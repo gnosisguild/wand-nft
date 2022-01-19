@@ -15,9 +15,14 @@ contract Wand is ERC721URIStorage, Ownable {
         uint256 sparkles;
         uint256 stone;
         uint256 birth;
-        uint256 rod;
-        uint256 upgrade;
+        uint256 handle;
+        uint256 halo;
+        uint256 environment;
+        uint256 evolution;
         string name;
+        // image components/layers not captured in the struct
+        // - birth chart - generated based on birth timestamp
+        // - aspect lines - generated based on owner's address
     }
 
     mapping (uint256 => WandStruct) wands;
@@ -88,8 +93,10 @@ contract Wand is ERC721URIStorage, Ownable {
         uint256 sparkles,
         uint256 stone,
         uint256 birth,
-        uint256 rod,
-        uint256 upgrade,
+        uint256 handle,
+        uint256 halo,
+        uint256 environment,
+        uint256 evolution,
         string memory name
         ) {
         return (
@@ -97,8 +104,10 @@ contract Wand is ERC721URIStorage, Ownable {
             wands[tokenId].sparkles,
             wands[tokenId].stone,
             wands[tokenId].birth,
-            wands[tokenId].rod,
-            wands[tokenId].upgrade,
+            wands[tokenId].handle,
+            wands[tokenId].halo,
+            wands[tokenId].environment,
+            wands[tokenId].evolution,
             wands[tokenId].name
         );
     }
@@ -112,8 +121,10 @@ contract Wand is ERC721URIStorage, Ownable {
             wands[tokenId].sparkles = psuedoRandom() % 10;
             wands[tokenId].stone = psuedoRandom() % 10;
             wands[tokenId].birth = block.timestamp;
-            wands[tokenId].rod = psuedoRandom() % 10;
-            wands[tokenId].upgrade = 0;
+            wands[tokenId].handle = psuedoRandom() % 10;
+            wands[tokenId].halo = psuedoRandom() % 10;
+            wands[tokenId].environment = psuedoRandom() % 10;
+            wands[tokenId].evolution = 0;
             wands[tokenId].name = "Wind Swept River";
         }
 
@@ -123,8 +134,8 @@ contract Wand is ERC721URIStorage, Ownable {
 
         if (to != address(0) && from != address(0)) {
             // we are transfering
-            // reset upgrades and age?
-            wands[tokenId].upgrade = 1;
+            // reset evolutions and age?
+            wands[tokenId].evolution = 0;
             wands[tokenId].birth = block.timestamp;
         }
     }
