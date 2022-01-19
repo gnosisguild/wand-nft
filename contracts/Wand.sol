@@ -9,6 +9,23 @@ import "base64-sol/base64.sol";
 contract Wand is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
+    
+    struct WandStruct {
+        uint256 background;
+        uint256 sparkles;
+        uint256 stone;
+        uint256 birth;
+        uint256 handle;
+        uint256 halo;
+        uint256 environment;
+        uint256 evolution;
+        string name;
+        // image components/layers not captured in the struct
+        // - birth chart - generated based on birth timestamp
+        // - aspect lines - generated based on owner's address
+    }
+
+    mapping (uint256 => WandStruct) wands;
 
     mapping(uint256 => uint256) public randToTokenId;
     mapping(uint16 => string) public assets;
@@ -65,5 +82,61 @@ contract Wand is ERC721URIStorage, Ownable {
                     )
                 )
             );
+    }
+
+    function psuedoRandom() private view returns (uint) {
+        return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, msg.sender)));
+    }
+
+    function getAttributes(uint256 tokenId) public view returns (
+        uint256 background,
+        uint256 sparkles,
+        uint256 stone,
+        uint256 birth,
+        uint256 handle,
+        uint256 halo,
+        uint256 environment,
+        uint256 evolution,
+        string memory name
+        ) {
+        return (
+            wands[tokenId].background,
+            wands[tokenId].sparkles,
+            wands[tokenId].stone,
+            wands[tokenId].birth,
+            wands[tokenId].handle,
+            wands[tokenId].halo,
+            wands[tokenId].environment,
+            wands[tokenId].evolution,
+            wands[tokenId].name
+        );
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override {
+        super._beforeTokenTransfer(from, to, tokenId);
+
+        if (from == address(0)) {
+            // we are minting
+            wands[tokenId].background = psuedoRandom() % 10;
+            wands[tokenId].sparkles = psuedoRandom() % 10;
+            wands[tokenId].stone = psuedoRandom() % 10;
+            wands[tokenId].birth = block.timestamp;
+            wands[tokenId].handle = psuedoRandom() % 10;
+            wands[tokenId].halo = psuedoRandom() % 10;
+            wands[tokenId].environment = psuedoRandom() % 10;
+            wands[tokenId].evolution = 0;
+            wands[tokenId].name = "Wind Swept River";
+        }
+
+        if (to == address(0)) {
+            // we are burning
+        }
+
+        if (to != address(0) && from != address(0)) {
+            // we are transfering
+            // reset evolutions and age?
+            wands[tokenId].evolution = 0;
+            wands[tokenId].birth = block.timestamp;
+        }
     }
 }
