@@ -52,24 +52,25 @@ contract Wand is ERC721URIStorage, Ownable {
     function mintWand() public {
         uint256 newWand = _tokenIds.current();
         _safeMint(msg.sender, newWand);
-        string memory imageURI = rngToImageEncoding(psuedoRandom());
+        generateAssetsFromRNG(psuedoRandom());
+        string memory imageURI = rngToImageEncoding();
         _setTokenURI(newWand, formatTokenURI(imageURI));
         _tokenIds.increment();
         //emit CreatedSVGNFT(newWand, svg);
     }
 
-    function generateSVG(uint256 _randomness)
-        public
-        view
-        returns (string memory finalSvg)
-    {
+    function generateAssetsFromRNG(uint256 _randomness) internal {
+        // TODO: select asset index from rng and store it on struct
+    }
+
+    function generateSVG() public view returns (string memory finalSvg) {
         return
             string(
                 abi.encodePacked(
                     '<svg width="200" height="200" ',
                     'xmlns="http://www.w3.org/2000/svg"> ',
                     '<image href="',
-                    assets[0],
+                    assets[0], // TODO, get index from struct
                     '" height="200" width="200"/>',
                     '<image href="',
                     assets[1],
@@ -97,14 +98,10 @@ contract Wand is ERC721URIStorage, Ownable {
             );
     }
 
-    function rngToImageEncoding(uint256 _rng)
-        public
-        view
-        returns (string memory)
-    {
+    function rngToImageEncoding() public view returns (string memory) {
         // TODO: prepend service url here
         string memory baseURL = "data:image/svg+xml;base64,";
-        string memory svg = generateSVG(_rng);
+        string memory svg = generateSVG();
         string memory svgBase64Encoded = Base64.encode(
             bytes(string(abi.encodePacked(svg)))
         );
