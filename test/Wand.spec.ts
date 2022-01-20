@@ -11,18 +11,16 @@ describe("GuildWand", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
     const Wand = await hre.ethers.getContractFactory("Wand");
-    const wand = await Wand.deploy(
-      [
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/background.png", // background
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/border.png", // border
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/birthchart_canvas.png", // background_canvas
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/environment.png", // environement
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/halo.png", // halo
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/sparkles.png", // sparkles
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/stone.png", // stone
-        "https://gateway.pinata.cloud/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/wand_handle.png" // handle
-      ]
-    );
+    const wand = await Wand.deploy([
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/background.png", // background
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/border.png", // border
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/birthchart_canvas.png", // background_canvas
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/environment.png", // environement
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/halo.png", // halo
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/sparkles.png", // sparkles
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/stone.png", // stone
+      "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/wand_handle.png", // handle
+    ]);
     return { Wand, wand };
   });
 
@@ -32,7 +30,7 @@ describe("GuildWand", async () => {
     it("should initialize NFT contract", async () => {
       const { wand } = await baseSetup();
       const uri = await wand.tokenURI(0);
-      console.log(uri)
+      console.log(uri);
     });
   });
 });
