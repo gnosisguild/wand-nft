@@ -25,6 +25,7 @@ contract Wand is ERC721URIStorage, Ownable {
     mapping(uint256 => WandStruct) wands;
     mapping(uint256 => uint256) public randToTokenId;
     mapping(uint256 => string) public assets;
+
     // 0 = background
     // 1 = border
     // 2 = background_canvas
@@ -34,15 +35,17 @@ contract Wand is ERC721URIStorage, Ownable {
     // 6 = stone
     // 7 = wand handle
 
-
     constructor(string[] memory _assets) ERC721("GuildWand", "WAND") {
-        for(uint256 i=0; i < _assets.length; i++) {
+        for (uint256 i = 0; i < _assets.length; i++) {
             setAssets(i, _assets[i]);
         }
         mintWand();
     }
 
-    function setAssets(uint256 index, string memory multiHash) public onlyOwner {
+    function setAssets(uint256 index, string memory multiHash)
+        public
+        onlyOwner
+    {
         assets[index] = multiHash;
     }
 
@@ -60,7 +63,7 @@ contract Wand is ERC721URIStorage, Ownable {
         view
         returns (string memory finalSvg)
     {
-        return 
+        return
             string(
                 abi.encodePacked(
                     '<svg width="200" height="200" ',
