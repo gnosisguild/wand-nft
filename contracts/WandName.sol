@@ -5,9 +5,9 @@ contract WandName {
   string[] nouns = ["obscurity","heavens","band","billow","globe","bowl","wandering star","celestial sphere","rack","orb","vault","colure","circlet","compass","island universe","revolution","empyrean","mist","universe","star system","heavens","world","ring","meridian","ether","entry","nature","perimeter","frost","opening","Milky Way","equator","orbit","smog","gloom","gate","spiral galaxy","macrocosm","irregular galaxy","cloud","overcast","pother","lid","hoop","entrance","pressure","coil","periphery","puff","scud","star cluster","fog","asteroid","fogginess","galaxy","horoscope","vault of heaven","luminous body","veil","cosmos","steam","creation","aureole","cycle","murk","earth","darkness","planetoid","halo","astrometry","sphere","vapor","disk","sky","azure","smoke","microcosm","film","crown","star","doorway","haze","disc","belt","round","terrene","dimness","elliptical galaxy","wheel","circuit","cirque","corona","ecliptic","enclosure","full turn","gateway","haziness","heavenly body","horizon","nebula","air"];
 
   function generateWandName(uint randomSeed) public returns (string memory wandName) {
-    string memory actionAdjective = actionAdjectives[actionAdjectives.length * randomSeed % 10];
-    string memory adjective = adjectives[adjectives.length * randomSeed % 10];
-    string memory noun = nouns[nouns.length * randomSeed % 10];
+    string memory actionAdjective = actionAdjectives[randomSeed % actionAdjectives.length];
+    string memory adjective = adjectives[randomSeed % adjectives.length];
+    string memory noun = nouns[randomSeed % nouns.length];
     string memory space = " ";
 
     wandName = string(abi.encodePacked(actionAdjective, space, adjective, space, noun));
