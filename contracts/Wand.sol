@@ -20,9 +20,6 @@ contract Wand is ERC721URIStorage, Ownable {
         uint256 environment;
         uint256 evolution;
         string name;
-        // image components/layers not captured in the struct
-        // - birth chart - generated based on birth timestamp
-        // - aspect lines - generated based on owner's address
     }
 
     mapping (uint256 => WandStruct) wands;
