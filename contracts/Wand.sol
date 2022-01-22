@@ -9,7 +9,7 @@ import "base64-sol/base64.sol";
 contract Wand is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-    
+
     struct WandStruct {
         uint256 background;
         uint256 sparkles;
@@ -22,50 +22,99 @@ contract Wand is ERC721URIStorage, Ownable {
         string name;
     }
 
-    mapping (uint256 => WandStruct) wands;
-
+    mapping(uint256 => WandStruct) wands;
     mapping(uint256 => uint256) public randToTokenId;
-    mapping(uint16 => string) public assets;
+    mapping(uint256 => string) public assets;
 
-    constructor() ERC721("GuildWand", "WAND") {
-        mintWand(
-            string(
-                abi.encodePacked(
-                    '<svg width="200" height="200"',
-                        'xmlns="http://www.w3.org/2000/svg">',
-                        '<image href="https://i.imgur.com/4xK1AjQ.png" height="200" width="200"/>',
-                        '<image href="https://i.imgur.com/5nFAehJ.png" height="200" width="200"/>',
-                    '</svg>'
-                )
-            )
-        );
+    // 0 = background
+    // 1 = border
+    // 2 = background_canvas
+    // 3 = environement
+    // 4 = halo
+    // 5 = sparkels
+    // 6 = stone
+    // 7 = wand handle
+
+    constructor(string[] memory _assets) ERC721("GuildWand", "WAND") {
+        for (uint256 i = 0; i < _assets.length; i++) {
+            setAssets(i, _assets[i]);
+        }
+        mintWand();
     }
 
-    function setAssets(uint16 index, string memory QmHash) external onlyOwner {
-        assets[index] = "QmHash";
+    function setAssets(uint256 index, string memory multiHash)
+        public
+        onlyOwner
+    {
+        assets[index] = multiHash;
     }
 
-    function mintWand(string memory svg) public {
+    function mintWand() public {
         uint256 newWand = _tokenIds.current();
         _safeMint(msg.sender, newWand);
-        string memory imageURI = svgToImageURI(svg);
+        generateAssetsFromRNG(psuedoRandom());
+        string memory imageURI = rngToImageEncoding();
         _setTokenURI(newWand, formatTokenURI(imageURI));
         _tokenIds.increment();
         //emit CreatedSVGNFT(newWand, svg);
     }
 
-    function generateSVG(uint256 _randomness) public view returns (string memory finalSvg) {
-
+    function generateAssetsFromRNG(uint256 _randomness) internal {
+        // TODO: select asset index from rng and store it on struct
     }
 
-    function svgToImageURI(string memory svg) public pure returns (string memory) {
+    function generateSVG() public view returns (string memory finalSvg) {
+        return
+            string(
+                abi.encodePacked(
+                    '<svg width="200" height="200" ',
+                    'xmlns="http://www.w3.org/2000/svg"> ',
+                    '<image href="',
+                    assets[0], // TODO, get index from struct
+                    '" height="200" width="200"/>',
+                    '<image href="',
+                    assets[1],
+                    '" height="200" width="200"/> ',
+                    '<image href="',
+                    assets[2],
+                    '" height="200" width="200"/> ',
+                    '<image href="',
+                    assets[3],
+                    '" height="200" width="200"/> ',
+                    '<image href="',
+                    assets[4],
+                    '" height="200" width="200"/> ',
+                    '<image href="',
+                    assets[5],
+                    '" height="200" width="200"/> ',
+                    '<image href="',
+                    assets[6],
+                    '" height="200" width="200"/> ',
+                    '<image href="',
+                    assets[7],
+                    '" height="200" width="200"/> ',
+                    "</svg>"
+                )
+            );
+    }
+
+    function rngToImageEncoding() public view returns (string memory) {
+        // TODO: prepend service url here
         string memory baseURL = "data:image/svg+xml;base64,";
-        string memory svgBase64Encoded = Base64.encode(bytes(string(abi.encodePacked(svg))));
-        return string(abi.encodePacked(baseURL,svgBase64Encoded));
+        string memory svg = generateSVG();
+        string memory svgBase64Encoded = Base64.encode(
+            bytes(string(abi.encodePacked(svg)))
+        );
+        return string(abi.encodePacked(baseURL, svgBase64Encoded));
     }
 
-    function formatTokenURI(string memory imageURI) public pure returns (string memory) {
-        return string(
+    function formatTokenURI(string memory imageURI)
+        public
+        pure
+        returns (string memory)
+    {
+        return
+            string(
                 abi.encodePacked(
                     "data:application/json;base64,",
                     Base64.encode(
@@ -73,7 +122,9 @@ contract Wand is ERC721URIStorage, Ownable {
                             abi.encodePacked(
                                 '{"name":"',
                                 "Guild Wand",
-                                '", "description":"Guild Wand", "attributes":"", "image":"',imageURI,'"}'
+                                '", "description":"Guild Wand", "attributes":"", "image":"',
+                                imageURI,
+                                '"}'
                             )
                         )
                     )
@@ -81,35 +132,44 @@ contract Wand is ERC721URIStorage, Ownable {
             );
     }
 
-    function psuedoRandom() private view returns (uint) {
-        return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, msg.sender)));
+    function psuedoRandom() private view returns (uint256) {
+        return
+            uint256(
+                keccak256(
+                    abi.encodePacked(
+                        block.difficulty,
+                        block.timestamp,
+                        msg.sender
+                    )
+                )
+            );
     }
 
-    function getAttributes(uint256 tokenId) public view returns (
-        uint256 background,
-        uint256 sparkles,
-        uint256 stone,
-        uint256 birth,
-        uint256 handle,
-        uint256 halo,
-        uint256 environment,
-        uint256 evolution,
-        string memory name
-        ) {
+    function getAttributes(uint256 tokenId)
+        public
+        view
+        returns (bytes memory attributes)
+    {
         return (
-            wands[tokenId].background,
-            wands[tokenId].sparkles,
-            wands[tokenId].stone,
-            wands[tokenId].birth,
-            wands[tokenId].handle,
-            wands[tokenId].halo,
-            wands[tokenId].environment,
-            wands[tokenId].evolution,
-            wands[tokenId].name
+            abi.encode(
+                wands[tokenId].background,
+                wands[tokenId].sparkles,
+                wands[tokenId].stone,
+                wands[tokenId].birth,
+                wands[tokenId].handle,
+                wands[tokenId].halo,
+                wands[tokenId].environment,
+                wands[tokenId].evolution,
+                wands[tokenId].name
+            )
         );
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
         super._beforeTokenTransfer(from, to, tokenId);
 
         if (from == address(0)) {

@@ -26,7 +26,6 @@ const DEFAULT_MNEMONIC =
 
 const sharedNetworkConfig: HttpNetworkUserConfig = {};
 if (PK) {
-  console.log("yah");
   sharedNetworkConfig.accounts = [PK];
 } else {
   sharedNetworkConfig.accounts = {
@@ -44,7 +43,7 @@ export default {
   paths: {
     artifacts: "build/artifacts",
     cache: "build/cache",
-    deploy: "src/deploy",
+    //deploy: "src/deploy",
     sources: "contracts",
   },
   solidity: {
