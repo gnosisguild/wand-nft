@@ -55,7 +55,8 @@ contract Wand is ERC721URIStorage, Ownable {
         _safeMint(msg.sender, newWand);
         generateAssetsFromRNG(psuedoRandom(), newWand);
         string memory imageURI = rngToImageEncoding(newWand);
-        _setTokenURI(newWand, formatTokenURI(imageURI));
+        string memory attributes = encodeAttributes(newWand);
+        _setTokenURI(newWand, formatTokenURI(imageURI, attributes));
         _tokenIds.increment();
         //emit CreatedSVGNFT(newWand, svg);
     }
@@ -118,7 +119,16 @@ contract Wand is ERC721URIStorage, Ownable {
         return string(abi.encodePacked(baseURL, svgBase64Encoded));
     }
 
-    function formatTokenURI(string memory imageURI)
+    function encodeAttributes(uint256 _id) public view returns (string memory) {
+        return 
+            string(
+                abi.encodePacked(
+
+                )
+            );
+    }
+
+    function formatTokenURI(string memory imageURI, string memory attributes)
         public
         pure
         returns (string memory)
@@ -130,9 +140,10 @@ contract Wand is ERC721URIStorage, Ownable {
                     Base64.encode(
                         bytes(
                             abi.encodePacked(
-                                '{"name":"',
-                                "Guild Wand",
-                                '", "description":"Guild Wand", "attributes":"", "image":"',
+                                '{"name":"Guild Wand",',
+                                '"description":"Guild Wand",', 
+                                '"attributes":"',attributes,'",', 
+                                '"image":"',
                                 imageURI,
                                 '"}'
                             )
