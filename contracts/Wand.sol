@@ -25,29 +25,44 @@ contract Wand is ERC721URIStorage, Ownable {
     }
 
     mapping(uint256 => WandStruct) wands;
-    mapping(uint256 => string) public assets;
+    string[] public backgrounds;
+    string[] public borders;
+    string[] public canvases;
+    string[] public environments;
+    string[] public halos;
+    string[] public sparkles;
+    string[] public stones;
+    string[] public handles;
 
-    // 0 = background
-    // 1 = border
-    // 2 = background_canvas
-    // 3 = environement
-    // 4 = halo
-    // 5 = sparkels
-    // 6 = stone
-    // 7 = wand handle
+    constructor() ERC721("GuildWand", "WAND") {}
 
-    constructor(string[] memory _assets) ERC721("GuildWand", "WAND") {
-        for (uint256 i = 0; i < _assets.length; i++) {
-            setAssets(i, _assets[i]);
-        }
-        mintWand();
-    }
-
-    function setAssets(uint256 index, string memory multiHash)
+    function initAssets(uint8 selector, string memory multiHash)
         public
         onlyOwner
     {
-        assets[index] = multiHash;
+        if (selector == 0) backgrounds.push(multiHash);
+        if (selector == 1) borders.push(multiHash);
+        if (selector == 2) canvases.push(multiHash);
+        if (selector == 3) environments.push(multiHash);
+        if (selector == 4) halos.push(multiHash);
+        if (selector == 5) sparkles.push(multiHash);
+        if (selector == 6) stones.push(multiHash);
+        if (selector == 7) handles.push(multiHash);
+    }
+
+    function setAssets(
+        uint8 selector,
+        uint256 index,
+        string memory multiHash
+    ) public onlyOwner {
+        if (selector == 0) backgrounds[index] = multiHash;
+        if (selector == 1) borders[index] = multiHash;
+        if (selector == 2) canvases[index] = multiHash;
+        if (selector == 3) environments[index] = multiHash;
+        if (selector == 4) halos[index] = multiHash;
+        if (selector == 5) sparkles[index] = multiHash;
+        if (selector == 6) stones[index] = multiHash;
+        if (selector == 7) handles[index] = multiHash;
     }
 
     function mintWand() public {
@@ -63,69 +78,70 @@ contract Wand is ERC721URIStorage, Ownable {
 
     function generateAssetsFromRNG(uint256 _randomness, uint256 _id) internal {
         // TODO: select asset index from rng and store it on struct, change modulus to fit in range of asset
-        wands[_id].background = 0 + (_randomness % 1);
-        wands[_id].border = 1 + (_randomness % 1);
-        wands[_id].canvas = 2 + (_randomness % 1);
-        wands[_id].environment = 3 + (_randomness % 1);
-        wands[_id].halo = 4 + (_randomness % 1);
-        wands[_id].sparkles = 5 + (_randomness % 1);
-        wands[_id].stone = 6 + (_randomness % 1);
-        wands[_id].handle = 7 + (_randomness % 1);
+        wands[_id].background = _randomness % backgrounds.length;
+        wands[_id].border = _randomness % borders.length;
+        wands[_id].canvas = _randomness % canvases.length;
+        wands[_id].environment = _randomness % environments.length;
+        wands[_id].halo = _randomness % halos.length;
+        wands[_id].sparkles = _randomness % sparkles.length;
+        wands[_id].stone = _randomness % stones.length;
+        wands[_id].handle = _randomness % handles.length;
         // todo get name from lib or just use same asset mapping here
     }
 
-    function generateSVG(uint256 _id) public view returns (string memory finalSvg) {
+    function generateSVG(uint256 _id)
+        public
+        view
+        returns (string memory finalSvg)
+    {
         return
             string(
                 abi.encodePacked(
                     '<svg width="500" height="750" ',
                     'xmlns="http://www.w3.org/2000/svg"> ',
                     '<image href="',
-                    assets[wands[_id].background],
+                    backgrounds[wands[_id].background],
                     '" height="750" width="500"/>',
                     '<image href="',
-                    assets[wands[_id].border],
+                    borders[wands[_id].border],
                     '" height="750" width="500"/> ',
                     '<image href="',
-                    assets[wands[_id].canvas],
+                    canvases[wands[_id].canvas],
                     '" height="750" width="500"/> ',
                     '<image href="',
-                    assets[wands[_id].environment],
+                    environments[wands[_id].environment],
                     '" height="750" width="500"/> ',
                     '<image href="',
-                    assets[wands[_id].halo],
+                    halos[wands[_id].halo],
                     '" height="750" width="500"/> ',
                     '<image href="',
-                    assets[wands[_id].sparkles],
+                    sparkles[wands[_id].sparkles],
                     '" height="750" width="500"/> ',
                     '<image href="',
-                    assets[wands[_id].stone],
+                    stones[wands[_id].stone],
                     '" height="750" width="500"/> ',
                     '<image href="',
-                    assets[wands[_id].handle],
+                    handles[wands[_id].handle],
                     '" height="750" width="500"/> ',
                     "</svg>"
                 )
             );
     }
 
-    function rngToImageEncoding(uint256 _id) public view returns (string memory) {
+    function rngToImageEncoding(uint256 _id)
+        public
+        view
+        returns (string memory)
+    {
         // TODO: prepend service url here
         string memory baseURL = "data:image/svg+xml;base64,";
         string memory svg = generateSVG(_id);
-        string memory svgBase64Encoded = Base64.encode(
-            bytes(svg)
-        );
+        string memory svgBase64Encoded = Base64.encode(bytes(svg));
         return string(abi.encodePacked(baseURL, svgBase64Encoded));
     }
 
     function encodeAttributes(uint256 _id) public view returns (string memory) {
-        return 
-            string(
-                abi.encodePacked(
-
-                )
-            );
+        return string(abi.encodePacked());
     }
 
     function formatTokenURI(string memory imageURI, string memory attributes)
@@ -141,8 +157,10 @@ contract Wand is ERC721URIStorage, Ownable {
                         bytes(
                             abi.encodePacked(
                                 '{"name":"Guild Wand",',
-                                '"description":"Guild Wand",', 
-                                '"attributes":"',attributes,'",', 
+                                '"description":"Guild Wand",',
+                                '"attributes":"',
+                                attributes,
+                                '",',
                                 '"image":"',
                                 imageURI,
                                 '"}'
