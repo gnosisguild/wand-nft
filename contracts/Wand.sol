@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "base64-sol/base64.sol";
+import "./WandName.sol";
 
 contract Wand is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
@@ -86,6 +87,7 @@ contract Wand is ERC721URIStorage, Ownable {
         wands[_id].sparkles = _randomness % sparkles.length;
         wands[_id].stone = _randomness % stones.length;
         wands[_id].handle = _randomness % handles.length;
+        wands[_id].name = WandName.generateWandName(_randomness);
         // todo get name from lib or just use same asset mapping here
     }
 
@@ -124,7 +126,7 @@ contract Wand is ERC721URIStorage, Ownable {
                     handles[wands[_id].handle],
                     '" height="750" width="500"/> ',
                     '<text fill="black" x="50%" y="95.84%" font-family="cursive" font-size="12" text-anchor="middle">',
-                    "Whispering Wander Crisp",
+                    wands[_id].name,
                     "</text>"
                     "</svg>"
                 )

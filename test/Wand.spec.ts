@@ -10,7 +10,14 @@ const FirstAddress = "0x0000000000000000000000000000000000000001";
 describe("GuildWand", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
-    const Wand = await hre.ethers.getContractFactory("Wand");
+
+    const WandName = await hre.ethers.getContractFactory("WandName");
+    const wandName = await WandName.deploy();
+    const Wand = await hre.ethers.getContractFactory("Wand", {
+      libraries: {
+        WandName: wandName.address,
+      },
+    });
     const wand = await Wand.deploy();
     await wand.initAssets(0, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/background.png");
     await wand.initAssets(1, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/border.png");
