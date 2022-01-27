@@ -123,6 +123,9 @@ contract Wand is ERC721URIStorage, Ownable {
                     '<image href="',
                     handles[wands[_id].handle],
                     '" height="750" width="500"/> ',
+                    '<text fill="black" x="50%" y="95.84%" font-family="cursive" font-size="12" text-anchor="middle">',
+                    "Whispering Wander Crisp",
+                    "</text>"
                     "</svg>"
                 )
             );
