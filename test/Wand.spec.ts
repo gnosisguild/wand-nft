@@ -11,23 +11,41 @@ describe("GuildWand", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const WandName = await hre.ethers.getContractFactory("WandName");
-    const wandName = await WandName.deploy();
-    const Wand = await hre.ethers.getContractFactory("Wand", {
-      libraries: {
-        WandName: wandName.address,
-      },
-    });
-    const wand = await Wand.deploy();
-    await wand.initAssets(0, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/background.png");
-    await wand.initAssets(1, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/border.png");
-    await wand.initAssets(2, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/birthchart_canvas.png");
-    await wand.initAssets(3, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/environment.png");
-    await wand.initAssets(4, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/halo.png");
-    await wand.initAssets(5, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/sparkles.png");
-    await wand.initAssets(6, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/stone.png");
-    await wand.initAssets(7, "https://cloudflare-ipfs.com/ipfs/QmenMC3y4DfpHX3mYjt7VJsHD6SxBmmLadnfgwQqpYG1SZ/wand_handle.png");
+    // const WandName = await hre.ethers.getContractFactory("WandName");
+    // const wandName = await WandName.deploy();
+    const HaloSVG1 = await hre.ethers.getContractFactory("HaloSVG1");
+    const haloSVG1 = await HaloSVG1.deploy();
+    const HaloSVG2 = await hre.ethers.getContractFactory("HaloSVG2");
+    const haloSVG2 = await HaloSVG2.deploy();
+    const HaloSVG3 = await hre.ethers.getContractFactory("HaloSVG3");
+    const haloSVG3 = await HaloSVG3.deploy();
+    const HaloSVG4 = await hre.ethers.getContractFactory("HaloSVG4");
+    const haloSVG4 = await HaloSVG4.deploy();
+
+    const abiCoder = new ethers.utils.AbiCoder();
+    const haloSVGs = abiCoder.encode(
+      [
+        "address haloSVGs1",
+        "address haloSVGs2",
+        "address haloSVGs3",
+        "address haloSVGs4",
+      ],
+      [haloSVG1.address, haloSVG2.address, haloSVG3.address, haloSVG4.address]
+    );
+    // const test = abiCoder.decode(["address haloSVGs1", "address haloSVGs2", "address haloSVGs3", "address haloSVGs4"], haloSVGs)
+    // console.log(test.haloSVGs1)
+    const HaloGenerator = await hre.ethers.getContractFactory("HaloGenerator");
+    const haloGenerator = await HaloGenerator.deploy(haloSVGs);
+
+    const WandConjuror = await hre.ethers.getContractFactory("WandConjuror");
+    const wandConjuror = await WandConjuror.deploy(haloGenerator.address);
+
+    const Wand = await hre.ethers.getContractFactory("Wand");
+    const wand = await Wand.deploy(wandConjuror.address);
+
     await wand.mintWand();
+    await wand.build(0);
+
     return { Wand, wand };
   });
 
