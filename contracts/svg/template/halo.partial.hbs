@@ -1,0 +1,21 @@
+<defs>
+  <path
+    d="M58.7687 76.7949C110.299 88.0702 154.043 62.7974 190 0.976313L110 139.54C77.1838 120.42 37.9799 109.915 -3.21719e-05 110.066L-1.0516e-05 70.0661C19.718 70.0595 39.5625 72.3317 58.7687 76.7949Z"
+    fill="#9A9EA7"
+    id="h0"
+  ></path>
+  <circle cx="100" cy="-50" r="20" fill="#9A9EA7" id="h1"></circle>
+</defs>
+
+<g transform="translate(1000 1060)">
+  {{#each rhythm}}
+    <g
+      style="transform: rotate(calc({{uint2str
+        @index
+      }} * 15deg)) translateY(-600px);"
+    >
+      {{#if halo0}}<use href="#h0"></use>{{/if}}
+      {{#if halo1}}<use href="#h1"></use>{{/if}}
+    </g>
+  {{/each}}
+</g>

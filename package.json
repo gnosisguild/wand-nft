@@ -1,11 +1,13 @@
 {
   "name": "GuildWand",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "compile:template": "solid-mustache ./contracts/svg/template/template.svg.hbs -o ./contracts/svg/Template.sol --condense",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat deploy --network",
@@ -50,6 +52,7 @@
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.6",
     "solhint-plugin-prettier": "0.0.5",
+    "solid-mustache": "^2.0.0",
     "solidity-coverage": "0.7.17",
     "ts-node": "9.1.1",
     "typescript": "4.1.3"

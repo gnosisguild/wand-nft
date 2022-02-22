@@ -1,0 +1,24 @@
+<g transform="translate(1000 1060)">
+  <defs>
+    <linearGradient id="aspectgradient">
+      <stop offset="0%" stop-color="#FFFFF0"></stop>
+      <stop offset="100%" stop-color="#BFBDB1"></stop>
+    </linearGradient>
+  </defs>
+  <g style="filter: blur(5px);">
+    {{#each planets}}
+      <circle cx="{{x}}" cy="{{y}}" r="11" fill="white"></circle>
+    {{/each}}
+  </g>
+  {{#each aspects}}
+    <line
+      x1="{{x1}}"
+      y1="{{y1}}"
+      x2="{{x2}}"
+      y2="{{y2}}"
+      stroke="url(#aspectgradient)"
+      stroke-width="10"
+      stroke-linecap="round"
+    ></line>
+  {{/each}}
+</g>
