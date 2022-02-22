@@ -46,7 +46,7 @@ describe("GuildWand", async () => {
     await wand.mintWand();
     await wand.build(0);
 
-    return { Wand, wand };
+    return { Wand, wand, WandConjuror, wandConjuror };
   });
 
   const [user1] = waffle.provider.getWallets();
@@ -58,4 +58,15 @@ describe("GuildWand", async () => {
       console.log(uri);
     });
   });
+
+  describe("should correctly calculate the current position of the sun", async () => {
+    const { wandConjuror } = await baseSetup();
+    const [minuteInDay, zenithAngle] =
+      await wandConjuror.calculateSolarPosition();
+    expect(minuteInDay).to.equal(1);
+    expect(zenithAngle).to.equal(1);
+  });
 });
+function formatEthers(x: any): any {
+  throw new Error("Function not implemented.");
+}
