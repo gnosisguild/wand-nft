@@ -1,31 +1,21 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import "./interfaces/IHaloGenerator.sol";
 import "./interfaces/IWands.sol";
-import "./Trigonometry.sol";
+import "./svg/Template.sol";
 import "base64-sol/base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract WandConjuror {
   using Strings for uint8;
 
-  IHaloGenerator public immutable haloGenerator;
-
-  constructor(IHaloGenerator _haloGenerator) {
-    haloGenerator = _haloGenerator;
-  }
+  constructor() {}
 
   function generateWandURI(IWands.Wand memory wand)
     external
     view
     returns (string memory)
   {
-    IHaloSVG.HaloData memory halo = haloGenerator.generateHalo(wand.halo);
-
-    //string memory name = generateName(wand.nameRng);
-    //bytes memory attributes = generateAttributesJSON(halo, name);
-
     return
       string(
         abi.encodePacked(
@@ -36,7 +26,7 @@ contract WandConjuror {
                 '{"name":"',
                 "name",
                 '", "description":"A unique Wand, designed and built on-chain. 1 of 5000.", "image": "data:image/svg+xml;base64,',
-                Base64.encode(bytes(generateSVG(halo.svgString))),
+                Base64.encode(bytes(generateSVG(wand))),
                 '", "attributes": ',
                 "attributes",
                 "}"
@@ -47,16 +37,93 @@ contract WandConjuror {
       );
   }
 
-  function generateSVG(string memory haloSVG)
+  function generateSVG(IWands.Wand memory wand)
     internal
-    pure
-    returns (bytes memory svg)
+    view
+    returns (string memory svg)
   {
-    svg = abi.encodePacked(
-      //'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 220 264">',
-      haloSVG,
-      "</svg>"
+    return
+      Template.render(
+        Template.__Input({
+          title: "FLOURISHING MISTY WORLD",
+          background: Template.Background({bg0: true}),
+          planets: [
+            Template.Planet({x: -114, y: 370}),
+            Template.Planet({x: -225, y: 334}),
+            Template.Planet({x: -227, y: 379}),
+            Template.Planet({x: 121, y: 295}),
+            Template.Planet({x: -19, y: 357}),
+            Template.Planet({x: 361, y: 13}),
+            Template.Planet({x: 176, y: 259}),
+            Template.Planet({x: -156, y: 388})
+          ],
+          aspects: [
+            Template.Aspect({x1: 259, y1: 26, x2: -91, y2: -244}),
+            Template.Aspect({x1: 259, y1: 26, x2: -259, y2: -26}),
+            Template.Aspect({x1: 83, y1: 247, x2: 84, y2: 246}),
+            Template.Aspect({x1: 83, y1: 247, x2: 258, y2: 34}),
+            Template.Aspect({x1: 87, y1: 245, x2: 258, y2: 30}),
+            Template.Aspect({x1: 248, y1: 77, x2: 191, y2: -177}),
+            Template.Aspect({x1: 0, y1: 0, x2: 0, y2: 0}),
+            Template.Aspect({x1: 0, y1: 0, x2: 0, y2: 0})
+          ],
+          starsSeed: 5,
+          stone: generateStone(wand),
+          halo: Template.Halo({
+            rhythm: [
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true}),
+              Template.Rhythm({halo0: true, halo1: false}),
+              Template.Rhythm({halo0: false, halo1: true})
+            ]
+          })
+        })
+      );
+  }
+
+  function generateStone(IWands.Wand memory wand)
+    internal
+    view
+    returns (Template.Stone memory)
+  {
+    // 24 * 60 * 60 seconds in a day * longitude / max longitude
+    uint256 localTimestamp = uint256(
+      int256(block.timestamp) + (int256(86400) * wand.longitude) / 32767
     );
+    uint256 secondInDay = localTimestamp % 86400; // 866400 seconds per day
+
+    // length of solar year: 365 days 5 hours 48 minutes 46 seconds = 31556926 seconds
+    // midwinter is 11 days 8 hours (= 979200 seconds) before the start of the calendar year
+    uint256 secondsSinceMidwinter = (localTimestamp - 979200) % 31556926;
+
+    return
+      Template.Stone({
+        seed: 1,
+        color: "crimson",
+        seasonsAmplitude: (int256(-wand.latitude) * 260) / 32767, // scale from [-32767,32767] to [-260,260] and switch sign
+        secondInYear: secondsSinceMidwinter,
+        secondInDay: secondInDay
+      });
   }
 
   // function generateName(
@@ -92,50 +159,5 @@ contract WandConjuror {
   //         conditionalFrameAttribute(frameData.title),
   //         colorAttributes(colors)
   //     );
-  // }
-
-  /// @dev Returns a rough approximation of the current position of the sun at the given geo coordinates
-  /// @param lat Latitude in degrees from equator between (S) -90 and 90 (N)
-  /// @param lng Longitude in degrees from prime meridian between (W) -180 and 180 (E)
-  /// @return minuteInDay The current minute of the day at the given longitude
-  /// @return zenithAngle The angle between the sun’s rays and the vertical direction at today's noon at the given latitude
-  // function calculateSolarPosition1(int256 lat, int256 lng)
-  //     public
-  //     view
-  //     returns (uint256 minuteInDay, int256 zenithAngle)
-  // {
-  //     int256 secondsInDay = 24 * 60 * 60;
-  //     uint256 localTimestamp = uint256(
-  //         int256(block.timestamp) + secondsInDay * (lng / 360)
-  //     );
-  //     minuteInDay = (localTimestamp / 60) % (24 * 60);
-
-  //     int256 minutesInYear = 525949; // solar year: 365 days 5 hours 49 minutes
-  //     int256 summerSolstice1970 = 246960;
-
-  //     int256 distanceToSolstice = (((int256(block.timestamp) /
-  //         60 -
-  //         summerSolstice1970) % minutesInYear) - (minutesInYear / 2));
-  //     if (distanceToSolstice < 0) distanceToSolstice *= -1; // distance to summer solstice between 0 and minutesInYear / 2
-
-  //     zenithAngle = (lat * distanceToSolstice) / ;
-  // }
-
-  // function calculateSolarPosition(int256 lat, int256 lng)
-  //     public
-  //     view
-  //     returns (uint256 azimuth, uint256 altitude)
-  // {
-  //     uint256 hoursInYear = 365 * 24 * 3600 + 6;
-  //     uint256 dayOfYear = ((block.timestamp / hoursInYear) % hoursInYear) /
-  //         24;
-
-  //     int256 hourAngle =
-
-  //     // https://www.pveducation.org/pvcdrom/properties-of-sunlight/declination-angle#footnote1_ypisw09
-  //     // 16384 = 360deg, cos result range: [-32767,32767], result uses 4 decimals
-  //     int256 declination = (-234500 *
-  //         Trigonometry.cos(uint16((16384 * dayOfYear) / 365) + 11)) / 32767;
-
   // }
 }

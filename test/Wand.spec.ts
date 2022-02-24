@@ -1,11 +1,6 @@
 import { expect } from "chai";
-import hre, { deployments, waffle, ethers } from "hardhat";
+import hre, { deployments, waffle } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
-
-const ZeroState =
-  "0x0000000000000000000000000000000000000000000000000000000000000000";
-const ZeroAddress = "0x0000000000000000000000000000000000000000";
-const FirstAddress = "0x0000000000000000000000000000000000000001";
 
 describe("GuildWand", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -13,45 +8,35 @@ describe("GuildWand", async () => {
 
     // const WandName = await hre.ethers.getContractFactory("WandName");
     // const wandName = await WandName.deploy();
-    const HaloSVG1 = await hre.ethers.getContractFactory("HaloSVG1");
-    const haloSVG1 = await HaloSVG1.deploy();
-    const HaloSVG2 = await hre.ethers.getContractFactory("HaloSVG2");
-    const haloSVG2 = await HaloSVG2.deploy();
-    const HaloSVG3 = await hre.ethers.getContractFactory("HaloSVG3");
-    const haloSVG3 = await HaloSVG3.deploy();
-    const HaloSVG4 = await hre.ethers.getContractFactory("HaloSVG4");
-    const haloSVG4 = await HaloSVG4.deploy();
 
-    const abiCoder = new ethers.utils.AbiCoder();
-    const haloSVGs = abiCoder.encode(
-      [
-        "address haloSVGs1",
-        "address haloSVGs2",
-        "address haloSVGs3",
-        "address haloSVGs4",
-      ],
-      [haloSVG1.address, haloSVG2.address, haloSVG3.address, haloSVG4.address]
-    );
-    // const test = abiCoder.decode(["address haloSVGs1", "address haloSVGs2", "address haloSVGs3", "address haloSVGs4"], haloSVGs)
-    // console.log(test.haloSVGs1)
-    const HaloGenerator = await hre.ethers.getContractFactory("HaloGenerator");
-    const haloGenerator = await HaloGenerator.deploy(haloSVGs);
+    const Template = await hre.ethers.getContractFactory("Template");
+    const template = await Template.deploy();
 
-    const WandConjuror = await hre.ethers.getContractFactory("WandConjuror");
-    const wandConjuror = await WandConjuror.deploy(haloGenerator.address);
+    const WandConjuror = await hre.ethers.getContractFactory("WandConjuror", {
+      libraries: { Template: template.address },
+    });
+    const wandConjuror = await WandConjuror.deploy();
 
     const Wand = await hre.ethers.getContractFactory("Wand");
     const wand = await Wand.deploy(wandConjuror.address);
 
     await wand.mintWand();
-    await wand.build(0);
+
+    const latBerlin = 52.5422;
+    const lngBerlin = 13.3495;
+    const maxInt16 = 2 ** 16 / 2 - 1;
+    await wand.build(
+      0,
+      Math.round((latBerlin * maxInt16) / 90),
+      Math.round((lngBerlin * maxInt16) / 180)
+    );
 
     return { Wand, wand, WandConjuror, wandConjuror };
   });
 
   const [user1] = waffle.provider.getWallets();
 
-  describe("initialize", async () => {
+  describe("initialize", () => {
     it("should initialize NFT contract", async () => {
       const { wand } = await baseSetup();
       const uri = await wand.tokenURI(0);
@@ -59,14 +44,11 @@ describe("GuildWand", async () => {
     });
   });
 
-  describe("should correctly calculate the current position of the sun", async () => {
-    const { wandConjuror } = await baseSetup();
-    const [minuteInDay, zenithAngle] =
-      await wandConjuror.calculateSolarPosition();
-    expect(minuteInDay).to.equal(1);
-    expect(zenithAngle).to.equal(1);
-  });
+  // describe("should correctly calculate the current position of the sun", async () => {
+  //   const { wandConjuror } = await baseSetup();
+  //   const [minuteInDay, zenithAngle] =
+  //     await wandConjuror.calculateSolarPosition();
+  //   expect(minuteInDay).to.equal(1);
+  //   expect(zenithAngle).to.equal(1);
+  // });
 });
-function formatEthers(x: any): any {
-  throw new Error("Function not implemented.");
-}

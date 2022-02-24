@@ -5,7 +5,7 @@
   <feTurbulence
     baseFrequency="0.005 0.01"
     numOctaves="3"
-    seed="{{seed}}"
+    seed="{{uint seed}}"
   ></feTurbulence>
   <feDiffuseLighting lighting-color="{{color}}" surfaceScale="10">
     <feDistantLight elevation="60"></feDistantLight>
@@ -18,7 +18,7 @@
 </radialGradient>
 <radialGradient id="sunshadow">
   <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"></stop>
-  <stop offset="33%" stop-color="hsla(0, 0%, 0%, 0.75)"></stop>
+  <stop offset="33%" stop-color="hsla(0, 0%, 0%, 0.7)"></stop>
 </radialGradient>
 <circle cx="1000" cy="1060" r="260" filter="url(#texture)"></circle>
 <circle cx="1000" cy="1060" r="262" fill="url(#ambientshadow)"></circle>
@@ -29,15 +29,15 @@
       attributeName="transform"
       attributeType="XML"
       type="translate"
-      values="0 0;0 {{#northernHemisphere}}-{{/northernHemisphere}}{{uint2str seasonsAmplitude}};0 0"
-      dur="30779326s"
-      begin="-{{uint2str secondInYear}}s"
+      values="0 {{int seasonsAmplitude}};0 0;0 {{int seasonsAmplitude}}"
+      dur="31556926s"
+      begin="-{{uint secondInYear}}s"
       repeatCount="indefinite"
     ></animateTransform>
     <circle r="1045" fill="url(#sunshadow)">
       <animateMotion
         dur="86400s"
-        begin="-{{uint2str secondInDay}}s"
+        begin="-{{uint secondInDay}}s"
         repeatCount="indefinite"
         path="M 1000 800 A 260 260 0 0 1 1000 1320 A 260 260 0 0 1 1000 800 z"
       ></animateMotion>

@@ -6,16 +6,16 @@
     </linearGradient>
   </defs>
   <g style="filter: blur(5px);">
-    {{#each planets}}
-      <circle cx="{{x}}" cy="{{y}}" r="11" fill="white"></circle>
+    {{#each planets length=8}}
+      <circle cx="{{int16 x}}" cy="{{int16 y}}" r="11" fill="white"></circle>
     {{/each}}
   </g>
-  {{#each aspects}}
+  {{#each aspects length=8}}
     <line
-      x1="{{x1}}"
-      y1="{{y1}}"
-      x2="{{x2}}"
-      y2="{{y2}}"
+      x1="{{int16 x1}}"
+      y1="{{int16 y1}}"
+      x2="{{int16 x2}}"
+      y2="{{int16 y2}}"
       stroke="url(#aspectgradient)"
       stroke-width="10"
       stroke-linecap="round"

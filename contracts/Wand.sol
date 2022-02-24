@@ -15,10 +15,12 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
   mapping(uint256 => Wand) private _wands;
 
   event WandBuilt(
-    uint256 tokenId,
+    uint256 indexed tokenId,
     uint16 halo,
     uint256 evolution,
-    uint256 birth
+    uint256 birth,
+    int256 latitude,
+    int256 longitude
   );
 
   constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
@@ -31,7 +33,11 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     _tokenIds.increment();
   }
 
-  function build(uint256 tokenId) external override {
+  function build(
+    uint256 tokenId,
+    int16 latitude,
+    int16 longitude
+  ) external override {
     require(
       msg.sender == ERC721.ownerOf(tokenId),
       "Wands: only owner can build wand"
@@ -42,10 +48,12 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       built: true,
       halo: halo,
       evolution: 0,
-      birth: block.timestamp
+      birth: block.timestamp,
+      latitude: latitude,
+      longitude: longitude
     });
     _wands[tokenId] = wand;
-    emit WandBuilt(tokenId, halo, 0, block.timestamp);
+    emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
   }
 
   function tokenURI(uint256 tokenId)
