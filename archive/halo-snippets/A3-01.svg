@@ -1,0 +1,17 @@
+<defs>
+  <style>
+    .a {
+      --halo: #dcd7af;
+    }
+  </style>
+</defs>
+<use width="404.77" height="425.26" transform="matrix(1, 0, 0, -1, 797.62, 729.54)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(0.87, 0.5, 0.5, -0.87, 988.97, 672.34)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(0.5, 0.87, 0.87, -0.5, 1183.27, 718.5)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(-0.5, 0.87, 0.87, 0.5, 1385.63, 1046.78)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(-0.87, 0.5, 0.5, 0.87, 1339.59, 1241.09)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(-1, 0, 0, 1, 1202.76, 1386.36)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(-0.87, -0.5, -0.5, 0.87, 1011.22, 1443.63)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(-0.5, -0.87, -0.87, 0.5, 816.91, 1397.59)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(0.5, -0.87, -0.87, -0.5, 614.33, 1069.09)" xlink:href="#a"/>
+<use width="404.77" height="425.26" transform="matrix(0.87, -0.5, -0.5, -0.87, 660.45, 874.77)" xlink:href="#a"/>
