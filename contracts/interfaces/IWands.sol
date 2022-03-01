@@ -10,13 +10,14 @@ interface IWands is IERC721 {
     bool built;
     uint256 evolution;
     uint256 birth;
-    uint16 halo;
+    uint8 halo;
     int16 latitude;
     int16 longitude;
   }
 
   function build(
     uint256 tokenId,
+    uint8 halo,
     int16 latitude,
     int16 longitude
   ) external;
@@ -25,7 +26,7 @@ interface IWands is IERC721 {
     external
     view
     returns (
-      uint16 halo,
+      uint8 halo,
       uint256 evolution,
       uint256 birth
     );

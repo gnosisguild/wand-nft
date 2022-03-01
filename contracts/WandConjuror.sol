@@ -6,6 +6,9 @@ import "./svg/Template.sol";
 import "base64-sol/base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
+uint256 constant HALO_RHYTHMS = 0x55ffffff;
+uint256 constant HALO_RHYTHM_LENGTH = 24;
+
 contract WandConjuror {
   using Strings for uint8;
 
@@ -69,34 +72,7 @@ contract WandConjuror {
           ],
           starsSeed: 5,
           stone: generateStone(wand),
-          halo: Template.Halo({
-            rhythm: [
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true}),
-              Template.Rhythm({halo0: true, halo1: false}),
-              Template.Rhythm({halo0: false, halo1: true})
-            ]
-          })
+          halo: generateHalo(wand)
         })
       );
   }
@@ -126,6 +102,49 @@ contract WandConjuror {
       });
   }
 
+  function generateHalo(IWands.Wand memory wand)
+    internal
+    view
+    returns (Template.Halo memory)
+  {
+    uint256 haloShape = wand.halo / (2**4); // first 4 bits are halo shape index
+    uint256 rhytmIndex = wand.halo % (2**4); // last 4 bits are rhythm index
+    return
+      Template.Halo({
+        halo0: haloShape == 0,
+        halo1: haloShape == 1,
+        halo2: haloShape == 2,
+        halo3: haloShape == 3,
+        halo4: haloShape == 4,
+        halo5: haloShape == 5,
+        rhythm: [
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 0)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 1)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 2)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 3)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 4)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 5)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 6)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 7)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 8)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 9)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 10)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 11)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 12)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 13)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 14)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 15)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 16)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 17)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 18)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 19)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 20)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 21)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 22)) == 1,
+          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 23)) == 1
+        ]
+      });
+  }
   // function generateName(
   //     string memory fieldTitle,
   //     string memory hardwareTitle,

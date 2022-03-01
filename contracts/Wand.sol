@@ -35,6 +35,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   function build(
     uint256 tokenId,
+    uint8 halo,
     int16 latitude,
     int16 longitude
   ) external override {
@@ -42,7 +43,6 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       msg.sender == ERC721.ownerOf(tokenId),
       "Wands: only owner can build wand"
     );
-    uint16 halo = 1 + uint16(psuedoRandom() % 4);
     // Construct Wand
     Wand memory wand = Wand({
       built: true,
@@ -86,7 +86,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     view
     override
     returns (
-      uint16 halo,
+      uint8 halo,
       uint256 evolution,
       uint256 birth
     )

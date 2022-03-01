@@ -25,8 +25,11 @@ describe("GuildWand", async () => {
     const latBerlin = 52.5422;
     const lngBerlin = 13.3495;
     const maxInt16 = 2 ** 16 / 2 - 1;
+
+    const shape0Rhythm0 = 0;
     await wand.build(
       0,
+      shape0Rhythm0,
       Math.round((latBerlin * maxInt16) / 90),
       Math.round((lngBerlin * maxInt16) / 180)
     );

@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import type { HttpNetworkUserConfig } from "hardhat/types";
 import yargs from "yargs";
 import "./src/tasks/setup";
+import "./src/tasks/encodeRhythms";
 
 const argv = yargs
   .option("network", {
