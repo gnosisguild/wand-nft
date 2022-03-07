@@ -127,7 +127,7 @@ function App() {
                       specularConstant={layer.specConstant}
                       specularExponent={layer.specularExponent}
                       lightingColor={layer.lightColor}
-                      result={`specOut${index}`}
+                      result={`emboss_${index}`}
                     >
                       <fePointLight
                         x={layer.pointX}
@@ -136,20 +136,19 @@ function App() {
                       />
                     </feSpecularLighting>
                     <feComposite
-                      in={`specOut${index}`}
-                      in2="SourceAlpha"
-                      operator="in"
-                      result={`compostite_in_${index}`}
+                      in2={`specOut${index}`}
+                      in="SourceAlpha"
+                      operator="out"
+                      result={`masked_emboss_${index}`}
                     />
-                    <feComposite
-                      in="SourceGraphic"
-                      in2={`compostite_in_${index}`}
-                      operator="arithmetic"
-                      k1={layer.k1}
-                      k2={layer.k2}
-                      k3={layer.k3}
-                      k4={layer.k4}
+                    <feColorMatrix
+                      in={`masked_emboss_${index}`}
                       result={`emboss_${index}`}
+                      type="matrix"
+                      values="-1 0 0 0 1 
+                              0 -1 0 0 1 
+                              0 0 -1 0 1
+                              0 0 0 1 0"
                     />
                   </>
                 ))}
@@ -199,6 +198,7 @@ function App() {
 
                 <feMerge>
                   <feMergeNode in="offsetBlur"></feMergeNode>
+                  <feMergeNode in="SourceGraphic"></feMergeNode>
                   {embossLayers.map((layer, index) => (
                     <feMergeNode
                       in={`emboss_${index}`}

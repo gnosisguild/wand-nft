@@ -35,9 +35,9 @@ const EmbossLayer = (props) => {
               <label>Specular Constant — {props.layer.specConstant}</label>
               <input
                 type="range"
-                min="-200"
-                max="200"
-                step="0.1"
+                min="0"
+                max="100"
+                step="0.01"
                 value={props.layer.specConstant}
                 className="slider"
                 onChange={(e) => {
@@ -109,62 +109,6 @@ const EmbossLayer = (props) => {
                 className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "pointZ", e.target.value);
-                }}
-              />
-            </div>
-            <div className="input-group">
-              <label>Compositer k1 — {props.layer.k1}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.001"
-                value={props.layer.k1}
-                className="slider"
-                onChange={(e) => {
-                  props.changeVal(props.index, "k1", e.target.value);
-                }}
-              />
-            </div>
-            <div className="input-group">
-              <label>Compositer k2 — {props.layer.k2}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.001"
-                value={props.layer.k2}
-                className="slider"
-                onChange={(e) => {
-                  props.changeVal(props.index, "k2", e.target.value);
-                }}
-              />
-            </div>
-            <div className="input-group">
-              <label>Compositer k3 — {props.layer.k3}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.001"
-                value={props.layer.k3}
-                className="slider"
-                onChange={(e) => {
-                  props.changeVal(props.index, "k3", e.target.value);
-                }}
-              />
-            </div>
-            <div className="input-group">
-              <label>Compositer k4 — {props.layer.k4}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.001"
-                value={props.layer.k4}
-                className="slider"
-                onChange={(e) => {
-                  props.changeVal(props.index, "k4", e.target.value);
                 }}
               />
             </div>
