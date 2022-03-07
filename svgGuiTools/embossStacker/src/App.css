@@ -1,0 +1,83 @@
+.path {
+  fill: white;
+  stroke: #000;
+  stroke-miterlimit: 10;
+  stroke-width: 0.25px;
+}
+
+.greyBlue {
+  fill: #8a9fa4;
+}
+
+.white {
+  fill: white;
+}
+
+.navy {
+  fill: #053c5b;
+}
+
+.noFill {
+  fill: none;
+}
+
+.red {
+  fill: #ed2d2e;
+}
+
+.gold {
+  fill: #f5cc14;
+}
+
+svg {
+  background: #421f43;
+  width: 100%;
+}
+
+.tool-container {
+  display: flex;
+  justify-content: end;
+}
+
+.svg-container {
+  width: 70%;
+}
+
+.filter-list {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 30%;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0.2em 5px;
+}
+li {
+  margin: 10px;
+  padding: 5px;
+  border: 1px solid navy;
+}
+.input-group {
+  margin: 10px 5px;
+}
+label {
+  display: block;
+  font-size: 12px;
+}
+.input-group input {
+  width: 100%;
+}
+.layer-header {
+  display: flex;
+  justify-content: space-between;
+}
