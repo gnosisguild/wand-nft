@@ -20,7 +20,7 @@ function App() {
   const [embossLayers, setEmbossLayers] = useState([Object.create(baseEmboss)]);
 
   const addEmboss = () => {
-    const newEmbossLayers = [...embossLayers, Object.create(setEmbossLayers)];
+    const newEmbossLayers = [...embossLayers, Object.create(baseEmboss)];
 
     setEmbossLayers(newEmbossLayers);
   };
@@ -48,8 +48,11 @@ function App() {
               <EmbossLayer
                 layer={layer}
                 index={index}
-                removeLayer={removeEmbossLayer}
+                removeLayer={() => {
+                  removeEmbossLayer(index);
+                }}
                 changeVal={changeVal}
+                key={`emboss_${index}`}
               />
             ))}
           </ul>
@@ -123,7 +126,7 @@ function App() {
                       surfaceScale={layer.surfaceScale}
                       specularConstant={layer.specConstant}
                       specularExponent={layer.specularExponent}
-                      lightingColor={layer.lightingColor}
+                      lightingColor={layer.lightColor}
                       result={`specOut${index}`}
                     >
                       <fePointLight
@@ -197,7 +200,10 @@ function App() {
                 <feMerge>
                   <feMergeNode in="offsetBlur"></feMergeNode>
                   {embossLayers.map((layer, index) => (
-                    <feMergeNode in={`emboss_${index}`}></feMergeNode>
+                    <feMergeNode
+                      in={`emboss_${index}`}
+                      key={`node_${index}`}
+                    ></feMergeNode>
                   ))}
                   {/* <feMergeNode in="idk"></feMergeNode> */}
                 </feMerge>

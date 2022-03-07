@@ -11,10 +11,10 @@ const EmbossLayer = (props) => {
             setMinimized(!minimized);
           }}
         >
-          {minimized ? "↑" : "↓"}
+          {minimized ? "↓" : "↑"}
         </button>
       </div>
-      {minimized && (
+      {!minimized && (
         <>
           <div className="inputs">
             <div className="input-group">
@@ -25,7 +25,7 @@ const EmbossLayer = (props) => {
                 max="200"
                 step="0.1"
                 value={props.layer.surfaceScale}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "surfaceScale", e.target.value);
                 }}
@@ -39,7 +39,7 @@ const EmbossLayer = (props) => {
                 max="200"
                 step="0.1"
                 value={props.layer.specConstant}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "specConstant", e.target.value);
                 }}
@@ -53,7 +53,7 @@ const EmbossLayer = (props) => {
                 max="200"
                 step="0.1"
                 value={props.layer.specExponent}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "specExponent", e.target.value);
                 }}
@@ -64,7 +64,7 @@ const EmbossLayer = (props) => {
               <input
                 type="color"
                 value={props.layer.lightColor}
-                class="color-input"
+                className="color-input"
                 onChange={(e) => {
                   props.changeVal(props.index, "lightColor", e.target.value);
                 }}
@@ -78,7 +78,7 @@ const EmbossLayer = (props) => {
                 max="20000"
                 step="1"
                 value={props.layer.pointX}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "pointX", e.target.value);
                 }}
@@ -92,7 +92,7 @@ const EmbossLayer = (props) => {
                 max="20000"
                 step="1"
                 value={props.layer.pointY}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "pointY", e.target.value);
                 }}
@@ -106,7 +106,7 @@ const EmbossLayer = (props) => {
                 max="20000"
                 step="1"
                 value={props.layer.pointZ}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "pointZ", e.target.value);
                 }}
@@ -120,7 +120,7 @@ const EmbossLayer = (props) => {
                 max="1"
                 step="0.001"
                 value={props.layer.k1}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "k1", e.target.value);
                 }}
@@ -134,7 +134,7 @@ const EmbossLayer = (props) => {
                 max="1"
                 step="0.001"
                 value={props.layer.k2}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "k2", e.target.value);
                 }}
@@ -148,7 +148,7 @@ const EmbossLayer = (props) => {
                 max="1"
                 step="0.001"
                 value={props.layer.k3}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "k3", e.target.value);
                 }}
@@ -162,7 +162,7 @@ const EmbossLayer = (props) => {
                 max="1"
                 step="0.001"
                 value={props.layer.k4}
-                class="slider"
+                className="slider"
                 onChange={(e) => {
                   props.changeVal(props.index, "k4", e.target.value);
                 }}
