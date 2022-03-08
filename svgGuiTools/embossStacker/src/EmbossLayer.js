@@ -112,6 +112,48 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
+            <div className="input-group">
+              <label>Opacity — {props.layer.opacity}</label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.001"
+                value={props.layer.opacity}
+                className="slider"
+                onChange={(e) => {
+                  props.changeVal(props.index, "opacity", e.target.value);
+                }}
+              />
+            </div>
+            <div className="input-group">
+              <label>Blur X — {props.layer.blurX}</label>
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="0.001"
+                value={props.layer.blurX}
+                className="slider"
+                onChange={(e) => {
+                  props.changeVal(props.index, "blurX", e.target.value);
+                }}
+              />
+            </div>
+            <div className="input-group">
+              <label>Blur Y — {props.layer.blurY}</label>
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="0.001"
+                value={props.layer.blurY}
+                className="slider"
+                onChange={(e) => {
+                  props.changeVal(props.index, "blurY", e.target.value);
+                }}
+              />
+            </div>
           </div>
           <button onClick={props.removeLayer}>Remove Layer</button>
         </>

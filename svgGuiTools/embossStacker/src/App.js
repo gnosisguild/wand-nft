@@ -10,10 +10,9 @@ const baseEmboss = {
   pointX: -50,
   pointY: -100,
   pointZ: 2000,
-  k1: 0,
-  k2: 1,
-  k3: 0.2,
-  k4: 0,
+  opacity: 1,
+  blurX: 0,
+  blurY: 0,
 };
 
 function App() {
@@ -127,7 +126,7 @@ function App() {
                       specularConstant={layer.specConstant}
                       specularExponent={layer.specularExponent}
                       lightingColor={layer.lightColor}
-                      result={`emboss_${index}`}
+                      result={`lighting_${index}`}
                     >
                       <fePointLight
                         x={layer.pointX}
@@ -135,20 +134,28 @@ function App() {
                         z={layer.pointZ}
                       />
                     </feSpecularLighting>
+                    <feGaussianBlur
+                      in={`lighting_${index}`}
+                      result={`blurred_${index}`}
+                      stdDeviation={`${layer.blurX} ${layer.blurY}`}
+                    ></feGaussianBlur>
+                    {/* Mask Light to handle shape */}
                     <feComposite
-                      in2={`specOut${index}`}
+                      in2={`blurred_${index}`}
                       in="SourceAlpha"
                       operator="out"
                       result={`masked_emboss_${index}`}
                     />
+
+                    {/* Invert light (black to white) and opacity */}
                     <feColorMatrix
                       in={`masked_emboss_${index}`}
                       result={`emboss_${index}`}
                       type="matrix"
-                      values="-1 0 0 0 1 
+                      values={`-1 0 0 0 1 
                               0 -1 0 0 1 
                               0 0 -1 0 1
-                              0 0 0 1 0"
+                              0 0 0 ${layer.opacity || 1} 0`}
                     />
                   </>
                 ))}

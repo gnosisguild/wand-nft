@@ -48,6 +48,9 @@ svg {
   top: 50px;
   left: 0;
   width: 30%;
+  height: calc(100vh - 50px);
+  overflow-y: scroll;
+  padding-bottom: 50px;
 }
 
 ul {
