@@ -14,7 +14,29 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <SvgTemplate />
+        <SvgTemplate
+          title="Hello World"
+          starsSeed={123}
+          planets={[
+            { x: -114, y: 370 },
+            { x: -225, y: 334 },
+            { x: -227, y: 379 },
+            { x: 121, y: 295 },
+            { x: -19, y: 357 },
+            { x: 361, y: 13 },
+            { x: 176, y: 259 },
+            { x: -156, y: 388 },
+          ]}
+          aspects={[
+            { x1: 259, y1: 26, x2: -91, y2: -244 },
+            { x1: 259, y1: 26, x2: -259, y2: -26 },
+            { x1: 83, y1: 247, x2: 84, y2: 246 },
+            { x1: 83, y1: 247, x2: 258, y2: 34 },
+            { x1: 87, y1: 245, x2: 258, y2: 30 },
+            { x1: 248, y1: 77, x2: 191, y2: -177 },
+          ]}
+          background={{ bg0: true }}
+        />
       </main>
 
       <footer className={styles.footer}>

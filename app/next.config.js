@@ -28,8 +28,6 @@ const nextConfig = {
                 callback();
               }
             },
-            // ignoreHelpers: true,
-            // helperDirs: [path.join(__dirname, "handlebars-helpers")],
           },
         },
       ],
