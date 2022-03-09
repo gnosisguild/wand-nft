@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "compile:template": "solid-mustache ./contracts/svg/template/template.svg.hbs -o ./contracts/svg/Template.sol --condense",
+    "compile:template": "solid-mustache ./contracts/svg/template.svg.hbs -o ./contracts/svg/Template.sol --condense",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat deploy --network",
@@ -17,8 +17,7 @@
     "lint:ts": "eslint --max-warnings 0 .",
     "fmt:sol": "prettier 'contracts/**/*.sol' -w",
     "fmt:ts": "prettier '(test|src)/**/*.ts' -w",
-    "prepack": "yarn build",
-    "prepare": "husky install"
+    "prepack": "yarn build"
   },
   "repository": "git@github.com:gnosis/wand-nft.git",
   "license": "UNLICENSED",
@@ -44,12 +43,11 @@
     "hardhat-contract-sizer": "^2.1.1",
     "hardhat-deploy": "0.7.0-beta.38",
     "hardhat-gas-reporter": "^1.0.4",
-    "husky": "5.1.3",
     "prettier": "^2.4.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.6",
     "solhint-plugin-prettier": "0.0.5",
-    "solid-mustache": "^4.0.2",
+    "solid-mustache": "^4.1.1",
     "solidity-coverage": "0.7.17",
     "ts-node": "9.1.1",
     "typescript": "4.1.3"

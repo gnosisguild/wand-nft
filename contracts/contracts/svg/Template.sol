@@ -116,7 +116,7 @@ library Template {
         __input.halo5
           ? ' <circle fill="#9A9EA7" cx="68.43" cy="40.5" r="40"/> '
           : "",
-        ' </g> <circle cx="100" cy="-50" r="20" fill="#9A9EA7" id="h1"></circle> </defs> <g transform="translate(1000 1060)"> '
+        ' </g> </defs> <g transform="translate(1000 1060)"> '
       )
     );
     for (uint256 __i; __i < __input.rhythm.length; __i++) {

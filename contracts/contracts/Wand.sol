@@ -37,7 +37,9 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint256 tokenId,
     uint8 halo,
     int16 latitude,
-    int16 longitude
+    int16 longitude,
+    Template.Planet[8] memory planets,
+    Template.Aspect[8] memory aspects
   ) external override {
     require(
       msg.sender == ERC721.ownerOf(tokenId),
@@ -50,7 +52,9 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       evolution: 0,
       birth: block.timestamp,
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
+      planets: planets,
+      aspects: aspects
     });
     _wands[tokenId] = wand;
     emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
