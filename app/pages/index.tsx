@@ -35,7 +35,7 @@ const Home: NextPage = () => {
             { x1: 87, y1: 245, x2: 258, y2: 30 },
             { x1: 248, y1: 77, x2: 191, y2: -177 },
           ]}
-          background={{ bg0: true }}
+          background={{ hue: 90, bg0: true }}
         />
       </main>
 

@@ -1,10 +1,12 @@
-<rect style="fill:#12161E" width="2000" height="3000"></rect>
-<radialGradient id="grad1">
-  <stop offset="0" style="stop-color:#7080B5"></stop>
-  <stop offset="1" style="stop-color:#6E7DB2;stop-opacity:0"></stop>
-</radialGradient>
-<circle style="fill:url(#grad1)" cx="1000" cy="1925" r="1133"></circle>
-<circle style="fill:url(#grad1)" cx="1000" cy="372" r="1133"></circle>
+<g style="filter: hue-rotate({{uint16 hue}}deg);">
+  <rect style="fill:#12161E" width="2000" height="3000"></rect>
+  <radialGradient id="grad1">
+    <stop offset="0" style="stop-color:#7080B5"></stop>
+    <stop offset="1" style="stop-color:#778cd6;stop-opacity:0"></stop>
+  </radialGradient>
+  <circle style="fill:url(#grad1)" cx="1000" cy="1925" r="1133"></circle>
+  <circle style="fill:url(#grad1)" cx="1000" cy="372" r="1133"></circle>
+</g>
 
 {{#if bg0}}
   <path

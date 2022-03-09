@@ -13,10 +13,12 @@ library Template {
   }
 
   struct Background {
+    uint16 hue;
     bool bg0;
   }
 
   struct Stone {
+    uint16 hue;
     uint256 seed;
     string color;
     int256 seasonsAmplitude;
@@ -54,7 +56,7 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 3000" style="background: #112211;" > <style type="text/css"> .bc{fill:none;stroke:#8BA0A5;} </style>',
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 3000" > <style type="text/css"> .bc{fill:none;stroke:#8BA0A5;} </style>',
         background(__input.background),
         stars(__input),
         stone(__input.stone),
@@ -225,6 +227,9 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
+        '<g style="filter: hue-rotate(',
+        uintToString(__input.bgHue),
+        'deg);"> <rect style="fill:#12161E" width="2000" height="3000"></rect> <radialGradient id="grad1"> <stop offset="0" style="stop-color:#7080B5"></stop> <stop offset="1" style="stop-color:#778cd6;stop-opacity:0"></stop> </radialGradient> <circle style="fill:url(#grad1)" cx="1000" cy="1925" r="1133"></circle> <circle style="fill:url(#grad1)" cx="1000" cy="372" r="1133"></circle> </g> ',
         __input.bg0
           ? ' <path d="M1000,2434.7l-198.9,334.1l194.9-334.7L422.9,2646l569.6-213.7l-891.4-19.9l888.6,17.1l-1122.4-338.6 l1120.5,335.1l-1243.4-713L987.3,2422L-255.5,1315.5L987.9,2418.1L-132.6,937.5l1122.4,1477L101.1,616l891.4,1795.7L422.9,382.4 l573.2,2027.5L801.1,259.6L1000,2409.3l198.9-2149.7l-194.9,2150.3l573.2-2027.5l-569.6,2029.3L1898.9,616l-888.6,1798.5 l1122.4-1477L1012.1,2418.1l1243.4-1102.6L1012.7,2422l1242.8-709.1l-1243.4,713l1120.5-335.1l-1122.4,338.6l888.6-17.1 l-891.4,19.9l569.6,213.7l-573.2-211.9l194.9,334.7L1000,2434.7z" fill="white" ></path> '
           : ""

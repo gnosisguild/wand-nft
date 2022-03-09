@@ -18,6 +18,7 @@ interface Props {
   planets: Planet[];
   aspects: Aspect[];
   background: {
+    hue: number;
     bg0: boolean;
   };
 }
