@@ -18,6 +18,18 @@ const EmbossLayer = (props) => {
         <>
           <div className="inputs">
             <div className="input-group">
+              <label>Light Source — {props.layer.lightType || "point"}</label>
+              <select
+                value={props.layer.lightType || "point"}
+                onChange={(e) =>
+                  props.changeVal(props.index, "lightType", e.target.value)
+                }
+              >
+                <option value="point">point</option>
+                <option value="spotlight">spotlight</option>
+              </select>
+            </div>
+            <div className="input-group">
               <label>Surface Scale — {props.layer.surfaceScale}</label>
               <input
                 type="range"
@@ -112,6 +124,72 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
+            {props.layer.lightType === "spotlight" && (
+              <>
+                <div className="input-group">
+                  <label>Spotlight target X — {props.layer.pointsAtX}</label>
+                  <input
+                    type="range"
+                    min="-20000"
+                    max="20000"
+                    step="1"
+                    value={props.layer.pointsAtX}
+                    className="slider"
+                    onChange={(e) => {
+                      props.changeVal(props.index, "pointsAtX", e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="input-group">
+                  <label>Spotlight target Y — {props.layer.pointsAtY}</label>
+                  <input
+                    type="range"
+                    min="-20000"
+                    max="20000"
+                    step="1"
+                    value={props.layer.pointsAtY}
+                    className="slider"
+                    onChange={(e) => {
+                      props.changeVal(props.index, "pointsAtY", e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="input-group">
+                  <label>Spotlight target Z — {props.layer.pointsAtZ}</label>
+                  <input
+                    type="range"
+                    min="-20000"
+                    max="20000"
+                    step="1"
+                    value={props.layer.pointsAtZ}
+                    className="slider"
+                    onChange={(e) => {
+                      props.changeVal(props.index, "pointsAtZ", e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="input-group">
+                  <label>
+                    Spotlight Cone Angle — {props.layer.limitingConeAngle}
+                  </label>
+                  <input
+                    type="range"
+                    min="-20"
+                    max="20"
+                    step="0.01"
+                    value={props.layer.limitingConeAngle}
+                    className="slider"
+                    onChange={(e) => {
+                      props.changeVal(
+                        props.index,
+                        "limitingConeAngle",
+                        e.target.value
+                      );
+                    }}
+                  />
+                </div>
+              </>
+            )}
             <div className="input-group">
               <label>Opacity — {props.layer.opacity}</label>
               <input

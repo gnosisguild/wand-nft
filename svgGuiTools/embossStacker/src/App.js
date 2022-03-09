@@ -3,6 +3,7 @@ import EmbossLayer from "./EmbossLayer";
 import "./App.css";
 
 const baseEmboss = {
+  lightType: "point",
   surfaceScale: 5,
   specConstant: 5,
   specExponent: 20,
@@ -13,6 +14,10 @@ const baseEmboss = {
   opacity: 1,
   blurX: 0,
   blurY: 0,
+  pointsAtX: 0,
+  pointsAtY: 0,
+  pointsAtZ: 0,
+  limitingConeAngle: 15,
 };
 
 function App() {
@@ -128,11 +133,24 @@ function App() {
                       lightingColor={layer.lightColor}
                       result={`lighting_${index}`}
                     >
-                      <fePointLight
-                        x={layer.pointX}
-                        y={layer.pointY}
-                        z={layer.pointZ}
-                      />
+                      {layer.lightType === "point" && (
+                        <fePointLight
+                          x={layer.pointX}
+                          y={layer.pointY}
+                          z={layer.pointZ}
+                        />
+                      )}
+                      {layer.lightType === "spotlight" && (
+                        <feSpotLight
+                          x={layer.pointX}
+                          y={layer.pointY}
+                          z={layer.pointZ}
+                          limitingConeAngle={layer.limitingConeAngle}
+                          pointsAtX={layer.pointsAtX}
+                          pointsAtY={layer.pointsAtY}
+                          pointsAtZ={layer.pointsAtZ}
+                        />
+                      )}
                     </feSpecularLighting>
                     <feGaussianBlur
                       in={`lighting_${index}`}
@@ -143,7 +161,7 @@ function App() {
                     <feComposite
                       in2={`blurred_${index}`}
                       in="SourceAlpha"
-                      operator="out"
+                      operator={layer.lightType === "spotlight" ? "in" : "out"}
                       result={`masked_emboss_${index}`}
                     />
 
