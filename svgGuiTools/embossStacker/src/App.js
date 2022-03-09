@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EmbossLayer from "./EmbossLayer";
+import { presets } from "./Presets";
 import "./App.css";
 
 const baseEmboss = {
@@ -21,7 +22,8 @@ const baseEmboss = {
 };
 
 function App() {
-  const [embossLayers, setEmbossLayers] = useState([Object.create(baseEmboss)]);
+  const [embossLayers, setEmbossLayers] = useState(presets);
+  const [showHalo, setShowHalo] = useState(true);
 
   const addEmboss = () => {
     const newEmbossLayers = [...embossLayers, Object.create(baseEmboss)];
@@ -101,6 +103,16 @@ function App() {
                   d="M8.82,104.29A226.25,226.25,0,0,0,104.36,8.76L87.44.12C83.82,7.23,75.12,20.71,75.12,20.71c-14.76,21-32.2,22.58-52.73,1.6,21.12,20.29,19.36,38-1.6,52.75h-.06A203.67,203.67,0,0,1,.12,87.22Z"
                 />
               </symbol>
+              <g id="halo">
+                <path
+                  d="M210.75,0Q181.91,217,105.43,215,29,217,.12,0L55.41,420q-21.87-164.34,50-164.66,71.91.33,50,164.66Z"
+                  fill="#9A9EA7"
+                  style={{
+                    transform: "translateX(-50%)",
+                    transformBox: "fill-box",
+                  }}
+                ></path>
+              </g>
 
               <filter id="filter1" x="-25%" y="-25%" width="150%" height="150%">
                 <feGaussianBlur
@@ -234,6 +246,166 @@ function App() {
                 </feMerge>
               </filter>
             </defs>
+            {showHalo && (
+              <g transform="translate(1000 1060)" filter="url(#filter1)">
+                <g
+                  style={{
+                    transform: "rotate(calc(0 * 15deg)) translateY(-800px)",
+                  }}
+                ></g>
+                <g
+                  style={{
+                    transform: "rotate(calc(1 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(2 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(3 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(4 * 15deg)) translateY(-800px)",
+                  }}
+                ></g>
+                <g
+                  style={{
+                    transform: "rotate(calc(5 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(6 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(7 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(8 * 15deg)) translateY(-800px)",
+                  }}
+                ></g>
+                <g
+                  style={{
+                    transform: "rotate(calc(9 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(10 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(11 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(12 * 15deg)) translateY(-800px)",
+                  }}
+                ></g>
+                <g
+                  style={{
+                    transform: "rotate(calc(13 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(14 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(15 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(16 * 15deg)) translateY(-800px)",
+                  }}
+                ></g>
+                <g
+                  style={{
+                    transform: "rotate(calc(17 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(18 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(19 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(20 * 15deg)) translateY(-800px)",
+                  }}
+                ></g>
+                <g
+                  style={{
+                    transform: "rotate(calc(21 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(22 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+                <g
+                  style={{
+                    transform: "rotate(calc(23 * 15deg)) translateY(-800px)",
+                  }}
+                >
+                  <use href="#halo"></use>
+                </g>
+              </g>
+            )}
             <g filter="url(#filter1)">
               <rect
                 x="946.87"
