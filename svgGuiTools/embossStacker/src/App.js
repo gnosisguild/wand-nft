@@ -8,7 +8,7 @@ const baseEmboss = {
   surfaceScale: 5,
   specConstant: 5,
   specExponent: 20,
-  lightColor: "#bbbbbb",
+  lightColor: "#ffffff",
   pointX: -50,
   pointY: -100,
   pointZ: 2000,
@@ -114,7 +114,12 @@ function App() {
                 ></path>
               </g>
 
-              <filter id="filter1" x="-25%" y="-25%" width="150%" height="150%">
+              <filter
+                color-interpolation-filters="sRGB"
+                id="filter1"
+                width="150%"
+                height="150%"
+              >
                 <feGaussianBlur
                   in="SourceAlpha"
                   result="alphablur"

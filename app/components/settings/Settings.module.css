@@ -1,0 +1,10 @@
+.layerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settingContainer {
+  border: 1px solid navy;
+  padding: 1em;
+}

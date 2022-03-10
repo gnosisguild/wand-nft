@@ -21,6 +21,15 @@ interface Props {
     hue: number;
     bg0: boolean;
   };
+  halo: {
+    halo0?: boolean;
+    halo1?: boolean;
+    halo2?: boolean;
+    halo3?: boolean;
+    halo4?: boolean;
+    halo5?: boolean;
+    rhythm: Array<boolean>;
+  };
 }
 
 const SvgTemplate: React.FC<Props> = (props) => (
