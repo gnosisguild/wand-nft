@@ -8,6 +8,7 @@ import styles from "../styles/Home.module.css";
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
+  const [handle, setHandle] = React.useState("handle0");
   return (
     <div className={styles.container}>
       <Head>
@@ -36,6 +37,17 @@ const Home: NextPage = () => {
               value={rhythm}
               onChange={(ev) => setRhythm(ev.target.value.slice(0, 24))}
             />
+          </CollapseContainer>
+          <CollapseContainer title="Handle">
+            <select
+              value={handle}
+              onChange={(ev) => setHandle(ev.target.value)}
+            >
+              <option value="handle0">handle0</option>
+              <option value="handle1">handle1</option>
+              <option value="handle2">handle2</option>
+              <option value="handle3">handle3</option>
+            </select>
           </CollapseContainer>
         </div>
         <div className={styles.wandImage}>
@@ -68,6 +80,7 @@ const Home: NextPage = () => {
                 (v, i) => rhythm[i % rhythm.length] !== "0"
               ),
             }}
+            handle={{ [handle]: true }}
           />
         </div>
       </main>

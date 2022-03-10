@@ -30,6 +30,12 @@ interface Props {
     halo5?: boolean;
     rhythm: Array<boolean>;
   };
+  handle: {
+    handle0?: boolean;
+    handle1?: boolean;
+    handle2?: boolean;
+    handle3?: boolean;
+  };
 }
 
 const SvgTemplate: React.FC<Props> = (props) => (
