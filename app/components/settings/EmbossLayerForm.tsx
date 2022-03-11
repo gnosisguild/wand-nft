@@ -1,11 +1,20 @@
 import { useState } from "react";
+import { EmbossLayer } from "../SvgTemplate";
+import styles from "./Settings.module.css";
 
-const EmbossLayer = (props) => {
+interface Props {
+  layer: EmbossLayer;
+  index: number;
+  removeLayer(index: number): void;
+  changeVal(index: number, key: string, value: string): void;
+}
+
+const EmbossLayerForm: React.FC<Props> = (props) => {
   const [minimized, setMinimized] = useState(false);
   return (
-    <li>
-      <div className="layer-header">
-        <h3>Layer {props.index + 1}</h3>
+    <li className={styles.formContainer}>
+      <div className={styles.layerHeader}>
+        <h4>Layer {props.index + 1}</h4>
         <button
           onClick={() => {
             setMinimized(!minimized);
@@ -16,8 +25,8 @@ const EmbossLayer = (props) => {
       </div>
       {!minimized && (
         <>
-          <div className="inputs">
-            <div className="input-group">
+          <div>
+            <div className={styles.inputGroup}>
               <label>Light Source — {props.layer.lightType || "point"}</label>
               <select
                 value={props.layer.lightType || "point"}
@@ -29,7 +38,7 @@ const EmbossLayer = (props) => {
                 <option value="spotlight">spotlight</option>
               </select>
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Surface Scale — {props.layer.surfaceScale}</label>
               <input
                 type="range"
@@ -43,7 +52,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Specular Constant — {props.layer.specConstant}</label>
               <input
                 type="range"
@@ -57,7 +66,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Specular Exponent — {props.layer.specExponent}</label>
               <input
                 type="range"
@@ -71,7 +80,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Light Color — {props.layer.lightColor}</label>
               <input
                 type="color"
@@ -82,7 +91,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Light Position X — {props.layer.pointX}</label>
               <input
                 type="range"
@@ -96,7 +105,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Light Position Y — {props.layer.pointY}</label>
               <input
                 type="range"
@@ -110,7 +119,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Light Position Z — {props.layer.pointZ}</label>
               <input
                 type="range"
@@ -126,7 +135,7 @@ const EmbossLayer = (props) => {
             </div>
             {props.layer.lightType === "spotlight" && (
               <>
-                <div className="input-group">
+                <div className={styles.inputGroup}>
                   <label>Spotlight target X — {props.layer.pointsAtX}</label>
                   <input
                     type="range"
@@ -140,7 +149,7 @@ const EmbossLayer = (props) => {
                     }}
                   />
                 </div>
-                <div className="input-group">
+                <div className={styles.inputGroup}>
                   <label>Spotlight target Y — {props.layer.pointsAtY}</label>
                   <input
                     type="range"
@@ -154,7 +163,7 @@ const EmbossLayer = (props) => {
                     }}
                   />
                 </div>
-                <div className="input-group">
+                <div className={styles.inputGroup}>
                   <label>Spotlight target Z — {props.layer.pointsAtZ}</label>
                   <input
                     type="range"
@@ -168,7 +177,7 @@ const EmbossLayer = (props) => {
                     }}
                   />
                 </div>
-                <div className="input-group">
+                <div className={styles.inputGroup}>
                   <label>
                     Spotlight Cone Angle — {props.layer.limitingConeAngle}
                   </label>
@@ -190,7 +199,7 @@ const EmbossLayer = (props) => {
                 </div>
               </>
             )}
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Opacity — {props.layer.opacity}</label>
               <input
                 type="range"
@@ -204,7 +213,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Blur X — {props.layer.blurX}</label>
               <input
                 type="range"
@@ -218,7 +227,7 @@ const EmbossLayer = (props) => {
                 }}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <label>Blur Y — {props.layer.blurY}</label>
               <input
                 type="range"
@@ -233,11 +242,13 @@ const EmbossLayer = (props) => {
               />
             </div>
           </div>
-          <button onClick={props.removeLayer}>Remove Layer</button>
+          <button onClick={() => props.removeLayer(props.index)}>
+            Remove Layer
+          </button>
         </>
       )}
     </li>
   );
 };
 
-export default EmbossLayer;
+export default EmbossLayerForm;

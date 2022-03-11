@@ -18,3 +18,10 @@
 .wandImage {
   width: 45%;
 }
+
+.toolList {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  row-gap: 1em;
+}

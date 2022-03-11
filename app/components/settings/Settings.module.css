@@ -5,6 +5,27 @@
 }
 
 .settingContainer {
+  min-width: 200px;
   border: 1px solid navy;
   padding: 1em;
+}
+
+.formContainer {
+  margin: 10px;
+  padding: 5px;
+  border: 1px solid lightgrey;
+}
+.inputGroup {
+  margin: 10px 5px;
+}
+.inputGroup label {
+  display: block;
+  font-size: 12px;
+}
+.inputGroup input {
+  width: 100%;
+}
+.layerHeader {
+  display: flex;
+  justify-content: space-between;
 }

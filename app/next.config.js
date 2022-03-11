@@ -24,6 +24,8 @@ const nextConfig = {
             helperResolver(helper, callback) {
               if (helper.startsWith("./uint") || helper.startsWith("./int")) {
                 callback(null, path.join(__dirname, "identity-helper.js"));
+              } else if (helper.startsWith("./eq")) {
+                callback(null, path.join(__dirname, "eq-helper.js"));
               } else {
                 callback();
               }

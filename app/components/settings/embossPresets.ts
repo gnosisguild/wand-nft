@@ -1,4 +1,4 @@
-export const presets = [
+export const embossPresets = [
   {
     specConstant: 6.78,
     specExponent: -200,
