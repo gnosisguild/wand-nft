@@ -8,3 +8,6 @@ env/
 .history
 coverage*
 deployments
+
+# Local Netlify folder
+.netlify

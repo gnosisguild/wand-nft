@@ -4,38 +4,24 @@
 
 .main {
   min-height: 100vh;
-  padding: 4rem 0;
+  padding: 0;
   flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.footer {
+.tools {
+  width: 45%;
+}
+
+.wandImage {
+  width: 45%;
+}
+
+.toolList {
   display: flex;
-  flex: 1;
-  padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
-}
-
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
+  flex-wrap: wrap;
+  column-gap: 1em;
+  row-gap: 1em;
 }
