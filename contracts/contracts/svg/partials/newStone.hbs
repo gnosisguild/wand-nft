@@ -1,0 +1,57 @@
+<clipPath id="stoneclip">
+  <circle cx="1000" cy="1060" r="262"></circle>
+</clipPath>
+<filter id="texture">
+  <feTurbulence
+    type={{settings.turbType}}
+    id="octave"
+    baseFrequency="{{settings.turbFreqX}} {{settings.turbFreqY}}"
+    numOctaves="{{settings.turbOct}}"
+    seed="1004123123"
+  ></feTurbulence>
+  <feComponentTransfer>
+    <feFuncR
+      id="r"
+      type="gamma"
+      amplitude="{{settings.redAmp}}"
+      exponent="{{settings.redExp}}"
+      offset="{{settings.redOff}}"
+    ></feFuncR>
+    <feFuncG
+      id="g"
+      type="gamma"
+      amplitude="{{settings.greenAmp}}"
+      exponent="{{settings.greenExp}}"
+      offset="{{settings.greenOff}}"
+    ></feFuncG>
+    <feFuncB
+      id="b"
+      type="gamma"
+      amplitude="{{settings.blueAmp}}"
+      exponent="{{settings.blueExp}}"
+      offset="{{settings.blueOff}}"
+    ></feFuncB>
+    <feFuncA type="discrete" tableValues="1"></feFuncA>
+  </feComponentTransfer>
+
+  <feComposite operator="in" in2="SourceGraphic"></feComposite>
+</filter>
+<radialGradient id="stoneshadow">
+  <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"></stop>
+  <stop offset="90%" stop-color="hsla(0, 0%, 0%, 1)"></stop>
+</radialGradient>
+<circle
+  id="stone"
+  transform="rotate(100{{settings.rotation}}, 1000, 1060)"
+  cx="1000"
+  cy="1060"
+  r="260"
+  filter="url(#texture)"
+></circle>
+<circle
+  cx="1200"
+  cy="1060"
+  r="520"
+  fill="url(#stoneshadow)"
+  clip-path="url(#stoneclip)"
+></circle>

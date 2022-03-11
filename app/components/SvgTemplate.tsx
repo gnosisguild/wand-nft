@@ -29,6 +29,22 @@ export interface EmbossLayer {
   pointsAtZ: number;
   limitingConeAngle: number;
 }
+export interface StoneSettings {
+  turbType: string;
+  turbFreqX: number;
+  turbFreqY: number;
+  turbOct: number;
+  redAmp: number;
+  redExp: number;
+  redOff: number;
+  greenAmp: number;
+  greenExp: number;
+  greenOff: number;
+  blueAmp: number;
+  blueExp: number;
+  blueOff: number;
+  rotation: number;
+}
 interface Props {
   title: string;
   starsSeed: number;
@@ -55,6 +71,9 @@ interface Props {
   };
   filter: {
     layers: EmbossLayer[];
+  };
+  stone: {
+    settings: StoneSettings;
   };
 }
 

@@ -9,6 +9,9 @@
   border: 1px solid navy;
   padding: 1em;
 }
+.fullWidth {
+  width: 100%;
+}
 
 .formContainer {
   margin: 10px;

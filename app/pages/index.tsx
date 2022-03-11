@@ -2,10 +2,15 @@ import type { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { SvgTemplate, CollapseContainer, EmbossLayerForm } from "../components";
+import {
+  SvgTemplate,
+  CollapseContainer,
+  EmbossLayerForm,
+  StoneForm,
+} from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
-import { EmbossLayer } from "../components/SvgTemplate";
+import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
 
 const baseEmboss = {
   lightType: "point",
@@ -25,11 +30,29 @@ const baseEmboss = {
   limitingConeAngle: 15,
 };
 
+const baseStoneSettings = {
+  turbType: "fractalNoise",
+  turbFreqX: 0.004,
+  turbFreqY: 0.007,
+  turbOct: 2,
+  redAmp: 0.69,
+  redExp: -0.43,
+  redOff: 0.16,
+  greenAmp: 0.61,
+  greenExp: -0.66,
+  greenOff: -0.63,
+  blueAmp: 0.58,
+  blueExp: 0.01,
+  blueOff: -0.15,
+  rotation: 26,
+};
+
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
+  const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
 
   const addEmboss = () => {
     const newEmbossLayers = [...embossLayers, Object.create(baseEmboss)];
@@ -43,12 +66,23 @@ const Home: NextPage = () => {
     setEmbossLayers(layers);
   };
 
-  const changeVal = (index: number, key: keyof EmbossLayer, value: any) => {
+  const changeEmbossVal = (
+    index: number,
+    key: keyof EmbossLayer,
+    value: any
+  ) => {
     const layers: EmbossLayer[] = [...embossLayers];
     const layer = layers[index];
     layer[key] = value;
     setEmbossLayers(layers);
   };
+
+  const changeStoneSetting = (key: keyof StoneSettings, value: any) => {
+    const settings = { ...stoneSettings };
+    settings[key] = value;
+    setStoneSettings(settings);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -93,19 +127,25 @@ const Home: NextPage = () => {
                 <option value="handle3">handle3</option>
               </select>
             </CollapseContainer>
-            <CollapseContainer title="Emboss Layers">
+            <CollapseContainer wide title="Emboss Layers">
               <ul>
                 {embossLayers.map((layer, index) => (
                   <EmbossLayerForm
                     layer={layer}
                     index={index}
                     removeLayer={removeEmbossLayer}
-                    changeVal={changeVal}
+                    changeVal={changeEmbossVal}
                     key={`emboss_${index}`}
                   />
                 ))}
               </ul>
               <button onClick={addEmboss}>Add Emboss Layer</button>
+            </CollapseContainer>
+            <CollapseContainer wide title="Stone">
+              <StoneForm
+                settings={stoneSettings}
+                changeVal={changeStoneSetting}
+              />
             </CollapseContainer>
           </div>
         </div>
@@ -141,6 +181,7 @@ const Home: NextPage = () => {
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
+            stone={{ settings: stoneSettings }}
           />
         </div>
       </main>
