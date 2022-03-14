@@ -80,7 +80,12 @@ interface Props {
 
 const SvgTemplate: React.FC<Props> = (props) => (
   <div
-    dangerouslySetInnerHTML={{ __html: template(props) }}
+    dangerouslySetInnerHTML={{
+      __html: template(props, {
+        allowProtoMethodsByDefault: true,
+        allowProtoPropertiesByDefault: true,
+      }),
+    }}
     className={classes.container}
   />
 );
