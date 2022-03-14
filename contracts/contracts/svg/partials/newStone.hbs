@@ -33,8 +33,32 @@
     ></feFuncB>
     <feFuncA type="discrete" tableValues="1"></feFuncA>
   </feComponentTransfer>
+  <feComposite
+    operator="in"
+    in2="SourceGraphic"
+    result="stoneTexture"
+  ></feComposite>
 
-  <feComposite operator="in" in2="SourceGraphic"></feComposite>
+  {{! <!-- Background glow  --> }}
+  <feGaussianBlur
+    in="SourceAlpha"
+    stdDeviation="30"
+    result="glow"
+  ></feGaussianBlur>
+  <feColorMatrix
+    in="glow"
+    result="bgGlow"
+    type="matrix"
+    values="-1 0 0 0 1
+            0 -1 0 0 1
+            0 0 -1 0 1
+            0 0 0 0.8 0 "
+  ></feColorMatrix>
+
+  <feMerge>
+    <feMergeNode in="bgGlow"></feMergeNode>
+    <feMergeNode in="stoneTexture"></feMergeNode>
+  </feMerge>
 </filter>
 <radialGradient id="stoneshadow">
   <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"></stop>
