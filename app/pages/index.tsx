@@ -67,8 +67,10 @@ const Home: NextPage = () => {
   }, [shape, rhythm, handle, embossLayers, stoneSettings]);
 
   const addEmboss = () => {
-    const newEmbossLayers = [...embossLayers, Object.create(embossLayers[0])];
-
+    const newEmbossLayers = [
+      ...embossLayers,
+      JSON.parse(JSON.stringify(embossLayers[0])),
+    ];
     setEmbossLayers(newEmbossLayers);
   };
 
