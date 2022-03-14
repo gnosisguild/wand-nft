@@ -10,62 +10,59 @@
     stdDeviation="8"
   ></feGaussianBlur>
 
-  {{!-- <!-- Background glow  --> --}}
+  {{! <!-- Background glow  --> }}
   <feGaussianBlur
     in="SourceGraphic"
     result="graphicblur"
     stdDeviation="8"
   ></feGaussianBlur>
-  <feOffset
-    dx="0"
-    dy="0"
-    in="graphicblur"
-    result="offsetBlur"
-  ></feOffset>
+  <feOffset dx="0" dy="0" in="graphicblur" result="offsetBlur"></feOffset>
 
-  {{!-- <!-- Emboss/Bevel --> --}}
+  {{! <!-- Emboss/Bevel --> }}
   {{#each layers}}
+    <feTurbulence
+      type="{{turbType}}"
+      id="octave"
+      baseFrequency="{{turbFreqX}} {{turbFreqY}}"
+      numOctaves="{{turbOct}}"
+      seed="1004123123"
+      result="turb_{{@index}}"
+    ></feTurbulence>
+    <feGaussianBlur
+      stdDeviation="{{turbBlur}}"
+      in="SourceAlpha"
+      result="turb_blur_{{@index}}"
+    ></feGaussianBlur>
+    <feDisplacementMap
+      scale="{{dispScale}}"
+      in="turb_blur_{{@index}}"
+      in2="turb_{{@index}}"
+      result="disp_turb_{{@index}}"
+    ></feDisplacementMap>
     <feSpecularLighting
-      in="graphicblur"
-      surfaceScale={{surfaceScale}}
-      specularConstant={{specConstant}}
-      specularExponent={{specularExponent}}
-      lightingColor={{lightColor}}
+      in="disp_turb_{{@index}}"
+      surfaceScale="{{surfaceScale}}"
+      specularConstant="{{specConstant}}"
+      specularExponent="{{specularExponent}}"
+      lightingColor="{{lightColor}}"
       result="lighting_{{@index}}"
     >
-      {{#if (eq lightType "point")}}
-        <fePointLight
-          x={{pointX}}
-          y={{pointY}}
-          z={{pointZ}}
-        />
-      {{/if}}
-      {{#if (eq lightType "spotlight")}}
-        <feSpotLight
-          x={{pointX}}
-          y={{pointY}}
-          z={{pointZ}}
-          limitingConeAngle={{limitingConeAngle}}
-          pointsAtX={{pointsAtX}}
-          pointsAtY={{pointsAtY}}
-          pointsAtZ={{pointsAtZ}}
-        />
-      {{/if}}
+      <fePointLight x="{{pointX}}" y="{{pointY}}" z="{{pointZ}}"></fePointLight>
     </feSpecularLighting>
     <feGaussianBlur
       in="lighting_{{@index}}"
       result="blurred_{{@index}}"
       stdDeviation="{{blurX}} {{blurY}}"
     ></feGaussianBlur>
-  {{!-- Mask Light to handle shape --}}
+    {{! Mask Light to handle shape }}
     <feComposite
       in2="blurred_{{@index}}"
       in="SourceAlpha"
-      operator="{{#if (eq lightType "spotlight")}}in{{/if}}{{#if (eq lightType "point")}}out{{/if}}"
+      operator="out"
       result="masked_emboss_{{@index}}"
-    />
+    ></feComposite>
 
-    {{!-- Invert light (black to white) and opacity --}}
+    {{! Invert light (black to white) and opacity }}
     <feColorMatrix
       in="masked_emboss_{{@index}}"
       result="emboss_{{@index}}"
@@ -74,11 +71,11 @@
               0 -1 0 0 1 
               0 0 -1 0 1
               0 0 0 {{opacity}} 0"
-    />
+    ></feColorMatrix>
   {{/each}}
 
-  {{!-- May be useful, demo of this here: http://cs.sru.edu/~svg/Chapter05/G05xx46.svg --}}
-  {{!-- <feTurbulence baseFrequency=".001" numOctaves="2" result="A">
+  {{! May be useful, demo of this here: http://cs.sru.edu/~svg/Chapter05/G05xx46.svg }}
+  {{! <feTurbulence baseFrequency=".001" numOctaves="2" result="A">
       <animate attributeName="baseFrequency" dur="100s" values=".005;.002;.001" repeatCount="indefinite"/> 
   </feTurbulence>
   <feComposite
@@ -119,19 +116,16 @@
     k3="1"
     k4="0"
     result="idk"
-  /> --}}
+  /> }}
 
   <feMerge>
     <feMergeNode in="offsetBlur"></feMergeNode>
     <feMergeNode in="SourceGraphic"></feMergeNode>
     {{#each layers}}
-      <feMergeNode
-        in="emboss_{{@index}}"
-        key="node_{{@index}}"
-      ></feMergeNode>
+      <feMergeNode in="emboss_{{@index}}" key="node_{{@index}}"></feMergeNode>
     {{/each}}
 
-    {{!-- This mergeNode is used for the turbulence filter above --}}
-    {{!-- <feMergeNode in="idk"></feMergeNode> --}}
+    {{! This mergeNode is used for the turbulence filter above }}
+    {{! <feMergeNode in="idk"></feMergeNode> }}
   </feMerge>
 </filter>

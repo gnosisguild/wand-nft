@@ -13,7 +13,12 @@ interface Aspect {
   y2: number;
 }
 export interface EmbossLayer {
-  lightType: string;
+  turbType: string;
+  turbFreqX: number;
+  turbFreqY: number;
+  turbOct: number;
+  turbBlur: number;
+  dispScale: number;
   surfaceScale: number;
   specConstant: number;
   specExponent: number;
@@ -24,10 +29,6 @@ export interface EmbossLayer {
   opacity: number;
   blurX: number;
   blurY: number;
-  pointsAtX: number;
-  pointsAtY: number;
-  pointsAtZ: number;
-  limitingConeAngle: number;
 }
 export interface StoneSettings {
   turbType: string;

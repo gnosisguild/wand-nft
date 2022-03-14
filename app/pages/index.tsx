@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import {
@@ -11,24 +11,7 @@ import {
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
-
-const baseEmboss = {
-  lightType: "point",
-  surfaceScale: 5,
-  specConstant: 5,
-  specExponent: 20,
-  lightColor: "#ffffff",
-  pointX: -50,
-  pointY: -100,
-  pointZ: 2000,
-  opacity: 1,
-  blurX: 0,
-  blurY: 0,
-  pointsAtX: 0,
-  pointsAtY: 0,
-  pointsAtZ: 0,
-  limitingConeAngle: 15,
-};
+import { btoa } from "buffer";
 
 const baseStoneSettings = {
   turbType: "fractalNoise",
@@ -54,8 +37,37 @@ const Home: NextPage = () => {
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
 
+  useEffect(() => {
+    // set initial state from URL
+    const params = new URLSearchParams(window.location.search);
+    const settingsBase64 = params.get("settings");
+    if (settingsBase64) {
+      const decodedSettings = JSON.parse(window.atob(settingsBase64));
+      setShape(decodedSettings.shape);
+      setRhythm(decodedSettings.rhythm);
+      setHandle(decodedSettings.handle);
+      setEmbossLayers(decodedSettings.embossLayers);
+      setStoneSettings(decodedSettings.stoneSettings);
+    }
+  }, []);
+
+  useEffect(() => {
+    // save wand state to url
+    const wandState = {
+      shape,
+      rhythm,
+      handle,
+      embossLayers,
+      stoneSettings,
+    };
+    const base64Settings = window.btoa(JSON.stringify(wandState));
+    const params = new URLSearchParams();
+    params.set("settings", base64Settings);
+    window.history.replaceState(null, "", `?${params.toString()}`);
+  }, [shape, rhythm, handle, embossLayers, stoneSettings]);
+
   const addEmboss = () => {
-    const newEmbossLayers = [...embossLayers, Object.create(baseEmboss)];
+    const newEmbossLayers = [...embossLayers, Object.create(embossPresets[0])];
 
     setEmbossLayers(newEmbossLayers);
   };
@@ -171,7 +183,7 @@ const Home: NextPage = () => {
               { x1: 87, y1: 245, x2: 258, y2: 30 },
               { x1: 248, y1: 77, x2: 191, y2: -177 },
             ]}
-            background={{ hue: 90, bg0: true }}
+            background={{ hue: 0, bg0: true }}
             halo={{
               [shape]: true,
               rhythm: Array.from(
