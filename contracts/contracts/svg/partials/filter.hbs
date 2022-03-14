@@ -1,8 +1,10 @@
 <filter
   color-interpolation-filters="sRGB"
   id="glowEmboss"
-  width="150%"
-  height="150%"
+  width="250%"
+  height="250%"
+  x="-30%"
+  y="-20%"
 >
   <feGaussianBlur
     in="SourceAlpha"
@@ -12,11 +14,19 @@
 
   {{! <!-- Background glow  --> }}
   <feGaussianBlur
-    in="SourceGraphic"
-    result="graphicblur"
-    stdDeviation="8"
+    in="SourceAlpha"
+    stdDeviation="30"
+    result="glow"
   ></feGaussianBlur>
-  <feOffset dx="0" dy="0" in="graphicblur" result="offsetBlur"></feOffset>
+  <feColorMatrix
+    in="glow"
+    result="bgGlow"
+    type="matrix"
+    values="-1 0 0 0 1
+            0 -1 0 0 1
+            0 0 -1 0 1
+            0 0 0 0.8 0 "
+  ></feColorMatrix>
 
   {{! <!-- Emboss/Bevel --> }}
   {{#each layers}}
@@ -119,7 +129,7 @@
   /> }}
 
   <feMerge>
-    <feMergeNode in="offsetBlur"></feMergeNode>
+    <feMergeNode in="bgGlow"></feMergeNode>
     <feMergeNode in="SourceGraphic"></feMergeNode>
     {{#each layers}}
       <feMergeNode in="emboss_{{@index}}" key="node_{{@index}}"></feMergeNode>

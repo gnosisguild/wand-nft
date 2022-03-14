@@ -85,7 +85,6 @@ const Home: NextPage = () => {
     key: keyof EmbossLayer,
     value: any
   ) => {
-    console.log(index);
     const layers: EmbossLayer[] = [...embossLayers];
     const layer = layers[index];
     layer[key] = value;
