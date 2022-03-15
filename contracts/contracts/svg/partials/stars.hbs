@@ -1,9 +1,11 @@
-<filter id="stars">
-  <feTurbulence baseFrequency="0.1" seed="{{uint starsSeed}}"></feTurbulence>
-  <feColorMatrix
-    values="0 0 0 7 -4  0 0 0 7 -4  0 0 0 7 -4  0 0 0 0 1"
-  ></feColorMatrix>
-</filter>
+<defs>
+  <filter id="stars">
+    <feTurbulence baseFrequency="0.1" seed="{{uint starsSeed}}"></feTurbulence>
+    <feColorMatrix
+      values="0 0 0 7 -4  0 0 0 7 -4  0 0 0 7 -4  0 0 0 0 1"
+    ></feColorMatrix>
+  </filter>
+</defs>
 <clipPath id="starsclip">
   <circle cx="1000" cy="1060" r="520"></circle>
 </clipPath>

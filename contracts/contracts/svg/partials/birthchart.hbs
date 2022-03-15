@@ -4,8 +4,11 @@
       <stop offset="0%" stop-color="#FFFFF0"></stop>
       <stop offset="100%" stop-color="#BFBDB1"></stop>
     </linearGradient>
+    <filter id="planet_blur">
+      <feGaussianBlur stdDeviation="4"></feGaussianBlur>
+    </filter>
   </defs>
-  <g style="filter: blur(5px);">
+  <g filter="url(#planet_blur)">
     {{#each planets length=8}}
       <circle cx="{{int16 x}}" cy="{{int16 y}}" r="11" fill="white"></circle>
     {{/each}}
