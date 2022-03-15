@@ -14,7 +14,7 @@ export const embossPresets = [
     pointZ: 400,
     lightColor: "#ffffff",
     opacity: 1,
-    blurX: 3,
-    blurY: 5,
+    blurX: 2,
+    blurY: 2,
   },
 ];

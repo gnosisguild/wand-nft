@@ -36,6 +36,7 @@ const Home: NextPage = () => {
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
+  let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
     // set initial state from URL
@@ -53,17 +54,20 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     // save wand state to url
-    const wandState = {
-      shape,
-      rhythm,
-      handle,
-      embossLayers,
-      stoneSettings,
-    };
-    const base64Settings = window.btoa(JSON.stringify(wandState));
-    const params = new URLSearchParams();
-    params.set("settings", base64Settings);
-    window.history.replaceState(null, "", `?${params.toString()}`);
+    clearTimeout(URLtimer);
+    URLtimer = setTimeout(() => {
+      const wandState = {
+        shape,
+        rhythm,
+        handle,
+        embossLayers,
+        stoneSettings,
+      };
+      const base64Settings = window.btoa(JSON.stringify(wandState));
+      const params = new URLSearchParams();
+      params.set("settings", base64Settings);
+      window.history.replaceState(null, "", `?${params.toString()}`);
+    }, 100);
   }, [shape, rhythm, handle, embossLayers, stoneSettings]);
 
   const addEmboss = () => {

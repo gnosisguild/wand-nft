@@ -161,8 +161,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Light Position X — {props.layer.pointX}</label>
               <input
                 type="range"
-                min="-20000"
-                max="20000"
+                min="-2000"
+                max="2000"
                 step="1"
                 value={props.layer.pointX}
                 className="slider"
@@ -175,8 +175,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Light Position Y — {props.layer.pointY}</label>
               <input
                 type="range"
-                min="-20000"
-                max="20000"
+                min="-2000"
+                max="2000"
                 step="1"
                 value={props.layer.pointY}
                 className="slider"
@@ -189,8 +189,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Light Position Z — {props.layer.pointZ}</label>
               <input
                 type="range"
-                min="-20000"
-                max="20000"
+                min="-2000"
+                max="2000"
                 step="1"
                 value={props.layer.pointZ}
                 className="slider"
