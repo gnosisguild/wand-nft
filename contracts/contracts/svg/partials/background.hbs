@@ -1,26 +1,128 @@
-<g style="filter: hue-rotate({{uint16 hue}}deg);">
-  <rect style="fill:#12161E" width="2000" height="3000"></rect>
-  <radialGradient id="grad1">
-    <stop offset="0" style="stop-color:#7080B5"></stop>
-    <stop offset="1" style="stop-color:#778cd6;stop-opacity:0"></stop>
-  </radialGradient>
-  <circle style="fill:url(#grad1)" cx="1000" cy="1925" r="1133"></circle>
-  <circle style="fill:url(#grad1)" cx="1000" cy="372" r="1133"></circle>
-</g>
+{{~#if bgRadial0}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(13, 17, 24, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad0">
+      <stop offset="0" style="stop-color:rgba(115, 131, 186, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(115, 131, 186, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgRadial1}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(8, 14, 37, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad1">
+      <stop offset="0" style="stop-color:rgba(88, 73, 116, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(88, 73, 116, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad1)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad1)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgRadial2}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(139, 160, 165, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad2">
+      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(139, 160, 165, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad2)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad2)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgRadial3}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(239, 202, 130, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad3">
+      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(239, 202, 130, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad3)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad3)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgRadial4}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(168, 224, 126, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad4">
+      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(168, 224, 126, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad4)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad4)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgRadial5}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(225, 114, 127, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad5">
+      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(225, 114, 127, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad5)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad5)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgRadial6}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <rect style="fill:rgba(13, 17, 24, 1)" width="2000" height="3000"></rect>
+    <radialGradient id="grad6">
+      <stop offset="0" style="stop-color:rgba(168, 224, 126, 1)"></stop>
+      <stop offset="1" style="stop-color:rgba(168, 224, 126, 0)"></stop>
+    </radialGradient>
+    <circle style="fill:url(#grad6)" cx="1000" cy="1925" r="1133"></circle>
+    <circle style="fill:url(#grad6)" cx="1000" cy="372" r="1133"></circle>
+  </g>
+{{~/if~}}
+{{~#if bgLinear0}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <linearGradient id="lin0" gradientTransform="rotate(90)">
+      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
+      <stop offset="100%" stop-color="rgba(115, 131, 186, 1)"></stop>
+    </linearGradient>
+    <rect style="fill:url(#lin0)" width="2000" height="3000"></rect>
+  </g>
+{{~/if~}}
+{{~#if bgLinear1}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <linearGradient id="lin1" gradientTransform="rotate(90)">
+      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
+      <stop offset="100%" stop-color="rgba(88, 73, 116, 1)"></stop>
+    </linearGradient>
+    <rect style="fill:url(#lin1)" width="2000" height="3000"></rect>
+  </g>
+{{~/if~}}
+{{~#if bgLinear2}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <linearGradient id="lin2" gradientTransform="rotate(90)">
+      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
+      <stop offset="100%" stop-color="rgba(247, 38, 43, 1)"></stop>
+    </linearGradient>
+    <rect style="fill:url(#lin2)" width="2000" height="3000"></rect>
+  </g>
+{{~/if~}}
+{{~#if bgLinear3}}
+  <g style="filter: hue-rotate({{uint16 hue}}deg);">
+    <linearGradient id="lin3" gradientTransform="rotate(90)">
+      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
+      <stop offset="100%" stop-color="rgba(225, 114, 127, 1)"></stop>
+    </linearGradient>
+    <rect style="fill:url(#lin3)" width="2000" height="3000"></rect>
+  </g>
+{{~/if~}}
 
-{{#if bg0}}
-  <defs>
-    <filter id="burstBlur">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2"></feGaussianBlur>
-    </filter>
-  </defs>
-  <path
-    filter="url(#burstBlur)"
-    d="M1000,2434.7l-198.9,334.1l194.9-334.7L422.9,2646l569.6-213.7l-891.4-19.9l888.6,17.1l-1122.4-338.6
+<defs>
+  <filter id="burstBlur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2"></feGaussianBlur>
+  </filter>
+</defs>
+<path
+  filter="url(#burstBlur)"
+  d="M1000,2434.7l-198.9,334.1l194.9-334.7L422.9,2646l569.6-213.7l-891.4-19.9l888.6,17.1l-1122.4-338.6
 			l1120.5,335.1l-1243.4-713L987.3,2422L-255.5,1315.5L987.9,2418.1L-132.6,937.5l1122.4,1477L101.1,616l891.4,1795.7L422.9,382.4
 			l573.2,2027.5L801.1,259.6L1000,2409.3l198.9-2149.7l-194.9,2150.3l573.2-2027.5l-569.6,2029.3L1898.9,616l-888.6,1798.5
 			l1122.4-1477L1012.1,2418.1l1243.4-1102.6L1012.7,2422l1242.8-709.1l-1243.4,713l1120.5-335.1l-1122.4,338.6l888.6-17.1
 			l-891.4,19.9l569.6,213.7l-573.2-211.9l194.9,334.7L1000,2434.7z"
-    fill="white"
-  ></path>
-{{/if}}
+  fill="white"
+></path>

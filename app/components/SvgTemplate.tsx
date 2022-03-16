@@ -53,7 +53,17 @@ interface Props {
   aspects: Aspect[];
   background: {
     hue: number;
-    bg0: boolean;
+    bgRadial0?: boolean;
+    bgRadial1?: boolean;
+    bgRadial2?: boolean;
+    bgRadial3?: boolean;
+    bgRadial4?: boolean;
+    bgRadial5?: boolean;
+    bgRadial6?: boolean;
+    bgLinear0?: boolean;
+    bgLinear1?: boolean;
+    bgLinear2?: boolean;
+    bgLinear3?: boolean;
   };
   halo: {
     halo0?: boolean;

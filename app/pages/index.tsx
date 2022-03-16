@@ -33,6 +33,7 @@ const baseStoneSettings = {
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
+  const [background, setBackground] = React.useState("bgRadial0");
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
@@ -49,6 +50,7 @@ const Home: NextPage = () => {
       setHandle(decodedSettings.handle);
       setEmbossLayers(decodedSettings.embossLayers);
       setStoneSettings(decodedSettings.stoneSettings);
+      setBackground(decodedSettings.background);
     }
   }, []);
 
@@ -62,13 +64,15 @@ const Home: NextPage = () => {
         handle,
         embossLayers,
         stoneSettings,
+        background,
       };
+      console.log(JSON.stringify(wandState));
       const base64Settings = window.btoa(JSON.stringify(wandState));
       const params = new URLSearchParams();
       params.set("settings", base64Settings);
       window.history.replaceState(null, "", `?${params.toString()}`);
     }, 100);
-  }, [shape, rhythm, handle, embossLayers, stoneSettings]);
+  }, [shape, rhythm, handle, embossLayers, stoneSettings, background]);
 
   const addEmboss = () => {
     const newEmbossLayers = [
@@ -145,6 +149,24 @@ const Home: NextPage = () => {
                 <option value="handle3">handle3</option>
               </select>
             </CollapseContainer>
+            <CollapseContainer title="Background">
+              <select
+                value={background}
+                onChange={(ev) => setBackground(ev.target.value)}
+              >
+                <option value="bgRadial0">Radial 0</option>
+                <option value="bgRadial1">Radial 1</option>
+                <option value="bgRadial2">Radial 2</option>
+                <option value="bgRadial3">Radial 3</option>
+                <option value="bgRadial4">Radial 4</option>
+                <option value="bgRadial5">Radial 5</option>
+                <option value="bgRadial6">Radial 6</option>
+                <option value="bgLinear0">Linear 0</option>
+                <option value="bgLinear1">Linear 1</option>
+                <option value="bgLinear2">Linear 2</option>
+                <option value="bgLinear3">Linear 3 </option>
+              </select>
+            </CollapseContainer>
             <CollapseContainer wide title="Emboss Layers">
               <ul>
                 {embossLayers.map((layer, index) => (
@@ -189,7 +211,7 @@ const Home: NextPage = () => {
               { x1: 87, y1: 245, x2: 258, y2: 30 },
               { x1: 248, y1: 77, x2: 191, y2: -177 },
             ]}
-            background={{ hue: 0, bg0: true }}
+            background={{ hue: 0, [background]: true }}
             halo={{
               [shape]: true,
               rhythm: Array.from(
