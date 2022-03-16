@@ -66,7 +66,7 @@ const Home: NextPage = () => {
         stoneSettings,
         background,
       };
-      console.log(JSON.stringify(wandState));
+
       const base64Settings = window.btoa(JSON.stringify(wandState));
       const params = new URLSearchParams();
       params.set("settings", base64Settings);
