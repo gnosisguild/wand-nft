@@ -27,16 +27,82 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
         <>
           <div>
             <div className={styles.inputGroup}>
-              <label>Light Source — {props.layer.lightType || "point"}</label>
+              <label>turbulence type</label>
               <select
-                value={props.layer.lightType || "point"}
-                onChange={(e) =>
-                  props.changeVal(props.index, "lightType", e.target.value)
-                }
+                onChange={(e) => {
+                  props.changeVal(props.index, "turbType", e.target.value);
+                }}
+                value={props.layer.turbType}
               >
-                <option value="point">point</option>
-                <option value="spotlight">spotlight</option>
+                <option value="turbulence">turbulence</option>
+                <option value="fractalNoise">fractalNoise</option>
               </select>
+            </div>
+            <div className={styles.inputGroup}>
+              <label>turbulence frequency x — {props.layer.turbFreqX}</label>
+              <input
+                onChange={(e) => {
+                  props.changeVal(props.index, "turbFreqX", e.target.value);
+                }}
+                type="range"
+                min="0"
+                max="0.1"
+                step="0.001"
+                value={props.layer.turbFreqX}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>turbulence frequency y — {props.layer.turbFreqY}</label>
+              <input
+                onChange={(e) => {
+                  props.changeVal(props.index, "turbFreqY", e.target.value);
+                }}
+                type="range"
+                min="0"
+                max="0.1"
+                step="0.001"
+                value={props.layer.turbFreqY}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>turbulence octave — {props.layer.turbOct}</label>
+              <input
+                onChange={(e) => {
+                  props.changeVal(props.index, "turbOct", e.target.value);
+                }}
+                type="range"
+                min="1"
+                max="10"
+                value={props.layer.turbOct}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>turbulence blur — {props.layer.turbBlur}</label>
+              <input
+                onChange={(e) => {
+                  props.changeVal(props.index, "turbBlur", e.target.value);
+                }}
+                type="range"
+                min="0"
+                max="10"
+                step="0.01"
+                value={props.layer.turbBlur}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>
+                turbulence displacement scale — {props.layer.dispScale}
+              </label>
+              <input
+                onChange={(e) => {
+                  props.changeVal(props.index, "dispScale", e.target.value);
+                }}
+                type="range"
+                min="0"
+                max="500"
+                step="0.1"
+                value={props.layer.dispScale}
+              />
             </div>
             <div className={styles.inputGroup}>
               <label>Surface Scale — {props.layer.surfaceScale}</label>
@@ -57,7 +123,7 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <input
                 type="range"
                 min="0"
-                max="100"
+                max="10"
                 step="0.01"
                 value={props.layer.specConstant}
                 className="slider"
@@ -70,8 +136,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Specular Exponent — {props.layer.specExponent}</label>
               <input
                 type="range"
-                min="-200"
-                max="200"
+                min="1"
+                max="128"
                 step="0.1"
                 value={props.layer.specExponent}
                 className="slider"
@@ -95,8 +161,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Light Position X — {props.layer.pointX}</label>
               <input
                 type="range"
-                min="-20000"
-                max="20000"
+                min="-2000"
+                max="2000"
                 step="1"
                 value={props.layer.pointX}
                 className="slider"
@@ -109,8 +175,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Light Position Y — {props.layer.pointY}</label>
               <input
                 type="range"
-                min="-20000"
-                max="20000"
+                min="-2000"
+                max="2000"
                 step="1"
                 value={props.layer.pointY}
                 className="slider"
@@ -123,8 +189,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>Light Position Z — {props.layer.pointZ}</label>
               <input
                 type="range"
-                min="-20000"
-                max="20000"
+                min="-2000"
+                max="2000"
                 step="1"
                 value={props.layer.pointZ}
                 className="slider"
@@ -133,72 +199,6 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 }}
               />
             </div>
-            {props.layer.lightType === "spotlight" && (
-              <>
-                <div className={styles.inputGroup}>
-                  <label>Spotlight target X — {props.layer.pointsAtX}</label>
-                  <input
-                    type="range"
-                    min="-20000"
-                    max="20000"
-                    step="1"
-                    value={props.layer.pointsAtX}
-                    className="slider"
-                    onChange={(e) => {
-                      props.changeVal(props.index, "pointsAtX", e.target.value);
-                    }}
-                  />
-                </div>
-                <div className={styles.inputGroup}>
-                  <label>Spotlight target Y — {props.layer.pointsAtY}</label>
-                  <input
-                    type="range"
-                    min="-20000"
-                    max="20000"
-                    step="1"
-                    value={props.layer.pointsAtY}
-                    className="slider"
-                    onChange={(e) => {
-                      props.changeVal(props.index, "pointsAtY", e.target.value);
-                    }}
-                  />
-                </div>
-                <div className={styles.inputGroup}>
-                  <label>Spotlight target Z — {props.layer.pointsAtZ}</label>
-                  <input
-                    type="range"
-                    min="-20000"
-                    max="20000"
-                    step="1"
-                    value={props.layer.pointsAtZ}
-                    className="slider"
-                    onChange={(e) => {
-                      props.changeVal(props.index, "pointsAtZ", e.target.value);
-                    }}
-                  />
-                </div>
-                <div className={styles.inputGroup}>
-                  <label>
-                    Spotlight Cone Angle — {props.layer.limitingConeAngle}
-                  </label>
-                  <input
-                    type="range"
-                    min="-20"
-                    max="20"
-                    step="0.01"
-                    value={props.layer.limitingConeAngle}
-                    className="slider"
-                    onChange={(e) => {
-                      props.changeVal(
-                        props.index,
-                        "limitingConeAngle",
-                        e.target.value
-                      );
-                    }}
-                  />
-                </div>
-              </>
-            )}
             <div className={styles.inputGroup}>
               <label>Opacity — {props.layer.opacity}</label>
               <input

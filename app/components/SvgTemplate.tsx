@@ -13,7 +13,12 @@ interface Aspect {
   y2: number;
 }
 export interface EmbossLayer {
-  lightType: string;
+  turbType: string;
+  turbFreqX: number;
+  turbFreqY: number;
+  turbOct: number;
+  turbBlur: number;
+  dispScale: number;
   surfaceScale: number;
   specConstant: number;
   specExponent: number;
@@ -24,10 +29,22 @@ export interface EmbossLayer {
   opacity: number;
   blurX: number;
   blurY: number;
-  pointsAtX: number;
-  pointsAtY: number;
-  pointsAtZ: number;
-  limitingConeAngle: number;
+}
+export interface StoneSettings {
+  turbType: string;
+  turbFreqX: number;
+  turbFreqY: number;
+  turbOct: number;
+  redAmp: number;
+  redExp: number;
+  redOff: number;
+  greenAmp: number;
+  greenExp: number;
+  greenOff: number;
+  blueAmp: number;
+  blueExp: number;
+  blueOff: number;
+  rotation: number;
 }
 interface Props {
   title: string;
@@ -36,7 +53,17 @@ interface Props {
   aspects: Aspect[];
   background: {
     hue: number;
-    bg0: boolean;
+    bgRadial0?: boolean;
+    bgRadial1?: boolean;
+    bgRadial2?: boolean;
+    bgRadial3?: boolean;
+    bgRadial4?: boolean;
+    bgRadial5?: boolean;
+    bgRadial6?: boolean;
+    bgLinear0?: boolean;
+    bgLinear1?: boolean;
+    bgLinear2?: boolean;
+    bgLinear3?: boolean;
   };
   halo: {
     halo0?: boolean;
@@ -53,14 +80,30 @@ interface Props {
     handle2?: boolean;
     handle3?: boolean;
   };
+  sparkle: {
+    sparkle0?: boolean;
+    sparkle1?: boolean;
+    sparkle2?: boolean;
+    sparkle3?: boolean;
+    sparkle4?: boolean;
+    sparkle5?: boolean;
+  };
   filter: {
     layers: EmbossLayer[];
+  };
+  stone: {
+    settings: StoneSettings;
   };
 }
 
 const SvgTemplate: React.FC<Props> = (props) => (
   <div
-    dangerouslySetInnerHTML={{ __html: template(props) }}
+    dangerouslySetInnerHTML={{
+      __html: template(props, {
+        allowProtoMethodsByDefault: true,
+        allowProtoPropertiesByDefault: true,
+      }),
+    }}
     className={classes.container}
   />
 );

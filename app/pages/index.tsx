@@ -1,39 +1,86 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
-import Image from "next/image";
-import { SvgTemplate, CollapseContainer, EmbossLayerForm } from "../components";
+import {
+  SvgTemplate,
+  CollapseContainer,
+  EmbossLayerForm,
+  StoneForm,
+  RhythmCircle,
+} from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
-import { EmbossLayer } from "../components/SvgTemplate";
+import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
 
-const baseEmboss = {
-  lightType: "point",
-  surfaceScale: 5,
-  specConstant: 5,
-  specExponent: 20,
-  lightColor: "#ffffff",
-  pointX: -50,
-  pointY: -100,
-  pointZ: 2000,
-  opacity: 1,
-  blurX: 0,
-  blurY: 0,
-  pointsAtX: 0,
-  pointsAtY: 0,
-  pointsAtZ: 0,
-  limitingConeAngle: 15,
+const baseStoneSettings = {
+  turbType: "fractalNoise",
+  turbFreqX: 0.004,
+  turbFreqY: 0.007,
+  turbOct: 2,
+  redAmp: 0.69,
+  redExp: -0.43,
+  redOff: 0.16,
+  greenAmp: 0.61,
+  greenExp: -0.66,
+  greenOff: -0.63,
+  blueAmp: 0.58,
+  blueExp: 0.01,
+  blueOff: -0.15,
+  rotation: 26,
 };
 
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
+  const [background, setBackground] = React.useState("bgRadial0");
+  const [sparkle, setSparkle] = React.useState("sparkle0");
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
+  const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
+  let URLtimer: ReturnType<typeof setTimeout>;
+
+  useEffect(() => {
+    // set initial state from URL
+    const params = new URLSearchParams(window.location.search);
+    const settingsBase64 = params.get("settings");
+    if (settingsBase64) {
+      const decodedSettings = JSON.parse(window.atob(settingsBase64));
+      setShape(decodedSettings.shape);
+      setRhythm(decodedSettings.rhythm);
+      setHandle(decodedSettings.handle);
+      setEmbossLayers(decodedSettings.embossLayers);
+      setStoneSettings(decodedSettings.stoneSettings);
+      setBackground(decodedSettings.background);
+      setSparkle(decodedSettings.sparkle);
+    }
+  }, []);
+
+  useEffect(() => {
+    // save wand state to url
+    clearTimeout(URLtimer);
+    URLtimer = setTimeout(() => {
+      const wandState = {
+        shape,
+        rhythm,
+        handle,
+        embossLayers,
+        stoneSettings,
+        background,
+        sparkle,
+      };
+
+      const base64Settings = window.btoa(JSON.stringify(wandState));
+      const params = new URLSearchParams();
+      params.set("settings", base64Settings);
+      window.history.replaceState(null, "", `?${params.toString()}`);
+    }, 100);
+  }, [shape, rhythm, handle, embossLayers, stoneSettings, background, sparkle]);
 
   const addEmboss = () => {
-    const newEmbossLayers = [...embossLayers, Object.create(baseEmboss)];
-
+    const newEmbossLayers = [
+      ...embossLayers,
+      JSON.parse(JSON.stringify(embossLayers[0])),
+    ];
     setEmbossLayers(newEmbossLayers);
   };
 
@@ -43,12 +90,23 @@ const Home: NextPage = () => {
     setEmbossLayers(layers);
   };
 
-  const changeVal = (index: number, key: keyof EmbossLayer, value: any) => {
+  const changeEmbossVal = (
+    index: number,
+    key: keyof EmbossLayer,
+    value: any
+  ) => {
     const layers: EmbossLayer[] = [...embossLayers];
     const layer = layers[index];
     layer[key] = value;
     setEmbossLayers(layers);
   };
+
+  const changeStoneSetting = (key: keyof StoneSettings, value: any) => {
+    const settings = { ...stoneSettings };
+    settings[key] = value;
+    setStoneSettings(settings);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -76,11 +134,16 @@ const Home: NextPage = () => {
                 <option value="halo4">halo4</option>
                 <option value="halo5">halo5</option>
               </select>
-              <input
-                type="text"
-                value={rhythm}
-                onChange={(ev) => setRhythm(ev.target.value.slice(0, 24))}
-              />
+              <div>
+                <RhythmCircle rhythm={rhythm} setRhythm={setRhythm} />
+
+                <label>Binary View</label>
+                <input
+                  type="text"
+                  value={rhythm}
+                  onChange={(ev) => setRhythm(ev.target.value.slice(0, 24))}
+                />
+              </div>
             </CollapseContainer>
             <CollapseContainer title="Handle">
               <select
@@ -93,19 +156,57 @@ const Home: NextPage = () => {
                 <option value="handle3">handle3</option>
               </select>
             </CollapseContainer>
-            <CollapseContainer title="Emboss Layers">
+            <CollapseContainer title="Background">
+              <select
+                value={background}
+                onChange={(ev) => setBackground(ev.target.value)}
+              >
+                <option value="bgRadial0">Radial 0</option>
+                <option value="bgRadial1">Radial 1</option>
+                <option value="bgRadial2">Radial 2</option>
+                <option value="bgRadial3">Radial 3</option>
+                <option value="bgRadial4">Radial 4</option>
+                <option value="bgRadial5">Radial 5</option>
+                <option value="bgRadial6">Radial 6</option>
+                <option value="bgLinear0">Linear 0</option>
+                <option value="bgLinear1">Linear 1</option>
+                <option value="bgLinear2">Linear 2</option>
+                <option value="bgLinear3">Linear 3 </option>
+              </select>
+            </CollapseContainer>
+            <CollapseContainer title="Sparkle">
+              <select
+                value={sparkle}
+                onChange={(ev) => setSparkle(ev.target.value)}
+              >
+                <option value="sparkleNone">No Sparkle</option>
+                <option value="sparkle0">sparkle 0</option>
+                <option value="sparkle1">sparkle 1</option>
+                <option value="sparkle2">sparkle 2</option>
+                <option value="sparkle3">sparkle 3</option>
+                <option value="sparkle4">sparkle 4</option>
+                <option value="sparkle5">sparkle 5</option>
+              </select>
+            </CollapseContainer>
+            <CollapseContainer wide title="Emboss Layers">
               <ul>
                 {embossLayers.map((layer, index) => (
                   <EmbossLayerForm
                     layer={layer}
                     index={index}
                     removeLayer={removeEmbossLayer}
-                    changeVal={changeVal}
+                    changeVal={changeEmbossVal}
                     key={`emboss_${index}`}
                   />
                 ))}
               </ul>
               <button onClick={addEmboss}>Add Emboss Layer</button>
+            </CollapseContainer>
+            <CollapseContainer wide title="Stone">
+              <StoneForm
+                settings={stoneSettings}
+                changeVal={changeStoneSetting}
+              />
             </CollapseContainer>
           </div>
         </div>
@@ -131,7 +232,7 @@ const Home: NextPage = () => {
               { x1: 87, y1: 245, x2: 258, y2: 30 },
               { x1: 248, y1: 77, x2: 191, y2: -177 },
             ]}
-            background={{ hue: 90, bg0: true }}
+            background={{ hue: 0, [background]: true }}
             halo={{
               [shape]: true,
               rhythm: Array.from(
@@ -141,6 +242,8 @@ const Home: NextPage = () => {
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
+            stone={{ settings: stoneSettings }}
+            sparkle={{ [sparkle]: true }}
           />
         </div>
       </main>

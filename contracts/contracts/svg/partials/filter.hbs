@@ -1,8 +1,10 @@
 <filter
   color-interpolation-filters="sRGB"
   id="glowEmboss"
-  width="150%"
-  height="150%"
+  width="250%"
+  height="250%"
+  x="-30%"
+  y="-20%"
 >
   <feGaussianBlur
     in="SourceAlpha"
@@ -10,128 +12,96 @@
     stdDeviation="8"
   ></feGaussianBlur>
 
-  {{!-- <!-- Background glow  --> --}}
+  {{! <!-- Background glow  --> }}
   <feGaussianBlur
-    in="SourceGraphic"
-    result="graphicblur"
-    stdDeviation="8"
+    in="SourceAlpha"
+    stdDeviation="30"
+    result="glow"
   ></feGaussianBlur>
-  <feOffset
-    dx="0"
-    dy="0"
-    in="graphicblur"
-    result="offsetBlur"
-  ></feOffset>
+  <feColorMatrix
+    in="glow"
+    result="bgGlow"
+    type="matrix"
+    values="-1 0 0 0 1
+            0 -1 0 0 1
+            0 0 -1 0 1
+            0 0 0 0.8 0 "
+  ></feColorMatrix>
 
-  {{!-- <!-- Emboss/Bevel --> --}}
+  {{! <!-- Emboss/Bevel --> }}
   {{#each layers}}
+    <feTurbulence
+      type="{{turbType}}"
+      baseFrequency="{{turbFreqX}} {{turbFreqY}}"
+      numOctaves="{{turbOct}}"
+      seed="1004123123"
+      result="turb_{{@index}}"
+    ></feTurbulence>
+    <feGaussianBlur
+      stdDeviation="{{turbBlur}}"
+      in="SourceAlpha"
+      result="turb_blur_{{@index}}"
+    ></feGaussianBlur>
+    <feDisplacementMap
+      scale="{{dispScale}}"
+      in="turb_blur_{{@index}}"
+      in2="turb_{{@index}}"
+      result="disp_turb_{{@index}}"
+    ></feDisplacementMap>
+    <feColorMatrix
+      type="matrix"
+      values="0 0 0 0 0,
+              0 0 0 0 0,
+              0 0 0 0 0,
+              0 0 0 1 0"
+      in="disp_turb_{{@index}}"
+      result="co_mat_{{@index}}"
+    ></feColorMatrix>
+    <feGaussianBlur
+      stdDeviation="{{blurX}} {{blurY}}"
+      in="co_mat_{{@index}}"
+      result="blur_co_mat_{{@index}}"
+    ></feGaussianBlur>
     <feSpecularLighting
-      in="graphicblur"
-      surfaceScale={{surfaceScale}}
-      specularConstant={{specConstant}}
-      specularExponent={{specularExponent}}
-      lightingColor={{lightColor}}
+      surfaceScale="{{surfaceScale}}"
+      specularConstant="{{specConstant}}"
+      specularExponent="{{specExponent}}"
+      lighting-color="{{lightColor}}"
+      in="blur_co_mat_{{@index}}"
       result="lighting_{{@index}}"
     >
-      {{#if (eq lightType "point")}}
-        <fePointLight
-          x={{pointX}}
-          y={{pointY}}
-          z={{pointZ}}
-        />
-      {{/if}}
-      {{#if (eq lightType "spotlight")}}
-        <feSpotLight
-          x={{pointX}}
-          y={{pointY}}
-          z={{pointZ}}
-          limitingConeAngle={{limitingConeAngle}}
-          pointsAtX={{pointsAtX}}
-          pointsAtY={{pointsAtY}}
-          pointsAtZ={{pointsAtZ}}
-        />
-      {{/if}}
+      <fePointLight x="{{pointX}}" y="{{pointY}}" z="{{pointZ}}"></fePointLight>
     </feSpecularLighting>
-    <feGaussianBlur
-      in="lighting_{{@index}}"
-      result="blurred_{{@index}}"
-      stdDeviation="{{blurX}} {{blurY}}"
-    ></feGaussianBlur>
-  {{!-- Mask Light to handle shape --}}
     <feComposite
-      in2="blurred_{{@index}}"
-      in="SourceAlpha"
-      operator="{{#if (eq lightType "spotlight")}}in{{/if}}{{#if (eq lightType "point")}}out{{/if}}"
-      result="masked_emboss_{{@index}}"
-    />
+      operator="in"
+      in="lighting_{{@index}}"
+      in2="co_mat_{{@index}}"
+      result="comp_light_1_{{@index}}"
+    ></feComposite>
+    <feComposite
+      operator="arithmetic"
+      k1="0"
+      k2="0"
+      k3="{{opacity}}"
+      k4="0"
+      in="disp_turb_{{@index}}"
+      in2="comp_light_1_{{@index}}"
+      result="comp_light_2_{{@index}}"
+    ></feComposite>
+    <feComposite
+      operator="in"
+      in2="SourceAlpha"
+      in="comp_light_2_{{@index}}"
+      result="comp_light_final_{{@index}}"
+    ></feComposite>
 
-    {{!-- Invert light (black to white) and opacity --}}
-    <feColorMatrix
-      in="masked_emboss_{{@index}}"
-      result="emboss_{{@index}}"
-      type="matrix"
-      values="-1 0 0 0 1 
-              0 -1 0 0 1 
-              0 0 -1 0 1
-              0 0 0 {{opacity}} 0"
-    />
   {{/each}}
 
-  {{!-- May be useful, demo of this here: http://cs.sru.edu/~svg/Chapter05/G05xx46.svg --}}
-  {{!-- <feTurbulence baseFrequency=".001" numOctaves="2" result="A">
-      <animate attributeName="baseFrequency" dur="100s" values=".005;.002;.001" repeatCount="indefinite"/> 
-  </feTurbulence>
-  <feComposite
-    in2="A"
-    in="SourceGraphic"
-    operator="arithmetic"
-    k1="1"
-    k2="1"
-    k3="1"
-    k4="-1"
-    result="C"
-  />
-  <feTurbulence
-    baseFrequency=".005"
-    numOctaves="1"
-    seed="25"
-    result="B"
-  >
-    <animate attributeName="baseFrequency" dur="200s" values=".02;.01;.001" repeatCount="indefinite"/>
-    <animate attributeName="seed" dur="35s" values="30;34" repeatCount="indefinite"/>
-  </feTurbulence>
-  <feComposite
-    in2="B"
-    in="SourceGraphic"
-    operator="arithmetic"
-    k1="0.6"
-    k2="1"
-    k3="1"
-    k4="-1"
-    result="D"
-  />
-  <feComposite
-    in2="C"
-    in="D"
-    operator="arithmetic"
-    k1="1"
-    k2="1"
-    k3="1"
-    k4="0"
-    result="idk"
-  /> --}}
-
   <feMerge>
-    <feMergeNode in="offsetBlur"></feMergeNode>
+    <feMergeNode in="bgGlow"></feMergeNode>
     <feMergeNode in="SourceGraphic"></feMergeNode>
     {{#each layers}}
-      <feMergeNode
-        in="emboss_{{@index}}"
-        key="node_{{@index}}"
-      ></feMergeNode>
+      <feMergeNode in="comp_light_final_{{@index}}"></feMergeNode>
     {{/each}}
-
-    {{!-- This mergeNode is used for the turbulence filter above --}}
-    {{!-- <feMergeNode in="idk"></feMergeNode> --}}
   </feMerge>
 </filter>

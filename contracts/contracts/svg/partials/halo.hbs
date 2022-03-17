@@ -15,7 +15,7 @@
       M193.39,0c0,25.3-96.18,51.7-192.78,79.1L11,117.7c89.7-21.2,182.38-7.1,182.38,42.3,0-49.4,92.74-63.5,182.44-42.3l10.4-38.6C289.53,51.7,193.39,25.3,193.39,0Z
       {{~/if~}}
       {{~#if halo4~}}
-      M.61,271.08l20.7,77.2c73.3-20,154.5-20,227.8,0L342.39.13C304.89,138.23,223,248.68,117.61,253.58A520.35,520.35,0,0,0,.61,271.08Z
+      M.62,243.77l23.47,76.41c72.53-22.62,153.68-25.54,227.65-8.19L323.37.11q-48.76,209-206.45,222A520.91,520.91,0,0,0,.62,243.77Z
       {{~/if~}}
       {{~#if halo5~}}
       M157.16,46.3Q136.46,199,50.06,200.8c-16.5.6-33.1,2-49.5,4.1L11,284.2a441.94,441.94,0,0,1,114.9,0Z
@@ -25,20 +25,45 @@
       style="transform: translateX(-50%); transform-box: fill-box;"
     />
     {{#if halo4}}
-      <circle fill="#9A9EA7" cx="15.41" cy="55.13" r="40"/>
+      <circle fill="#9A9EA7" cx="0" cy="80" r="40"/>
     {{/if}}
     {{#if halo5}}
-      <circle fill="#9A9EA7" cx="3" cy="40.5" r="40"/>
+      <circle fill="#9A9EA7" cx="0" cy="60" r="40"/>
     {{/if}}
   </g>
 </defs>
 
+{{!-- 
+  Had to adjust a few of these, I couldn't figure out a 
+  way in illustrator to shift the symbol definitions in 
+  x or y. We may need to either re-export not as symbols,
+  or change the above to use the symbol's canvas size.
+--}}
 <g transform="translate(1000 1060)">
   {{#each rhythm length=24}}
     <g
       style="transform: rotate(calc({{
         @index
-      }} * 15deg)) translateY(-800px);"
+      }} * 15deg)) translateY(
+      {{~#if ../halo0~}}
+      -770px
+      {{~/if~}}
+      {{~#if ../halo1~}}
+      -800px
+      {{~/if~}}
+      {{~#if ../halo2~}}
+      -800px
+      {{~/if~}}
+      {{~#if ../halo3~}}
+      -800px
+      {{~/if~}}
+      {{~#if ../halo4~}}
+      -740px
+      {{~/if~}}
+      {{~#if ../halo5~}}
+      -720px
+      {{~/if~}}
+      );"
     >
       {{#if .}}<use href="#halo"></use>{{/if}}
     </g>

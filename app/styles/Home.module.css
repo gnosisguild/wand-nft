@@ -3,7 +3,7 @@
 }
 
 .main {
-  min-height: 100vh;
+  height: calc(98vh - 3rem);
   padding: 0;
   flex: 1;
   display: flex;
@@ -13,6 +13,8 @@
 
 .tools {
   width: 45%;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .wandImage {
@@ -24,4 +26,11 @@
   flex-wrap: wrap;
   column-gap: 1em;
   row-gap: 1em;
+}
+.tools label,
+.tools input,
+.tools select {
+  margin-top: 5px;
+  display: block;
+  width: 100%;
 }
