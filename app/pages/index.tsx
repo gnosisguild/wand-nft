@@ -1,17 +1,16 @@
 import type { NextPage } from "next";
 import React, { useEffect } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import {
   SvgTemplate,
   CollapseContainer,
   EmbossLayerForm,
   StoneForm,
+  RhythmCircle,
 } from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
-import { btoa } from "buffer";
 
 const baseStoneSettings = {
   turbType: "fractalNoise",
@@ -135,11 +134,16 @@ const Home: NextPage = () => {
                 <option value="halo4">halo4</option>
                 <option value="halo5">halo5</option>
               </select>
-              <input
-                type="text"
-                value={rhythm}
-                onChange={(ev) => setRhythm(ev.target.value.slice(0, 24))}
-              />
+              <div>
+                <RhythmCircle rhythm={rhythm} setRhythm={setRhythm} />
+
+                <label>Binary View</label>
+                <input
+                  type="text"
+                  value={rhythm}
+                  onChange={(ev) => setRhythm(ev.target.value.slice(0, 24))}
+                />
+              </div>
             </CollapseContainer>
             <CollapseContainer title="Handle">
               <select

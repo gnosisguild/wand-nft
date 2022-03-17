@@ -27,3 +27,10 @@
   column-gap: 1em;
   row-gap: 1em;
 }
+.tools label,
+.tools input,
+.tools select {
+  margin-top: 5px;
+  display: block;
+  width: 100%;
+}
