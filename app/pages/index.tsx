@@ -34,6 +34,7 @@ const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
   const [background, setBackground] = React.useState("bgRadial0");
+  const [sparkle, setSparkle] = React.useState("sparkle0");
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
@@ -51,6 +52,7 @@ const Home: NextPage = () => {
       setEmbossLayers(decodedSettings.embossLayers);
       setStoneSettings(decodedSettings.stoneSettings);
       setBackground(decodedSettings.background);
+      setSparkle(decodedSettings.sparkle);
     }
   }, []);
 
@@ -65,6 +67,7 @@ const Home: NextPage = () => {
         embossLayers,
         stoneSettings,
         background,
+        sparkle,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -72,7 +75,7 @@ const Home: NextPage = () => {
       params.set("settings", base64Settings);
       window.history.replaceState(null, "", `?${params.toString()}`);
     }, 100);
-  }, [shape, rhythm, handle, embossLayers, stoneSettings, background]);
+  }, [shape, rhythm, handle, embossLayers, stoneSettings, background, sparkle]);
 
   const addEmboss = () => {
     const newEmbossLayers = [
@@ -167,6 +170,20 @@ const Home: NextPage = () => {
                 <option value="bgLinear3">Linear 3 </option>
               </select>
             </CollapseContainer>
+            <CollapseContainer title="Sparkle">
+              <select
+                value={sparkle}
+                onChange={(ev) => setSparkle(ev.target.value)}
+              >
+                <option value="sparkleNone">No Sparkle</option>
+                <option value="sparkle0">sparkle 0</option>
+                <option value="sparkle1">sparkle 1</option>
+                <option value="sparkle2">sparkle 2</option>
+                <option value="sparkle3">sparkle 3</option>
+                <option value="sparkle4">sparkle 4</option>
+                <option value="sparkle5">sparkle 5</option>
+              </select>
+            </CollapseContainer>
             <CollapseContainer wide title="Emboss Layers">
               <ul>
                 {embossLayers.map((layer, index) => (
@@ -222,6 +239,7 @@ const Home: NextPage = () => {
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
             stone={{ settings: stoneSettings }}
+            sparkle={{ [sparkle]: true }}
           />
         </div>
       </main>

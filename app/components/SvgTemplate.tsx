@@ -80,6 +80,14 @@ interface Props {
     handle2?: boolean;
     handle3?: boolean;
   };
+  sparkle: {
+    sparkle0?: boolean;
+    sparkle1?: boolean;
+    sparkle2?: boolean;
+    sparkle3?: boolean;
+    sparkle4?: boolean;
+    sparkle5?: boolean;
+  };
   filter: {
     layers: EmbossLayer[];
   };
