@@ -15,7 +15,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
   mapping(uint256 => Wand) private _wands;
 
   mapping(uint256 => uint256) public ILvl;
-  mapping(uint256 => uint256) public XP;
+  mapping(address => uint256) public XP;
 
   event WandBuilt(
     uint256 indexed tokenId,
@@ -26,8 +26,8 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     int256 longitude
   );
 
-  event XPLevelUp(uint256 indexed id, uint256 indexed levels, uint256 indexed newLevel);
-  event XPLevelDown(uint256 indexed id, uint256 indexed levels, uint256 indexed newLevel);
+  event XPLevelUp(address indexed id, uint256 indexed levels, uint256 indexed newLevel);
+  event XPLevelDown(address indexed id, uint256 indexed levels, uint256 indexed newLevel);
   event IlvlLevelUp(uint256 indexed id, uint256 indexed levels, uint256 indexed newLevel);
   event IlvlLevelDown(uint256 indexed id, uint256 indexed levels, uint256 indexed newLevel);
 
@@ -108,14 +108,14 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     return (wand.halo, wand.evolution, wand.birth);
   }
 
-  function levelUpXP(uint256 _id, uint256 _levels) public onlyOwner {
+  function levelUpXP(address _id, uint256 _levels) public onlyOwner {
       require(XP[_id] + _levels <= 10, "max level is 10");
       require(_exists(_id), "nonexistent id");
       XP[_id] += _levels;
       emit XPLevelUp(_id, _levels, XP[_id]);
   }
 
-  function levelUpXPBatch(uint256[] memory _ids, uint256[] memory _levels) public onlyOwner {
+  function levelUpXPBatch(address[] memory _ids, uint256[] memory _levels) public onlyOwner {
       require(_ids.length == _levels.length, "length missmatch");
       for(uint256 i=0; i<_ids.length; i++) {
           require(XP[_ids[i]] + _levels[i] <= 10, "max level is 10");
@@ -125,20 +125,20 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       }
   }
 
-  // function levelDownAlvl(uint256 _id, uint256 _levels) public onlyOwner {
-  //     require(_exists(_id), "nonexistent id");
-  //     cardLevels[_id] -= _levels;
-  //     emit AlvlLevelDown(_id, _levels, cardLevels[_id]);
-  // }
+  function levelDownXP(address _id, uint256 _levels) public onlyOwner {
+      require(_exists(_id), "nonexistent id");
+      XP[_id] -= _levels;
+      emit XPLevelDown(_id, _levels, XP[_id]);
+  }
 
-  // function levelDownAlvlBatch(uint256[] memory _ids, uint256[] memory _levels) public onlyOwner {
-  //     require(_ids.length == _levels.length, "length missmatch");
-  //     for(uint256 i=0; i<_ids.length; i++) {
-  //         require(_exists(_ids[i]), "nonexistent id");
-  //         cardLevels[_ids[i]] -= _levels[i];
-  //         emit AlvlLevelDown(_ids[i], _levels[i], cardLevels[_ids[i]]);
-  //     }
-  // }
+  function levelDownXPBatch(address[] memory _ids, uint256[] memory _levels) public onlyOwner {
+      require(_ids.length == _levels.length, "length missmatch");
+      for(uint256 i=0; i<_ids.length; i++) {
+          require(_exists(_ids[i]), "nonexistent id");
+          XP[_ids[i]] -= _levels[i];
+          emit XPLevelDown(_ids[i], _levels[i], XP[_ids[i]]);
+      }
+  }
 
   function _beforeTokenTransfer(
     address from,
@@ -160,8 +160,6 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       // reset evolutions and age?
       _wands[tokenId].evolution = 0;
       _wands[tokenId].birth = block.timestamp;
-      // reset XP on transfer
-      XP[tokenId] = 0;
     }
   }
 }
