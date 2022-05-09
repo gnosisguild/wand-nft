@@ -1,6 +1,3 @@
-<clipPath id="stoneclip">
-  <circle cx="1000" cy="1060" r="262"></circle>
-</clipPath>
 <filter id="texture">
   <feTurbulence
     type={{settings.turbType}}
@@ -64,6 +61,14 @@
   <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"></stop>
   <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"></stop>
 </radialGradient>
+<defs>
+  {{!-- clip paths --}}
+  <clipPath id="stoneclip">
+    <circle cx="1000" cy="1060" r="260"></circle>
+  </clipPath>
+
+</defs>
+{{!-- stone base --}}
 <circle
   id="stone"
   transform="rotate(100{{settings.rotation}}, 1000, 1060)"
@@ -72,6 +77,8 @@
   r="260"
   filter="url(#texture)"
 ></circle>
+
+{{!-- stone shadow --}}
 <circle
   cx="1200"
   cy="1060"
@@ -79,3 +86,30 @@
   fill="url(#stoneshadow)"
   clip-path="url(#stoneclip)"
 ></circle>
+<defs>
+  <style>
+    .uuid-6f96f74f-7a8b-4ba5-a7a0-254d7f7cbfa6 {
+      fill: url(#uuid-ee310409-76a3-470d-ad7a-81739190418d);
+    }
+
+    .uuid-ad07c916-24d3-48fd-971b-e294e6870b8b {
+      fill: url(#uuid-eb32ee99-d07b-4e1c-840f-b90a012181d2);
+    }
+  </style>
+  <radialGradient id="uuid-eb32ee99-d07b-4e1c-840f-b90a012181d2" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse">
+    <stop offset=".05" stop-color="#fff" stop-opacity=".8"/>
+    <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/>
+    <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/>
+    <stop offset=".63" stop-color="#929292" stop-opacity=".5"/>
+    <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/>
+    <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/>
+  </radialGradient>
+  <radialGradient id="uuid-ee310409-76a3-470d-ad7a-81739190418d" cx="1148.95" cy="2659.77" fx="1148.95" fy="2659.77" r="75.93" gradientTransform="translate(312.49 2545.6) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#fff"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<path class="uuid-ad07c916-24d3-48fd-971b-e294e6870b8b" d="M1183.84,876.14c101.54,101.54,101.56,266.17,.04,367.7-101.52,101.52-266.21,101.56-367.74,.02-101.54-101.54-101.54-266.17,0-367.7s266.17-101.56,367.7-.02Z"/>
+<path class="uuid-6f96f74f-7a8b-4ba5-a7a0-254d7f7cbfa6" d="M918.85,856.64c48.74-19.4,96.54-14.34,106.77,11.32,10.22,25.66-21.02,62.18-69.78,81.58s-96.54,14.34-106.77-11.32c-10.22-25.64,21.02-62.18,69.78-81.58Z"/>
+
+

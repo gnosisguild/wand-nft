@@ -213,7 +213,7 @@ const Home: NextPage = () => {
         <div className={styles.wandImage}>
           <SvgTemplate
             title="FLOURISHING MISTY WORLD"
-            starsSeed={123}
+            stars={{starsSeed: 132413}}
             planets={[
               { x: -114, y: 370 },
               { x: -225, y: 334 },
