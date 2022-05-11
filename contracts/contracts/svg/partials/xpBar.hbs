@@ -1,0 +1,25 @@
+<defs>
+  <style>
+    .xp-seg {
+      fill: green;
+    }
+    .xp-circ {
+      fill: none;
+      stroke-width: 1;
+      stroke: green;
+    }
+    .xp-bar * {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+  </style>
+  <symbol id="xp-bar-seg">
+    <circle class="xp-circ" cx="1000" cy="1060.25" r="307.97"/>
+    <path class="xp-seg" d="M1002.84,768.69c-.95,0-1.9-.01-2.84-.01s-1.9,0-2.84,.01l-.16-16c1,0,2-.01,3-.01s2,0,3,.01l-.16,16Z"/>
+  </symbol>
+</defs>
+<g class="xp-bar">
+  {{#xp cap amount 0.5}}
+    <use xlink:href="#xp-bar-seg" transform="rotate({{this}})"/>
+  {{/xp}}
+</g>

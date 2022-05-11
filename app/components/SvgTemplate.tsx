@@ -94,8 +94,12 @@ interface Props {
     settings: StoneSettings;
   };
   stars: {
-    starsSeed: number
-  }
+    starsSeed: number;
+  };
+  xp: {
+    cap: number;
+    amount: number;
+  };
 }
 
 const SvgTemplate: React.FC<Props> = (props) => (
