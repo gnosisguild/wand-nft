@@ -242,7 +242,7 @@ const Home: NextPage = () => {
                 changeVal={changeStoneSetting}
               />
             </CollapseContainer>
-            <CollapseContainer wide title="Stars">
+            <CollapseContainer wide title="Planets">
               <LocationInput value={location} onChange={setLocation} />
             </CollapseContainer>
           </div>

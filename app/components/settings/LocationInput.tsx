@@ -44,11 +44,14 @@ const LocationInput: React.FC<Props> = ({ value, onChange }) => {
     }
   };
 
+  const lat = value?.latitude;
+  const lon = value?.longitude;
+
   useEffect(() => {
     let canceled = false;
-    if (value) {
+    if (lat && lon) {
       fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${value.latitude}&lon=${value.longitude}&zoom=14&format=json`
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&zoom=14&format=json`
       )
         .then((res) => res.json())
         .then((json) => {
@@ -61,7 +64,7 @@ const LocationInput: React.FC<Props> = ({ value, onChange }) => {
     return () => {
       canceled = true;
     };
-  });
+  }, [lat, lon]);
 
   return (
     <div>
