@@ -1,18 +1,22 @@
 <g transform="translate(1000 1060)">
   <defs>
-    <linearGradient id="aspectgradient">
-      <stop offset="0%" stop-color="#FFFFF0"></stop>
-      <stop offset="100%" stop-color="#BFBDB1"></stop>
-    </linearGradient>
+    <radialGradient id="aspectgradient" cx="0" cy="0" r="1" gradientUnits="objectBoundingBox" gradientTransform="translate(0.5 0.5)">
+      <stop stop-color="#FFFCFC" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#534E41" stop-opacity="0.6"/>
+    </radialGradient>
     <filter id="planet_blur">
       <feGaussianBlur stdDeviation="4"></feGaussianBlur>
     </filter>
+    <clipPath id="aspect-clip">
+      <circle cx="0" cy="0" r="260"></circle>
+    </clipPath> 
   </defs>
   <g filter="url(#planet_blur)">
     {{#each planets length=8}}
       <circle cx="{{int16 x}}" cy="{{int16 y}}" r="11" fill="white"></circle>
     {{/each}}
   </g>
+
   {{#each aspects length=8}}
     <line
       x1="{{int16 x1}}"
@@ -20,8 +24,9 @@
       x2="{{int16 x2}}"
       y2="{{int16 y2}}"
       stroke="url(#aspectgradient)"
-      stroke-width="10"
+      stroke-width="8"
       stroke-linecap="round"
+      clip-path="url(#aspect-clip)"
     ></line>
   {{/each}}
 </g>

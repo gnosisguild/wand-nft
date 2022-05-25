@@ -48,7 +48,6 @@ export interface StoneSettings {
 }
 interface Props {
   title: string;
-  starsSeed: number;
   planets: Planet[];
   aspects: Aspect[];
   background: {
@@ -93,6 +92,13 @@ interface Props {
   };
   stone: {
     settings: StoneSettings;
+  };
+  stars: {
+    starsSeed: number;
+  };
+  xp: {
+    cap: number;
+    amount: number;
   };
 }
 

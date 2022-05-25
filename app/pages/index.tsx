@@ -37,6 +37,7 @@ const Home: NextPage = () => {
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
+  const [xp, setXp] = React.useState(3221);
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const Home: NextPage = () => {
       setStoneSettings(decodedSettings.stoneSettings);
       setBackground(decodedSettings.background);
       setSparkle(decodedSettings.sparkle);
+      setXp(decodedSettings.xp);
     }
   }, []);
 
@@ -67,6 +69,7 @@ const Home: NextPage = () => {
         stoneSettings,
         background,
         sparkle,
+        xp,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -74,7 +77,16 @@ const Home: NextPage = () => {
       params.set("settings", base64Settings);
       window.history.replaceState(null, "", `?${params.toString()}`);
     }, 100);
-  }, [shape, rhythm, handle, embossLayers, stoneSettings, background, sparkle]);
+  }, [
+    shape,
+    rhythm,
+    handle,
+    embossLayers,
+    stoneSettings,
+    background,
+    sparkle,
+    xp,
+  ]);
 
   const addEmboss = () => {
     const newEmbossLayers = [
@@ -188,6 +200,20 @@ const Home: NextPage = () => {
                 <option value="sparkle5">sparkle 5</option>
               </select>
             </CollapseContainer>
+            <CollapseContainer title="Account XP Level">
+              <p>Cap: 10,000</p>
+              <p>Amount: {xp}</p>
+              <input
+                onChange={(e) => {
+                  setXp(parseInt(e.target.value));
+                }}
+                type="range"
+                min="0"
+                max="10000"
+                step="1"
+                value={xp}
+              />
+            </CollapseContainer>
             <CollapseContainer wide title="Emboss Layers">
               <ul>
                 {embossLayers.map((layer, index) => (
@@ -213,7 +239,7 @@ const Home: NextPage = () => {
         <div className={styles.wandImage}>
           <SvgTemplate
             title="FLOURISHING MISTY WORLD"
-            starsSeed={123}
+            stars={{ starsSeed: 132413 }}
             planets={[
               { x: -114, y: 370 },
               { x: -225, y: 334 },
@@ -244,6 +270,7 @@ const Home: NextPage = () => {
             filter={{ layers: embossLayers }}
             stone={{ settings: stoneSettings }}
             sparkle={{ [sparkle]: true }}
+            xp={{ cap: 10000, amount: xp }}
           />
         </div>
       </main>
