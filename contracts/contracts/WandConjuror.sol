@@ -49,7 +49,7 @@ contract WandConjuror {
       Template.render(
         Template.__Input({
           title: "FLOURISHING MISTY WORLD",
-          background: Template.Background({bg0: true}),
+          background: Template.Background({hue: 0, bg0: true}),
           planets: [
             Template.Planet({x: -114, y: 370}),
             Template.Planet({x: -225, y: 334}),
@@ -94,6 +94,7 @@ contract WandConjuror {
 
     return
       Template.Stone({
+        hue: 0,
         seed: 1,
         color: "crimson",
         seasonsAmplitude: (int256(-wand.latitude) * 260) / 32767, // scale from [-32767,32767] to [-260,260] and switch sign

@@ -108,33 +108,33 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     return (wand.halo, wand.evolution, wand.birth);
   }
 
-  function levelUpXP(address _id, uint256 _levels) public onlyOwner {
+  function levelUpXP(address _id, uint256 _tokenId, uint256 _levels) public onlyOwner {
       require(XP[_id] + _levels <= 10, "max level is 10");
-      require(_exists(_id), "nonexistent id");
+      require(_exists(_tokenId), "nonexistent id");
       XP[_id] += _levels;
       emit XPLevelUp(_id, _levels, XP[_id]);
   }
 
-  function levelUpXPBatch(address[] memory _ids, uint256[] memory _levels) public onlyOwner {
+  function levelUpXPBatch(address[] memory _ids, uint256[] memory _tokenids, uint256[] memory _levels) public onlyOwner {
       require(_ids.length == _levels.length, "length missmatch");
       for(uint256 i=0; i<_ids.length; i++) {
           require(XP[_ids[i]] + _levels[i] <= 10, "max level is 10");
-          require(_exists(_ids[i]), "nonexistent id");
+          require(_exists(_tokenids[i]), "nonexistent id");
           XP[_ids[i]] += _levels[i];
           emit XPLevelUp(_ids[i], _levels[i], XP[_ids[i]]);
       }
   }
 
-  function levelDownXP(address _id, uint256 _levels) public onlyOwner {
-      require(_exists(_id), "nonexistent id");
+  function levelDownXP(address _id, uint256 _tokenId, uint256 _levels) public onlyOwner {
+      require(_exists(_tokenId), "nonexistent id");
       XP[_id] -= _levels;
       emit XPLevelDown(_id, _levels, XP[_id]);
   }
 
-  function levelDownXPBatch(address[] memory _ids, uint256[] memory _levels) public onlyOwner {
+  function levelDownXPBatch(address[] memory _ids, uint256[] memory _tokenids, uint256[] memory _levels) public onlyOwner {
       require(_ids.length == _levels.length, "length missmatch");
       for(uint256 i=0; i<_ids.length; i++) {
-          require(_exists(_ids[i]), "nonexistent id");
+          require(_exists(_tokenids[i]), "nonexistent id");
           XP[_ids[i]] -= _levels[i];
           emit XPLevelDown(_ids[i], _levels[i], XP[_ids[i]]);
       }
