@@ -11,9 +11,9 @@ interface Props {
   onChange(value: Location | undefined): void;
 }
 
-const defaultLocation = fetch("http://ip-api.com/json")
+const defaultLocation = fetch("https://ipapi.co/json/")
   .then((res) => res.json())
-  .then((json) => ({ latitude: json.lat, longitude: json.lon }));
+  .then((json) => ({ latitude: json.latitude, longitude: json.longitude }));
 
 const LocationInput: React.FC<Props> = ({ value, onChange }) => {
   const [q, setQ] = useState("");
