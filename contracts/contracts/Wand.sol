@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./interfaces/IWandConjuror.sol";
 import "./interfaces/IWands.sol";
+//import "Template.sol"
 
 contract Wand is ERC721URIStorage, IWands, Ownable {
   using Counters for Counters.Counter;
@@ -53,18 +54,19 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       msg.sender == ERC721.ownerOf(tokenId),
       "Wands: only owner can build wand"
     );
+    // TODO: check tokenID is not already built?
     // Construct Wand
-    Wand memory wand = Wand({
-      built: true,
-      halo: halo,
-      evolution: 0,
-      birth: block.timestamp,
-      latitude: latitude,
-      longitude: longitude,
-      planets: planets,
-      aspects: aspects
-    });
-    _wands[tokenId] = wand;
+    Wand storage wand = _wands[tokenId];
+    wand.built = true;
+    wand.halo = halo;
+    wand.evolution = 0;
+    wand.birth = block.timestamp;
+    wand.latitude = latitude;
+    wand.longitude = longitude;
+    for(uint256 i=0; i<planets.length; i++) {
+      wand.planets.push(Template.Planet(planets[i].x, planets[i].y));
+      wand.aspects.push(Template.Aspect(aspects[i].x1, aspects[i].y1, aspects[i].x2, aspects[i].y2));
+    }
     emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
   }
 
