@@ -14,8 +14,8 @@ interface IWands is IERC721 {
     uint8 halo;
     int16 latitude;
     int16 longitude;
-    Template.Planet[] planets;
-    Template.Aspect[] aspects;
+    Template.Planet[8] planets;
+    Template.Aspect[8] aspects;
   }
 
   function build(

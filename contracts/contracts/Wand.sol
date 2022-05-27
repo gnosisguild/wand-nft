@@ -64,8 +64,10 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     wand.latitude = latitude;
     wand.longitude = longitude;
     for(uint256 i=0; i<planets.length; i++) {
-      wand.planets.push(Template.Planet(planets[i].x, planets[i].y));
-      wand.aspects.push(Template.Aspect(aspects[i].x1, aspects[i].y1, aspects[i].x2, aspects[i].y2));
+      //wand.planets.push(Template.Planet(planets[i].x, planets[i].y));
+      //wand.aspects.push(Template.Aspect(aspects[i].x1, aspects[i].y1, aspects[i].x2, aspects[i].y2));
+      wand.planets[i] = Template.Planet(planets[i].x, planets[i].y);
+      wand.aspects[i] = Template.Aspect(aspects[i].x1, aspects[i].y1, aspects[i].x2, aspects[i].y2);
     }
     emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
   }
