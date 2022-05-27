@@ -122,10 +122,13 @@ const Home: NextPage = () => {
   };
 
   const changeStoneSetting = (key: keyof StoneSettings, value: any) => {
-    const settings = { ...stoneSettings };
-    settings[key] = value;
+    const settings = { ...stoneSettings, [key]: value };
     setStoneSettings(settings);
   };
+
+  const now = new Date();
+  const bod = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const secondInDay = (now.getTime() - bod.getTime()) / 1000;
 
   return (
     <div className={styles.container}>
@@ -269,7 +272,16 @@ const Home: NextPage = () => {
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
-            stone={{ settings: stoneSettings }}
+            stone={{
+              ...stoneSettings,
+              seasonsAmplitude: Math.round(
+                ((location?.latitude || 0) / 180) * 260
+              ),
+              secondInDay,
+              // length of solar year: 365 days 5 hours 48 minutes 46 seconds = 31556926 seconds
+              // midwinter is 11 days 8 hours (= 979200 seconds) before the start of the calendar year
+              secondInYear: Math.round((Date.now() / 1000 - 979200) % 31556926),
+            }}
             sparkle={{ [sparkle]: true }}
             xp={{ cap: 10000, amount: xp }}
           />

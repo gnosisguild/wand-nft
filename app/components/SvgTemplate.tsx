@@ -45,6 +45,9 @@ export interface StoneSettings {
   blueExp: number;
   blueOff: number;
   rotation: number;
+  seasonsAmplitude: number;
+  secondInYear: number;
+  secondInDay: number;
 }
 interface Props {
   title: string;
@@ -90,9 +93,7 @@ interface Props {
   filter: {
     layers: EmbossLayer[];
   };
-  stone: {
-    settings: StoneSettings;
-  };
+  stone: StoneSettings;
   stars: {
     starsSeed: number;
   };
