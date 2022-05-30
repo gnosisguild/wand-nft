@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { DependencyList, EffectCallback, useEffect, useState } from "react";
 import styles from "./Settings.module.css";
 
 interface Location {
@@ -47,24 +47,28 @@ const LocationInput: React.FC<Props> = ({ value, onChange }) => {
   const lat = value?.latitude;
   const lon = value?.longitude;
 
-  useEffect(() => {
-    let canceled = false;
-    if (lat && lon) {
-      fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&zoom=14&format=json`
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          if (!canceled) {
-            setResult(json.display_name);
-          }
-        });
-    }
+  useDebouncedEffect(
+    () => {
+      let canceled = false;
+      if (lat && lon) {
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&zoom=14&format=json`
+        )
+          .then((res) => res.json())
+          .then((json) => {
+            if (!canceled) {
+              setResult(json.display_name);
+            }
+          });
+      }
 
-    return () => {
-      canceled = true;
-    };
-  }, [lat, lon]);
+      return () => {
+        canceled = true;
+      };
+    },
+    [lat, lon],
+    500
+  );
 
   return (
     <div>
@@ -112,3 +116,16 @@ const LocationInput: React.FC<Props> = ({ value, onChange }) => {
 };
 
 export default LocationInput;
+
+const useDebouncedEffect = (
+  effect: EffectCallback,
+  deps: DependencyList | undefined,
+  delay: number
+) => {
+  useEffect(() => {
+    const handler = setTimeout(() => effect(), delay);
+
+    return () => clearTimeout(handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...(deps || []), delay]);
+};
