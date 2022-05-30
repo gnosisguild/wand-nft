@@ -53,10 +53,8 @@ export const calculateVisiblePlanetPositions = (
 ) => {
   const positions = calculateBodyPositions(latitude, longitude, altitude, date);
   const planetPositions = Object.values(positions).slice(2); // skip sun and moon
-  return planetPositions.map(({ x, y }) => {
-    // coordinates further away than the scaled radius mean that the planet is not currently visible on the local celestial sphere
-    // we zero them, which means they won't be rendered
-    if (Math.sqrt(x * x + y * y) > CHART_RADIUS) return { x: 0, y: 0 };
-    return { x, y };
-  });
+  // coordinates further away than the scaled radius mean that the planet is not currently visible on the local celestial sphere
+  return planetPositions.filter(
+    ({ x, y }) => Math.sqrt(x * x + y * y) <= CHART_RADIUS
+  );
 };
