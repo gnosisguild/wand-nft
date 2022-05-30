@@ -23,9 +23,7 @@
 
   {{#each aspects length=8}}
     <path
-      d="M{{int16 x1}},{{int16 y1}} L{{int16 x2}},{{int16 y2}} M{{int16
-        x2
-      }},{{int16 y1}} M{{int16 x1}},{{int16 y2}}"
+      d="M{{int16 x1}},{{int16 y1}} L{{int16 x2}},{{int16 y2}} m25,25"
       stroke="url(#aspectgradient)"
       stroke-width="8"
       clip-path="url(#aspect-clip)"
