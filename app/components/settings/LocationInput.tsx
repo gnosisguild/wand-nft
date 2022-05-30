@@ -89,9 +89,11 @@ const LocationInput: React.FC<Props> = ({ value, onChange }) => {
         <input
           type="number"
           value={value?.latitude || ""}
+          max="90"
+          min="-90"
           onChange={(ev) =>
             onChange({
-              latitude: parseFloat(ev.target.value),
+              latitude: clamp(parseFloat(ev.target.value), -90, 90),
               longitude: value?.longitude || 0,
             })
           }
@@ -102,10 +104,12 @@ const LocationInput: React.FC<Props> = ({ value, onChange }) => {
         <input
           type="number"
           value={value?.longitude || ""}
+          max="180"
+          min="-180"
           onChange={(ev) =>
             onChange({
               latitude: value?.latitude || 0,
-              longitude: parseFloat(ev.target.value),
+              longitude: clamp(parseFloat(ev.target.value), -180, 180),
             })
           }
         />
@@ -129,3 +133,6 @@ const useDebouncedEffect = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...(deps || []), delay]);
 };
+
+const clamp = (num: number, min: number, max: number) =>
+  Math.min(Math.max(num, min), max);
