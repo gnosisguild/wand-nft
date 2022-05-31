@@ -32,12 +32,14 @@ const baseStoneSettings = {
   blueExp: 0.01,
   blueOff: -0.15,
   rotation: 26,
+  hue: 0,
 };
 
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
   const [background, setBackground] = React.useState("bgRadial0");
+  const [hue, setHue] = React.useState(0);
   const [sparkle, setSparkle] = React.useState("sparkle0");
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
@@ -62,6 +64,7 @@ const Home: NextPage = () => {
       setBackground(decodedSettings.background);
       setSparkle(decodedSettings.sparkle);
       setXp(decodedSettings.xp);
+      setHue(decodedSettings.hue);
     }
   }, []);
 
@@ -78,6 +81,7 @@ const Home: NextPage = () => {
         background,
         sparkle,
         xp,
+        hue,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -94,6 +98,7 @@ const Home: NextPage = () => {
     background,
     sparkle,
     xp,
+    hue,
   ]);
 
   const addEmboss = () => {
@@ -225,6 +230,19 @@ const Home: NextPage = () => {
                 value={xp}
               />
             </CollapseContainer>
+            <CollapseContainer title="Background Hue Rotate">
+              <p>{hue} degrees</p>
+              <input
+                onChange={(e) => {
+                  setHue(parseInt(e.target.value));
+                }}
+                type="range"
+                min="0"
+                max="360"
+                step="1"
+                value={hue}
+              />
+            </CollapseContainer>
             <CollapseContainer wide title="Emboss Layers" collapse>
               <ul>
                 {embossLayers.map((layer, index) => (
@@ -262,7 +280,7 @@ const Home: NextPage = () => {
               location?.latitude || 0,
               location?.longitude || 0
             )}
-            background={{ hue: 0, [background]: true }}
+            background={{ hue, [background]: true }}
             halo={{
               [shape]: true,
               rhythm: Array.from(
