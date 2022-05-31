@@ -1,10 +1,12 @@
 import React from "react";
+import { Body } from "astronomy-engine";
 import classes from "./SvgTemplate.module.css";
 import template from "../../contracts/contracts/svg/template.svg.hbs";
 
-interface Planet {
+export interface Planet {
   x: number;
   y: number;
+  name: Body;
 }
 interface Aspect {
   x1: number;

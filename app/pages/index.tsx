@@ -225,7 +225,7 @@ const Home: NextPage = () => {
                 value={xp}
               />
             </CollapseContainer>
-            <CollapseContainer wide title="Emboss Layers">
+            <CollapseContainer wide title="Emboss Layers" collapse>
               <ul>
                 {embossLayers.map((layer, index) => (
                   <EmbossLayerForm

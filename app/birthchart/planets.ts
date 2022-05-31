@@ -1,15 +1,11 @@
 import { Equator, Horizon, Observer } from "astronomy-engine";
 import { ALL_BODIES, CHART_RADIUS } from "./const";
+import { Planet } from "../components/SvgTemplate";
 
 // http://ip-api.com/json
 const latitude = 52.5422;
 const longitude = 13.3495;
 const toRad = (deg: number) => deg * (Math.PI / 180);
-
-interface Point {
-  x: number;
-  y: number;
-}
 
 export const calculateBodyPositions = (
   latitude: number,
@@ -19,7 +15,7 @@ export const calculateBodyPositions = (
 ) => {
   const observer = new Observer(latitude, longitude, altitude);
 
-  const positions: { [key: string]: Point } = {};
+  const positions: { [key: string]: Planet } = {};
 
   ALL_BODIES.forEach((body) => {
     const equator = Equator(body, date, observer, true, true);
@@ -39,6 +35,7 @@ export const calculateBodyPositions = (
     positions[body] = {
       x: Math.round(CHART_RADIUS * flatX),
       y: Math.round(-CHART_RADIUS * flatY),
+      name: body,
     };
   });
 
