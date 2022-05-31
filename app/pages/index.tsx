@@ -7,10 +7,15 @@ import {
   EmbossLayerForm,
   StoneForm,
   RhythmCircle,
+  LocationInput,
 } from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
+import {
+  calculateAspects,
+  calculateVisiblePlanetPositions,
+} from "../birthchart";
 
 const baseStoneSettings = {
   turbType: "fractalNoise",
@@ -38,6 +43,9 @@ const Home: NextPage = () => {
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
+  const [location, setLocation] = React.useState<
+    { latitude: number; longitude: number } | undefined
+  >(undefined);
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -114,10 +122,13 @@ const Home: NextPage = () => {
   };
 
   const changeStoneSetting = (key: keyof StoneSettings, value: any) => {
-    const settings = { ...stoneSettings };
-    settings[key] = value;
+    const settings = { ...stoneSettings, [key]: value };
     setStoneSettings(settings);
   };
+
+  const now = new Date();
+  const bod = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const secondInDay = (now.getTime() - bod.getTime()) / 1000;
 
   return (
     <div className={styles.container}>
@@ -234,30 +245,23 @@ const Home: NextPage = () => {
                 changeVal={changeStoneSetting}
               />
             </CollapseContainer>
+            <CollapseContainer wide title="Planets">
+              <LocationInput value={location} onChange={setLocation} />
+            </CollapseContainer>
           </div>
         </div>
         <div className={styles.wandImage}>
           <SvgTemplate
             title="FLOURISHING MISTY WORLD"
             stars={{ starsSeed: 132413 }}
-            planets={[
-              { x: -114, y: 370 },
-              { x: -225, y: 334 },
-              { x: -227, y: 379 },
-              { x: 121, y: 295 },
-              { x: -19, y: 357 },
-              { x: 361, y: 13 },
-              { x: 176, y: 259 },
-              { x: -156, y: 388 },
-            ]}
-            aspects={[
-              { x1: 259, y1: 26, x2: -91, y2: -244 },
-              { x1: 259, y1: 26, x2: -259, y2: -26 },
-              { x1: 83, y1: 247, x2: 84, y2: 246 },
-              { x1: 83, y1: 247, x2: 258, y2: 34 },
-              { x1: 87, y1: 245, x2: 258, y2: 30 },
-              { x1: 248, y1: 77, x2: 191, y2: -177 },
-            ]}
+            planets={calculateVisiblePlanetPositions(
+              location?.latitude || 0,
+              location?.longitude || 0
+            )}
+            aspects={calculateAspects(
+              location?.latitude || 0,
+              location?.longitude || 0
+            )}
             background={{ hue: 0, [background]: true }}
             halo={{
               [shape]: true,
@@ -268,7 +272,16 @@ const Home: NextPage = () => {
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
-            stone={{ settings: stoneSettings }}
+            stone={{
+              ...stoneSettings,
+              seasonsAmplitude: Math.round(
+                ((location?.latitude || 0) / 180) * 260
+              ),
+              secondInDay,
+              // length of solar year: 365 days 5 hours 48 minutes 46 seconds = 31556926 seconds
+              // midwinter is 11 days 8 hours (= 979200 seconds) before the start of the calendar year
+              secondInYear: Math.round((Date.now() / 1000 - 979200) % 31556926),
+            }}
             sparkle={{ [sparkle]: true }}
             xp={{ cap: 10000, amount: xp }}
           />
