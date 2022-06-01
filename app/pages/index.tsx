@@ -45,6 +45,7 @@ const Home: NextPage = () => {
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
+  const [level, setLevel] = React.useState("level3");
   const [location, setLocation] = React.useState<
     { latitude: number; longitude: number } | undefined
   >(undefined);
@@ -65,6 +66,7 @@ const Home: NextPage = () => {
       setSparkle(decodedSettings.sparkle);
       setXp(decodedSettings.xp);
       setHue(decodedSettings.hue);
+      setLevel(decodedSettings.level);
     }
   }, []);
 
@@ -82,6 +84,7 @@ const Home: NextPage = () => {
         sparkle,
         xp,
         hue,
+        level,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -99,6 +102,7 @@ const Home: NextPage = () => {
     sparkle,
     xp,
     hue,
+    level,
   ]);
 
   const addEmboss = () => {
@@ -216,6 +220,18 @@ const Home: NextPage = () => {
                 <option value="sparkle5">sparkle 5</option>
               </select>
             </CollapseContainer>
+            <CollapseContainer title="Wand level">
+              <select
+                value={level}
+                onChange={(ev) => setLevel(ev.target.value)}
+              >
+                <option value="level1">level 1</option>
+                <option value="level2">level 2</option>
+                <option value="level3">level 3</option>
+                <option value="level4">level 4</option>
+                <option value="level5">level 5</option>
+              </select>
+            </CollapseContainer>
             <CollapseContainer title="Account XP Level">
               <p>Cap: 10,000</p>
               <p>Amount: {xp}</p>
@@ -270,7 +286,7 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.wandImage}>
           <SvgTemplate
-            title="FLOURISHING MISTY WORLD"
+            frame={{ title: "FLOURISHING MISTY WORLD", [level]: true }}
             stars={{ starsSeed: 132413 }}
             planets={calculateVisiblePlanetPositions(
               location?.latitude || 0,

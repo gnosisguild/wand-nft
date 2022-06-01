@@ -52,7 +52,14 @@ export interface StoneSettings {
   secondInDay: number;
 }
 interface Props {
-  title: string;
+  frame: {
+    title: string;
+    level1?: boolean;
+    level2?: boolean;
+    level3?: boolean;
+    level4?: boolean;
+    level5?: boolean;
+  };
   planets: Planet[];
   aspects: Aspect[];
   background: {
