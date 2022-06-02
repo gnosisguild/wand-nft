@@ -296,6 +296,11 @@ ast-types-flow@^0.0.7:
   resolved "https://registry.yarnpkg.com/ast-types-flow/-/ast-types-flow-0.0.7.tgz#f70b735c6bca1a5c9c22d982c3e39e7feba3bdad"
   integrity sha1-9wtzXGvKGlycItmCw+Oef+ujva0=
 
+astronomy-engine@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/astronomy-engine/-/astronomy-engine-2.1.0.tgz#0efad6dfa02cd8f69717120446f808eb7b341747"
+  integrity sha512-8dHEKrUrcpExmcUWMokzDqRXVRplJVf3U/OJnhQCjXj0p1AwyltQkikOLNhf6Y54VNUJAkpxUFh0rGpn8KWn+Q==
+
 async@~0.2.10:
   version "0.2.10"
   resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
