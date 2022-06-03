@@ -1,18 +1,26 @@
 <defs>
+  <linearGradient id="gradient-fill">
+		<stop offset="0" stop-color="black" />
+    <stop offset="0.5" stop-color="rgba(255,255,255,0.5)" />
+    <stop offset="1" stop-color="rgba(255,255,255,0.8)" />
+  </linearGradient>
   <style type="text/css">
     .title {font: 45px serif; fill: #999777;
     mix-blend-mode: difference; text-transform: uppercase; letter-spacing: 5px}
     .titleBox {fill: none; stroke:#DCD7AF; stroke-width: 4px;}
     .frame-line {
         fill: none;
-        stroke: white;
+        stroke: url(#gradient-fill);
         stroke-miterlimit: 10;
         stroke-width: 2px;
+        mix-blend-mode: plus-lighter;
       }
       .frame-circ {
-        fill: white;
+        fill: url(#gradient-fill);
+        mix-blend-mode: plus-lighter;
       }
   </style>
+					
 </defs>
   {{~#if level1}}
     <g>
