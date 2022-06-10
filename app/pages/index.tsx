@@ -309,6 +309,7 @@ const Home: NextPage = () => {
                 { length: 24 },
                 (v, i) => rhythm[i % rhythm.length] !== "0"
               ),
+              hue: bgColor.hue + 180,
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
@@ -323,7 +324,7 @@ const Home: NextPage = () => {
               secondInYear: Math.round((Date.now() / 1000 - 979200) % 31556926),
             }}
             sparkle={{ [sparkle]: true }}
-            xp={{ cap: 10000, amount: xp }}
+            xp={{ cap: 10000, amount: xp, crown: xp >= 10000 }}
           />
         </div>
       </main>

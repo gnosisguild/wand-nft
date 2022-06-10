@@ -82,6 +82,7 @@ interface Props {
     halo4?: boolean;
     halo5?: boolean;
     rhythm: Boolean[];
+    hue: number;
   };
   handle: {
     handle0?: boolean;
@@ -107,6 +108,7 @@ interface Props {
   xp: {
     cap: number;
     amount: number;
+    crown: boolean;
   };
 }
 
