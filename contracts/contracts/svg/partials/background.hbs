@@ -1,116 +1,41 @@
-{{~#if bgRadial0}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(13, 17, 24, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad0">
-      <stop offset="0" style="stop-color:rgba(115, 131, 186, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(115, 131, 186, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgRadial1}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(8, 14, 37, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad1">
-      <stop offset="0" style="stop-color:rgba(88, 73, 116, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(88, 73, 116, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad1)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad1)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgRadial2}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(139, 160, 165, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad2">
-      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(139, 160, 165, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad2)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad2)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgRadial3}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(239, 202, 130, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad3">
-      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(239, 202, 130, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad3)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad3)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgRadial4}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(168, 224, 126, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad4">
-      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(168, 224, 126, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad4)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad4)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgRadial5}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(225, 114, 127, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad5">
-      <stop offset="0" style="stop-color:rgba(255, 255, 255, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(225, 114, 127, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad5)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad5)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgRadial6}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <rect style="fill:rgba(13, 17, 24, 1)" width="2000" height="3000"></rect>
-    <radialGradient id="grad6">
-      <stop offset="0" style="stop-color:rgba(168, 224, 126, 1)"></stop>
-      <stop offset="1" style="stop-color:rgba(168, 224, 126, 0)"></stop>
-    </radialGradient>
-    <circle style="fill:url(#grad6)" cx="1000" cy="1925" r="1133"></circle>
-    <circle style="fill:url(#grad6)" cx="1000" cy="372" r="1133"></circle>
-  </g>
-{{~/if~}}
-{{~#if bgLinear0}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <linearGradient id="lin0" gradientTransform="rotate(90)">
-      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
-      <stop offset="100%" stop-color="rgba(115, 131, 186, 1)"></stop>
-    </linearGradient>
-    <rect style="fill:url(#lin0)" width="2000" height="3000"></rect>
-  </g>
-{{~/if~}}
-{{~#if bgLinear1}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <linearGradient id="lin1" gradientTransform="rotate(90)">
-      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
-      <stop offset="100%" stop-color="rgba(111, 92, 147, 1)"></stop>
-    </linearGradient>
-    <rect style="fill:url(#lin1)" width="2000" height="3000"></rect>
-  </g>
-{{~/if~}}
-{{~#if bgLinear2}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <linearGradient id="lin2" gradientTransform="rotate(90)">
-      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
-      <stop offset="100%" stop-color="rgba(247, 38, 43, 1)"></stop>
-    </linearGradient>
-    <rect style="fill:url(#lin2)" width="2000" height="3000"></rect>
-  </g>
-{{~/if~}}
-{{~#if bgLinear3}}
-  <g style="filter: hue-rotate({{uint16 hue}}deg);">
-    <linearGradient id="lin3" gradientTransform="rotate(90)">
-      <stop offset="0%" stop-color="rgba(8, 14, 37, 1)"></stop>
-      <stop offset="100%" stop-color="rgba(225, 114, 127, 1)"></stop>
-    </linearGradient>
-    <rect style="fill:url(#lin3)" width="2000" height="3000"></rect>
-  </g>
-{{~/if~}}
+<g style="filter: hue-rotate({{uint16 hue}}deg);">
+{{#if radial}}
+  {{#if light}}
+      <rect style="fill:hsla({{color.hue}}, {{color.saturation}}%, {{color.lightness}}%, 1)" width="2000" height="3000"></rect>
+      <radialGradient id="grad0">
+        <stop offset="0" style="stop-color:hsla({{color.hue}}, 100%, 95%, 1)"></stop>
+        <stop offset="1" style="stop-color:hsla(55, 66%, 83%, 0)"></stop>
+      </radialGradient>
+      <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"></circle>
+      <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"></circle>
+  {{/if}}
+  {{#if dark}}
+      <rect style="fill:hsl({{color.hue}}, 30%, 7%)" width="2000" height="3000"></rect>
+      <radialGradient id="grad0">
+        <stop offset="0" style="stop-color: hsla({{color.hue}}, {{color.saturation}}%, {{color.lightness}}%, 1)"></stop>
+        <stop offset="1" style="stop-color: hsla({{color.hue}}, {{color.saturation}}%, {{color.lightness}}%, 0)"></stop>
+      </radialGradient>
+      <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"></circle>
+      <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"></circle>
+  {{/if}}
+{{/if}}
+{{#if linear}}
+  {{#if light}}
+      <linearGradient id="lin0" gradientTransform="rotate(90)">
+        <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"></stop>
+        <stop offset="100%" stop-color="hsla({{color.hue}}, {{color.saturation}}%, {{color.lightness}}%, 1)"></stop>
+      </linearGradient>
+      <rect style="fill:url(#lin0)" width="2000" height="3000"></rect>
+  {{/if}}
+  {{#if dark}}
+      <linearGradient id="lin0" gradientTransform="rotate(90)">
+        <stop offset="0%" stop-color="hsl({{color.hue}}, 30%, 7%)"></stop>
+        <stop offset="100%" stop-color="hsla({{color.hue}}, {{color.saturation}}%, {{color.lightness}}%, 1)"></stop>
+      </linearGradient>
+      <rect style="fill:url(#lin0)" width="2000" height="3000"></rect>
+  {{/if}}
+{{/if}}
+</g>
 
 <defs>
   <filter id="burstBlur">

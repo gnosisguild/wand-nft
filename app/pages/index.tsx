@@ -8,14 +8,17 @@ import {
   StoneForm,
   RhythmCircle,
   LocationInput,
+  BackgroundPicker,
 } from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
+import { HSLColor } from "../components/settings/BackgroundPicker";
 import {
   calculateAspects,
   calculateVisiblePlanetPositions,
 } from "../birthchart";
+import HueSelect from "../components/settings/HueSelect";
 
 const baseStoneSettings = {
   turbType: "fractalNoise",
@@ -38,7 +41,14 @@ const baseStoneSettings = {
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] = React.useState("bgRadial0");
+  const [background, setBackground] =
+    React.useState<"linear" | "radial">("radial");
+  const [bgColor, setBgColor] = React.useState<HSLColor>({
+    hue: 50,
+    saturation: 50,
+    lightness: 50,
+  });
+  const [bgRealm, setBgRealm] = React.useState<"light" | "dark">("dark");
   const [hue, setHue] = React.useState(0);
   const [sparkle, setSparkle] = React.useState("sparkle0");
   const [handle, setHandle] = React.useState("handle0");
@@ -46,9 +56,10 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] = React.useState<
-    { latitude: number; longitude: number } | undefined
-  >(undefined);
+  const [location, setLocation] =
+    React.useState<{ latitude: number; longitude: number } | undefined>(
+      undefined
+    );
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -65,8 +76,9 @@ const Home: NextPage = () => {
       setBackground(decodedSettings.background);
       setSparkle(decodedSettings.sparkle);
       setXp(decodedSettings.xp);
-      setHue(decodedSettings.hue);
       setLevel(decodedSettings.level);
+      setBgColor(decodedSettings.bgColor);
+      setBgRealm(decodedSettings.bgRealm);
     }
   }, []);
 
@@ -83,8 +95,9 @@ const Home: NextPage = () => {
         background,
         sparkle,
         xp,
-        hue,
         level,
+        bgRealm,
+        bgColor,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -101,8 +114,9 @@ const Home: NextPage = () => {
     background,
     sparkle,
     xp,
-    hue,
     level,
+    bgRealm,
+    bgColor,
   ]);
 
   const addEmboss = () => {
@@ -189,21 +203,21 @@ const Home: NextPage = () => {
               </select>
             </CollapseContainer>
             <CollapseContainer title="Background">
+              {`hsl(${bgColor.hue}, ${bgColor.saturation}%, ${bgColor.lightness}%)`}
+              <BackgroundPicker
+                mainColor={bgColor}
+                realm={bgRealm}
+                setMainColor={setBgColor}
+                setRealm={setBgRealm}
+              />
               <select
                 value={background}
-                onChange={(ev) => setBackground(ev.target.value)}
+                onChange={(ev) =>
+                  setBackground(ev.target.value as "linear" | "radial")
+                }
               >
-                <option value="bgRadial0">Radial 0</option>
-                <option value="bgRadial1">Radial 1</option>
-                <option value="bgRadial2">Radial 2</option>
-                <option value="bgRadial3">Radial 3</option>
-                <option value="bgRadial4">Radial 4</option>
-                <option value="bgRadial5">Radial 5</option>
-                <option value="bgRadial6">Radial 6</option>
-                <option value="bgLinear0">Linear 0</option>
-                <option value="bgLinear1">Linear 1</option>
-                <option value="bgLinear2">Linear 2</option>
-                <option value="bgLinear3">Linear 3 </option>
+                <option value="linear">linear</option>
+                <option value="radial">radial</option>
               </select>
             </CollapseContainer>
             <CollapseContainer title="Sparkle">
@@ -246,19 +260,6 @@ const Home: NextPage = () => {
                 value={xp}
               />
             </CollapseContainer>
-            <CollapseContainer title="Background Hue Rotate">
-              <p>{hue} degrees</p>
-              <input
-                onChange={(e) => {
-                  setHue(parseInt(e.target.value));
-                }}
-                type="range"
-                min="0"
-                max="360"
-                step="1"
-                value={hue}
-              />
-            </CollapseContainer>
             <CollapseContainer wide title="Emboss Layers" collapse>
               <ul>
                 {embossLayers.map((layer, index) => (
@@ -296,7 +297,12 @@ const Home: NextPage = () => {
               location?.latitude || 0,
               location?.longitude || 0
             )}
-            background={{ hue, [background]: true }}
+            background={{
+              hue,
+              [background]: true,
+              color: bgColor,
+              [bgRealm]: true,
+            }}
             halo={{
               [shape]: true,
               rhythm: Array.from(

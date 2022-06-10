@@ -64,17 +64,15 @@ interface Props {
   aspects: Aspect[];
   background: {
     hue: number;
-    bgRadial0?: boolean;
-    bgRadial1?: boolean;
-    bgRadial2?: boolean;
-    bgRadial3?: boolean;
-    bgRadial4?: boolean;
-    bgRadial5?: boolean;
-    bgRadial6?: boolean;
-    bgLinear0?: boolean;
-    bgLinear1?: boolean;
-    bgLinear2?: boolean;
-    bgLinear3?: boolean;
+    linear?: boolean;
+    radial?: boolean;
+    light?: boolean;
+    dark?: boolean;
+    color: {
+      hue: number;
+      saturation: number;
+      lightness: number;
+    };
   };
   halo: {
     halo0?: boolean;
