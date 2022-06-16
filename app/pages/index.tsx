@@ -8,14 +8,17 @@ import {
   StoneForm,
   RhythmCircle,
   LocationInput,
+  BackgroundPicker,
 } from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
+import { HSLColor } from "../components/settings/BackgroundPicker";
 import {
   calculateAspects,
   calculateVisiblePlanetPositions,
 } from "../birthchart";
+import HueSelect from "../components/settings/HueSelect";
 
 const baseStoneSettings = {
   turbType: "fractalNoise",
@@ -32,20 +35,31 @@ const baseStoneSettings = {
   blueExp: 0.01,
   blueOff: -0.15,
   rotation: 26,
+  hue: 0,
 };
 
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] = React.useState("bgRadial0");
+  const [background, setBackground] =
+    React.useState<"linear" | "radial">("radial");
+  const [bgColor, setBgColor] = React.useState<HSLColor>({
+    hue: 50,
+    saturation: 50,
+    lightness: 50,
+  });
+  const [bgRealm, setBgRealm] = React.useState<"light" | "dark">("dark");
+  const [hue, setHue] = React.useState(0);
   const [sparkle, setSparkle] = React.useState("sparkle0");
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
-  const [location, setLocation] = React.useState<
-    { latitude: number; longitude: number } | undefined
-  >(undefined);
+  const [level, setLevel] = React.useState("level3");
+  const [location, setLocation] =
+    React.useState<{ latitude: number; longitude: number } | undefined>(
+      undefined
+    );
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -62,6 +76,9 @@ const Home: NextPage = () => {
       setBackground(decodedSettings.background);
       setSparkle(decodedSettings.sparkle);
       setXp(decodedSettings.xp);
+      setLevel(decodedSettings.level);
+      setBgColor(decodedSettings.bgColor);
+      setBgRealm(decodedSettings.bgRealm);
     }
   }, []);
 
@@ -78,6 +95,9 @@ const Home: NextPage = () => {
         background,
         sparkle,
         xp,
+        level,
+        bgRealm,
+        bgColor,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -94,6 +114,9 @@ const Home: NextPage = () => {
     background,
     sparkle,
     xp,
+    level,
+    bgRealm,
+    bgColor,
   ]);
 
   const addEmboss = () => {
@@ -180,21 +203,21 @@ const Home: NextPage = () => {
               </select>
             </CollapseContainer>
             <CollapseContainer title="Background">
+              {`hsl(${bgColor.hue}, ${bgColor.saturation}%, ${bgColor.lightness}%)`}
+              <BackgroundPicker
+                mainColor={bgColor}
+                realm={bgRealm}
+                setMainColor={setBgColor}
+                setRealm={setBgRealm}
+              />
               <select
                 value={background}
-                onChange={(ev) => setBackground(ev.target.value)}
+                onChange={(ev) =>
+                  setBackground(ev.target.value as "linear" | "radial")
+                }
               >
-                <option value="bgRadial0">Radial 0</option>
-                <option value="bgRadial1">Radial 1</option>
-                <option value="bgRadial2">Radial 2</option>
-                <option value="bgRadial3">Radial 3</option>
-                <option value="bgRadial4">Radial 4</option>
-                <option value="bgRadial5">Radial 5</option>
-                <option value="bgRadial6">Radial 6</option>
-                <option value="bgLinear0">Linear 0</option>
-                <option value="bgLinear1">Linear 1</option>
-                <option value="bgLinear2">Linear 2</option>
-                <option value="bgLinear3">Linear 3 </option>
+                <option value="linear">linear</option>
+                <option value="radial">radial</option>
               </select>
             </CollapseContainer>
             <CollapseContainer title="Sparkle">
@@ -211,6 +234,18 @@ const Home: NextPage = () => {
                 <option value="sparkle5">sparkle 5</option>
               </select>
             </CollapseContainer>
+            <CollapseContainer title="Wand level">
+              <select
+                value={level}
+                onChange={(ev) => setLevel(ev.target.value)}
+              >
+                <option value="level1">level 1</option>
+                <option value="level2">level 2</option>
+                <option value="level3">level 3</option>
+                <option value="level4">level 4</option>
+                <option value="level5">level 5</option>
+              </select>
+            </CollapseContainer>
             <CollapseContainer title="Account XP Level">
               <p>Cap: 10,000</p>
               <p>Amount: {xp}</p>
@@ -225,7 +260,7 @@ const Home: NextPage = () => {
                 value={xp}
               />
             </CollapseContainer>
-            <CollapseContainer wide title="Emboss Layers">
+            <CollapseContainer wide title="Emboss Layers" collapse>
               <ul>
                 {embossLayers.map((layer, index) => (
                   <EmbossLayerForm
@@ -252,7 +287,7 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.wandImage}>
           <SvgTemplate
-            title="FLOURISHING MISTY WORLD"
+            frame={{ title: "FLOURISHING MISTY WORLD", [level]: true }}
             stars={{ starsSeed: 132413 }}
             planets={calculateVisiblePlanetPositions(
               location?.latitude || 0,
@@ -262,13 +297,19 @@ const Home: NextPage = () => {
               location?.latitude || 0,
               location?.longitude || 0
             )}
-            background={{ hue: 0, [background]: true }}
+            background={{
+              hue,
+              [background]: true,
+              color: bgColor,
+              [bgRealm]: true,
+            }}
             halo={{
               [shape]: true,
               rhythm: Array.from(
                 { length: 24 },
                 (v, i) => rhythm[i % rhythm.length] !== "0"
               ),
+              hue: bgColor.hue + 180,
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}
@@ -283,7 +324,7 @@ const Home: NextPage = () => {
               secondInYear: Math.round((Date.now() / 1000 - 979200) % 31556926),
             }}
             sparkle={{ [sparkle]: true }}
-            xp={{ cap: 10000, amount: xp }}
+            xp={{ cap: 10000, amount: xp, crown: xp >= 10000 }}
           />
         </div>
       </main>

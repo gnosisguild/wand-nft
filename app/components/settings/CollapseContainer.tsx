@@ -4,10 +4,16 @@ import styles from "./Settings.module.css";
 type Props = {
   title: string;
   wide?: boolean;
+  collapse?: boolean;
 };
 
-const CollapseContainer: React.FC<Props> = ({ children, title, wide }) => {
-  const [minimized, setMinimized] = useState(false);
+const CollapseContainer: React.FC<Props> = ({
+  children,
+  title,
+  wide,
+  collapse,
+}) => {
+  const [minimized, setMinimized] = useState(Boolean(collapse));
   return (
     <div className={`${styles.settingContainer} ${wide && styles.fullWidth}`}>
       <div className={styles.layerHeader}>

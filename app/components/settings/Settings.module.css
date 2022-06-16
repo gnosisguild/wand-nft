@@ -63,3 +63,35 @@
 .rhythmCheck input:hover {
   opacity: 1;
 }
+
+.hueSelectContainer {
+  position: relative;
+  margin-top: 10px;
+}
+.hueIndicator {
+  position: absolute;
+  width: 3px;
+  height: 60px;
+  top: -5px;
+  left: 0px;
+  background: red;
+}
+.hueSelect {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  max-width: 200px;
+  height: 50px;
+}
+.hueSingle {
+  height: 100%;
+  width: 0.2778%;
+}
+.hueSVG {
+  height: 100%;
+  width: 100%;
+}
+.singleGradSlider {
+  width: 100%;
+  height: 50px;
+}

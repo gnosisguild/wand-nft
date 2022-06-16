@@ -13,13 +13,37 @@
     </radialGradient>
     <clipPath id="aspect-clip">
       <circle cx="0" cy="0" r="260"></circle>
-    </clipPath>
+    </clipPath> 
+    <filter id="planet_blur">
+      <feGaussianBlur stdDeviation="4"></feGaussianBlur>
+    </filter>
+    <style>
+      .Mercury {
+        fill: #FFF6F2
+      }
+      .Venus {
+        fill: #FFFCF0
+      }
+      .Mars {
+        fill: #FFEDED
+      }
+      .Jupiter {
+        fill: #FFEEF4
+      }
+      .Saturn {
+        fill: #FFF3E9
+      }
+      .Uranus {
+        fill: #ECFDFF
+      }
+      .Neptune {
+        fill: #EEF7FF
+      }
+      .Pluto {
+        fill: #F8F0FF
+      }    
+      </style>
   </defs>
-  <g style="filter: blur(4px);">
-    {{#each planets}}
-      <circle cx="{{int16 x}}" cy="{{int16 y}}" r="11" fill="white"></circle>
-    {{/each}}
-  </g>
 
   {{#each aspects length=8}}
     <path
@@ -29,4 +53,11 @@
       clip-path="url(#aspect-clip)"
     ></path>
   {{/each}}
+
+
+  <g filter="url(#planet_blur)">
+    {{#each planets length=8}}
+      <circle cx="{{int16 x}}" cy="{{int16 y}}" class="planet {{name}}" r="11" fill="white"></circle>
+    {{/each}}
+  </g>
 </g>

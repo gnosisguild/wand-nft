@@ -1,10 +1,12 @@
 import React from "react";
+import { Body } from "astronomy-engine";
 import classes from "./SvgTemplate.module.css";
 import template from "../../contracts/contracts/svg/template.svg.hbs";
 
-interface Planet {
+export interface Planet {
   x: number;
   y: number;
+  name: Body;
 }
 interface Aspect {
   x1: number;
@@ -50,22 +52,27 @@ export interface StoneSettings {
   secondInDay: number;
 }
 interface Props {
-  title: string;
+  frame: {
+    title: string;
+    level1?: boolean;
+    level2?: boolean;
+    level3?: boolean;
+    level4?: boolean;
+    level5?: boolean;
+  };
   planets: Planet[];
   aspects: Aspect[];
   background: {
     hue: number;
-    bgRadial0?: boolean;
-    bgRadial1?: boolean;
-    bgRadial2?: boolean;
-    bgRadial3?: boolean;
-    bgRadial4?: boolean;
-    bgRadial5?: boolean;
-    bgRadial6?: boolean;
-    bgLinear0?: boolean;
-    bgLinear1?: boolean;
-    bgLinear2?: boolean;
-    bgLinear3?: boolean;
+    linear?: boolean;
+    radial?: boolean;
+    light?: boolean;
+    dark?: boolean;
+    color: {
+      hue: number;
+      saturation: number;
+      lightness: number;
+    };
   };
   halo: {
     halo0?: boolean;
@@ -75,6 +82,7 @@ interface Props {
     halo4?: boolean;
     halo5?: boolean;
     rhythm: Boolean[];
+    hue: number;
   };
   handle: {
     handle0?: boolean;
@@ -100,6 +108,7 @@ interface Props {
   xp: {
     cap: number;
     amount: number;
+    crown: boolean;
   };
 }
 
