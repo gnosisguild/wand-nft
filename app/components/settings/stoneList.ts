@@ -369,6 +369,23 @@ const stoneList: StoneSettings[] = [
     blueOff: 0.48,
     rotation: 82,
   },
+
+  {
+    turbType: "turbulence",
+    turbFreqX: 0.007,
+    turbFreqY: 0.006,
+    turbOct: 1,
+    redAmp: 0.04,
+    redExp: -0.57,
+    redOff: -0.09,
+    greenAmp: -0.51,
+    greenExp: -0.12,
+    greenOff: 0.51,
+    blueAmp: 0.24,
+    blueExp: -0.83,
+    blueOff: -0.8,
+    rotation: 111,
+  },
 ];
 
 export default stoneList;
