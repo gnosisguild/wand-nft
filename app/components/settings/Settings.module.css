@@ -95,3 +95,21 @@
   width: 100%;
   height: 50px;
 }
+.stoneList ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.stoneList li {
+  width: 10%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.stoneViewSvg {
+  width: 300%;
+  position: absolute;
+  top: -109%;
+  left: -100%;
+}

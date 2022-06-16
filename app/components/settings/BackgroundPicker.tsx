@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Settings.module.css";
 
 export interface HSLColor {
@@ -15,9 +15,15 @@ interface Props {
 }
 
 const BackgroundPicker = (props: Props) => {
-  const [hue, setHue] = useState(50);
-  const [saturation, setSaturation] = useState(50);
-  const [lightness, setLightness] = useState(50);
+  const [hue, setHue] = useState(props.mainColor.hue);
+  const [saturation, setSaturation] = useState(props.mainColor.saturation);
+  const [lightness, setLightness] = useState(props.mainColor.lightness);
+
+  useEffect(() => {
+    setHue(props.mainColor.hue);
+    setSaturation(props.mainColor.saturation);
+    setLightness(props.mainColor.lightness);
+  }, [props.mainColor]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = parseInt(e.target.value);
@@ -48,7 +54,14 @@ const BackgroundPicker = (props: Props) => {
         <option value="dark">dark</option>
       </select>
       <label>Hue</label>
-      <input onChange={onChange} name="hue" type="range" min="0" max="360" />
+      <input
+        value={hue}
+        onChange={onChange}
+        name="hue"
+        type="range"
+        min="0"
+        max="360"
+      />
       <div>
         <ul className={styles.hueSelect}>
           {Array.from(Array(360).keys()).map((i) => (
@@ -74,6 +87,7 @@ const BackgroundPicker = (props: Props) => {
       <label>Saturation</label>
       <input
         onChange={onChange}
+        value={saturation}
         name="saturation"
         type="range"
         min="0"
@@ -103,6 +117,7 @@ const BackgroundPicker = (props: Props) => {
       </div>
       <label>Lightness</label>
       <input
+        value={lightness}
         onChange={onChange}
         name="lightness"
         type="range"
