@@ -1,17 +1,35 @@
 import { useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Draggable from "react-draggable";
 import { StoneSettings } from "../SvgTemplate";
 import StoneViewer from "./StoneViewer";
 import stones from "./stoneList";
 import styles from "./Settings.module.css";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 interface Props {
   settings: StoneSettings;
   changeVal(key: string, value: any): void;
   swapStone<SetStateAction>(settings: StoneSettings): void;
 }
 
+const DraggableNoType: any = Draggable;
+
+const randomStonePosision = () => {
+  const stoneWidth = 18;
+  const angle = Math.random() * Math.PI * 2;
+  const r = 41 * Math.sqrt(Math.random());
+  const x = 41 + r * Math.cos(angle);
+  const y = 41 + r * Math.sin(angle);
+
+  return { top: `${y}%`, left: `${x}%` };
+};
+
+const stonesWithPosition = stones.map((stone) => {
+  return { ...stone, position: randomStonePosision() };
+});
+
 const StoneForm: React.FC<Props> = ({ settings, changeVal, swapStone }) => {
   const [mode, setMode] = useState("manual");
+
   return (
     <div>
       <CopyToClipboard text={JSON.stringify(settings)}>
@@ -33,7 +51,40 @@ const StoneForm: React.FC<Props> = ({ settings, changeVal, swapStone }) => {
         >
           Select from list
         </button>
+        <button
+          onClick={() => {
+            setMode("grab bag");
+          }}
+        >
+          Grab Bag
+        </button>
       </div>
+      {mode === "grab bag" && (
+        <div className={styles.stoneBag}>
+          <p>Double click to choose a stone</p>
+          <ul>
+            {stonesWithPosition.map((stone, index) => (
+              <DraggableNoType key={index} bounds="parent">
+                <li
+                  onClick={(e) => {
+                    switch (e.detail) {
+                      case 2:
+                        swapStone(stone);
+                        break;
+                      default:
+                        return;
+                    }
+                    swapStone(stone);
+                  }}
+                  style={randomStonePosision()}
+                >
+                  <StoneViewer settings={stone} uniqueKey={index} />
+                </li>
+              </DraggableNoType>
+            ))}
+          </ul>
+        </div>
+      )}
       {mode === "list" && (
         <div className={styles.stoneList}>
           <ul>
