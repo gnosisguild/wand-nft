@@ -20,7 +20,7 @@ import {
 } from "../birthchart";
 import HueSelect from "../components/settings/HueSelect";
 
-const baseStoneSettings = {
+const baseStoneSettings: StoneSettings = {
   turbType: "fractalNoise",
   turbFreqX: 0.004,
   turbFreqY: 0.007,
@@ -35,7 +35,6 @@ const baseStoneSettings = {
   blueExp: 0.01,
   blueOff: -0.15,
   rotation: 26,
-  hue: 0,
 };
 
 const Home: NextPage = () => {
@@ -278,6 +277,9 @@ const Home: NextPage = () => {
               <StoneForm
                 settings={stoneSettings}
                 changeVal={changeStoneSetting}
+                swapStone={(settings: StoneSettings) => {
+                  setStoneSettings(settings);
+                }}
               />
             </CollapseContainer>
             <CollapseContainer wide title="Planets">

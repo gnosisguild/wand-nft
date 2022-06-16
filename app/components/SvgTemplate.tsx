@@ -47,9 +47,9 @@ export interface StoneSettings {
   blueExp: number;
   blueOff: number;
   rotation: number;
-  seasonsAmplitude: number;
-  secondInYear: number;
-  secondInDay: number;
+  seasonsAmplitude?: number;
+  secondInYear?: number;
+  secondInDay?: number;
 }
 interface Props {
   frame: {
