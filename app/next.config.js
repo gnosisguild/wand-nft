@@ -25,11 +25,19 @@ const nextConfig = {
             ],
             helperResolver(helper, callback) {
               if (helper.startsWith("./uint") || helper.startsWith("./int")) {
-                callback(null, path.join(__dirname, './handlebars-helpers', "identity-helper.js"));
+                callback(
+                  null,
+                  path.join(
+                    __dirname,
+                    "./handlebars-helpers",
+                    "identity-helper.js"
+                  )
+                );
               } else if (helper.startsWith("./eq")) {
-                callback(null, path.join(__dirname, './handlebars-helpers', "eq-helper.js"));
-              } else if (helper.startsWith("./xp")) {
-                callback(null, path.join(__dirname, './handlebars-helpers', "xp-helper.js"));
+                callback(
+                  null,
+                  path.join(__dirname, "./handlebars-helpers", "eq-helper.js")
+                );
               } else {
                 callback();
               }
