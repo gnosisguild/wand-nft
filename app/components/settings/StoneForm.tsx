@@ -232,6 +232,19 @@ const StoneForm: React.FC<Props> = ({ settings, changeVal, swapStone }) => {
               step="1"
             />
           </div>
+          <div className={styles.inputGroup}>
+            <label>seed — {settings.seed}</label>
+            <input
+              onChange={(e) => {
+                changeVal("seed", e.target.value);
+              }}
+              type="range"
+              value={settings.seed}
+              min="0"
+              max="10000000"
+              step="1"
+            />
+          </div>
         </>
       )}
     </div>

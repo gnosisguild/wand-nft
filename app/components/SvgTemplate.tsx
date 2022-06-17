@@ -47,6 +47,7 @@ export interface StoneSettings {
   blueExp: number;
   blueOff: number;
   rotation: number;
+  seed: number;
   seasonsAmplitude?: number;
   secondInYear?: number;
   secondInDay?: number;

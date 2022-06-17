@@ -3,7 +3,7 @@
     {{#if fractalNoise}}type="fractalNoise"{{/if}}
     baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
     numOctaves="{{uint8 turbOct}}"
-    seed="1004123123"
+    seed="{{uint seed}}"
   ></feTurbulence>
   <feComponentTransfer>
     <feFuncR
