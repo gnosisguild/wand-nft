@@ -55,8 +55,8 @@ library Template {
   }
 
   struct Xp {
-    string amount;
-    string cap;
+    uint32 amount;
+    uint32 cap;
     bool crown;
   }
 
@@ -69,6 +69,7 @@ library Template {
     uint8 turbFreqX;
     uint8 turbFreqY;
     uint8 turbOct;
+    uint256 seed;
     int8 redAmp;
     int8 redExp;
     int8 redOff;
@@ -116,6 +117,7 @@ library Template {
   }
 
   struct Planet {
+    bool visible;
     int16 x;
     int16 y;
     string name;
@@ -223,18 +225,22 @@ library Template {
       abi.encodePacked(__result, ' <g filter="url(#planet_blur)"> ')
     );
     for (uint256 __i2; __i2 < __input.planets.length; __i2++) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <circle cx="',
-          intToString(__input.planets[__i2].x, 0),
-          '" cy="',
-          intToString(__input.planets[__i2].y, 0),
-          '" class="planet ',
-          __input.planets[__i2].name,
-          '" r="11" fill="white"></circle> '
-        )
-      );
+      __result = string(abi.encodePacked(__result, " "));
+      if (__input.planets[__i2].visible) {
+        __result = string(
+          abi.encodePacked(
+            __result,
+            '<circle cx="',
+            intToString(__input.planets[__i2].x, 0),
+            '" cy="',
+            intToString(__input.planets[__i2].y, 0),
+            '" class="planet ',
+            __input.planets[__i2].name,
+            '" r="11" fill="white"></circle>'
+          )
+        );
+      }
+      __result = string(abi.encodePacked(__result, " "));
     }
     __result = string(abi.encodePacked(__result, " </g> </g>"));
   }
@@ -393,19 +399,21 @@ library Template {
         uintToString(__input.turbFreqY, 3),
         '" numOctaves="',
         uintToString(__input.turbOct, 0),
-        '" seed="1004123123" ></feTurbulence> <feComponentTransfer> <feFuncR type="gamma" amplitude="',
+        '" seed="',
+        uintToString(__input.seed, 0),
+        '" ></feTurbulence> <feComponentTransfer> <feFuncR type="gamma" amplitude="',
         intToString(__input.redAmp, 2),
         '" exponent="',
         intToString(__input.redExp, 2),
         '" offset="',
-        intToString(__input.redOff, 2),
-        '" ></feFuncR> <feFuncG type="gamma" amplitude="',
-        intToString(__input.greenAmp, 2)
+        intToString(__input.redOff, 2)
       )
     );
     __result = string(
       abi.encodePacked(
         __result,
+        '" ></feFuncR> <feFuncG type="gamma" amplitude="',
+        intToString(__input.greenAmp, 2),
         '" exponent="',
         intToString(__input.greenExp, 2),
         '" offset="',
@@ -419,14 +427,14 @@ library Template {
         '" ></feFuncB> <feFuncA type="discrete" tableValues="1"></feFuncA> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="stoneTexture" ></feComposite> ',
         ' <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="glow" ></feGaussianBlur> <feColorMatrix in="glow" result="bgGlow" type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 0.8 0 " ></feColorMatrix> <feMerge> <feMergeNode in="bgGlow"></feMergeNode> <feMergeNode in="stoneTexture"></feMergeNode> </feMerge> </filter> <radialGradient id="stoneshadow"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"></stop> <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"></stop> </radialGradient> <defs> ',
         ' <clipPath id="stoneclip"> <circle cx="1000" cy="1060" r="260"></circle> </clipPath> </defs> ',
-        ' <circle id="stone" transform="rotate(',
-        uintToString(__input.rotation, 0),
-        ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#texture)" ></circle> '
+        ' <circle id="stone" transform="rotate('
       )
     );
     __result = string(
       abi.encodePacked(
         __result,
+        uintToString(__input.rotation, 0),
+        ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#texture)" ></circle> ',
         ' <circle cx="1200" cy="1060" r="520" fill="url(#stoneshadow)" clip-path="url(#stoneclip)" ></circle> <defs> <radialGradient id="stone-fill" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"></stop> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"></stop> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"></stop> <stop offset=".63" stop-color="#929292" stop-opacity=".5"></stop> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"></stop> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"></stop> </radialGradient> <radialGradient id="stone-highlight" cx="1148.95" cy="2659.77" fx="1148.95" fy="2659.77" r="75.93" gradientTransform="translate(312.49 2545.6) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity="0.7"></stop> <stop offset="1" stop-color="#fff" stop-opacity="0"></stop> </radialGradient> </defs> <path fill="url(#stone-fill)" d="M1183.84,876.14c101.54,101.54,101.56,266.17,.04,367.7-101.52,101.52-266.21,101.56-367.74,.02-101.54-101.54-101.54-266.17,0-367.7s266.17-101.56,367.7-.02Z" ></path> <path fill="url(#stone-highlight)" d="M918.85,856.64c48.74-19.4,96.54-14.34,106.77,11.32,10.22,25.66-21.02,62.18-69.78,81.58s-96.54,14.34-106.77-11.32c-10.22-25.64,21.02-62.18,69.78-81.58Z" > </path>'
       )
     );
@@ -456,9 +464,9 @@ library Template {
       abi.encodePacked(
         __result,
         "<defs> <style> .xp-seg { fill: green; } .xp-guide { fill: none; stroke-width: 1; stroke: #FAFFC0; opacity: 0.7; } .xp-bar * { transform-box: fill-box; transform-origin: center; } .xp-start { fill: white; } .xp-fill { fill: none; stroke-width: 28; stroke: url(#xp-grad); opacity: 1; mix-blend-mode: plus-lighter; } .hilt rect { fill: url(#hilt-grad); } #bar-base { stroke-dasharray: calc(",
-        __input.amount,
+        uintToString(__input.amount, 0),
         " / ",
-        __input.cap,
+        uintToString(__input.cap, 0),
         ' * 37.2%) 100%; } </style> <symbol id="xp-bar-seg"> <circle class="xp-circ" cx="1000" cy="1060.25" r="307.97"/> <path class="xp-seg" d="M1002.84,768.69c-.95,0-1.9-.01-2.84-.01s-1.9,0-2.84,.01l-.16-16c1,0,2-.01,3-.01s2,0,3,.01l-.16,16Z"/> </symbol> <linearGradient id="xp-grad" gradientUnits="objectBoundingBox" x1="80%" x2="20%" y1="200%" y2="-400%"> <stop offset="0" stop-color="black" stop-opacity="1"/> <stop offset="0.4" stop-color="lightgreen" stop-opacity="0"/> </linearGradient> <linearGradient id="hilt-grad" gradientUnits="objectBoundingBox" x1="80%" x2="20%" y1="200%" y2="-400%"> <stop offset="0" stop-color="black" stop-opacity="1"/> <stop offset="0.4" stop-color="lightgreen" stop-opacity="1"/> </linearGradient> </defs> <circle class="xp-guide" cx="1000" cy="1060.25" r="320"/> <circle class="xp-guide" cx="1000" cy="1060.25" r="290"/> <path id="bar-base" d="M1000,1365 a1,1 0 0,0 0,-610" class="xp-fill" stroke-linecap="round"> </path> <use href="#bar-base" transform="scale(-1,1) translate(-2000,0)"></use> <g class="hilt" filter="url(#glowEmboss)" id="xp-hilt"> <rect width="40" height="40" x="980" y="1345" transform="rotate(45, 1000, 1365)"/> <rect width="40" height="40" x="980" y="1345" /> </g> ',
         __input.crown
           ? ' <use href="#xp-hilt" transform="translate(0,-610)"></use> '

@@ -14,10 +14,7 @@ import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
 import { HSLColor } from "../components/settings/BackgroundPicker";
-import {
-  calculateAspects,
-  calculateVisiblePlanetPositions,
-} from "../birthchart";
+import { calculateAspects, calculatePlanetPositions } from "../birthchart";
 import HueSelect from "../components/settings/HueSelect";
 
 const baseStoneSettings: StoneSettings = {
@@ -40,8 +37,9 @@ const baseStoneSettings: StoneSettings = {
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] =
-    React.useState<"linear" | "radial">("radial");
+  const [background, setBackground] = React.useState<"linear" | "radial">(
+    "radial"
+  );
   const [bgColor, setBgColor] = React.useState<HSLColor>({
     hue: 50,
     saturation: 50,
@@ -55,10 +53,9 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] =
-    React.useState<{ latitude: number; longitude: number } | undefined>(
-      undefined
-    );
+  const [location, setLocation] = React.useState<
+    { latitude: number; longitude: number } | undefined
+  >(undefined);
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -291,7 +288,7 @@ const Home: NextPage = () => {
           <SvgTemplate
             frame={{ title: "FLOURISHING MISTY WORLD", [level]: true }}
             stars={{ starsSeed: 132413 }}
-            planets={calculateVisiblePlanetPositions(
+            planets={calculatePlanetPositions(
               location?.latitude || 0,
               location?.longitude || 0
             )}

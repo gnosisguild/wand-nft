@@ -1,12 +1,11 @@
 import React from "react";
-import { Body } from "astronomy-engine";
 import classes from "./SvgTemplate.module.css";
 import template from "../../contracts/contracts/svg/template.svg.hbs";
 
 export interface Planet {
   x: number;
   y: number;
-  name: Body;
+  visible: boolean;
 }
 interface Aspect {
   x1: number;
@@ -33,7 +32,7 @@ export interface EmbossLayer {
   blurY: number;
 }
 export interface StoneSettings {
-  turbType: string;
+  fractalNoise: boolean;
   turbFreqX: number;
   turbFreqY: number;
   turbOct: number;
