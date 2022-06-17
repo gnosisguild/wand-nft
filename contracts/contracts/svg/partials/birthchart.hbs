@@ -18,28 +18,28 @@
       <feGaussianBlur stdDeviation="4"></feGaussianBlur>
     </filter>
     <style>
-      .Mercury {
+      .p0 {
         fill: #FFF6F2
       }
-      .Venus {
+      .p1 {
         fill: #FFFCF0
       }
-      .Mars {
+      .p2 {
         fill: #FFEDED
       }
-      .Jupiter {
+      .p3 {
         fill: #FFEEF4
       }
-      .Saturn {
+      .p4 {
         fill: #FFF3E9
       }
-      .Uranus {
+      .p5 {
         fill: #ECFDFF
       }
-      .Neptune {
+      .p6 {
         fill: #EEF7FF
       }
-      .Pluto {
+      .p7 {
         fill: #F8F0FF
       }    
       </style>
@@ -57,7 +57,7 @@
 
   <g filter="url(#planet_blur)">
     {{#each planets length=8}}
-      <circle cx="{{int16 x}}" cy="{{int16 y}}" class="planet {{name}}" r="11" fill="white"></circle>
+      {{#if visible }}<circle cx="{{int16 x}}" cy="{{int16 y}}" class="p{{@index}}" r="11"></circle>{{/if}}
     {{/each}}
   </g>
 </g>

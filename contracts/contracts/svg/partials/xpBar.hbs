@@ -26,6 +26,10 @@
     .hilt rect {
       fill: url(#hilt-grad);
     }
+
+    #bar-base {
+      stroke-dasharray: calc({{uint32 amount}} / {{uint32 cap}} * 37.2%) 100%;
+    }
   </style>
   <symbol id="xp-bar-seg">
     <circle class="xp-circ" cx="1000" cy="1060.25" r="307.97"/>
@@ -44,7 +48,7 @@
 <circle class="xp-guide" cx="1000" cy="1060.25" r="320"/>
 <circle class="xp-guide" cx="1000" cy="1060.25" r="290"/>
 
-<path id="bar-base" d="M1000,1365 a1,1 0 0,0 0,-610" class="xp-fill" stroke-dasharray="{{xp cap amount}}% 100%" stroke-linecap="round">
+<path id="bar-base" d="M1000,1365 a1,1 0 0,0 0,-610" class="xp-fill" stroke-linecap="round">
 </path>
 <use href="#bar-base" transform="scale(-1,1) translate(-2000,0)"></use>
 <g class="hilt" filter="url(#glowEmboss)" id="xp-hilt">

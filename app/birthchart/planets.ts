@@ -35,23 +35,21 @@ export const calculateBodyPositions = (
     positions[body] = {
       x: Math.round(CHART_RADIUS * flatX),
       y: Math.round(-CHART_RADIUS * flatY),
-      name: body,
+
+      // coordinates further away than 1 mean that the planet is not currently visible on the local celestial sphere
+      visible: Math.sqrt(flatX * flatX + flatY * flatY) <= 1,
     };
   });
 
   return positions;
 };
 
-export const calculateVisiblePlanetPositions = (
+export const calculatePlanetPositions = (
   latitude: number,
   longitude: number,
   altitude = 0,
   date = new Date()
 ) => {
   const positions = calculateBodyPositions(latitude, longitude, altitude, date);
-  const planetPositions = Object.values(positions).slice(2); // skip sun and moon
-  // coordinates further away than the scaled radius mean that the planet is not currently visible on the local celestial sphere
-  return planetPositions.filter(
-    ({ x, y }) => Math.sqrt(x * x + y * y) <= CHART_RADIUS
-  );
+  return Object.values(positions).slice(2); // skip sun and moon
 };
