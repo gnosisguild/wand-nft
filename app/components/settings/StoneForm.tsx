@@ -56,9 +56,9 @@ const StoneForm: React.FC<Props> = ({ settings, changeVal, swapStone }) => {
             <label>turbulence type</label>
             <select
               onChange={(e) => {
-                changeVal("turbType", e.target.value);
+                changeVal("fractalNoise", e.target.value === "fractalNoise");
               }}
-              value={settings.turbType}
+              value={settings.fractalNoise ? "fractalNoise" : "turbulence"}
             >
               <option value="turbulence">turbulence</option>
               <option value="fractalNoise">fractalNoise</option>
@@ -236,7 +236,7 @@ const StoneForm: React.FC<Props> = ({ settings, changeVal, swapStone }) => {
             <label>seed — {settings.seed}</label>
             <input
               onChange={(e) => {
-                changeVal("seed", e.target.value);
+                changeVal("seed", parseInt(e.target.value));
               }}
               type="range"
               value={settings.seed}

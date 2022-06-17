@@ -20,7 +20,7 @@ const StoneViewer = ({ settings }: Props) => {
       )
     );
   }, [settings]);
-  console.log(`data:image/svg+xml;base64,${svgData}`);
+
   return (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
