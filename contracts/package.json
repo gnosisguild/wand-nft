@@ -47,7 +47,7 @@
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.6",
     "solhint-plugin-prettier": "0.0.5",
-    "solid-mustache": "^4.1.1",
+    "solid-mustache": "^4.2.1",
     "solidity-coverage": "0.7.17",
     "ts-node": "9.1.1",
     "typescript": "4.1.3"

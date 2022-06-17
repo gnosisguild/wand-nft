@@ -1,32 +1,28 @@
 <filter id="texture">
   <feTurbulence
-    type={{turbType}}
-    id="octave"
-    baseFrequency="{{turbFreqX}} {{turbFreqY}}"
-    numOctaves="{{turbOct}}"
+    {{#if fractalNoise}}type="fractalNoise"{{/if}}
+    baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
+    numOctaves="{{uint8 turbOct}}"
     seed="1004123123"
   ></feTurbulence>
   <feComponentTransfer>
     <feFuncR
-      id="r"
       type="gamma"
-      amplitude="{{redAmp}}"
-      exponent="{{redExp}}"
-      offset="{{redOff}}"
+      amplitude="{{int8 redAmp decimals=2}}"
+      exponent="{{int8 redExp decimals=2}}"
+      offset="{{int8 redOff decimals=2}}"
     ></feFuncR>
     <feFuncG
-      id="g"
       type="gamma"
-      amplitude="{{greenAmp}}"
-      exponent="{{greenExp}}"
-      offset="{{greenOff}}"
+      amplitude="{{int8 greenAmp decimals=2}}"
+      exponent="{{int8 greenExp decimals=2}}"
+      offset="{{int8 greenOff decimals=2}}"
     ></feFuncG>
     <feFuncB
-      id="b"
       type="gamma"
-      amplitude="{{blueAmp}}"
-      exponent="{{blueExp}}"
-      offset="{{blueOff}}"
+      amplitude="{{int8 blueAmp decimals=2}}"
+      exponent="{{int8 blueExp decimals=2}}"
+      offset="{{int8 blueOff decimals=2}}"
     ></feFuncB>
     <feFuncA type="discrete" tableValues="1"></feFuncA>
   </feComponentTransfer>
@@ -71,7 +67,7 @@
 {{! stone base }}
 <circle
   id="stone"
-  transform="rotate(100{{rotation}}, 1000, 1060)"
+  transform="rotate({{uint16 rotation}}, 1000, 1060)"
   cx="1000"
   cy="1060"
   r="260"

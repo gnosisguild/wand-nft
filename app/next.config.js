@@ -27,11 +27,7 @@ const nextConfig = {
               if (helper.startsWith("./uint") || helper.startsWith("./int")) {
                 callback(
                   null,
-                  path.join(
-                    __dirname,
-                    "./handlebars-helpers",
-                    "identity-helper.js"
-                  )
+                  path.join(__dirname, "./handlebars-helpers", "int-helper.js")
                 );
               } else if (helper.startsWith("./eq")) {
                 callback(
