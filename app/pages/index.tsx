@@ -15,24 +15,23 @@ import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings, Sparkle } from "../components/SvgTemplate";
 import { HSLColor } from "../components/settings/BackgroundPicker";
 import { calculateAspects, calculatePlanetPositions } from "../birthchart";
-import HueSelect from "../components/settings/HueSelect";
 
 const baseStoneSettings: StoneSettings = {
-  seed: 1,
-  fractalNoise: true,
-  turbFreqX: 4,
-  turbFreqY: 7,
-  turbOct: 2,
-  redAmp: 69,
-  redExp: -43,
-  redOff: 16,
-  greenAmp: 61,
-  greenExp: -66,
-  greenOff: -63,
-  blueAmp: 58,
-  blueExp: 1,
-  blueOff: -15,
-  rotation: 26,
+  fractalNoise: false,
+  turbFreqX: 2,
+  turbFreqY: 4,
+  turbOct: 3,
+  redAmp: 30,
+  redExp: -74,
+  redOff: -56,
+  greenAmp: 62,
+  greenExp: -52,
+  greenOff: -68,
+  blueAmp: 12,
+  blueExp: -32,
+  blueOff: -6,
+  rotation: 21,
+  seed: 1004123123,
 };
 
 const baseSparkleSet: Sparkle[] = [
@@ -66,9 +65,8 @@ const baseSparkleSet: Sparkle[] = [
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] = React.useState<"linear" | "radial">(
-    "radial"
-  );
+  const [background, setBackground] =
+    React.useState<"linear" | "radial">("radial");
   const [bgColor, setBgColor] = React.useState<HSLColor>({
     hue: 50,
     saturation: 50,
@@ -82,9 +80,10 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] = React.useState<
-    { latitude: number; longitude: number } | undefined
-  >(undefined);
+  const [location, setLocation] =
+    React.useState<{ latitude: number; longitude: number } | undefined>(
+      undefined
+    );
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
