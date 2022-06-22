@@ -65,8 +65,9 @@ const baseSparkleSet: Sparkle[] = [
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] =
-    React.useState<"linear" | "radial">("radial");
+  const [background, setBackground] = React.useState<"linear" | "radial">(
+    "radial"
+  );
   const [bgColor, setBgColor] = React.useState<HSLColor>({
     hue: 50,
     saturation: 50,
@@ -80,10 +81,9 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] =
-    React.useState<{ latitude: number; longitude: number } | undefined>(
-      undefined
-    );
+  const [location, setLocation] = React.useState<
+    { latitude: number; longitude: number } | undefined
+  >(undefined);
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -178,10 +178,10 @@ const Home: NextPage = () => {
   const secondInDay = (now.getTime() - bod.getTime()) / 1000;
 
   const generateRandomSparkle = (): Sparkle => {
-    const angle = Math.random() * Math.PI * 2;
-    const r = 820 * Math.sqrt(Math.random());
-    const x = 1000 + r * Math.cos(angle);
-    const y = 1060 + r * Math.sin(angle);
+    const r = 820;
+    const x = 1000 + r * (Math.random() * 2 - 1);
+    const y = 1060 + r * (Math.random() * 2 - 1);
+
     const scale = Math.random() * (1 - 0.3) + 0.3;
 
     return { ty: y, tx: x, scale };
