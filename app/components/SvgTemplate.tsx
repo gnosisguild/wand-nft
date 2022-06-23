@@ -13,6 +13,13 @@ interface Aspect {
   x2: number;
   y2: number;
 }
+
+export interface Sparkle {
+  scale: number;
+  tx: number;
+  ty: number;
+}
+
 export interface EmbossLayer {
   turbType: string;
   turbFreqX: number;
@@ -91,12 +98,7 @@ interface Props {
     handle3?: boolean;
   };
   sparkle: {
-    sparkle0?: boolean;
-    sparkle1?: boolean;
-    sparkle2?: boolean;
-    sparkle3?: boolean;
-    sparkle4?: boolean;
-    sparkle5?: boolean;
+    sparkles: Sparkle[];
   };
   filter: {
     layers: EmbossLayer[];

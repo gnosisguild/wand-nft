@@ -12,7 +12,7 @@ import {
 } from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
-import { EmbossLayer, StoneSettings } from "../components/SvgTemplate";
+import { EmbossLayer, StoneSettings, Sparkle } from "../components/SvgTemplate";
 import { HSLColor } from "../components/settings/BackgroundPicker";
 import { calculateAspects, calculatePlanetPositions } from "../birthchart";
 import HueSelect from "../components/settings/HueSelect";
@@ -34,6 +34,34 @@ const baseStoneSettings: StoneSettings = {
   rotation: 26,
 };
 
+const baseSparkleSet: Sparkle[] = [
+  {
+    scale: 1,
+    tx: 1352,
+    ty: 349,
+  },
+  {
+    scale: 0.35,
+    tx: 249,
+    ty: 1000,
+  },
+  {
+    scale: 0.55,
+    tx: 1169,
+    ty: 1155,
+  },
+  {
+    scale: 0.75,
+    tx: 1448,
+    ty: 1355,
+  },
+  {
+    scale: 0.55,
+    tx: 1148,
+    ty: 1410,
+  },
+];
+
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
@@ -47,7 +75,7 @@ const Home: NextPage = () => {
   });
   const [bgRealm, setBgRealm] = React.useState<"light" | "dark">("dark");
   const [hue, setHue] = React.useState(0);
-  const [sparkle, setSparkle] = React.useState("sparkle0");
+  const [sparkles, setSparkles] = React.useState(baseSparkleSet);
   const [handle, setHandle] = React.useState("handle0");
   const [embossLayers, setEmbossLayers] = React.useState(embossPresets);
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
@@ -70,7 +98,7 @@ const Home: NextPage = () => {
       setEmbossLayers(decodedSettings.embossLayers);
       setStoneSettings(decodedSettings.stoneSettings);
       setBackground(decodedSettings.background);
-      setSparkle(decodedSettings.sparkle);
+      setSparkles(decodedSettings.sparkle);
       setXp(decodedSettings.xp);
       setLevel(decodedSettings.level);
       setBgColor(decodedSettings.bgColor);
@@ -89,7 +117,7 @@ const Home: NextPage = () => {
         embossLayers,
         stoneSettings,
         background,
-        sparkle,
+        sparkles,
         xp,
         level,
         bgRealm,
@@ -108,7 +136,7 @@ const Home: NextPage = () => {
     embossLayers,
     stoneSettings,
     background,
-    sparkle,
+    sparkles,
     xp,
     level,
     bgRealm,
@@ -148,6 +176,26 @@ const Home: NextPage = () => {
   const now = new Date();
   const bod = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const secondInDay = (now.getTime() - bod.getTime()) / 1000;
+
+  const generateRandomSparkle = (): Sparkle => {
+    const r = 820;
+    const x = 1000 + r * (Math.random() * 2 - 1);
+    const y = 1060 + r * (Math.random() * 2 - 1);
+
+    const scale = Math.random() * (1 - 0.3) + 0.3;
+
+    return { ty: y, tx: x, scale };
+  };
+
+  const setNewSparkleSet = () => {
+    const sparkleAmount = Math.random() * (8 - 4) + 4;
+    const newSparkles = Array.from(
+      { length: sparkleAmount },
+      generateRandomSparkle
+    );
+    console.log(newSparkles);
+    setSparkles(newSparkles);
+  };
 
   return (
     <div className={styles.container}>
@@ -217,18 +265,7 @@ const Home: NextPage = () => {
               </select>
             </CollapseContainer>
             <CollapseContainer title="Sparkle">
-              <select
-                value={sparkle}
-                onChange={(ev) => setSparkle(ev.target.value)}
-              >
-                <option value="sparkleNone">No Sparkle</option>
-                <option value="sparkle0">sparkle 0</option>
-                <option value="sparkle1">sparkle 1</option>
-                <option value="sparkle2">sparkle 2</option>
-                <option value="sparkle3">sparkle 3</option>
-                <option value="sparkle4">sparkle 4</option>
-                <option value="sparkle5">sparkle 5</option>
-              </select>
+              <button onClick={setNewSparkleSet}>Generate New Sparkles</button>
             </CollapseContainer>
             <CollapseContainer title="Wand level">
               <select
@@ -322,7 +359,7 @@ const Home: NextPage = () => {
               // midwinter is 11 days 8 hours (= 979200 seconds) before the start of the calendar year
               secondInYear: Math.round((Date.now() / 1000 - 979200) % 31556926),
             }}
-            sparkle={{ [sparkle]: true }}
+            sparkle={{ sparkles }}
             xp={{ cap: 10000, amount: xp, crown: xp >= 10000 }}
           />
         </div>
