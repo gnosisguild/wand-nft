@@ -1,12 +1,12 @@
 export const embossPresets = [
   {
     turbType: "turbulence",
-    turbFreqX: 0.001,
-    turbFreqY: 0.001,
+    turbFreqX: 1,
+    turbFreqY: 1,
     turbOct: 1,
-    turbBlur: 2,
+    turbBlur: 20,
     dispScale: 200,
-    specConstant: 0.75,
+    specConstant: 8,
     specExponent: 30,
     surfaceScale: 5,
     pointX: -50,

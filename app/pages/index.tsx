@@ -18,45 +18,46 @@ import { calculateAspects, calculatePlanetPositions } from "../birthchart";
 import HueSelect from "../components/settings/HueSelect";
 
 const baseStoneSettings: StoneSettings = {
-  turbType: "fractalNoise",
-  turbFreqX: 0.004,
-  turbFreqY: 0.007,
+  seed: 1,
+  fractalNoise: true,
+  turbFreqX: 4,
+  turbFreqY: 7,
   turbOct: 2,
-  redAmp: 0.69,
-  redExp: -0.43,
-  redOff: 0.16,
-  greenAmp: 0.61,
-  greenExp: -0.66,
-  greenOff: -0.63,
-  blueAmp: 0.58,
-  blueExp: 0.01,
-  blueOff: -0.15,
+  redAmp: 69,
+  redExp: -43,
+  redOff: 16,
+  greenAmp: 61,
+  greenExp: -66,
+  greenOff: -63,
+  blueAmp: 58,
+  blueExp: 1,
+  blueOff: -15,
   rotation: 26,
 };
 
 const baseSparkleSet: Sparkle[] = [
   {
-    scale: 1,
+    scale: 100,
     tx: 1352,
     ty: 349,
   },
   {
-    scale: 0.35,
+    scale: 35,
     tx: 249,
     ty: 1000,
   },
   {
-    scale: 0.55,
+    scale: 55,
     tx: 1169,
     ty: 1155,
   },
   {
-    scale: 0.75,
+    scale: 75,
     tx: 1448,
     ty: 1355,
   },
   {
-    scale: 0.55,
+    scale: 55,
     tx: 1148,
     ty: 1410,
   },
@@ -182,7 +183,7 @@ const Home: NextPage = () => {
     const x = 1000 + r * (Math.random() * 2 - 1);
     const y = 1060 + r * (Math.random() * 2 - 1);
 
-    const scale = Math.random() * (1 - 0.3) + 0.3;
+    const scale = 100 * (Math.random() * (1 - 0.3) + 0.3);
 
     return { ty: y, tx: x, scale };
   };

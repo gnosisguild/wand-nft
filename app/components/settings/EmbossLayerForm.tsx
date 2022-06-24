@@ -46,8 +46,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 }}
                 type="range"
                 min="0"
-                max="0.1"
-                step="0.001"
+                max="1000"
+                step="1"
                 value={props.layer.turbFreqX}
               />
             </div>
@@ -59,8 +59,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 }}
                 type="range"
                 min="0"
-                max="0.1"
-                step="0.001"
+                max="1000"
+                step="1"
                 value={props.layer.turbFreqY}
               />
             </div>
@@ -84,8 +84,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 }}
                 type="range"
                 min="0"
-                max="10"
-                step="0.01"
+                max="100"
+                step="1"
                 value={props.layer.turbBlur}
               />
             </div>
@@ -100,7 +100,7 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 type="range"
                 min="0"
                 max="500"
-                step="0.1"
+                step="1"
                 value={props.layer.dispScale}
               />
             </div>
@@ -110,7 +110,7 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 type="range"
                 min="-200"
                 max="200"
-                step="0.1"
+                step="1"
                 value={props.layer.surfaceScale}
                 className="slider"
                 onChange={(e) => {
@@ -123,8 +123,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <input
                 type="range"
                 min="0"
-                max="10"
-                step="0.01"
+                max="1000"
+                step="1"
                 value={props.layer.specConstant}
                 className="slider"
                 onChange={(e) => {
@@ -138,7 +138,7 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 type="range"
                 min="1"
                 max="128"
-                step="0.1"
+                step="1"
                 value={props.layer.specExponent}
                 className="slider"
                 onChange={(e) => {
@@ -204,8 +204,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <input
                 type="range"
                 min="0"
-                max="1"
-                step="0.001"
+                max="100"
+                step="1"
                 value={props.layer.opacity}
                 className="slider"
                 onChange={(e) => {
@@ -218,8 +218,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <input
                 type="range"
                 min="0"
-                max="50"
-                step="0.001"
+                max="500"
+                step="1"
                 value={props.layer.blurX}
                 className="slider"
                 onChange={(e) => {
@@ -232,8 +232,8 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <input
                 type="range"
                 min="0"
-                max="50"
-                step="0.001"
+                max="500"
+                step="1"
                 value={props.layer.blurY}
                 className="slider"
                 onChange={(e) => {

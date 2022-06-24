@@ -38,7 +38,7 @@
       result="turb_{{@index}}"
     ></feTurbulence>
     <feGaussianBlur
-      stdDeviation="{{uint8 turbBlur}}"
+      stdDeviation="{{uint8 turbBlur decimals=1}}"
       in="SourceAlpha"
       result="turb_blur_{{@index}}"
     ></feGaussianBlur>
@@ -58,7 +58,7 @@
       result="co_mat_{{@index}}"
     ></feColorMatrix>
     <feGaussianBlur
-      stdDeviation="{{uint8 blurX}} {{uint8 blurY}}"
+      stdDeviation="{{uint8 blurX decimals=1}} {{uint8 blurY decimals=1}}"
       in="co_mat_{{@index}}"
       result="blur_co_mat_{{@index}}"
     ></feGaussianBlur>
