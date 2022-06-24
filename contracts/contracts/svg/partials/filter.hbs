@@ -31,19 +31,19 @@
   {{! <!-- Emboss/Bevel --> }}
   {{#each layers}}
     <feTurbulence
-      type="{{turbType}}"
-      baseFrequency="{{turbFreqX}} {{turbFreqY}}"
-      numOctaves="{{turbOct}}"
+      {{#if fractalNoise}}type="fractalNoise"{{/if}}
+      baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
+      numOctaves="{{uint8 turbOct}}"
       seed="1004123123"
       result="turb_{{@index}}"
     ></feTurbulence>
     <feGaussianBlur
-      stdDeviation="{{turbBlur}}"
+      stdDeviation="{{uint8 turbBlur}}"
       in="SourceAlpha"
       result="turb_blur_{{@index}}"
     ></feGaussianBlur>
     <feDisplacementMap
-      scale="{{dispScale}}"
+      scale="{{uint8 dispScale}}"
       in="turb_blur_{{@index}}"
       in2="turb_{{@index}}"
       result="disp_turb_{{@index}}"
@@ -58,19 +58,19 @@
       result="co_mat_{{@index}}"
     ></feColorMatrix>
     <feGaussianBlur
-      stdDeviation="{{blurX}} {{blurY}}"
+      stdDeviation="{{uint8 blurX}} {{uint8 blurY}}"
       in="co_mat_{{@index}}"
       result="blur_co_mat_{{@index}}"
     ></feGaussianBlur>
     <feSpecularLighting
-      surfaceScale="{{surfaceScale}}"
-      specularConstant="{{specConstant}}"
-      specularExponent="{{specExponent}}"
+      surfaceScale="{{uint8 surfaceScale}}"
+      specularConstant="{{uint8 specConstant decimals=2}}"
+      specularExponent="{{uint8 specExponent}}"
       lighting-color="{{lightColor}}"
       in="blur_co_mat_{{@index}}"
       result="lighting_{{@index}}"
     >
-      <fePointLight x="{{pointX}}" y="{{pointY}}" z="{{pointZ}}"></fePointLight>
+      <fePointLight x="{{int16 pointX}}" y="{{int16 pointY}}" z="{{int16 pointZ}}"></fePointLight>
     </feSpecularLighting>
     <feComposite
       operator="in"
@@ -82,7 +82,7 @@
       operator="arithmetic"
       k1="0"
       k2="0"
-      k3="{{opacity}}"
+      k3="{{uint8 opacity decimals=2}}"
       k4="0"
       in="disp_turb_{{@index}}"
       in2="comp_light_1_{{@index}}"
