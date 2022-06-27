@@ -15,7 +15,7 @@ export const embossPresets = [
     turbFreqX: 17,
     turbFreqY: 17,
     turbOct: 1,
-    turbType: "fractalNoise",
+    fractalNoise: true
   },
   {
     blurX: 19,
@@ -33,7 +33,7 @@ export const embossPresets = [
     turbFreqX: 1,
     turbFreqY: 9,
     turbOct: 1,
-    turbType: "fractalNoise",
+    fractalNoise: true
   },
   {
     blurX: 19,
@@ -51,6 +51,6 @@ export const embossPresets = [
     turbFreqX: 19,
     turbFreqY: 19,
     turbOct: 1,
-    turbType: "fractalNoise",
+    fractalNoise: true
   },
 ];
