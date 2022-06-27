@@ -113,3 +113,18 @@
   top: -109%;
   left: -100%;
 }
+.stoneBag ul {
+  position: relative;
+  background: bisque;
+  width: 50%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.stoneBag li {
+  position: absolute;
+  width: 18%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  cursor: grab;
+}

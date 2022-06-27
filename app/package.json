@@ -15,7 +15,8 @@
     "next": "12.1.0",
     "react": "17.0.2",
     "react-copy-to-clipboard": "^5.1.0",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-draggable": "^4.4.5"
   },
   "devDependencies": {
     "@types/node": "17.0.21",
