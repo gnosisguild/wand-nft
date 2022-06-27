@@ -1,6 +1,6 @@
 export const embossPresets = [
   {
-    turbType: "turbulence",
+    fractalNoise: true,
     turbFreqX: 1,
     turbFreqY: 1,
     turbOct: 1,
