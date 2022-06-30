@@ -15,48 +15,48 @@ import { embossPresets } from "../components/settings/embossPresets";
 import { EmbossLayer, StoneSettings, Sparkle } from "../components/SvgTemplate";
 import { HSLColor } from "../components/settings/BackgroundPicker";
 import { calculateAspects, calculatePlanetPositions } from "../birthchart";
-import HueSelect from "../components/settings/HueSelect";
 
 const baseStoneSettings: StoneSettings = {
-  turbType: "fractalNoise",
-  turbFreqX: 0.004,
-  turbFreqY: 0.007,
-  turbOct: 2,
-  redAmp: 0.69,
-  redExp: -0.43,
-  redOff: 0.16,
-  greenAmp: 0.61,
-  greenExp: -0.66,
-  greenOff: -0.63,
-  blueAmp: 0.58,
-  blueExp: 0.01,
-  blueOff: -0.15,
-  rotation: 26,
+  fractalNoise: false,
+  turbFreqX: 2,
+  turbFreqY: 4,
+  turbOct: 3,
+  redAmp: 30,
+  redExp: -74,
+  redOff: -56,
+  greenAmp: 62,
+  greenExp: -52,
+  greenOff: -68,
+  blueAmp: 12,
+  blueExp: -32,
+  blueOff: -6,
+  rotation: 21,
+  seed: 1004123123,
 };
 
 const baseSparkleSet: Sparkle[] = [
   {
-    scale: 1,
+    scale: 100,
     tx: 1352,
     ty: 349,
   },
   {
-    scale: 0.35,
+    scale: 35,
     tx: 249,
     ty: 1000,
   },
   {
-    scale: 0.55,
+    scale: 55,
     tx: 1169,
     ty: 1155,
   },
   {
-    scale: 0.75,
+    scale: 75,
     tx: 1448,
     ty: 1355,
   },
   {
-    scale: 0.55,
+    scale: 55,
     tx: 1148,
     ty: 1410,
   },
@@ -65,9 +65,8 @@ const baseSparkleSet: Sparkle[] = [
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] = React.useState<"linear" | "radial">(
-    "radial"
-  );
+  const [background, setBackground] =
+    React.useState<"linear" | "radial">("radial");
   const [bgColor, setBgColor] = React.useState<HSLColor>({
     hue: 50,
     saturation: 50,
@@ -81,9 +80,10 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] = React.useState<
-    { latitude: number; longitude: number } | undefined
-  >(undefined);
+  const [location, setLocation] =
+    React.useState<{ latitude: number; longitude: number } | undefined>(
+      undefined
+    );
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -182,7 +182,7 @@ const Home: NextPage = () => {
     const x = 1000 + r * (Math.random() * 2 - 1);
     const y = 1060 + r * (Math.random() * 2 - 1);
 
-    const scale = Math.random() * (1 - 0.3) + 0.3;
+    const scale = 100 * (Math.random() * (1 - 0.3) + 0.3);
 
     return { ty: y, tx: x, scale };
   };

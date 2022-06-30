@@ -11,6 +11,6 @@
 </defs>
 <g filter="url(#burstBlur)" style="opacity: 0.6">
   {{#each sparkles}}
-    <use width="250.33" height="377.46" transform="translate({{tx}} {{ty}}) scale({{scale}})" xlink:href="#sprkl" />
+    <use width="250.33" height="377.46" transform="translate({{int16 tx}} {{int16 ty}}) scale({{uint8 scale decimals=2}})" href="#sprkl" />
   {{/each}}
 </g>
