@@ -65,8 +65,9 @@ const baseSparkleSet: Sparkle[] = [
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] =
-    React.useState<"linear" | "radial">("radial");
+  const [background, setBackground] = React.useState<"linear" | "radial">(
+    "radial"
+  );
   const [bgColor, setBgColor] = React.useState<HSLColor>({
     hue: 50,
     saturation: 50,
@@ -80,10 +81,9 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] =
-    React.useState<{ latitude: number; longitude: number } | undefined>(
-      undefined
-    );
+  const [location, setLocation] = React.useState<
+    { latitude: number; longitude: number } | undefined
+  >(undefined);
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -179,10 +179,10 @@ const Home: NextPage = () => {
 
   const generateRandomSparkle = (): Sparkle => {
     const r = 820;
-    const x = 1000 + r * (Math.random() * 2 - 1);
-    const y = 1060 + r * (Math.random() * 2 - 1);
+    const x = Math.round(1000 + r * (Math.random() * 2 - 1));
+    const y = Math.round(1060 + r * (Math.random() * 2 - 1));
 
-    const scale = 100 * (Math.random() * (1 - 0.3) + 0.3);
+    const scale = Math.round(100 * (Math.random() * (1 - 0.3) + 0.3));
 
     return { ty: y, tx: x, scale };
   };
@@ -193,7 +193,6 @@ const Home: NextPage = () => {
       { length: sparkleAmount },
       generateRandomSparkle
     );
-    console.log(newSparkles);
     setSparkles(newSparkles);
   };
 
@@ -359,7 +358,7 @@ const Home: NextPage = () => {
               // midwinter is 11 days 8 hours (= 979200 seconds) before the start of the calendar year
               secondInYear: Math.round((Date.now() / 1000 - 979200) % 31556926),
             }}
-            sparkle={{ sparkles }}
+            sparkles={sparkles}
             xp={{ cap: 10000, amount: xp, crown: xp >= 10000 }}
           />
         </div>
