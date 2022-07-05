@@ -10,14 +10,14 @@
     in="SourceAlpha"
     result="alphablur"
     stdDeviation="8"
-  ></feGaussianBlur>
+  />
 
   {{! <!-- Background glow  --> }}
   <feGaussianBlur
     in="SourceAlpha"
     stdDeviation="30"
     result="glow"
-  ></feGaussianBlur>
+  />
   <feColorMatrix
     in="glow"
     result="bgGlow"
@@ -26,7 +26,7 @@
             0 -1 0 0 1
             0 0 -1 0 1
             0 0 0 1 0 "
-  ></feColorMatrix>
+  />
 
   {{! <!-- Emboss/Bevel --> }}
   {{#each layers}}
@@ -36,18 +36,18 @@
       numOctaves="{{uint8 turbOct}}"
       seed="1004123123"
       result="turb_{{@index}}"
-    ></feTurbulence>
+    />
     <feGaussianBlur
       stdDeviation="{{uint8 turbBlur decimals=1}}"
       in="SourceAlpha"
       result="turb_blur_{{@index}}"
-    ></feGaussianBlur>
+    />
     <feDisplacementMap
       scale="{{uint8 dispScale}}"
       in="turb_blur_{{@index}}"
       in2="turb_{{@index}}"
       result="disp_turb_{{@index}}"
-    ></feDisplacementMap>
+    />
     <feColorMatrix
       type="matrix"
       values="0 0 0 0 0,
@@ -56,12 +56,12 @@
               0 0 0 1 0"
       in="disp_turb_{{@index}}"
       result="co_mat_{{@index}}"
-    ></feColorMatrix>
+    />
     <feGaussianBlur
       stdDeviation="{{uint8 blurX decimals=1}} {{uint8 blurY decimals=1}}"
       in="co_mat_{{@index}}"
       result="blur_co_mat_{{@index}}"
-    ></feGaussianBlur>
+    />
     <feSpecularLighting
       surfaceScale="{{uint8 surfaceScale}}"
       specularConstant="{{uint8 specConstant decimals=2}}"
@@ -70,14 +70,14 @@
       in="blur_co_mat_{{@index}}"
       result="lighting_{{@index}}"
     >
-      <fePointLight x="{{int16 pointX}}" y="{{int16 pointY}}" z="{{int16 pointZ}}"></fePointLight>
+      <fePointLight x="{{int16 pointX}}" y="{{int16 pointY}}" z="{{int16 pointZ}}"/>
     </feSpecularLighting>
     <feComposite
       operator="in"
       in="lighting_{{@index}}"
       in2="co_mat_{{@index}}"
       result="comp_light_1_{{@index}}"
-    ></feComposite>
+    />
     <feComposite
       operator="arithmetic"
       k1="0"
@@ -87,21 +87,21 @@
       in="disp_turb_{{@index}}"
       in2="comp_light_1_{{@index}}"
       result="comp_light_2_{{@index}}"
-    ></feComposite>
+    />
     <feComposite
       operator="in"
       in2="SourceAlpha"
       in="comp_light_2_{{@index}}"
       result="comp_light_final_{{@index}}"
-    ></feComposite>
+    />
 
   {{/each}}
 
   <feMerge>
-    <feMergeNode in="bgGlow"></feMergeNode>
-    <feMergeNode in="SourceGraphic"></feMergeNode>
+    <feMergeNode in="bgGlow"/>
+    <feMergeNode in="SourceGraphic"/>
     {{#each layers}}
-      <feMergeNode in="comp_light_final_{{@index}}"></feMergeNode>
+      <feMergeNode in="comp_light_final_{{@index}}"/>
     {{/each}}
   </feMerge>
 </filter>

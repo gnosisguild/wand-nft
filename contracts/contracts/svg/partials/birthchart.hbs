@@ -8,14 +8,14 @@
       gradientUnits="objectBoundingBox"
       gradientTransform="translate(0.5 0.5)"
     >
-      <stop stop-color="#FFFCFC" stop-opacity="0.7"></stop>
-      <stop offset="1" stop-color="#534E41" stop-opacity="0.6"></stop>
+      <stop stop-color="#FFFCFC" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#534E41" stop-opacity="0.6"/>
     </radialGradient>
     <clipPath id="aspect-clip">
-      <circle cx="0" cy="0" r="260"></circle>
+      <circle cx="0" cy="0" r="260"/>
     </clipPath> 
     <filter id="planet_blur">
-      <feGaussianBlur stdDeviation="4"></feGaussianBlur>
+      <feGaussianBlur stdDeviation="4"/>
     </filter>
     <style>
       .p0 {
@@ -51,13 +51,13 @@
       stroke="url(#aspectgradient)"
       stroke-width="8"
       clip-path="url(#aspect-clip)"
-    ></path>
+    />
   {{/each}}
 
 
   <g filter="url(#planet_blur)">
     {{#each planets length=8}}
-      {{#if visible }}<circle cx="{{int16 x}}" cy="{{int16 y}}" class="p{{@index}}" r="11"></circle>{{/if}}
+      {{#if visible }}<circle cx="{{int16 x}}" cy="{{int16 y}}" class="p{{@index}}" r="11"/>{{/if}}
     {{/each}}
   </g>
 </g>
