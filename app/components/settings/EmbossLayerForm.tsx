@@ -30,9 +30,13 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               <label>turbulence type</label>
               <select
                 onChange={(e) => {
-                  props.changeVal(props.index, "turbType", e.target.value);
+                  props.changeVal(
+                    props.index,
+                    "fractalNoise",
+                    e.target.value === "fractalNoise"
+                  );
                 }}
-                value={props.layer.turbType}
+                value={props.layer.fractalNoise ? "fractalNoise" : "turbulence"}
               >
                 <option value="turbulence">turbulence</option>
                 <option value="fractalNoise">fractalNoise</option>

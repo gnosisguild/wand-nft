@@ -21,7 +21,7 @@ export interface Sparkle {
 }
 
 export interface EmbossLayer {
-  turbType: string;
+  fractalNoise: boolean;
   turbFreqX: number;
   turbFreqY: number;
   turbOct: number;
