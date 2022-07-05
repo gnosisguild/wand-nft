@@ -277,6 +277,7 @@ const Home: NextPage = () => {
                 <option value="level3">level 3</option>
                 <option value="level4">level 4</option>
                 <option value="level5">level 5</option>
+                <option value="level6">level 6</option>
               </select>
             </CollapseContainer>
             <CollapseContainer title="Account XP Level">
