@@ -141,14 +141,14 @@ library Template {
       abi.encodePacked(
         __result,
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 3000" shape-rendering="geometricPrecision" > <style type="text/css"> .bc{fill:none;stroke:#8BA0A5;} </style>',
-        filter(__input.filter),
-        background(__input.background),
-        xpBar(__input.xp),
-        stars(__input.stars),
+        BackgroundLayer.filter(__input.filter),
+        BackgroundLayer.background(__input.background),
+        BackgroundLayer.xpBar(__input.xp),
+        BackgroundLayer.stars(__input.stars),
         stone(__input.stone),
-        frame(__input.frame),
+        FrameLayer.frame(__input.frame),
         halo(__input.halo),
-        handles(__input.handle),
+        HandleLayer.handles(__input.handle),
         birthchart(__input),
         sparkle(__input),
         "</svg>"
@@ -156,8 +156,229 @@ library Template {
     );
   }
 
-  function filter(Filter memory __input)
+  function stone(Stone memory __input)
     internal
+    pure
+    returns (string memory __result)
+  {
+    __result = string(
+      abi.encodePacked(
+        __result,
+        '<filter id="texture"> <feTurbulence ',
+        __input.fractalNoise ? 'type="fractalNoise"' : "",
+        ' baseFrequency="',
+        SolidMustacheHelpers.uintToString(__input.turbFreqX, 3),
+        " ",
+        SolidMustacheHelpers.uintToString(__input.turbFreqY, 3),
+        '" numOctaves="',
+        SolidMustacheHelpers.uintToString(__input.turbOct, 0),
+        '" seed="',
+        SolidMustacheHelpers.uintToString(__input.seed, 0),
+        '" /> <feComponentTransfer> <feFuncR type="gamma" amplitude="',
+        SolidMustacheHelpers.intToString(__input.redAmp, 2),
+        '" exponent="',
+        SolidMustacheHelpers.intToString(__input.redExp, 2),
+        '" offset="',
+        SolidMustacheHelpers.intToString(__input.redOff, 2)
+      )
+    );
+    __result = string(
+      abi.encodePacked(
+        __result,
+        '" /> <feFuncG type="gamma" amplitude="',
+        SolidMustacheHelpers.intToString(__input.greenAmp, 2),
+        '" exponent="',
+        SolidMustacheHelpers.intToString(__input.greenExp, 2),
+        '" offset="',
+        SolidMustacheHelpers.intToString(__input.greenOff, 2),
+        '" /> <feFuncB type="gamma" amplitude="',
+        SolidMustacheHelpers.intToString(__input.blueAmp, 2),
+        '" exponent="',
+        SolidMustacheHelpers.intToString(__input.blueExp, 2),
+        '" offset="',
+        SolidMustacheHelpers.intToString(__input.blueOff, 2),
+        '" /> <feFuncA type="discrete" tableValues="1"/> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="stoneTexture" /> ',
+        __constant0,
+        '0.8 0 " /> <feMerge> <feMergeNode in="bgGlow"/> <feMergeNode in="stoneTexture"/> </feMerge> </filter> <radialGradient id="stoneshadow"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/> <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"/> </radialGradient> <defs> ',
+        ' <clipPath id="stoneclip"> <circle cx="1000" cy="1060" r="260"/> </clipPath> </defs> '
+      )
+    );
+    __result = string(
+      abi.encodePacked(
+        __result,
+        ' <circle id="stone" transform="rotate(',
+        SolidMustacheHelpers.uintToString(__input.rotation, 0),
+        ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#texture)" /> ',
+        ' <circle cx="1200" cy="1060" r="520" fill="url(#stoneshadow)" clip-path="url(#stoneclip)" /> <defs> <radialGradient id="stone-fill" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"/> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/> <stop offset=".63" stop-color="#929292" stop-opacity=".5"/> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/> </radialGradient> <radialGradient id="stone-highlight" cx="1149" cy="2660" fx="1149" fy="2660" r="76" gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity="0.7"/> <stop offset="1" stop-color="#fff" stop-opacity="0"/> </radialGradient> </defs> <path fill="url(#stone-fill)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/> <path fill="url(#stone-highlight)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>'
+      )
+    );
+  }
+
+  function halo(Halo memory __input)
+    internal
+    pure
+    returns (string memory __result)
+  {
+    __result = string(
+      abi.encodePacked(
+        __result,
+        '<defs> <g id="halo" filter="url(#glowEmboss)"> <path d="',
+        __input.halo0
+          ? "m0 0 114 425c-40-153-6-231 93-231 100 0 134 78 93 231L414 0c-31 116-103 174-207 174C104 174 32 116 0 0Z"
+          : "",
+        __input.halo1
+          ? "M211 0q-29 217-106 215Q29 217 0 0l55 420q-21-164 50-165 72 1 50 165Z"
+          : "",
+        __input.halo2
+          ? "M171 0q0 115 171 162l-10 39q-161-39-161 219 0-258-160-219L1 162Q171 115 171 0Z"
+          : "",
+        __input.halo3
+          ? "M193 0c0 25-96 52-192 79l10 39c90-21 182-7 182 42 0-49 93-63 183-42l10-39C290 52 193 25 193 0Z"
+          : "",
+        __input.halo4
+          ? "m1 244 23 76c73-22 154-25 228-8L323 0q-48 209-206 222A521 521 0 0 0 1 244Z"
+          : "",
+        __input.halo5
+          ? "M157 46Q136 199 50 201c-16 0-33 2-49 4l10 79a442 442 0 0 1 115 0Z"
+          : "",
+        '" fill="hsl(',
+        SolidMustacheHelpers.uintToString(__input.hue, 0),
+        ', 10%, 64%)" style="transform: translateX(-50%); transform-box: fill-box;" /> '
+      )
+    );
+    if (__input.halo4) {
+      __result = string(
+        abi.encodePacked(
+          __result,
+          ' <circle fill="hsl(',
+          SolidMustacheHelpers.uintToString(__input.hue, 0),
+          ', 10%, 64%)" cx="0" cy="80" r="40"/> '
+        )
+      );
+    }
+    __result = string(abi.encodePacked(__result, " "));
+    if (__input.halo5) {
+      __result = string(
+        abi.encodePacked(
+          __result,
+          ' <circle fill="hsl(',
+          SolidMustacheHelpers.uintToString(__input.hue, 0),
+          ', 10%, 64%)" cx="0" cy="60" r="40"/> '
+        )
+      );
+    }
+    __result = string(
+      abi.encodePacked(
+        __result,
+        " </g> </defs> ",
+        ' <g transform="translate(1000 1060)"> '
+      )
+    );
+    for (uint256 __i; __i < __input.rhythm.length; __i++) {
+      __result = string(
+        abi.encodePacked(
+          __result,
+          ' <g style="transform: rotate(calc(',
+          SolidMustacheHelpers.uintToString(__i, 0),
+          " * 15deg)) translateY(",
+          __input.halo0 ? "-770px" : "",
+          __input.halo1 ? "-800px" : "",
+          __input.halo2 ? "-800px" : "",
+          __input.halo3 ? "-800px" : "",
+          __input.halo4 ? "-740px" : "",
+          __input.halo5 ? "-720px" : "",
+          ');" > ',
+          __input.rhythm[__i] ? '<use href="#halo"/>' : "",
+          " </g> "
+        )
+      );
+    }
+    __result = string(abi.encodePacked(__result, " </g>"));
+  }
+
+  function birthchart(__Input memory __input)
+    internal
+    pure
+    returns (string memory __result)
+  {
+    __result = string(
+      abi.encodePacked(
+        __result,
+        '<g transform="translate(1000 1060)"> <defs> <radialGradient id="aspectgradient" cx="0" cy="0" r="1" gradientUnits="objectBoundingBox" gradientTransform="translate(0.5 0.5)" > <stop stop-color="#FFFCFC" stop-opacity="0.7"/> <stop offset="1" stop-color="#534E41" stop-opacity="0.6"/> </radialGradient> <clipPath id="aspect-clip"> <circle cx="0" cy="0" r="260"/> </clipPath> <filter id="planet_blur"> <feGaussianBlur stdDeviation="4"/> </filter> <style> .p0 { fill: #FFF6F2 } .p1 { fill: #FFFCF0 } .p2 { fill: #FFEDED } .p3 { fill: #FFEEF4 } .p4 { fill: #FFF3E9 } .p5 { fill: #ECFDFF } .p6 { fill: #EEF7FF } .p7 { fill: #F8F0FF } </style> </defs> '
+      )
+    );
+    for (uint256 __i; __i < __input.aspects.length; __i++) {
+      __result = string(
+        abi.encodePacked(
+          __result,
+          ' <path d="M',
+          SolidMustacheHelpers.intToString(__input.aspects[__i].x1, 0),
+          ",",
+          SolidMustacheHelpers.intToString(__input.aspects[__i].y1, 0),
+          " L",
+          SolidMustacheHelpers.intToString(__input.aspects[__i].x2, 0),
+          ",",
+          SolidMustacheHelpers.intToString(__input.aspects[__i].y2, 0),
+          ' m25,25" stroke="url(#aspectgradient)" stroke-width="8" clip-path="url(#aspect-clip)" /> '
+        )
+      );
+    }
+    __result = string(
+      abi.encodePacked(__result, ' <g filter="url(#planet_blur)"> ')
+    );
+    for (uint256 __i2; __i2 < __input.planets.length; __i2++) {
+      __result = string(abi.encodePacked(__result, " "));
+      if (__input.planets[__i2].visible) {
+        __result = string(
+          abi.encodePacked(
+            __result,
+            '<circle cx="',
+            SolidMustacheHelpers.intToString(__input.planets[__i2].x, 0),
+            '" cy="',
+            SolidMustacheHelpers.intToString(__input.planets[__i2].y, 0),
+            '" class="p',
+            SolidMustacheHelpers.uintToString(__i2, 0),
+            '" r="11"/>'
+          )
+        );
+      }
+      __result = string(abi.encodePacked(__result, " "));
+    }
+    __result = string(abi.encodePacked(__result, " </g> </g>"));
+  }
+
+  function sparkle(__Input memory __input)
+    internal
+    pure
+    returns (string memory __result)
+  {
+    __result = string(
+      abi.encodePacked(
+        __result,
+        '<defs> <style type="text/css"> .sparkle { fill: white } </style> <symbol id="sprkl" viewBox="0 0 250 377"> <path class="sparkle" d="m4 41 121 146 125 2-122 2 118 146-121-146-125-2 122-2L4 41Z"/> <path class="sparkle" d="m105 0 21 185 86-83-86 88 18 187-20-185-87 84 87-88L105 0Z"/> </symbol> </defs> <g filter="url(#burstBlur)" style="opacity: 0.6"> '
+      )
+    );
+    for (uint256 __i; __i < __input.sparkles.length; __i++) {
+      __result = string(
+        abi.encodePacked(
+          __result,
+          ' <use width="250" height="377" transform="translate(',
+          SolidMustacheHelpers.intToString(__input.sparkles[__i].tx, 0),
+          " ",
+          SolidMustacheHelpers.intToString(__input.sparkles[__i].ty, 0),
+          ") scale(",
+          SolidMustacheHelpers.uintToString(__input.sparkles[__i].scale, 2),
+          ')" href="#sprkl" /> '
+        )
+      );
+    }
+    __result = string(abi.encodePacked(__result, " </g>"));
+  }
+}
+
+library BackgroundLayer {
+  function filter(Template.Filter memory __input)
+    external
     pure
     returns (string memory __result)
   {
@@ -296,8 +517,8 @@ library Template {
     __result = string(abi.encodePacked(__result, " </feMerge> </filter>"));
   }
 
-  function background(Background memory __input)
-    internal
+  function background(Template.Background memory __input)
+    external
     pure
     returns (string memory __result)
   {
@@ -397,8 +618,8 @@ library Template {
     );
   }
 
-  function xpBar(Xp memory __input)
-    internal
+  function xpBar(Template.Xp memory __input)
+    external
     pure
     returns (string memory __result)
   {
@@ -425,8 +646,8 @@ library Template {
     );
   }
 
-  function stars(Stars memory __input)
-    internal
+  function stars(Template.Stars memory __input)
+    external
     pure
     returns (string memory __result)
   {
@@ -439,67 +660,11 @@ library Template {
       )
     );
   }
+}
 
-  function stone(Stone memory __input)
-    internal
-    pure
-    returns (string memory __result)
-  {
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '<filter id="texture"> <feTurbulence ',
-        __input.fractalNoise ? 'type="fractalNoise"' : "",
-        ' baseFrequency="',
-        SolidMustacheHelpers.uintToString(__input.turbFreqX, 3),
-        " ",
-        SolidMustacheHelpers.uintToString(__input.turbFreqY, 3),
-        '" numOctaves="',
-        SolidMustacheHelpers.uintToString(__input.turbOct, 0),
-        '" seed="',
-        SolidMustacheHelpers.uintToString(__input.seed, 0),
-        '" /> <feComponentTransfer> <feFuncR type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.redAmp, 2),
-        '" exponent="',
-        SolidMustacheHelpers.intToString(__input.redExp, 2),
-        '" offset="',
-        SolidMustacheHelpers.intToString(__input.redOff, 2)
-      )
-    );
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '" /> <feFuncG type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.greenAmp, 2),
-        '" exponent="',
-        SolidMustacheHelpers.intToString(__input.greenExp, 2),
-        '" offset="',
-        SolidMustacheHelpers.intToString(__input.greenOff, 2),
-        '" /> <feFuncB type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.blueAmp, 2),
-        '" exponent="',
-        SolidMustacheHelpers.intToString(__input.blueExp, 2),
-        '" offset="',
-        SolidMustacheHelpers.intToString(__input.blueOff, 2),
-        '" /> <feFuncA type="discrete" tableValues="1"/> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="stoneTexture" /> ',
-        __constant0,
-        '0.8 0 " /> <feMerge> <feMergeNode in="bgGlow"/> <feMergeNode in="stoneTexture"/> </feMerge> </filter> <radialGradient id="stoneshadow"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/> <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"/> </radialGradient> <defs> ',
-        ' <clipPath id="stoneclip"> <circle cx="1000" cy="1060" r="260"/> </clipPath> </defs> '
-      )
-    );
-    __result = string(
-      abi.encodePacked(
-        __result,
-        ' <circle id="stone" transform="rotate(',
-        SolidMustacheHelpers.uintToString(__input.rotation, 0),
-        ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#texture)" /> ',
-        ' <circle cx="1200" cy="1060" r="520" fill="url(#stoneshadow)" clip-path="url(#stoneclip)" /> <defs> <radialGradient id="stone-fill" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"/> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/> <stop offset=".63" stop-color="#929292" stop-opacity=".5"/> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/> </radialGradient> <radialGradient id="stone-highlight" cx="1149" cy="2660" fx="1149" fy="2660" r="76" gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity="0.7"/> <stop offset="1" stop-color="#fff" stop-opacity="0"/> </radialGradient> </defs> <path fill="url(#stone-fill)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/> <path fill="url(#stone-highlight)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>'
-      )
-    );
-  }
-
-  function frame(Frame memory __input)
-    internal
+library FrameLayer {
+  function frame(Template.Frame memory __input)
+    external
     pure
     returns (string memory __result)
   {
@@ -528,91 +693,11 @@ library Template {
       )
     );
   }
+}
 
-  function halo(Halo memory __input)
-    internal
-    pure
-    returns (string memory __result)
-  {
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '<defs> <g id="halo" filter="url(#glowEmboss)"> <path d="',
-        __input.halo0
-          ? "m0 0 114 425c-40-153-6-231 93-231 100 0 134 78 93 231L414 0c-31 116-103 174-207 174C104 174 32 116 0 0Z"
-          : "",
-        __input.halo1
-          ? "M211 0q-29 217-106 215Q29 217 0 0l55 420q-21-164 50-165 72 1 50 165Z"
-          : "",
-        __input.halo2
-          ? "M171 0q0 115 171 162l-10 39q-161-39-161 219 0-258-160-219L1 162Q171 115 171 0Z"
-          : "",
-        __input.halo3
-          ? "M193 0c0 25-96 52-192 79l10 39c90-21 182-7 182 42 0-49 93-63 183-42l10-39C290 52 193 25 193 0Z"
-          : "",
-        __input.halo4
-          ? "m1 244 23 76c73-22 154-25 228-8L323 0q-48 209-206 222A521 521 0 0 0 1 244Z"
-          : "",
-        __input.halo5
-          ? "M157 46Q136 199 50 201c-16 0-33 2-49 4l10 79a442 442 0 0 1 115 0Z"
-          : "",
-        '" fill="hsl(',
-        SolidMustacheHelpers.uintToString(__input.hue, 0),
-        ', 10%, 64%)" style="transform: translateX(-50%); transform-box: fill-box;" /> '
-      )
-    );
-    if (__input.halo4) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <circle fill="hsl(',
-          SolidMustacheHelpers.uintToString(__input.hue, 0),
-          ', 10%, 64%)" cx="0" cy="80" r="40"/> '
-        )
-      );
-    }
-    __result = string(abi.encodePacked(__result, " "));
-    if (__input.halo5) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <circle fill="hsl(',
-          SolidMustacheHelpers.uintToString(__input.hue, 0),
-          ', 10%, 64%)" cx="0" cy="60" r="40"/> '
-        )
-      );
-    }
-    __result = string(
-      abi.encodePacked(
-        __result,
-        " </g> </defs> ",
-        ' <g transform="translate(1000 1060)"> '
-      )
-    );
-    for (uint256 __i; __i < __input.rhythm.length; __i++) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <g style="transform: rotate(calc(',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          " * 15deg)) translateY(",
-          __input.halo0 ? "-770px" : "",
-          __input.halo1 ? "-800px" : "",
-          __input.halo2 ? "-800px" : "",
-          __input.halo3 ? "-800px" : "",
-          __input.halo4 ? "-740px" : "",
-          __input.halo5 ? "-720px" : "",
-          ');" > ',
-          __input.rhythm[__i] ? '<use href="#halo"/>' : "",
-          " </g> "
-        )
-      );
-    }
-    __result = string(abi.encodePacked(__result, " </g>"));
-  }
-
-  function handles(Handle memory __input)
-    internal
+library HandleLayer {
+  function handles(Template.Handle memory __input)
+    external
     pure
     returns (string memory __result)
   {
@@ -634,85 +719,6 @@ library Template {
           : ""
       )
     );
-  }
-
-  function birthchart(__Input memory __input)
-    internal
-    pure
-    returns (string memory __result)
-  {
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '<g transform="translate(1000 1060)"> <defs> <radialGradient id="aspectgradient" cx="0" cy="0" r="1" gradientUnits="objectBoundingBox" gradientTransform="translate(0.5 0.5)" > <stop stop-color="#FFFCFC" stop-opacity="0.7"/> <stop offset="1" stop-color="#534E41" stop-opacity="0.6"/> </radialGradient> <clipPath id="aspect-clip"> <circle cx="0" cy="0" r="260"/> </clipPath> <filter id="planet_blur"> <feGaussianBlur stdDeviation="4"/> </filter> <style> .p0 { fill: #FFF6F2 } .p1 { fill: #FFFCF0 } .p2 { fill: #FFEDED } .p3 { fill: #FFEEF4 } .p4 { fill: #FFF3E9 } .p5 { fill: #ECFDFF } .p6 { fill: #EEF7FF } .p7 { fill: #F8F0FF } </style> </defs> '
-      )
-    );
-    for (uint256 __i; __i < __input.aspects.length; __i++) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <path d="M',
-          SolidMustacheHelpers.intToString(__input.aspects[__i].x1, 0),
-          ",",
-          SolidMustacheHelpers.intToString(__input.aspects[__i].y1, 0),
-          " L",
-          SolidMustacheHelpers.intToString(__input.aspects[__i].x2, 0),
-          ",",
-          SolidMustacheHelpers.intToString(__input.aspects[__i].y2, 0),
-          ' m25,25" stroke="url(#aspectgradient)" stroke-width="8" clip-path="url(#aspect-clip)" /> '
-        )
-      );
-    }
-    __result = string(
-      abi.encodePacked(__result, ' <g filter="url(#planet_blur)"> ')
-    );
-    for (uint256 __i2; __i2 < __input.planets.length; __i2++) {
-      __result = string(abi.encodePacked(__result, " "));
-      if (__input.planets[__i2].visible) {
-        __result = string(
-          abi.encodePacked(
-            __result,
-            '<circle cx="',
-            SolidMustacheHelpers.intToString(__input.planets[__i2].x, 0),
-            '" cy="',
-            SolidMustacheHelpers.intToString(__input.planets[__i2].y, 0),
-            '" class="p',
-            SolidMustacheHelpers.uintToString(__i2, 0),
-            '" r="11"/>'
-          )
-        );
-      }
-      __result = string(abi.encodePacked(__result, " "));
-    }
-    __result = string(abi.encodePacked(__result, " </g> </g>"));
-  }
-
-  function sparkle(__Input memory __input)
-    internal
-    pure
-    returns (string memory __result)
-  {
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '<defs> <style type="text/css"> .sparkle { fill: white } </style> <symbol id="sprkl" viewBox="0 0 250 377"> <path class="sparkle" d="m4 41 121 146 125 2-122 2 118 146-121-146-125-2 122-2L4 41Z"/> <path class="sparkle" d="m105 0 21 185 86-83-86 88 18 187-20-185-87 84 87-88L105 0Z"/> </symbol> </defs> <g filter="url(#burstBlur)" style="opacity: 0.6"> '
-      )
-    );
-    for (uint256 __i; __i < __input.sparkles.length; __i++) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <use width="250" height="377" transform="translate(',
-          SolidMustacheHelpers.intToString(__input.sparkles[__i].tx, 0),
-          " ",
-          SolidMustacheHelpers.intToString(__input.sparkles[__i].ty, 0),
-          ") scale(",
-          SolidMustacheHelpers.uintToString(__input.sparkles[__i].scale, 2),
-          ')" href="#sprkl" /> '
-        )
-      );
-    }
-    __result = string(abi.encodePacked(__result, " </g>"));
   }
 }
 
