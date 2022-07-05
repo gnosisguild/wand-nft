@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.6;
 
-string constant __constant0 = ' <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="glow" /> <feColorMatrix in="glow" result="bgGlow" type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 ';
-string constant __constant1 = '%, 0)"/> </radialGradient> <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/> <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/> ';
-string constant __constant2 = '-grad" gradientUnits="objectBoundingBox" x1="80%" x2="20%" y1="200%" y2="-400%"> <stop offset="0"/> <stop offset=".4" stop-color="#90ee90"';
+string constant __constant0 = '%, 0)"/> </radialGradient> <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/> <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/> ';
 
 library Template {
   struct __Input {
@@ -164,7 +162,7 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
-        '<filter id="texture"> <feTurbulence ',
+        '<filter id="s"> <feTurbulence ',
         __input.fractalNoise ? 'type="fractalNoise"' : "",
         ' baseFrequency="',
         SolidMustacheHelpers.uintToString(__input.turbFreqX, 3),
@@ -197,19 +195,18 @@ library Template {
         SolidMustacheHelpers.intToString(__input.blueExp, 2),
         '" offset="',
         SolidMustacheHelpers.intToString(__input.blueOff, 2),
-        '" /> <feFuncA type="discrete" tableValues="1"/> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="stoneTexture" /> ',
-        __constant0,
-        '0.8 0 " /> <feMerge> <feMergeNode in="bgGlow"/> <feMergeNode in="stoneTexture"/> </feMerge> </filter> <radialGradient id="stoneshadow"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/> <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"/> </radialGradient> <defs> ',
-        ' <clipPath id="stoneclip"> <circle cx="1000" cy="1060" r="260"/> </clipPath> </defs> '
+        '" /> <feFuncA type="discrete" tableValues="1"/> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="tex" /> ',
+        ' <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="glow" /> <feColorMatrix in="glow" result="bgg" type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 .8 0 " /> <feMerge> <feMergeNode in="bgg"/> <feMergeNode in="tex"/> </feMerge> </filter> <radialGradient id="ss"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/> <stop offset="90%" stop-color="hsla(0, 0%, 0%, .8)"/> </radialGradient> <defs> ',
+        ' <clipPath id="sc"> <circle cx="1000" cy="1060" r="260"/> </clipPath> </defs> ',
+        ' <circle transform="rotate('
       )
     );
     __result = string(
       abi.encodePacked(
         __result,
-        ' <circle id="stone" transform="rotate(',
         SolidMustacheHelpers.uintToString(__input.rotation, 0),
-        ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#texture)" /> ',
-        ' <circle cx="1200" cy="1060" r="520" fill="url(#stoneshadow)" clip-path="url(#stoneclip)" /> <defs> <radialGradient id="stone-fill" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"/> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/> <stop offset=".63" stop-color="#929292" stop-opacity=".5"/> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/> </radialGradient> <radialGradient id="stone-highlight" cx="1149" cy="2660" fx="1149" fy="2660" r="76" gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity="0.7"/> <stop offset="1" stop-color="#fff" stop-opacity="0"/> </radialGradient> </defs> <path fill="url(#stone-fill)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/> <path fill="url(#stone-highlight)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>'
+        ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#s)" /> ',
+        ' <circle cx="1200" cy="1060" r="520" fill="url(#ss)" clip-path="url(#sc)" /> <defs> <radialGradient id="sf" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"/> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/> <stop offset=".63" stop-color="#929292" stop-opacity=".5"/> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/> </radialGradient> <radialGradient id="sh" cx="1149" cy="2660" fx="1149" fy="2660" r="76" gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity=".7"/> <stop offset="1" stop-color="#fff" stop-opacity="0"/> </radialGradient> </defs> <path fill="url(#sf)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/> <path fill="url(#sh)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>'
       )
     );
   }
@@ -304,7 +301,7 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
-        '<g transform="translate(1000 1060)"> <defs> <radialGradient id="aspectgradient" cx="0" cy="0" r="1" gradientUnits="objectBoundingBox" gradientTransform="translate(0.5 0.5)" > <stop stop-color="#FFFCFC" stop-opacity="0.7"/> <stop offset="1" stop-color="#534E41" stop-opacity="0.6"/> </radialGradient> <clipPath id="aspect-clip"> <circle cx="0" cy="0" r="260"/> </clipPath> <filter id="planet_blur"> <feGaussianBlur stdDeviation="4"/> </filter> <style> .p0 { fill: #FFF6F2 } .p1 { fill: #FFFCF0 } .p2 { fill: #FFEDED } .p3 { fill: #FFEEF4 } .p4 { fill: #FFF3E9 } .p5 { fill: #ECFDFF } .p6 { fill: #EEF7FF } .p7 { fill: #F8F0FF } </style> </defs> '
+        '<g transform="translate(1000 1060)"> <defs> <radialGradient id="ag" cx="0" cy="0" r="1" gradientTransform="translate(.5 .5)" > <stop stop-color="#FFFCFC" stop-opacity=".7"/> <stop offset="1" stop-color="#534E41" stop-opacity=".6"/> </radialGradient> <clipPath id="ac"><circle cx="0" cy="0" r="260"/></clipPath> <filter id="pb"><feGaussianBlur stdDeviation="4"/></filter> <style> .p0 { fill: #FFF6F2 } .p1 { fill: #FFFCF0 } .p2 { fill: #FFEDED } .p3 { fill: #FFEEF4 } .p4 { fill: #FFF3E9 } .p5 { fill: #ECFDFF } .p6 { fill: #EEF7FF } .p7 { fill: #F8F0FF } </style> </defs> '
       )
     );
     for (uint256 __i; __i < __input.aspects.length; __i++) {
@@ -319,13 +316,11 @@ library Template {
           SolidMustacheHelpers.intToString(__input.aspects[__i].x2, 0),
           ",",
           SolidMustacheHelpers.intToString(__input.aspects[__i].y2, 0),
-          ' m25,25" stroke="url(#aspectgradient)" stroke-width="8" clip-path="url(#aspect-clip)" /> '
+          ' m25,25" stroke="url(#ag)" stroke-width="8" clip-path="url(#ac)" /> '
         )
       );
     }
-    __result = string(
-      abi.encodePacked(__result, ' <g filter="url(#planet_blur)"> ')
-    );
+    __result = string(abi.encodePacked(__result, ' <g filter="url(#pb)"> '));
     for (uint256 __i2; __i2 < __input.planets.length; __i2++) {
       __result = string(abi.encodePacked(__result, " "));
       if (__input.planets[__i2].visible) {
@@ -355,7 +350,7 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
-        '<defs> <style type="text/css"> .sparkle { fill: white } </style> <symbol id="sprkl" viewBox="0 0 250 377"> <path class="sparkle" d="m4 41 121 146 125 2-122 2 118 146-121-146-125-2 122-2L4 41Z"/> <path class="sparkle" d="m105 0 21 185 86-83-86 88 18 187-20-185-87 84 87-88L105 0Z"/> </symbol> </defs> <g filter="url(#burstBlur)" style="opacity: 0.6"> '
+        '<defs> <style type="text/css"> .sp { fill: white } </style> <symbol id="sp" viewBox="0 0 250 377"> <path class="sp" d="m4 41 121 146 125 2-122 2 118 146-121-146-125-2 122-2L4 41Z"/> <path class="sp" d="m105 0 21 185 86-83-86 88 18 187-20-185-87 84 87-88L105 0Z"/> </symbol> </defs> <g filter="url(#bb)" style="opacity: .6"> '
       )
     );
     for (uint256 __i; __i < __input.sparkles.length; __i++) {
@@ -368,7 +363,7 @@ library Template {
           SolidMustacheHelpers.intToString(__input.sparkles[__i].ty, 0),
           ") scale(",
           SolidMustacheHelpers.uintToString(__input.sparkles[__i].scale, 2),
-          ')" href="#sprkl" /> '
+          ')" href="#sp" /> '
         )
       );
     }
@@ -385,9 +380,8 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        '<filter color-interpolation-filters="sRGB" id="ge" width="250%" height="250%" x="-75%" y="-55%" > <feGaussianBlur in="SourceAlpha" result="alphablur" stdDeviation="8" /> ',
-        __constant0,
-        '1 0 " /> ',
+        '<defs> <filter color-interpolation-filters="sRGB" id="ge" width="250%" height="250%" x="-75%" y="-55%" > <feGaussianBlur in="SourceAlpha" result="alphablur" stdDeviation="8" /> ',
+        ' <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="fg" /> <feColorMatrix in="fg" result="bgg" type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 " /> ',
         " "
       )
     );
@@ -403,11 +397,11 @@ library BackgroundLayer {
           SolidMustacheHelpers.uintToString(__input.layers[__i].turbFreqY, 3),
           '" numOctaves="',
           SolidMustacheHelpers.uintToString(__input.layers[__i].turbOct, 0),
-          '" seed="1004123123" result="turb_',
+          '" seed="1004123123" result="t',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
           SolidMustacheHelpers.uintToString(__input.layers[__i].turbBlur, 1),
-          '" in="SourceAlpha" result="turb_blur_',
+          '" in="SourceAlpha" result="tb',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feDisplacementMap scale="',
           SolidMustacheHelpers.uintToString(__input.layers[__i].dispScale, 0)
@@ -416,28 +410,28 @@ library BackgroundLayer {
       __result = string(
         abi.encodePacked(
           __result,
-          '" in="turb_blur_',
+          '" in="tb',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" in2="turb_',
+          '" in2="t',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="disp_turb_',
+          '" result="dt',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" /> <feColorMatrix type="matrix" values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0" in="disp_turb_',
+          '" /> <feColorMatrix type="matrix" values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0" in="dt',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="co_mat_',
+          '" result="cm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
           SolidMustacheHelpers.uintToString(__input.layers[__i].blurX, 1),
           " ",
           SolidMustacheHelpers.uintToString(__input.layers[__i].blurY, 1),
-          '" in="co_mat_',
+          '" in="cm',
           SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
-          '" result="blur_co_mat_',
+          '" result="bcm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feSpecularLighting surfaceScale="',
           SolidMustacheHelpers.uintToString(
@@ -456,9 +450,9 @@ library BackgroundLayer {
           ),
           '" lighting-color="',
           __input.layers[__i].lightColor,
-          '" in="blur_co_mat_',
+          '" in="bcm',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="lighting_',
+          '" result="l',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" > <fePointLight x="',
           SolidMustacheHelpers.intToString(__input.layers[__i].pointX, 0)
@@ -471,28 +465,28 @@ library BackgroundLayer {
           SolidMustacheHelpers.intToString(__input.layers[__i].pointY, 0),
           '" z="',
           SolidMustacheHelpers.intToString(__input.layers[__i].pointZ, 0),
-          '"/> </feSpecularLighting> <feComposite operator="in" in="lighting_',
+          '"/> </feSpecularLighting> <feComposite operator="in" in="l',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" in2="co_mat_',
+          '" in2="cm',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="comp_light_1_',
+          '" result="cl1',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feComposite operator="arithmetic" k1="0" k2="0" k3="',
           SolidMustacheHelpers.uintToString(__input.layers[__i].opacity, 2),
-          '" k4="0" in="disp_turb_',
+          '" k4="0" in="dt',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" in2="comp_light_1_',
+          '" in2="cl1',
           SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
-          '" result="comp_light_2_',
+          '" result="cl2',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" /> <feComposite operator="in" in2="SourceAlpha" in="comp_light_2_',
+          '" /> <feComposite operator="in" in2="SourceAlpha" in="cl2',
           SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="comp_light_final_',
+          '" result="clf',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> '
         )
@@ -501,20 +495,25 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        ' <feMerge> <feMergeNode in="bgGlow"/> <feMergeNode in="SourceGraphic"/> '
+        ' <feMerge> <feMergeNode in="bgg"/> <feMergeNode in="SourceGraphic"/> '
       )
     );
     for (uint256 __i2; __i2 < __input.layers.length; __i2++) {
       __result = string(
         abi.encodePacked(
           __result,
-          ' <feMergeNode in="comp_light_final_',
+          ' <feMergeNode in="clf',
           SolidMustacheHelpers.uintToString(__i2, 0),
           '"/> '
         )
       );
     }
-    __result = string(abi.encodePacked(__result, " </feMerge> </filter>"));
+    __result = string(
+      abi.encodePacked(
+        __result,
+        ' </feMerge> </filter> <filter id="bb"> <feGaussianBlur in="SourceGraphic" stdDeviation="2"/> </filter> </defs>'
+      )
+    );
   }
 
   function background(Template.Background memory __input)
@@ -545,7 +544,7 @@ library BackgroundLayer {
             '%, 1)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsla(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ', 100%, 95%, 1)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
-            __constant1
+            __constant0
           )
         );
       }
@@ -568,7 +567,7 @@ library BackgroundLayer {
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            __constant1
+            __constant0
           )
         );
       }
@@ -581,13 +580,13 @@ library BackgroundLayer {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <linearGradient id="lin0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"/> <stop offset="100%" stop-color="hsla(',
+            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"/> <stop offset="100%" stop-color="hsla(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> </linearGradient> <rect style="fill:url(#lin0)" width="2000" height="3000"/> '
+            '%, 1)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
           )
         );
       }
@@ -596,7 +595,7 @@ library BackgroundLayer {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <linearGradient id="lin0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(',
+            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ', 30%, 7%)"/> <stop offset="100%" stop-color="hsla(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
@@ -604,7 +603,7 @@ library BackgroundLayer {
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> </linearGradient> <rect style="fill:url(#lin0)" width="2000" height="3000"/> '
+            '%, 1)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
           )
         );
       }
@@ -613,7 +612,7 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        ' </g> <defs> <filter id="burstBlur"> <feGaussianBlur in="SourceGraphic" stdDeviation="2"/> </filter> </defs> <path filter="url(#burstBlur)" style="opacity: 0.5" d="m1000 2435-199 334 195-335-573 212 570-214-892-20 889 18-1123-339 1121 335-1244-713 1243 709-1242-1106L988 2418-133 938 990 2415 101 616l892 1796L423 382l573 2028L801 260l199 2149 199-2149-195 2150 573-2028-569 2030 891-1796-889 1799L2133 938 1012 2418l1244-1102-1243 1106 1243-709-1244 713 1121-335-1123 338 889-17-892 20 570 214-573-212 195 335-199-334z" fill="white" />'
+        ' </g> <path filter="url(#bb)" style="opacity: .5" d="m1000 2435-199 334 195-335-573 212 570-214-892-20 889 18-1123-339 1121 335-1244-713 1243 709-1242-1106L988 2418-133 938 990 2415 101 616l892 1796L423 382l573 2028L801 260l199 2149 199-2149-195 2150 573-2028-569 2030 891-1796-889 1799L2133 938 1012 2418l1244-1102-1243 1106 1243-709-1244 713 1121-335-1123 338 889-17-892 20 570 214-573-212 195 335-199-334z" fill="white" />'
       )
     );
   }
@@ -626,21 +625,13 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        "<defs> <style> .xp-guide { fill: none; stroke-width: 1; stroke: #FAFFC0; opacity: 0.7; } .xp-bar * { transform-box: fill-box; transform-origin: center; } .xp-start { fill: white; } .hilt path { fill: url(#hilt-grad); } #bar-base { stroke-dasharray: calc(",
+        '<defs> <style> .xpc { fill: none; stroke-width: 1; stroke: #FAFFC0; opacity: 0.7; } .hilt path { fill: url(#hg); } </style> <linearGradient id="xpg" x1="80%" x2="20%" y1="200%" y2="-400%"> <stop offset="0"/> <stop offset=".4" stop-color="#90ee90" stop-opacity="0"/> </linearGradient> <linearGradient id="hg" x1="80%" x2="20%" y1="200%" y2="-400%"> <stop offset="0"/> <stop offset=".4" stop-color="#90ee90"/> </linearGradient> </defs> <circle class="xpc" cx="1000" cy="1060" r="320"/> <circle class="xpc" cx="1000" cy="1060" r="290"/> <path id="xpb" d="M1000 1365a1 1 0 0 0 0-610" stroke-linecap="round" style="stroke-dasharray:calc(',
         SolidMustacheHelpers.uintToString(__input.amount, 0),
         " / ",
         SolidMustacheHelpers.uintToString(__input.cap, 0),
-        ' * 37.2%) 100%; } </style> <symbol id="xp-bar-seg"> <circle class="xp-circ" cx="1000" cy="1060" r="308"/> <path d="M1003 769h-6v-16h6v16Z" style="fill:green"/> </symbol> <linearGradient id="xp',
-        __constant2,
-        ' stop-opacity="0"/> </linearGradient> <linearGradient id="hilt',
-        __constant2,
-        '/> </linearGradient> </defs> <circle class="xp-guide" cx="1000" cy="1060" r="320"/> <circle class="xp-guide" cx="1000" cy="1060" r="290"/> <path id="bar-base" d="M1000 1365a1 1 0 0 0 0-610" stroke-linecap="round" style="stroke-dasharray:calc(',
-        SolidMustacheHelpers.uintToString(__input.amount, 0),
-        " / ",
-        SolidMustacheHelpers.uintToString(__input.cap, 0),
-        ' * 37.2%) 100%;fill:none;stroke-width:28;stroke:url(#xp-grad);opacity:1;mix-blend-mode:plus-lighter"/> <use href="#bar-base" transform="matrix(-1 0 0 1 2000 0)"/> <g class="hilt" filter="url(#ge)" id="xp-hilt"> <path transform="rotate(45 1000 1365)" d="M980 1345h40v40h-40z"/> <path d="M980 1345h40v40h-40z"/> </g> ',
+        ' * 37.2%) 100%;fill:none;stroke-width:28;stroke:url(#xpg);opacity:1;mix-blend-mode:plus-lighter"/> <use href="#xpb" transform="matrix(-1 0 0 1 2000 0)"/> <g class="hilt" filter="url(#ge)" id="xph"> <path transform="rotate(45 1000 1365)" d="M980 1345h40v40h-40z"/> <path d="M980 1345h40v40h-40z"/> </g> ',
         __input.crown
-          ? ' <use href="#xp-hilt" transform="translate(0,-610)"/> '
+          ? ' <use href="#xph" transform="translate(0,-610)"/> '
           : ""
       )
     );
@@ -654,9 +645,9 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        '<defs> <filter id="stars"> <feTurbulence baseFrequency="0.1" seed="',
+        '<defs> <filter id="st"> <feTurbulence baseFrequency=".1" seed="',
         SolidMustacheHelpers.uintToString(__input.starsSeed, 0),
-        '"/> <feColorMatrix values="0 0 0 7 -4 0 0 0 7 -4 0 0 0 7 -4 0 0 0 0 1" /> </filter> </defs> <clipPath id="starsclip"> <circle cx="1000" cy="1060" r="520"/> </clipPath> <mask id="starsmask"> <g filter="url(#stars)" transform="scale(2)"> <rect width="100%" height="100%"/> </g> </mask> <circle class="bc" cx="1000" cy="1060" r="260"/> <circle class="bc" cx="1000" cy="1060" r="360"/> <circle class="bc" cx="1000" cy="1060" r="440"/> <circle class="bc" cx="1000" cy="1060" r="520"/> <line class="bc" x1="740" y1="610" x2="1260" y2="1510"/> <line class="bc" x1="1260" y1="610" x2="740" y2="1510"/> <line class="bc" x1="1450" y1="800" x2="550" y2="1320"/> <line class="bc" x1="1450" y1="1320" x2="550" y2="800"/> <g style="filter: blur(2px);"> <rect width="100%" height="100%" fill="white" mask="url(#starsmask)" clip-path="url(#starsclip)" /> </g>'
+        '"/> <feColorMatrix values="0 0 0 7 -4 0 0 0 7 -4 0 0 0 7 -4 0 0 0 0 1" /> </filter> </defs> <clipPath id="stc"> <circle cx="1000" cy="1060" r="520"/> </clipPath> <mask id="stm"> <g filter="url(#st)" transform="scale(2)"> <rect width="100%" height="100%"/> </g> </mask> <circle class="bc" cx="1000" cy="1060" r="260"/> <circle class="bc" cx="1000" cy="1060" r="360"/> <circle class="bc" cx="1000" cy="1060" r="440"/> <circle class="bc" cx="1000" cy="1060" r="520"/> <line class="bc" x1="740" y1="610" x2="1260" y2="1510"/> <line class="bc" x1="1260" y1="610" x2="740" y2="1510"/> <line class="bc" x1="1450" y1="800" x2="550" y2="1320"/> <line class="bc" x1="1450" y1="1320" x2="550" y2="800"/> <g style="filter: blur(2px);"> <rect width="100%" height="100%" fill="white" mask="url(#stm)" clip-path="url(#stc)" /> </g>'
       )
     );
   }
@@ -704,19 +695,20 @@ library HandleLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        '<defs> <style> .a, .d { fill: none; } .a, .b, .c, .d, .e, .f, .g, .h, .i, .k { stroke: #000; stroke-width: 0.25px; } .b, .c, .e, .g { fill: #fff; } .purpFill { fill: #584975; } .brickFill { fill: #e0727f; } .lavenderFill { fill: #ad93c5; } .red { --wedge-color: #e0727f; } .greyBlueFill { fill: #8a9fa4; } .orangeFill { fill: #efc981; } .goldFill { fill: #f5cc14; } .redFill { fill: #ed2d2e; } .navyFill { fill: #053c5b; } .grey { --wedge-color: #8a9fa4; } .blue { --wedge-color: #053c5b; } .blackFill{ fill: #1b1925; } .blueFill { fill: #425288; } .greenFill { fill: #aad37e; } .blue { --wedge-color: #425288; } .greyFill { fill: #8a9fa4; } .lightGreyFill { fill: #c3cdd7; } .lightBlueFill { fill: #8cb3db; } .darkBlueFill { fill: #3a4757; } .darkBlue { --wedge-color: #3a4757; } </style> <symbol id="wa" viewBox="0 0 111.09 111.03"> <style> .cw { fill: var(--wedge-color) } </style> <path class="c" d="M12.19,110.9A226.3,226.3,0,0,0,111,12.13l-6.6-3.37A226.31,226.31,0,0,1,8.83,104.3Z" /> <path class="c cw" d="M8.82,104.29A226.25,226.25,0,0,0,104.36,8.76L87.44.12C83.82,7.23,75.12,20.71,75.12,20.71c-14.76,21-32.2,22.58-52.73,1.6,21.12,20.29,19.36,38-1.6,52.75h-.06A203.67,203.67,0,0,1,.12,87.22Z" /> </symbol> <symbol id="wb" viewBox="0 0 113.58 64.7"> <style> .cw { fill: var(--wedge-color) } </style> <path class="a cw" d="M3.28,4.36.15,32S56.79,17.86,56.79,64.7C56.79,17.86,113.43,32,113.43,32L110.3,4.36C87.44-1.34,29.93-1.23,3.28,4.36Z" /> <path class="b" d="M.15,32S25.2,25.76,42,35.35C33.16,30,8.68,33.45,8.68,33.45L0,32.08" /> <path class="b" d="M113.43,32s-25.06-6.27-41.85,3.32c8.84-5.32,33.31-1.9,33.31-1.9l8.66-1.38" /> </symbol> <symbol id="c" viewBox="0 0 210.85 420.03"> <path class="greyFill" d="M210.72,0q-28.8,217.05-105.3,215Q28.92,217,.12,0l55.3,420q-21.9-164.4,50-164.7,71.85.3,50,164.7Z" /> </symbol> <symbol id="g" viewBox="0 0 345.72 148.44"> <path class="lightBlueFill" d="M172.86,0c1.43,20.32,9.8,60.4,172.84,87.8-167.23-20.58-171.58,36.62-172.84,60.5h0C171.59,124.43,167.25,67.23,0,87.81,163.06,60.41,171.43,20.33,172.86,0Z" /> </symbol> <symbol id="h" viewBox="0 0 47.93 90.1"> <path class="b" d="M24,90.1C24,75.61,39.62,56.23,47.8,48,47.8,36.39,24,17.56,24,0,24,17.56.12,36.39.12,48,8.31,56.23,24,75.61,24,90.1Z" /> <path class="c" d="M45.09,39.85C34.91,49.38,27.6,58.1,24,68.84,20.33,58.1,13,49.4,2.83,39.86,9.07,28.56,24,13.88,24,0,24,13.88,38.85,28.55,45.09,39.85Z" /> <line class="b" x1="23.96" y1="68.84" x2="23.96" y2="90.1"/> </symbol> </defs>',
+        '<defs> <style> .a, .d { fill: none; } .a, .b, .c, .d, .e, .f, .g, .h, .i, .k { stroke: #000; stroke-width: .25px; } .b, .c, .e, .g { fill: #fff; } .pf { fill: #584975; } .red { --wedge-color: #e0727f; } .rf { fill: #ed2d2e; } .nf { fill: #053c5b; } .gr { --wedge-color: #8a9fa4; } .bf{ fill: #1b1925; } .lb { fill: #425288; } .gf { fill: #aad37e; } .bl { --wedge-color: #425288; } .ef { fill: #8a9fa4; } .lgf { fill: #c3cdd7; } .lbf { fill: #8cb3db; } .db { --wedge-color: #3a4757; } </style> <symbol id="wa" viewBox="0 0 111 111"> <style>.cw { fill: var(--wedge-color) }</style> <path class="c" d="M12 111a226 226 0 0 0 99-99l-7-3a226 226 0 0 1-95 95Z"/> <path class="c cw" d="M9 104a226 226 0 0 0 95-95L87 0 75 21c-15 21-32 22-53 1 22 21 20 38-1 53A204 204 0 0 1 0 87Z"/> </symbol> <symbol id="wb" viewBox="0 0 114 65"> <path class="a cw" d="M3 4 0 32s57-14 57 33c0-47 56-33 56-33l-3-28C87-1 30-1 3 4Z"/> <path class="b" d="M0 32s25-6 42 3c-9-5-33-2-33-2l-9-1m113 0s-25-6-41 3c8-5 33-2 33-2l9-1"/> </symbol> <symbol id="c" viewBox="0 0 211 420"> <path class="ef" d="M211 0q-29 217-106 215Q29 217 0 0l55 420q-21-164 50-165 72 1 50 165Z"/> </symbol> <symbol id="g" viewBox="0 0 346 148"> <path class="lbf" d="M173 0c1 20 10 60 173 88-168-21-172 36-173 60-1-24-6-81-173-60C163 60 171 20 173 0Z"/> </symbol> <symbol id="h" viewBox="0 0 48 90"> <path class="b" d="M24 90c0-14 16-34 24-42 0-12-24-30-24-48C24 18 0 36 0 48c8 8 24 28 24 42Z"/> <path class="c" d="M45 40a72 72 0 0 0-21 29C20 58 13 49 3 40 9 29 24 14 24 0c0 14 15 29 21 40Z"/> <path class="b" d="M24 69v21"/> </symbol> </defs> <g filter="url(#ge)" style="opacity: 1; mix-blend-mode: luminosity">',
         __input.handle0
-          ? '<g filter="url(#ge)" style="opacity: 1; mix-blend-mode: luminosity"> <path class="purpFill" d="M1073 2313c-13-13-18-24-25-81-27-194-2-683 34-778l-32-40H950l-32 40c36 95 61 584 34 778-7 57-12 68-25 80Z"/> <rect class="c" x="940.8" y="1407" width="118.5" height="7.4" rx="3.7"/> <rect class="c" x="940.8" y="1592.6" width="118.5" height="7.4" rx="3.7"/> <rect class="c" x="944.4" y="1630.6" width="111.3" height="7.4" rx="3.7"/> <rect class="c" x="947.8" y="1668.6" width="104.4" height="7.4" rx="3.7"/> <rect class="c" x="951" y="1706.6" width="97.9" height="7.4" rx="3.7"/> <rect class="c" x="953.3" y="1744.6" width="93.5" height="7.4" rx="3.7"/> <rect class="c" x="955.1" y="1782.6" width="89.8" height="7.4" rx="3.7"/> <rect class="c" x="956.7" y="1820.6" width="86.5" height="7.4" rx="3.7"/> <rect class="c" x="958.1" y="1858.6" width="83.8" height="7.4" rx="3.7"/> <rect class="c" x="959.1" y="1896.6" width="81.8" height="7.4" rx="3.7"/> <rect class="c" x="959.7" y="1934.6" width="80.5" height="7.4" rx="3.7"/> <rect class="c" x="960.2" y="1972.6" width="79.6" height="7.4" rx="3.7"/> <rect class="c" x="960.2" y="2010.6" width="79.6" height="7.4" rx="3.7"/> <rect class="c" x="960.1" y="2048.6" width="79.7" height="7.4" rx="3.7"/> <rect class="c" x="959.4" y="2086.6" width="81.3" height="7.4" rx="3.7"/> <rect class="c" x="957.5" y="2124.6" width="84.9" height="7.4" rx="3.7"/> <rect class="c" x="955.1" y="2162.6" width="89.8" height="7.4" rx="3.7"/> <path class="b" d="M1000 1553a231 231 0 0 1-103-25l5-10a220 220 0 0 0 196-1l6 11a231 231 0 0 1-104 25Z"/> <use class="red" width="111.1" height="111" transform="translate(1091 1426)" href="#wa"/> <use class="red" width="111.1" height="111" transform="rotate(90 -258 1168)" href="#wa"/> <use class="red" width="113.6" height="64.7" transform="translate(943 2199)" href="#wb"/> <use class="red" width="113.6" height="64.7" transform="matrix(-1.25 0 0 -1 1071 1558)" href="#wb"/> <path class="purpFill" d="M918 1454h164"/> <path class="b" d="M928 2384c10-5 9 15 9 15s-11 4-7 22c0 0-12-32-2-37ZM1072 2384c-10-5-9 15-9 15s11 4 7 22c0 0 12-32 2-37Z"/> <circle cx="1000" cy="2350.4" r="79.7" style="fill:#ad93c5"/> <path class="b" d="M1000 2351s102 4 68-52l-4 4c29 43-64 42-64 42s-93 1-64-42l-4-4c-34 56 68 52 68 52ZM949 2487l11 63c16-33 64-33 80 0l11-63c-31 38-72 38-102 0Zm89 50a51 51 0 0 0-76 0l-6-35c28 24 60 24 88 0Z"/> <path class="a" d="m949 2487 7 15M962 2537l-3 13M1038 2537l2 13M1051 2487l-7 15"/> <path d="M1068 2299c35 56-68 52-68 52s-103 4-68-52a80 80 0 0 0-17 52c5 85 36 217 52 318-20-125 16-133 33-133s53 8 33 133c16-101 47-233 52-318 2-16-5-39-17-52Zm-28 251a46 46 0 0 0-80 0l-11-63c30 38 71 38 102 0Zm33-146c-7 57-43 100-73 100s-66-43-73-100c-1-5-9-48 73-47 82-1 74 42 73 47Z" style="fill:#e0727f"/> </g>'
+          ? '<path class="pf" d="M1073 2313c-13-13-18-24-25-81-27-194-2-683 34-778l-32-40H950l-32 40c36 95 61 584 34 778-7 57-12 68-25 80Z"/> <rect class="c" x="941" y="1407" width="119" height="7" rx="4"/> <rect class="c" x="941" y="1593" width="119" height="7" rx="4"/> <rect class="c" x="944" y="1631" width="111" height="7" rx="4"/> <rect class="c" x="948" y="1669" width="104" height="7" rx="4"/> <rect class="c" x="951" y="1707" width="98" height="7" rx="4"/> <rect class="c" x="953" y="1745" width="94" height="7" rx="4"/> <rect class="c" x="955" y="1783" width="90" height="7" rx="4"/> <rect class="c" x="957" y="1821" width="87" height="7" rx="4"/> <rect class="c" x="958" y="1859" width="84" height="7" rx="4"/> <rect class="c" x="959" y="1897" width="82" height="7" rx="4"/> <rect class="c" x="960" y="1935" width="81" height="7" rx="4"/> <rect class="c" x="960" y="1973" width="80" height="7" rx="4"/> <rect class="c" x="960" y="2011" width="80" height="7" rx="4"/> <rect class="c" x="960" y="2049" width="80" height="7" rx="4"/> <rect class="c" x="959" y="2087" width="81" height="7" rx="4"/> <rect class="c" x="958" y="2125" width="85" height="7" rx="4"/> <rect class="c" x="955" y="2163" width="90" height="7" rx="4"/> <path class="b" d="M1000 1553a231 231 0 0 1-103-25l5-10a220 220 0 0 0 196-1l6 11a231 231 0 0 1-104 25Z"/> <use class="red" width="111" height="111" transform="translate(1091 1426)" href="#wa"/> <use class="red" width="111" height="111" transform="rotate(90 -258 1168)" href="#wa"/> <use class="red" width="114" height="65" transform="translate(943 2199)" href="#wb"/> <use class="red" width="114" height="65" transform="matrix(-1.25 0 0 -1 1071 1558)" href="#wb"/> <path class="pf" d="M918 1454h164"/> <path class="b" d="M928 2384c10-5 9 15 9 15s-11 4-7 22c0 0-12-32-2-37Zm144 0c-10-5-9 15-9 15s11 4 7 22c0 0 12-32 2-37Z"/> <circle cx="1000" cy="2350" r="80" fill="#ad93c5"/> <path class="b" d="M1000 2351s102 4 68-52l-4 4c29 43-64 42-64 42s-93 1-64-42l-4-4c-34 56 68 52 68 52Zm-51 136 11 63c16-33 64-33 80 0l11-63c-31 38-72 38-102 0Zm89 50a51 51 0 0 0-76 0l-6-35c28 24 60 24 88 0Z"/> <path class="a" d="m949 2487 7 15m6 35-3 13m79-13 2 13m11-63-7 15"/> <path d="M1068 2299c35 56-68 52-68 52s-103 4-68-52a80 80 0 0 0-17 52c5 85 36 217 52 318-20-125 16-133 33-133s53 8 33 133c16-101 47-233 52-318 2-16-5-39-17-52Zm-28 251a46 46 0 0 0-80 0l-11-63c30 38 71 38 102 0Zm33-146c-7 57-43 100-73 100s-66-43-73-100c-1-5-9-48 73-47 82-1 74 42 73 47Z" fill="#e0727f"/>'
           : "",
         __input.handle1
-          ? '<g filter="url(#ge)" style="opacity: 1; mix-blend-mode: luminosity"> <rect class="c" x="946.9" y="1407" width="106.3" height="7.4" rx="3.7"/> <circle cx="1000" cy="2020.3" r="130.1" style="fill:#fff;stroke:#000;stroke-width:0.25px"/> <circle cx="1000" cy="2020.3" r="125.7" style="fill:#8a9fa4"/> <circle cx="1000" cy="2020.3" r="118.3" style="fill:#efc981"/> <path d="M1000 2001a124 124 0 0 0-109 65 118 118 0 0 0 218 0 124 124 0 0 0-109-65Z" style="fill:#f5cc14"/> <path class="redFill" d="M963 1414h74l42 899H921l42-899z"/> <rect class="c" x="951.7" y="1567.4" width="96.5" height="7.4" rx="3.7"/> <rect class="c" x="950" y="1604.7" width="100.1" height="7.4" rx="3.7"/> <rect class="c" x="948.8" y="1642.1" width="102.5" height="7.4" rx="3.7"/> <rect class="c" x="946.9" y="1679.4" width="106.2" height="7.4" rx="3.7"/> <rect class="c" x="944.7" y="1716.7" width="110.6" height="7.4" rx="3.7"/> <rect class="c" x="943.5" y="1754" width="113" height="7.4" rx="3.7"/> <rect class="c" x="941.8" y="1791.3" width="116.5" height="7.4" rx="3.7"/> <rect class="c" x="940.3" y="1828.7" width="119.4" height="7.4" rx="3.7"/> <rect class="c" x="938.5" y="1866" width="123" height="7.4" rx="3.7"/> <rect class="c" x="936.6" y="1903.3" width="126.8" height="7.4" rx="3.7"/> <rect class="c" x="934.6" y="1940.6" width="130.7" height="7.4" rx="3.7"/> <path class="redFill" d="m824 2337 168 232c-99-138-17-152-6-157l-38-17c-12 5-53 21-124-58Z"/> <path class="c" d="M896 2411c34 10 66-5 66-5a60 60 0 0 0-33 50Z"/> <path class="redFill" d="m909 2419 16 23c6-17 12-23 12-23s-16 2-28 0Z"/> <path class="d" d="m896 2411 13 8M925 2442l4 15M937 2419a271 271 0 0 1 25-13"/> <path class="redFill" d="m1176 2337-168 232c99-138 17-152 6-157l38-17c12 5 53 21 124-58Z"/> <path class="c" d="M1104 2411c-34 10-66-5-66-5a60 60 0 0 1 33 51Z"/> <path class="redFill" d="m1091 2419-16 23c-6-17-12-23-12-23s16 2 28 0Z"/> <path class="d" d="m1104 2411-13 8M1075 2442l-4 15M1063 2419a271 271 0 0 0-25-13"/> <circle class="c" cx="1000" cy="2334.1" r="82.1"/> <circle class="navyFill" cx="1000" cy="2334.1" r="74.6"/> <rect class="c" x="992.8" y="2252" width="14.6" height="164.2" rx="7.1"/> <use class="blue" width="113.6" height="64.7" transform="matrix(.91 0 0 1.82 948 1487)" href="#wb"/> <path class="b" d="M1000 2163a231 231 0 0 1-103-25l5-10a220 220 0 0 0 196-1l5 11a231 231 0 0 1-103 25Z"/> <path class="navyFill" d="m1078 2186-10-197c-34-10-106-10-135 0l-11 196Z"/> <use class="grey" width="113.6" height="64.7" transform="matrix(-1.5 0 0 -1.77 1085 2239)" href="#wb"/> <use class="grey" width="111.1" height="111" transform="rotate(90 -563 1474)" href="#wa"/> <use class="grey" width="111.1" height="111" transform="translate(1089 2036)" href="#wa"/> </g>'
+          ? '<rect class="c" x="947" y="1407" width="106" height="7" rx="4"/> <circle cx="1000" cy="2020" r="130" fill="#fff" stroke="#000" stroke-width=".3"/> <circle cx="1000" cy="2020" r="126" fill="#8a9fa4"/> <circle cx="1000" cy="2020" r="118" fill="#efc981"/> <path d="M1000 2001a124 124 0 0 0-109 65 118 118 0 0 0 218 0 124 124 0 0 0-109-65Z" fill="#f5cc14"/> <path class="rf" d="M963 1414h74l42 899H921l42-899z"/> <rect class="c" x="952" y="1567" width="97" height="7" rx="4"/> <rect class="c" x="950" y="1605" width="100" height="7" rx="4"/> <rect class="c" x="949" y="1642" width="103" height="7" rx="4"/> <rect class="c" x="947" y="1679" width="106" height="7" rx="4"/> <rect class="c" x="945" y="1717" width="111" height="7" rx="4"/> <rect class="c" x="944" y="1754" width="113" height="7" rx="4"/> <rect class="c" x="942" y="1791" width="117" height="7" rx="4"/> <rect class="c" x="940" y="1829" width="119" height="7" rx="4"/> <rect class="c" x="939" y="1866" width="123" height="7" rx="4"/> <rect class="c" x="937" y="1903" width="127" height="7" rx="4"/> <rect class="c" x="935" y="1941" width="132" height="7" rx="4"/> <path class="rf" d="m824 2337 168 232c-99-138-17-152-6-157l-38-17c-12 5-53 21-124-58Z"/> <path class="c" d="M896 2411c34 10 66-5 66-5a60 60 0 0 0-33 50Z"/> <path class="rf" d="m909 2419 16 23c6-17 12-23 12-23s-16 2-28 0Z"/> <path class="d" d="m896 2411 13 8m16 23 4 15m8-38a271 271 0 0 1 25-13"/> <path class="rf" d="m1176 2337-168 232c99-138 17-152 6-157l38-17c12 5 53 21 124-58Z"/> <path class="c" d="M1104 2411c-34 10-66-5-66-5a60 60 0 0 1 33 51Z"/> <path class="rf" d="m1091 2419-16 23c-6-17-12-23-12-23s16 2 28 0Z"/> <path class="d" d="m1104 2411-13 8m-16 23-4 15m-8-38a271 271 0 0 0-25-13"/> <circle class="c" cx="1000" cy="2334" r="82"/> <circle class="nf" cx="1000" cy="2334" r="75"/> <rect class="c" x="993" y="2252" width="15" height="164" rx="7"/> <use class="bl" width="114" height="65" transform="matrix(.91 0 0 1.82 948 1487)" href="#wb"/> <path class="b" d="M1000 2163a231 231 0 0 1-103-25l5-10a220 220 0 0 0 196-1l5 11a231 231 0 0 1-103 25Z"/> <path class="nf" d="m1078 2186-10-197c-34-10-106-10-135 0l-11 196Z"/> <use class="gr" width="114" height="65" transform="matrix(-1.5 0 0 -1.77 1085 2239)" href="#wb"/> <use class="gr" width="111" height="111" transform="rotate(90 -563 1474)" href="#wa"/> <use class="gr" width="111" height="111" transform="translate(1089 2036)" href="#wa"/>'
           : "",
         __input.handle2
-          ? '<g filter="url(#ge)" style="opacity: 1; mix-blend-mode: luminosity"> <rect class="c" x="932.3" y="1407.1" width="135.3" height="7.4" rx="3.7"/> <path class="blackFill" d="M1060 1415c-56 187-41 540-3 673 34 118 28 165 3 225H940c-25-60-31-107 3-225 38-133 53-486-3-673Z"/> <rect class="c" x="968.1" y="1872.5" width="63.8" height="7.4" rx="3.7"/> <rect class="c" x="965.2" y="1910.1" width="69.5" height="7.4" rx="3.7"/> <rect class="c" x="961.9" y="1947.8" width="76.2" height="7.4" rx="3.7"/> <rect class="c" x="957.7" y="1985.4" width="84.6" height="7.4" rx="3.7"/> <rect class="c" x="952.3" y="2023.1" width="95.3" height="7.4" rx="3.7"/> <path class="b" d="M1042 1824a234 234 0 0 1-84 0l1-12a222 222 0 0 0 82 0Z"/> <path class="blueFill" d="M916 1755c-16 41 11 48 46 51l-4 26c-31-28-59-38-77 5 17-41-2-55-50-58l17-20c13 9 47 46 68-4ZM1084 1755c16 41-11 48-46 51l4 26c31-28 59-38 77 5-17-41 2-55 50-58l-17-20c-13 9-47 46-68-4Z"/> <circle class="blackFill" cx="1000" cy="2394.6" r="65.5"/> <path class="blueFill" d="M1000 2342c32 0 16-30 140-16-87-14-140-37-140-71 0 34-53 57-140 71 124-14 108 16 140 16Z"/> <rect class="blueFill" x="914.8" y="2375.4" width="170.5" height="38.3" rx="19.2"/> <path class="blueFill" d="M1000 2763c0-116 66-174 148-202l-18-56c-110 20-98-63-130-63s-20 83-130 63l-18 56c82 28 148 86 148 202Z"/> <path class="b" d="M1000 2662c4-8 27-73 124-113l-7-22c-34 5-92-5-117-66-25 61-83 71-117 66l-7 22c97 40 120 105 124 113Z"/> <path class="greenFill" d="M1000 2645c11-22 44-70 114-100l-3-10c-58 7-99-31-111-56-12 25-53 63-111 56l-3 10c71 30 103 78 114 100ZM883 2527l6 8M876 2549l10-4M1000 2645v18M1111 2535l6-8M1114 2545l10 4M1000 2461v18"/> <path class="b" d="M1000 2328s8-9 24-15c-16-8-24-16-24-16s-8 8-24 16c16 6 24 15 24 15Z"/> <path class="greenFill" d="m1000 2318 7-6-7-5-7 5 7 6z"/> <path class="a" d="M1000 2297v10M993 2312l-17 1M1000 2318v10M1007 2312l17 1"/> <use class="blue" width="113.6" height="64.7" transform="matrix(-.6 0 0 -1.46 1034 1845)" href="#wb"/> <use class="blue" width="113.6" height="64.7" transform="matrix(1.2 0 0 1.17 932 2064)" href="#wb"/> </g>'
+          ? '<rect class="c" x="932" y="1407" width="135" height="7" rx="4"/> <path class="bf" d="M1060 1415c-56 187-41 540-3 673 34 118 28 165 3 225H940c-25-60-31-107 3-225 38-133 53-486-3-673Z"/> <rect class="c" x="968" y="1873" width="64" height="7" rx="4"/> <rect class="c" x="965" y="1910" width="70" height="7" rx="4"/> <rect class="c" x="962" y="1948" width="7" height="7" rx="4"/> <rect class="c" x="958" y="1985" width="85" height="7" rx="4"/> <rect class="c" x="952" y="2023" width="95" height="7" rx="4"/> <path class="b" d="M1042 1824a234 234 0 0 1-84 0l1-12a222 222 0 0 0 82 0Z"/> <path class="lb" d="M916 1755c-16 41 11 48 46 51l-4 26c-31-28-59-38-77 5 17-41-2-55-50-58l17-20c13 9 47 46 68-4Zm168 0c16 41-11 48-46 51l4 26c31-28 59-38 77 5-17-41 2-55 50-58l-17-20c-13 9-47 46-68-4Z"/> <circle class="bf" cx="1000" cy="2394.6" r="65.5"/> <path class="lb" d="M1000 2342c32 0 16-30 140-16-87-14-140-37-140-71 0 34-53 57-140 71 124-14 108 16 140 16Z"/> <rect class="lb" x="915" y="2375" width="170.5" height="38.3" rx="19.2"/> <path class="lb" d="M1000 2763c0-116 66-174 148-202l-18-56c-110 20-98-63-130-63s-20 83-130 63l-18 56c82 28 148 86 148 202Z"/> <path class="b" d="M1000 2662c4-8 27-73 124-113l-7-22c-34 5-92-5-117-66-25 61-83 71-117 66l-7 22c97 40 120 105 124 113Z"/> <path class="gf" d="M1000 2645c11-22 44-70 114-100l-3-10c-58 7-99-31-111-56-12 25-53 63-111 56l-3 10c71 30 103 78 114 100Zm-117-118 6 8m-13 14 10-4m114 100v18m111-128 6-8m-3 18 10 4m-124-88v18"/> <path class="b" d="M1000 2328s8-9 24-15c-16-8-24-16-24-16s-8 8-24 16c16 6 24 15 24 15Z"/> <path class="gf" d="m1000 2318 7-6-7-5-7 5 7 6z"/> <path class="a" d="M1000 2297v10m-7 5-17 1m24 5v10m7-16 17 1"/> <use class="bl" width="114" height="65" transform="matrix(-.6 0 0 -1.46 1034 1845)" href="#wb"/> <use class="bl" width="114" height="65" transform="matrix(1.2 0 0 1.17 932 2064)" href="#wb"/>'
           : "",
         __input.handle3
-          ? '<g filter="url(#ge)" style="opacity: 1; mix-blend-mode: luminosity"> <path class="lightBlueFill" d="m1021 2313 35-899H942l38 899h41z"/> <rect class="g" x="932.3" y="1407.1" width="135.3" height="7.4" rx="3.7"/> <rect class="g" x="952.1" y="1724.2" width="95.9" height="7.4" rx="3.7"/> <rect class="g" x="953" y="1761.8" width="93.9" height="7.4" rx="3.7"/> <rect class="g" x="954.6" y="1799.5" width="90.9" height="7.4" rx="3.7"/> <rect class="g" x="956.5" y="1837.1" width="87" height="7.4" rx="3.7"/> <rect class="g" x="958" y="1874.8" width="83.9" height="7.4" rx="3.7"/> <rect class="g" x="959.5" y="1912.4" width="81" height="7.4" rx="3.7"/> <rect class="g" x="961.2" y="1950.1" width="77.6" height="7.4" rx="3.7"/> <rect class="g" x="962.9" y="1987.7" width="74.2" height="7.4" rx="3.7"/> <path class="g" d="M1108 2075a212 212 0 0 0-216 0l-4-8a221 221 0 0 1 225 1Z"/> <use class="darkBlue" width="113.6" height="64.7" transform="matrix(.7 0 0 1.46 961 2021)" href="#wb"/> <use class="darkBlue" width="113.6" height="64.7" transform="matrix(-1.01 0 0 -1 1058 1696)" href="#wb"/> <use width="210.8" height="420" transform="matrix(.2 .06 -.08 .26 1060 1982)" href="#c"/> <use width="210.8" height="420" transform="matrix(.18 .09 -.12 .25 1108 1997)" href="#c"/> <use width="210.8" height="420" transform="matrix(.2 -.06 .08 .26 900 1994)" href="#c"/> <use width="210.8" height="420" transform="matrix(.18 -.09 .12 .25 854 2016)" href="#c"/> <circle class="lightBlueFill" cx="1000.1" cy="2257.2" r="80.7"/> <path class="greyFill" d="M1000 2434c133 0 226-73 226-73l-87-120c45 63 21 99-39 118-60 20-100-3-100-56 0 53-39 76-100 56-59-19-84-55-39-118l-87 120s93 73 226 73Z"/> <path class="lightGreyFill" d="m825 2318-28 39s58 41 142 55c26-12 45-23 45-42-55 34-145-8-159-52ZM1175 2318l28 39s-58 41-141 55c-27-12-45-23-46-42 56 34 145-8 159-52Z"/> <use width="345.7" height="148.4" transform="translate(827 2370)" href="#g"/> <path class="b" d="M1000 2471s14-19 51-28c-37-15-51-33-51-33s-13 18-51 33c37 9 51 28 51 28Z"/> <path d="M1000 2462c11-11 25-17 33-20a143 143 0 0 1-33-23 143 143 0 0 1-33 23c8 3 22 9 33 20Z" style="fill:#3a4757"/> <path class="b" d="m967 2442-18 1M1000 2419v-9M1033 2442l18 1M1000 2462v10"/> <use width="47.9" height="90.1" transform="translate(976 2167)" href="#h"/> <use width="47.9" height="90.1" transform="rotate(90 -572 1662)" href="#h"/> <use width="47.9" height="90.1" transform="rotate(-90 1596 686)" href="#h"/> <use width="47.9" height="90.1" transform="rotate(180 512 1174)" href="#h"/> </g>'
-          : ""
+          ? '<path class="lbf" d="m1021 2313 35-899H942l38 899h41z"/> <rect class="g" x="932" y="1407" width="135" height="7" rx="4"/> <rect class="g" x="952" y="1724" width="96" height="7" rx="4"/> <rect class="g" x="953" y="1762" width="94" height="7" rx="4"/> <rect class="g" x="955" y="1800" width="91" height="7" rx="4"/> <rect class="g" x="957" y="1837" width="87" height="7" rx="4"/> <rect class="g" x="958" y="1875" width="84" height="7" rx="4"/> <rect class="g" x="960" y="1912" width="81" height="7" rx="4"/> <rect class="g" x="961" y="1950" width="78" height="7" rx="4"/> <rect class="g" x="963" y="1988" width="74" height="7" rx="4"/> <path class="g" d="M1108 2075a212 212 0 0 0-216 0l-4-8a221 221 0 0 1 225 1Z"/> <use class="db" width="114" height="65" transform="matrix(.7 0 0 1.46 961 2021)" href="#wb"/> <use class="db" width="114" height="65" transform="matrix(-1.01 0 0 -1 1058 1696)" href="#wb"/> <use width="211" height="420" transform="matrix(.2 .06 -.08 .26 1060 1982)" href="#c"/> <use width="211" height="420" transform="matrix(.18 .09 -.12 .25 1108 1997)" href="#c"/> <use width="211" height="420" transform="matrix(.2 -.06 .08 .26 900 1994)" href="#c"/> <use width="211" height="420" transform="matrix(.18 -.09 .12 .25 854 2016)" href="#c"/> <circle class="lbf" cx="1000" cy="2257" r="81"/> <path class="ef" d="M1000 2434c133 0 226-73 226-73l-87-120c45 63 21 99-39 118-60 20-100-3-100-56 0 53-39 76-100 56-59-19-84-55-39-118l-87 120s93 73 226 73Z"/> <path d="m825 2318-28 39s58 41 142 55c26-12 45-23 45-42-55 34-145-8-159-52Zm350 0 28 39s-58 41-141 55c-27-12-45-23-46-42 56 34 145-8 159-52Z" fill="#c3cdd7"/> <use width="346" height="148" transform="translate(827 2370)" href="#g"/> <path class="b" d="M1000 2471s14-19 51-28c-37-15-51-33-51-33s-13 18-51 33c37 9 51 28 51 28Z"/> <path d="M1000 2462c11-11 25-17 33-20a143 143 0 0 1-33-23 143 143 0 0 1-33 23c8 3 22 9 33 20Z" fill="#3a4757"/> <path class="b" d="m967 2442-18 1m51-24v-9m33 32 18 1m-51 19v10"/> <use width="48" height="90" transform="translate(976 2167)" href="#h"/> <use width="48" height="90" transform="rotate(90 -572 1662)" href="#h"/> <use width="48" height="90" transform="rotate(-90 1596 686)" href="#h"/> <use width="48" height="90" transform="rotate(180 512 1174)" href="#h"/>'
+          : "",
+        "</g>"
       )
     );
   }
