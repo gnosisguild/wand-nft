@@ -1,6 +1,6 @@
 <filter
   color-interpolation-filters="sRGB"
-  id="glowEmboss"
+  id="ge"
   width="250%"
   height="250%"
   x="-75%"
@@ -12,15 +12,15 @@
     stdDeviation="8"
   />
 
-  {{! <!-- Background glow  --> }}
+  {{! Background glow }}
   <feGaussianBlur
     in="SourceAlpha"
     stdDeviation="30"
-    result="glow"
+    result="fg"
   />
   <feColorMatrix
-    in="glow"
-    result="bgGlow"
+    in="fg"
+    result="bgg"
     type="matrix"
     values="-1 0 0 0 1
             0 -1 0 0 1
@@ -28,25 +28,25 @@
             0 0 0 1 0 "
   />
 
-  {{! <!-- Emboss/Bevel --> }}
+  {{! Emboss/Bevel }}
   {{#each layers}}
     <feTurbulence
       {{#if fractalNoise}}type="fractalNoise"{{/if}}
       baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
       numOctaves="{{uint8 turbOct}}"
       seed="1004123123"
-      result="turb_{{@index}}"
+      result="t{{@index}}"
     />
     <feGaussianBlur
       stdDeviation="{{uint8 turbBlur decimals=1}}"
       in="SourceAlpha"
-      result="turb_blur_{{@index}}"
+      result="tb{{@index}}"
     />
     <feDisplacementMap
       scale="{{uint8 dispScale}}"
-      in="turb_blur_{{@index}}"
-      in2="turb_{{@index}}"
-      result="disp_turb_{{@index}}"
+      in="tb{{@index}}"
+      in2="t{{@index}}"
+      result="dt{{@index}}"
     />
     <feColorMatrix
       type="matrix"
@@ -54,29 +54,29 @@
               0 0 0 0 0,
               0 0 0 0 0,
               0 0 0 1 0"
-      in="disp_turb_{{@index}}"
-      result="co_mat_{{@index}}"
+      in="dt{{@index}}"
+      result="cm{{@index}}"
     />
     <feGaussianBlur
       stdDeviation="{{uint8 blurX decimals=1}} {{uint8 blurY decimals=1}}"
-      in="co_mat_{{@index}}"
-      result="blur_co_mat_{{@index}}"
+      in="cm{{@index}}"
+      result="bcm{{@index}}"
     />
     <feSpecularLighting
       surfaceScale="{{uint8 surfaceScale}}"
       specularConstant="{{uint8 specConstant decimals=2}}"
       specularExponent="{{uint8 specExponent}}"
       lighting-color="{{lightColor}}"
-      in="blur_co_mat_{{@index}}"
-      result="lighting_{{@index}}"
+      in="bcm{{@index}}"
+      result="l{{@index}}"
     >
       <fePointLight x="{{int16 pointX}}" y="{{int16 pointY}}" z="{{int16 pointZ}}"/>
     </feSpecularLighting>
     <feComposite
       operator="in"
-      in="lighting_{{@index}}"
-      in2="co_mat_{{@index}}"
-      result="comp_light_1_{{@index}}"
+      in="l{{@index}}"
+      in2="cm{{@index}}"
+      result="cl1{{@index}}"
     />
     <feComposite
       operator="arithmetic"
@@ -84,24 +84,24 @@
       k2="0"
       k3="{{uint8 opacity decimals=2}}"
       k4="0"
-      in="disp_turb_{{@index}}"
-      in2="comp_light_1_{{@index}}"
-      result="comp_light_2_{{@index}}"
+      in="dt{{@index}}"
+      in2="cl1{{@index}}"
+      result="cl2{{@index}}"
     />
     <feComposite
       operator="in"
       in2="SourceAlpha"
-      in="comp_light_2_{{@index}}"
-      result="comp_light_final_{{@index}}"
+      in="cl2{{@index}}"
+      result="clf{{@index}}"
     />
 
   {{/each}}
 
   <feMerge>
-    <feMergeNode in="bgGlow"/>
+    <feMergeNode in="bgg"/>
     <feMergeNode in="SourceGraphic"/>
     {{#each layers}}
-      <feMergeNode in="comp_light_final_{{@index}}"/>
+      <feMergeNode in="clf{{@index}}"/>
     {{/each}}
   </feMerge>
 </filter>

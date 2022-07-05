@@ -21,18 +21,18 @@
 {{/if}}
 {{#if linear}}
   {{#if light}}
-      <linearGradient id="lin0" gradientTransform="rotate(90)">
+      <linearGradient id="l0" gradientTransform="rotate(90)">
         <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"/>
         <stop offset="100%" stop-color="hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 1)"/>
       </linearGradient>
-      <rect style="fill:url(#lin0)" width="2000" height="3000"/>
+      <rect style="fill:url(#l0)" width="2000" height="3000"/>
   {{/if}}
   {{#if dark}}
-      <linearGradient id="lin0" gradientTransform="rotate(90)">
+      <linearGradient id="l0" gradientTransform="rotate(90)">
         <stop offset="0%" stop-color="hsl({{uint8 color.hue}}, 30%, 7%)"/>
         <stop offset="100%" stop-color="hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 1)"/>
       </linearGradient>
-      <rect style="fill:url(#lin0)" width="2000" height="3000"/>
+      <rect style="fill:url(#l0)" width="2000" height="3000"/>
   {{/if}}
 {{/if}}
 </g>

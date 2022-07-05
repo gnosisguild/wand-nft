@@ -1,49 +1,34 @@
 <defs>
   <style>
-    .xp-guide {
+    .xpc {
       fill: none;
       stroke-width: 1;
       stroke: #FAFFC0;
       opacity: 0.7;
     }
-    .xp-bar * {
-      transform-box: fill-box;
-      transform-origin: center;
-    }
-    .xp-start {
-      fill: white;
-    }
     .hilt path {
-      fill: url(#hilt-grad);
-    }
-
-    #bar-base {
-      stroke-dasharray: calc({{uint32 amount}} / {{uint32 cap}} * 37.2%) 100%;
+      fill: url(#hg);
     }
   </style>
-  <symbol id="xp-bar-seg">
-    <circle class="xp-circ" cx="1000" cy="1060" r="308"/>
-    <path d="M1003 769h-6v-16h6v16Z" style="fill:green"/>
-  </symbol>
-  <linearGradient id="xp-grad" gradientUnits="objectBoundingBox" x1="80%" x2="20%" y1="200%" y2="-400%">
+  <linearGradient id="xpg" x1="80%" x2="20%" y1="200%" y2="-400%">
     <stop offset="0"/>
     <stop offset=".4" stop-color="#90ee90" stop-opacity="0"/>
   </linearGradient>
-  <linearGradient id="hilt-grad" gradientUnits="objectBoundingBox" x1="80%" x2="20%" y1="200%" y2="-400%">
+  <linearGradient id="hg" x1="80%" x2="20%" y1="200%" y2="-400%">
     <stop offset="0"/>
     <stop offset=".4" stop-color="#90ee90"/>
   </linearGradient>
 </defs>
 
-<circle class="xp-guide" cx="1000" cy="1060" r="320"/>
-<circle class="xp-guide" cx="1000" cy="1060" r="290"/>
+<circle class="xpc" cx="1000" cy="1060" r="320"/>
+<circle class="xpc" cx="1000" cy="1060" r="290"/>
 
-<path id="bar-base" d="M1000 1365a1 1 0 0 0 0-610" stroke-linecap="round" style="stroke-dasharray:calc({{uint32 amount}} / {{uint32 cap}} * 37.2%) 100%;fill:none;stroke-width:28;stroke:url(#xp-grad);opacity:1;mix-blend-mode:plus-lighter"/>
-<use href="#bar-base" transform="matrix(-1 0 0 1 2000 0)"/>
-<g class="hilt" filter="url(#glowEmboss)" id="xp-hilt">
+<path id="bb" d="M1000 1365a1 1 0 0 0 0-610" stroke-linecap="round" style="stroke-dasharray:calc({{uint32 amount}} / {{uint32 cap}} * 37.2%) 100%;fill:none;stroke-width:28;stroke:url(#xpg);opacity:1;mix-blend-mode:plus-lighter"/>
+<use href="#bb" transform="matrix(-1 0 0 1 2000 0)"/>
+<g class="hilt" filter="url(#ge)" id="xph">
   <path transform="rotate(45 1000 1365)" d="M980 1345h40v40h-40z"/>
   <path d="M980 1345h40v40h-40z"/>
 </g>
 {{#if crown}}
-<use href="#xp-hilt" transform="translate(0,-610)"/>
+<use href="#xph" transform="translate(0,-610)"/>
 {{/if}}

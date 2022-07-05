@@ -1,16 +1,16 @@
 <defs>
-  <filter id="stars">
+  <filter id="st">
     <feTurbulence baseFrequency="0.1" seed="{{uint starsSeed}}"/>
     <feColorMatrix
       values="0 0 0 7 -4  0 0 0 7 -4  0 0 0 7 -4  0 0 0 0 1"
     />
   </filter>
 </defs>
-<clipPath id="starsclip">
+<clipPath id="stc">
   <circle cx="1000" cy="1060" r="520"/>
 </clipPath>
-<mask id="starsmask">
-  <g filter="url(#stars)" transform="scale(2)">
+<mask id="stm">
+  <g filter="url(#st)" transform="scale(2)">
     <rect width="100%" height="100%"/>
   </g>
 </mask>
@@ -29,7 +29,7 @@
     width="100%"
     height="100%"
     fill="white"
-    mask="url(#starsmask)"
-    clip-path="url(#starsclip)"
+    mask="url(#stm)"
+    clip-path="url(#stc)"
   />
 </g>
