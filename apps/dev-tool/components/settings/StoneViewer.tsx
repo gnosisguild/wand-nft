@@ -1,6 +1,6 @@
 import { StoneSettings } from "../SvgTemplate";
 import styles from "./Settings.module.css";
-import stoneTemplate from "../../../contracts/contracts/svg/partials/stone.hbs";
+import stoneTemplate from "../../../../contracts/contracts/svg/partials/stone.hbs";
 import { useMemo } from "react";
 
 interface Props {

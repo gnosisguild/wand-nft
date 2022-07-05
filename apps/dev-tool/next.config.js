@@ -17,6 +17,7 @@ const nextConfig = {
               path.join(
                 __dirname,
                 "..",
+                "..",
                 "contracts",
                 "contracts",
                 "svg",
