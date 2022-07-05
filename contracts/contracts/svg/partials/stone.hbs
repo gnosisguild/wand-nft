@@ -45,7 +45,7 @@
     values="-1 0 0 0 1
             0 -1 0 0 1
             0 0 -1 0 1
-            0 0 0 0.8 0 "
+            0 0 0 .8 0 "
   />
 
   <feMerge>
@@ -55,7 +55,7 @@
 </filter>
 <radialGradient id="ss">
   <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/>
-  <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"/>
+  <stop offset="90%" stop-color="hsla(0, 0%, 0%, .8)"/>
 </radialGradient>
 <defs>
   {{! clip paths }}
@@ -66,7 +66,6 @@
 </defs>
 {{! stone base }}
 <circle
-  id="stone"
   transform="rotate({{uint16 rotation}}, 1000, 1060)"
   cx="1000"
   cy="1060"
@@ -110,7 +109,7 @@
     gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)"
     gradientUnits="userSpaceOnUse"
   >
-    <stop offset="0" stop-color="#fff" stop-opacity="0.7"/>
+    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
     <stop offset="1" stop-color="#fff" stop-opacity="0"/>
   </radialGradient>
 </defs>
