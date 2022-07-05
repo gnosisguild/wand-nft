@@ -2,15 +2,13 @@
   <style type="text/css">
     .sparkle { fill: white }
   </style>
-  <symbol id="sprkl" viewBox="0 0 250.33 377.46">
-    <g id="b" data-name="star02">
-      <path class="sparkle" d="M4.01,40.74L125.22,187.24l125.11,1.79-122.18,1.79,118.17,146.5L125.11,190.82,0,189.03l122.18-1.79L4.01,40.74Z" />
-      <path class="sparkle" d="M105.4,0l20.23,185.39,86.64-83.73-86.17,88.3,18.11,187.5-20.23-185.39-86.64,83.73,86.17-88.3L105.4,0Z" />
-    </g>
+  <symbol id="sprkl" viewBox="0 0 250 377">
+    <path class="sparkle" d="m4 41 121 146 125 2-122 2 118 146-121-146-125-2 122-2L4 41Z"/>
+    <path class="sparkle" d="m105 0 21 185 86-83-86 88 18 187-20-185-87 84 87-88L105 0Z"/>
   </symbol>
 </defs>
 <g filter="url(#burstBlur)" style="opacity: 0.6">
   {{#each sparkles}}
-    <use width="250.33" height="377.46" transform="translate({{int16 tx}} {{int16 ty}}) scale({{uint8 scale decimals=2}})" href="#sprkl" />
+    <use width="250" height="377" transform="translate({{int16 tx}} {{int16 ty}}) scale({{uint8 scale decimals=2}})" href="#sprkl" />
   {{/each}}
 </g>
