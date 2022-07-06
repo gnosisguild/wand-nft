@@ -1,3 +1,9 @@
+.colorPicker {
+  position: absolute;
+  bottom: 5vh;
+  left: calc(50% - 400px);
+}
+
 .value {
   position: absolute;
   left: 50%;
@@ -8,21 +14,6 @@
   transform: translate(-50%,-50%);
   z-index: 100;
   background-color: var(--selectedColor)
-}
-
-#color-picker {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  border: 1px solid transparent;
-  top: 50%;
-  margin-top: -200px;
-  left: 50%;
-  margin-left: -200px;
-  background-color: #1d1d25;
-  -webkit-touch-callout: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
 }
 
 .circle {
@@ -43,8 +34,6 @@
   position: absolute;
   top: -10px;
   left: 140px;
-  width: 30px;
-  height: 30px;
   text-align: center;
   border-radius: 20px;
   cursor: pointer;
