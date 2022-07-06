@@ -1,0 +1,36 @@
+.stoneList ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.stoneList li {
+  width: 10%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.stoneViewSvg {
+  width: 300%;
+  position: absolute;
+  top: -109%;
+  left: -100%;
+}
+.stoneBag {
+  width: 33%;
+}
+.stoneBag ul {
+  position: relative;
+  background: bisque;
+  width: 80%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.stoneBag li {
+  position: absolute;
+  width: 18%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  cursor: grab;
+}
