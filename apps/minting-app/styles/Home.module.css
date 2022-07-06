@@ -16,3 +16,9 @@
   max-width: 400px;
   margin: 0 auto;
 }
+
+.colorPicker {
+  position: absolute;
+  bottom: 5vh;
+  left: calc(50% - 400px);
+}
