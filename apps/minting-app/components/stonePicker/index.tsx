@@ -31,7 +31,6 @@ const StonePicker: React.FC<Props> = () => {
 
   return (
     <div className={styles.stoneBag}>
-      <p>Double click to choose a stone</p>
       <UiCircle>
         <ul>
           {stonesWithPosition.map((stone, index) => (
