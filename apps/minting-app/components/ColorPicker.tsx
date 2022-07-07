@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classes from "./ColorPicker.module.css";
 
 export const Canvas = () => {
@@ -14,11 +14,7 @@ export const Canvas = () => {
   const size = 200;
   const thickness = size / 20;
   const knobRadius = 15;
-  // let mouseDown = false;
-  // let knobType;
-  // let mousePosition;
-  // let elementPosition;
-  let raf;
+  let intiialKnobOffsetX = size / 2 - knobRadius;
 
   // Hue
   const hueRadius = size / 2;
@@ -28,8 +24,6 @@ export const Canvas = () => {
   const [knobType, setKnobType] = useState("hue");
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
-  // Todo: figure out how to set initial state to top center dynamically by calling setHueKnobPosition().
-  let intiialKnobOffsetX = size / 2 - knobRadius;
   let [hueKnobPos, setHueKnobPos] = useState({
     x: intiialKnobOffsetX,
     y: thickness / 2 - knobRadius,
@@ -52,7 +46,6 @@ export const Canvas = () => {
       top: pickerElement?.offsetTop,
     };
     setElementCoords({ x: pickerOffset.left, y: pickerOffset.top });
-    // let mousePosition = { x: 0, y: 0 };
 
     drawHueArc();
     drawLightnessArc();
@@ -105,65 +98,39 @@ export const Canvas = () => {
     ctx!.restore();
   };
 
-  const getHueValue = (coords: { x: number; y: number }) => {
+  const getColorValue = (coords: { x: number; y: number }) => {
     let atan, value;
+    let radius = knobType === "hue" ? hueRadius : lightnessRadius;
     const mousePosition = {
       x: coords.x - elementCoords.x,
       y: coords.y - elementCoords.y,
     };
-    atan = Math.atan2(mousePosition.x - hueRadius, mousePosition.y - hueRadius);
+    atan = Math.atan2(mousePosition.x - radius, mousePosition.y - radius);
     value = -atan / (Math.PI / 180) + 180;
 
     return value;
   };
 
-  const getLightnessValue = (coords: { x: number; y: number }) => {
-    let atan, value;
-    const mousePosition = {
-      x: coords.x - elementCoords.x,
-      y: coords.y - elementCoords.y,
-    };
-    atan = Math.atan2(
-      mousePosition.x - lightnessRadius,
-      mousePosition.y - lightnessRadius
-    );
-    value = -atan / (Math.PI / 180) + 180;
-
-    return value;
-  };
-
-  const setHueKnobPosition = (target: number) => {
-    let orbit = hueRadius - thickness / 2; // the center radius of the radial slider.
-    hueKnobPos.x =
+  const setKnobPosition = (target: number) => {
+    let radius = knobType === "hue" ? hueRadius : lightnessRadius;
+    let orbit = radius - thickness / 2; // the center radius of the radial slider.
+    let knob = knobType === "hue" ? hueKnobPos : lightnessKnobPos;
+    knob.x =
       Math.round(orbit * Math.sin((target * Math.PI) / 180)) +
       orbit -
       knobRadius +
       4;
-    hueKnobPos.y =
+    knob.y =
       Math.round(orbit * -Math.cos((target * Math.PI) / 180)) +
       orbit -
       knobRadius +
       4;
-    setHueKnobPos({ x: hueKnobPos.x, y: hueKnobPos.y });
-  };
-
-  const setLightnessKnobPosition = (target: number) => {
-    let orbit = lightnessRadius - thickness / 2; // the center radius of the radial slider.
-    let offset = (size - lightnessSize) / 2;
-    lightnessKnobPos.x =
-      Math.round(orbit * Math.sin((target * Math.PI) / 180)) +
-      orbit -
-      knobRadius +
-      4;
-    lightnessKnobPos.y =
-      Math.round(orbit * -Math.cos((target * Math.PI) / 180)) +
-      orbit -
-      knobRadius +
-      4;
-    setLightnessKnobPos({
-      x: lightnessKnobPos.x + offset,
-      y: lightnessKnobPos.y + offset,
-    });
+    if (knobType === "hue") {
+      setHueKnobPos({ x: knob.x, y: knob.y });
+    } else {
+      let offset = (size - lightnessSize) / 2;
+      setLightnessKnobPos({ x: knob.x + offset, y: knob.y + offset });
+    }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -207,13 +174,13 @@ export const Canvas = () => {
   useEffect(() => {
     if (mouseDown) {
       if (knobType === "hue") {
-        const hueVal = getHueValue({ x: mouseX, y: mouseY });
+        const hueVal = getColorValue({ x: mouseX, y: mouseY });
         setHueValue(hueVal);
-        setHueKnobPosition(hueVal);
+        setKnobPosition(hueVal);
       } else {
-        const lightnessVal = getLightnessValue({ x: mouseX, y: mouseY });
-        setLightnessValue(lightnessVal / 3.6);
-        setLightnessKnobPosition(lightnessVal);
+        const lightnessVal = getColorValue({ x: mouseX, y: mouseY });
+        setLightnessValue(lightnessVal / 360 / 100);
+        setKnobPosition(lightnessVal);
       }
     }
   }, [mouseX, mouseY]);
@@ -234,30 +201,25 @@ export const Canvas = () => {
           )}%)`,
         }}
       ></span>
-      <div
-        id="hue"
-        className={classes.knob}
-        onMouseDown={handleMouseDown}
-        style={{
-          backgroundColor: mouseDown ? "#c2c2c2" : "#e2e2e2",
-          height: knobRadius * 2,
-          left: hueKnobPos.x,
-          width: knobRadius * 2,
-          top: hueKnobPos.y,
-        }}
-      />
-      <div
-        id="lightness"
-        className={classes.knob}
-        onMouseDown={handleMouseDown}
-        style={{
-          backgroundColor: mouseDown ? "#c2c2c2" : "#e2e2e2",
-          height: knobRadius * 2,
-          left: lightnessKnobPos.x,
-          width: knobRadius * 2,
-          top: lightnessKnobPos.y,
-        }}
-      />
+      {["hue", "lightness"].map((colorType) => {
+        let knob = colorType === "hue" ? hueKnobPos : lightnessKnobPos;
+        return (
+          <div
+            key={colorType}
+            id={colorType}
+            className={classes.knob}
+            onMouseDown={handleMouseDown}
+            style={{
+              backgroundColor:
+                mouseDown && knobType === colorType ? "#c2c2c2" : "#e2e2e2",
+              height: knobRadius * 2,
+              left: knob.x,
+              width: knobRadius * 2,
+              top: knob.y,
+            }}
+          />
+        );
+      })}
     </div>
   );
 };
