@@ -97,9 +97,8 @@ interface Props {
     handle2?: boolean;
     handle3?: boolean;
   };
-  sparkle: {
-    sparkles: Sparkle[];
-  };
+
+  sparkles: Sparkle[];
   filter: {
     layers: EmbossLayer[];
   };
