@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useAppContext } from "../../context/AppContext";
 import classes from "./ColorPicker.module.css";
 
 export const Canvas = () => {
+  const { state, dispatch } = useAppContext();
   const ref = useRef<HTMLCanvasElement | null>(null);
   const canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
   let ctx = canvasCtxRef.current;
@@ -18,7 +20,7 @@ export const Canvas = () => {
 
   // Hue
   const hueRadius = size / 2;
-  let [hueValue, setHueValue] = useState(0);
+  let [hueValue, setHueValue] = useState(state.background.color.hue);
   const [mouseDown, setMouseDown] = useState(false);
   const [elementCoords, setElementCoords] = useState({ x: 0, y: 0 });
   const [knobType, setKnobType] = useState("hue");
@@ -33,7 +35,9 @@ export const Canvas = () => {
   const lightnessSize = size * 0.6;
   const lightnessRadius = lightnessSize / 2;
   const lightnessRange = [80, 40]; // Max lightness, Min lightness
-  let [lightnessValue, setLightnessValue] = useState(lightnessRange[1]);
+  let [lightnessValue, setLightnessValue] = useState(
+    state.background.color.lightness
+  );
   let [lightnessKnobPos, setLightnessKnobPos] = useState({
     x: intiialKnobOffsetX,
     y: (size - lightnessSize) / 2 + thickness / 2 - knobRadius,
@@ -57,7 +61,10 @@ export const Canvas = () => {
     ctx!.arc(size / 2, size / 2, hueRadius, 0, 2 * Math.PI);
     gradient = ctx!.createConicGradient(-1.5708, hueRadius, hueRadius);
     for (i = 0; i <= 360; i++) {
-      gradient.addColorStop((1 / 360) * i, `hsl(${i},100%, 50%)`);
+      gradient.addColorStop(
+        (1 / 360) * i,
+        `hsl(${i}, ${state.background.color.saturation}%, 50%)`
+      );
     }
 
     // Fill it
@@ -175,11 +182,30 @@ export const Canvas = () => {
     if (mouseDown) {
       if (knobType === "hue") {
         const hueVal = getColorValue({ x: mouseX, y: mouseY });
+        dispatch({
+          type: "changeBackground",
+          value: {
+            ...state.background,
+            color: { ...state.background.color, hue: hueVal },
+          },
+        });
         setHueValue(hueVal);
         setKnobPosition(hueVal);
       } else {
-        const lightnessVal = getColorValue({ x: mouseX, y: mouseY });
-        setLightnessValue(lightnessVal / 360 / 100);
+        const lightnessVal =
+          (getColorValue({ x: mouseX, y: mouseY }) / 360) * 100;
+        console.log(lightnessVal);
+        dispatch({
+          type: "changeBackground",
+          value: {
+            ...state.background,
+            color: {
+              ...state.background.color,
+              lightness: lightnessVal,
+            },
+          },
+        });
+        setLightnessValue(lightnessVal);
         setKnobPosition(lightnessVal);
       }
     }
