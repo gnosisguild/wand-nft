@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { UiCircle } from "../";
 import { useAppContext } from "../../context/AppContext";
 import classes from "./ColorPicker.module.css";
 
@@ -13,13 +14,13 @@ export const ColorPicker = () => {
   // ----- CONFIG ----- //
 
   // Common
-  const size = 200;
-  const thickness = size / 20;
+  const size = 235;
   const knobRadius = 15;
   let intiialKnobOffsetX = size / 2 - knobRadius;
 
   // Hue
   const hueRadius = size / 2;
+  const hueThickness = size / 20;
   let [hueValue, setHueValue] = useState(state.background.color.hue);
   const [mouseDown, setMouseDown] = useState(false);
   let [hueCoords, setHueCoords] = useState({ x: 0, y: 0 });
@@ -28,11 +29,12 @@ export const ColorPicker = () => {
   const [mouseY, setMouseY] = useState(0);
   let [hueKnobPos, setHueKnobPos] = useState({
     x: intiialKnobOffsetX,
-    y: thickness / 2 - knobRadius,
+    y: hueThickness / 2 - knobRadius,
   });
 
   // Lightness
-  const lightnessSize = size * 0.6;
+  const lightnessSize = size * 0.5;
+  const lightnessThickness = lightnessSize / 20;
   const lightnessRadius = lightnessSize / 2;
   const lightnessRange = [80, 40]; // Max lightness, Min lightness
   let [lightnessValue, setLightnessValue] = useState(
@@ -40,7 +42,7 @@ export const ColorPicker = () => {
   );
   let [lightnessKnobPos, setLightnessKnobPos] = useState({
     x: intiialKnobOffsetX,
-    y: (size - lightnessSize) / 2 + thickness / 2 - knobRadius,
+    y: (size - lightnessSize) / 2 + lightnessThickness / 2 - knobRadius,
   });
   const lightnessOffset = (size - lightnessSize) / 2;
   let [lightnessCoords, setLightnessCoords] = useState({
@@ -51,8 +53,8 @@ export const ColorPicker = () => {
   const setupSlider = () => {
     let pickerElement = parentRef.current;
     let pickerOffset = {
-      left: pickerElement?.offsetLeft,
-      top: pickerElement?.offsetTop,
+      left: pickerElement?.getBoundingClientRect().x,
+      top: pickerElement?.getBoundingClientRect().y,
     };
     setHueCoords({ x: pickerOffset.left, y: pickerOffset.top });
     setLightnessCoords({
@@ -70,10 +72,7 @@ export const ColorPicker = () => {
     ctx!.arc(size / 2, size / 2, hueRadius, 0, 2 * Math.PI);
     gradient = ctx!.createConicGradient(-1.5708, hueRadius, hueRadius);
     for (i = 0; i <= 360; i++) {
-      gradient.addColorStop(
-        (1 / 360) * i,
-        `hsl(${i}, ${state.background.color.saturation}%, 50%)`
-      );
+      gradient.addColorStop((1 / 360) * i, `hsl(${i}, 100%, 50%)`);
     }
 
     // Fill it
@@ -84,7 +83,7 @@ export const ColorPicker = () => {
     ctx!.save();
     ctx!.globalCompositeOperation = "destination-out";
     ctx!.beginPath();
-    ctx!.arc(size / 2, size / 2, size / 2 - thickness, 0, Math.PI * 2);
+    ctx!.arc(size / 2, size / 2, size / 2 - hueThickness, 0, Math.PI * 2);
     ctx!.closePath();
     ctx!.fill();
     ctx!.restore();
@@ -108,7 +107,13 @@ export const ColorPicker = () => {
     ctx!.save();
     ctx!.globalCompositeOperation = "destination-out";
     ctx!.beginPath();
-    ctx!.arc(size / 2, size / 2, lightnessRadius - thickness, 0, Math.PI * 2);
+    ctx!.arc(
+      size / 2,
+      size / 2,
+      lightnessRadius - lightnessThickness,
+      0,
+      Math.PI * 2
+    );
     ctx!.closePath();
     ctx!.fill();
     ctx!.restore();
@@ -130,6 +135,7 @@ export const ColorPicker = () => {
 
   const setKnobPosition = (target: number) => {
     let radius = knobType === "hue" ? hueRadius : lightnessRadius;
+    let thickness = knobType === "hue" ? hueThickness : lightnessThickness;
     let orbit = radius - thickness / 2; // the center radius of the radial slider.
     let knob = knobType === "hue" ? hueKnobPos : lightnessKnobPos;
     knob.x =
@@ -225,32 +231,34 @@ export const ColorPicker = () => {
   }, [mouseX, mouseY]);
 
   return (
-    <div
-      ref={parentRef}
-      className={classes.colorPicker}
-      style={{ width: size, height: size }}
-    >
-      <canvas ref={ref} width={size} height={size} />
-      {["hue", "lightness"].map((colorType) => {
-        let knob = colorType === "hue" ? hueKnobPos : lightnessKnobPos;
-        return (
-          <div
-            key={colorType}
-            id={colorType}
-            className={classes.knob}
-            onMouseDown={handleMouseDown}
-            style={{
-              backgroundColor:
-                mouseDown && knobType === colorType ? "#c2c2c2" : "#e2e2e2",
-              height: knobRadius * 2,
-              left: knob.x,
-              width: knobRadius * 2,
-              top: knob.y,
-            }}
-          />
-        );
-      })}
-    </div>
+    <UiCircle>
+      <div
+        ref={parentRef}
+        className={classes.colorPicker}
+        style={{ width: size, height: size }}
+      >
+        <canvas ref={ref} width={size} height={size} />
+        {["hue", "lightness"].map((colorType) => {
+          let knob = colorType === "hue" ? hueKnobPos : lightnessKnobPos;
+          return (
+            <div
+              key={colorType}
+              id={colorType}
+              className={classes.knob}
+              onMouseDown={handleMouseDown}
+              style={{
+                backgroundColor:
+                  mouseDown && knobType === colorType ? "#c2c2c2" : "#e2e2e2",
+                height: knobRadius * 2,
+                left: knob.x,
+                width: knobRadius * 2,
+                top: knob.y,
+              }}
+            />
+          );
+        })}
+      </div>
+    </UiCircle>
   );
 };
 
