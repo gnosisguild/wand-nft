@@ -47,7 +47,7 @@ library Template {
   }
 
   struct Color {
-    uint8 hue;
+    uint16 hue;
     uint8 saturation;
     uint8 lightness;
   }
@@ -92,7 +92,7 @@ library Template {
     bool halo3;
     bool halo4;
     bool halo5;
-    uint8 hue;
+    uint16 hue;
     bool[24] rhythm;
   }
 
@@ -545,15 +545,15 @@ library BackgroundLayer {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <path style="fill:hsla(',
+            ' <path style="fill:hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsla(',
+            '%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 100%, 95%, 1)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
+            ', 100%, 95%)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
             __constant0
           )
         );
@@ -565,13 +565,13 @@ library BackgroundLayer {
             __result,
             ' <path style="fill:hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 30%, 7%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color: hsla(',
+            ', 30%, 7%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color: hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> <stop offset="1" style="stop-color: hsla(',
+            '%)"/> <stop offset="1" style="stop-color: hsla(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
@@ -590,13 +590,13 @@ library BackgroundLayer {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"/> <stop offset="100%" stop-color="hsla(',
+            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/> <stop offset="100%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
+            '%)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
           )
         );
       }
@@ -607,13 +607,13 @@ library BackgroundLayer {
             __result,
             ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 30%, 7%)"/> <stop offset="100%" stop-color="hsla(',
+            ', 30%, 7%)"/> <stop offset="100%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
+            '%)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
           )
         );
       }
