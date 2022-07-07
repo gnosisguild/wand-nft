@@ -6,8 +6,6 @@ import styles from "./StonePicker.module.css";
 import { UiCircle } from "../";
 import { useAppContext } from "../../context/AppContext";
 
-interface Props {}
-
 const DraggableNoType: any = Draggable;
 
 const randomStonePosision = () => {
@@ -20,7 +18,7 @@ const randomStonePosision = () => {
   return { top: `${y}%`, left: `${x}%` };
 };
 
-const StonePicker: React.FC<Props> = () => {
+const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const [stonesWithPosition, setStonesWithPosition] = useState(
     stones.map((stone) => {

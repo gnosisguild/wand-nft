@@ -1,7 +1,7 @@
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 
-const UiCircle = ({ children }) => {
+const UiCircle: React.FC = ({ children }) => {
   return (
     <div className={styles.containerCircle}>
       <svg
