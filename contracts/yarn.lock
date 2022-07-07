@@ -8529,10 +8529,10 @@ solhint@^3.3.6:
   optionalDependencies:
     prettier "^1.14.3"
 
-solid-mustache@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/solid-mustache/-/solid-mustache-4.4.0.tgz#20a70b7f97cb41f03ad395b3e81d4a68e2f06dc2"
-  integrity sha512-zxC9lvg+khtXuJee7LK0oP0Mu+ttrvTNw32a0i51zKPUtkc5+wcNzNaOTYoyZdlkVvhRYN24YXg23pA0llR/VQ==
+solid-mustache@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/solid-mustache/-/solid-mustache-4.5.0.tgz#ca3f88fa135113f4c9d5483ca7b0083005d9b517"
+  integrity sha512-U4f12DGtaIM/o8Yp4FUdTySYLO4OzvuRjRGTSAYA3jYJf+cTqurztF7kjPlX4plg8DtE3Nl5pGbLgZ5fHqmOvg==
   dependencies:
     "@handlebars/parser" "^2.1.0"
     cosmiconfig "^7.0.1"

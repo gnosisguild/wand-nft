@@ -58,7 +58,7 @@
     "dotenv": "^8.0.0",
     "ethers": "^5.4.6",
     "solc": "0.8.1",
-    "solid-mustache": "^4.4.0",
+    "solid-mustache": "^4.5.0",
     "yargs": "^16.1.1"
   },
   "resolutions": {

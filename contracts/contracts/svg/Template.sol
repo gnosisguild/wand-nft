@@ -34,7 +34,13 @@ library Template {
     int16 pointX;
     int16 pointY;
     int16 pointZ;
-    LightColor lightColor;
+    Color lightColor;
+  }
+
+  struct Color {
+    uint8 saturation;
+    uint8 lightness;
+    uint16 hue;
   }
 
   struct LightColor {
@@ -49,7 +55,7 @@ library Template {
     bool dark;
     bool linear;
     uint16 hueRotate;
-    LightColor color;
+    Color color;
   }
 
   struct Xp {
