@@ -6,7 +6,7 @@ export const Canvas = () => {
   const canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
   let ctx = canvasCtxRef.current;
 
-  const parentRef = useRef<HTMLElement | null>(null);
+  const parentRef = useRef<HTMLDivElement | null>(null);
 
   // ----- CONFIG ----- //
 
@@ -14,15 +14,20 @@ export const Canvas = () => {
   const size = 200;
   const thickness = size / 20;
   const knobRadius = 15;
-  let mouseDown = false;
-  let knobType;
-  let mousePosition;
-  let elementPosition;
+  // let mouseDown = false;
+  // let knobType;
+  // let mousePosition;
+  // let elementPosition;
   let raf;
 
   // Hue
   const hueRadius = size / 2;
   let [hueValue, setHueValue] = useState(0);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [elementCoords, setElementCoords] = useState({ x: 0, y: 0 });
+  const [knobType, setKnobType] = useState("hue");
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
   // Todo: figure out how to set initial state to top center dynamically by calling setHueKnobPosition().
   let [hueKnobPos, setHueKnobPos] = useState({ x: 85, y: -11 });
 
@@ -37,8 +42,8 @@ export const Canvas = () => {
       left: pickerElement?.offsetLeft,
       top: pickerElement?.offsetTop,
     };
-    elementPosition = { x: pickerOffset.left, y: pickerOffset.top };
-    let mousePosition = { x: 0, y: 0 };
+    setElementCoords({ x: pickerOffset.left, y: pickerOffset.top });
+    // let mousePosition = { x: 0, y: 0 };
 
     drawHueArc();
     drawLightnessArc();
@@ -106,11 +111,11 @@ export const Canvas = () => {
     ctx!.restore();
   };
 
-  const getHueValue = (e: React.MouseEvent) => {
+  const getHueValue = (coords: { x: number; y: number }) => {
     let atan, value;
-    mousePosition = {
-      x: e.pageX - elementPosition.x,
-      y: e.pageY - elementPosition.y,
+    const mousePosition = {
+      x: coords.x - elementCoords.x,
+      y: coords.y - elementCoords.y,
     };
     atan = Math.atan2(mousePosition.x - hueRadius, mousePosition.y - hueRadius);
     value = -atan / (Math.PI / 180) + 180;
@@ -119,41 +124,58 @@ export const Canvas = () => {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    mouseDown = true;
-    knobType = e.target.id;
+    const target = e.target as HTMLDivElement;
+    console.log("mousdown", target);
+    setMouseDown(true);
+    setKnobType(target.id);
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
-    mouseDown = false;
+  const handleMouseUp = (e: MouseEvent) => {
+    console.log("mouseUp", mouseDown);
+    setMouseDown(false);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (e: MouseEvent) => {
+    console.log("mouseMove", mouseDown);
+    setMouseX(e.x);
+    setMouseY(e.y);
+  };
+
+  useEffect(() => {
+    document.querySelector("body")?.addEventListener("mouseup", handleMouseUp);
+    document
+      .querySelector("body")
+      ?.addEventListener("mousemove", handleMouseMove);
+
+    if (ref.current) {
+      canvasCtxRef.current = ref.current.getContext("2d");
+      ctx = canvasCtxRef.current;
+      setHueValue(hueValue);
+      updateSlider();
+    }
+
+    return () => {
+      document
+        .querySelector("body")
+        ?.removeEventListener("mouseup", handleMouseUp);
+      document
+        .querySelector("body")
+        ?.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(mouseDown, knobType);
     if (mouseDown) {
       if (knobType === "hue") {
-        setHueValue(getHueValue(e));
-        setHueKnobPosition(getHueValue(e));
+        const hueVal = getHueValue({ x: mouseX, y: mouseY });
+        setHueValue(hueVal);
+        setHueKnobPosition(hueVal);
       } else {
         // setLightnessPosition(event);
       }
     }
-  };
-
-  useEffect(() => {
-    if (ref.current) {
-      canvasCtxRef.current = ref.current.getContext("2d");
-      ctx = canvasCtxRef.current;
-
-      document
-        .querySelector("body")
-        ?.addEventListener("mouseup", (e) => handleMouseUp(e));
-      document
-        .querySelector("body")
-        ?.addEventListener("mousemove", (e) => handleMouseMove(e));
-
-      setHueValue(hueValue);
-      updateSlider();
-    }
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
     <div
