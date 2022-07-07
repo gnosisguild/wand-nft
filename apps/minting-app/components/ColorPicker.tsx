@@ -29,12 +29,21 @@ export const Canvas = () => {
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
   // Todo: figure out how to set initial state to top center dynamically by calling setHueKnobPosition().
-  let [hueKnobPos, setHueKnobPos] = useState({ x: 85, y: -11 });
+  let intiialKnobOffsetX = size / 2 - knobRadius;
+  let [hueKnobPos, setHueKnobPos] = useState({
+    x: intiialKnobOffsetX,
+    y: thickness / 2 - knobRadius,
+  });
 
   // Lightness
-  const lightnessSize = size * 0.75;
+  const lightnessSize = size * 0.6;
   const lightnessRadius = lightnessSize / 2;
   const lightnessRange = [80, 40]; // Max lightness, Min lightness
+  let [lightnessValue, setLightnessValue] = useState(lightnessRange[1]);
+  let [lightnessKnobPos, setLightnessKnobPos] = useState({
+    x: intiialKnobOffsetX,
+    y: (size - lightnessSize) / 2 + thickness / 2 - knobRadius,
+  });
 
   const setupSlider = () => {
     let pickerElement = parentRef.current;
@@ -47,21 +56,6 @@ export const Canvas = () => {
 
     drawHueArc();
     drawLightnessArc();
-  };
-
-  const setHueKnobPosition = (target) => {
-    let orbit = hueRadius - thickness / 2; // the center radius of the radial slider.
-    hueKnobPos.x =
-      Math.round(orbit * Math.sin((target * Math.PI) / 180)) +
-      orbit -
-      knobRadius +
-      4;
-    hueKnobPos.y =
-      Math.round(orbit * -Math.cos((target * Math.PI) / 180)) +
-      orbit -
-      knobRadius +
-      4;
-    setHueKnobPos({ x: hueKnobPos.x, y: hueKnobPos.y });
   };
 
   const drawHueArc = () => {
@@ -123,6 +117,55 @@ export const Canvas = () => {
     return value;
   };
 
+  const getLightnessValue = (coords: { x: number; y: number }) => {
+    let atan, value;
+    const mousePosition = {
+      x: coords.x - elementCoords.x,
+      y: coords.y - elementCoords.y,
+    };
+    atan = Math.atan2(
+      mousePosition.x - lightnessRadius,
+      mousePosition.y - lightnessRadius
+    );
+    value = -atan / (Math.PI / 180) + 180;
+
+    return value;
+  };
+
+  const setHueKnobPosition = (target: number) => {
+    let orbit = hueRadius - thickness / 2; // the center radius of the radial slider.
+    hueKnobPos.x =
+      Math.round(orbit * Math.sin((target * Math.PI) / 180)) +
+      orbit -
+      knobRadius +
+      4;
+    hueKnobPos.y =
+      Math.round(orbit * -Math.cos((target * Math.PI) / 180)) +
+      orbit -
+      knobRadius +
+      4;
+    setHueKnobPos({ x: hueKnobPos.x, y: hueKnobPos.y });
+  };
+
+  const setLightnessKnobPosition = (target: number) => {
+    let orbit = lightnessRadius - thickness / 2; // the center radius of the radial slider.
+    let offset = (size - lightnessSize) / 2;
+    lightnessKnobPos.x =
+      Math.round(orbit * Math.sin((target * Math.PI) / 180)) +
+      orbit -
+      knobRadius +
+      4;
+    lightnessKnobPos.y =
+      Math.round(orbit * -Math.cos((target * Math.PI) / 180)) +
+      orbit -
+      knobRadius +
+      4;
+    setLightnessKnobPos({
+      x: lightnessKnobPos.x + offset,
+      y: lightnessKnobPos.y + offset,
+    });
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLDivElement;
     setMouseDown(true);
@@ -168,7 +211,9 @@ export const Canvas = () => {
         setHueValue(hueVal);
         setHueKnobPosition(hueVal);
       } else {
-        // setLightnessPosition(event);
+        const lightnessVal = getLightnessValue({ x: mouseX, y: mouseY });
+        setLightnessValue(lightnessVal / 3.6);
+        setLightnessKnobPosition(lightnessVal);
       }
     }
   }, [mouseX, mouseY]);
@@ -183,7 +228,10 @@ export const Canvas = () => {
       <span
         className={classes.value}
         style={{
-          backgroundColor: `hsl(${Math.round(hueValue)}deg, 100%, 50%)`,
+          backgroundColor: `hsl(${Math.round(hueValue)}deg, 100%, ${Math.round(
+            lightnessRange[0] -
+              ((lightnessRange[0] - lightnessRange[1]) * lightnessValue) / 100
+          )}%)`,
         }}
       ></span>
       <div
@@ -202,7 +250,13 @@ export const Canvas = () => {
         id="lightness"
         className={classes.knob}
         onMouseDown={handleMouseDown}
-        style={{ width: knobRadius * 2, height: knobRadius * 2 }}
+        style={{
+          backgroundColor: mouseDown ? "#c2c2c2" : "#e2e2e2",
+          height: knobRadius * 2,
+          left: lightnessKnobPos.x,
+          width: knobRadius * 2,
+          top: lightnessKnobPos.y,
+        }}
       />
     </div>
   );
