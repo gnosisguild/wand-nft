@@ -36,7 +36,7 @@ export const Canvas = () => {
   const lightnessRadius = lightnessSize / 2;
   const lightnessRange = [80, 40]; // Max lightness, Min lightness
 
-  const updateSlider = () => {
+  const setupSlider = () => {
     let pickerElement = parentRef.current;
     let pickerOffset = {
       left: pickerElement?.offsetLeft,
@@ -125,18 +125,15 @@ export const Canvas = () => {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLDivElement;
-    console.log("mousdown", target);
     setMouseDown(true);
     setKnobType(target.id);
   };
 
   const handleMouseUp = (e: MouseEvent) => {
-    console.log("mouseUp", mouseDown);
     setMouseDown(false);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    console.log("mouseMove", mouseDown);
     setMouseX(e.x);
     setMouseY(e.y);
   };
@@ -151,7 +148,7 @@ export const Canvas = () => {
       canvasCtxRef.current = ref.current.getContext("2d");
       ctx = canvasCtxRef.current;
       setHueValue(hueValue);
-      updateSlider();
+      setupSlider();
     }
 
     return () => {
@@ -165,7 +162,6 @@ export const Canvas = () => {
   }, []);
 
   useEffect(() => {
-    console.log(mouseDown, knobType);
     if (mouseDown) {
       if (knobType === "hue") {
         const hueVal = getHueValue({ x: mouseX, y: mouseY });
