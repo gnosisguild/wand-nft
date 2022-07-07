@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import classes from "./ColorPicker.module.css";
 
-export const Canvas = () => {
+export const ColorPicker = () => {
   const { state, dispatch } = useAppContext();
   const ref = useRef<HTMLCanvasElement | null>(null);
   const canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
@@ -22,7 +22,7 @@ export const Canvas = () => {
   const hueRadius = size / 2;
   let [hueValue, setHueValue] = useState(state.background.color.hue);
   const [mouseDown, setMouseDown] = useState(false);
-  const [elementCoords, setElementCoords] = useState({ x: 0, y: 0 });
+  let [hueCoords, setHueCoords] = useState({ x: 0, y: 0 });
   const [knobType, setKnobType] = useState("hue");
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
@@ -42,6 +42,11 @@ export const Canvas = () => {
     x: intiialKnobOffsetX,
     y: (size - lightnessSize) / 2 + thickness / 2 - knobRadius,
   });
+  const lightnessOffset = (size - lightnessSize) / 2;
+  let [lightnessCoords, setLightnessCoords] = useState({
+    x: lightnessOffset,
+    y: lightnessOffset,
+  });
 
   const setupSlider = () => {
     let pickerElement = parentRef.current;
@@ -49,7 +54,11 @@ export const Canvas = () => {
       left: pickerElement?.offsetLeft,
       top: pickerElement?.offsetTop,
     };
-    setElementCoords({ x: pickerOffset.left, y: pickerOffset.top });
+    setHueCoords({ x: pickerOffset.left, y: pickerOffset.top });
+    setLightnessCoords({
+      x: pickerOffset.left + lightnessOffset,
+      y: pickerOffset.top + lightnessOffset,
+    });
 
     drawHueArc();
     drawLightnessArc();
@@ -108,6 +117,7 @@ export const Canvas = () => {
   const getColorValue = (coords: { x: number; y: number }) => {
     let atan, value;
     let radius = knobType === "hue" ? hueRadius : lightnessRadius;
+    let elementCoords = knobType === "hue" ? hueCoords : lightnessCoords;
     const mousePosition = {
       x: coords.x - elementCoords.x,
       y: coords.y - elementCoords.y,
@@ -192,8 +202,8 @@ export const Canvas = () => {
         setHueValue(hueVal);
         setKnobPosition(hueVal);
       } else {
-        const lightnessVal =
-          (getColorValue({ x: mouseX, y: mouseY }) / 360) * 100;
+        const lightnessTarget = getColorValue({ x: mouseX, y: mouseY });
+        const lightnessVal = (lightnessTarget / 360) * 100;
         console.log(lightnessVal);
         dispatch({
           type: "changeBackground",
@@ -201,12 +211,16 @@ export const Canvas = () => {
             ...state.background,
             color: {
               ...state.background.color,
-              lightness: lightnessVal,
+              lightness: Math.round(
+                lightnessRange[0] -
+                  ((lightnessRange[0] - lightnessRange[1]) * lightnessValue) /
+                    100
+              ),
             },
           },
         });
         setLightnessValue(lightnessVal);
-        setKnobPosition(lightnessVal);
+        setKnobPosition(lightnessTarget);
       }
     }
   }, [mouseX, mouseY]);
@@ -250,4 +264,4 @@ export const Canvas = () => {
   );
 };
 
-export default React.memo(Canvas);
+export default React.memo(ColorPicker);
