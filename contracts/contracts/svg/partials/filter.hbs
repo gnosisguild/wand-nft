@@ -1,0 +1,113 @@
+<defs>
+  <filter
+    color-interpolation-filters="sRGB"
+    id="ge"
+    width="250%"
+    height="250%"
+    x="-75%"
+    y="-55%"
+  >
+    <feGaussianBlur
+      in="SourceAlpha"
+      result="alphablur"
+      stdDeviation="8"
+    />
+
+    {{! Background glow }}
+    <feGaussianBlur
+      in="SourceAlpha"
+      stdDeviation="30"
+      result="fg"
+    />
+    <feColorMatrix
+      in="fg"
+      result="bgg"
+      type="matrix"
+      values="-1 0 0 0 1
+              0 -1 0 0 1
+              0 0 -1 0 1
+              0 0 0 1 0 "
+    />
+
+    {{! Emboss/Bevel }}
+    {{#each layers}}
+      <feTurbulence
+        {{#if fractalNoise}}type="fractalNoise"{{/if}}
+        baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
+        numOctaves="{{uint8 turbOct}}"
+        seed="1004123123"
+        result="t{{@index}}"
+      />
+      <feGaussianBlur
+        stdDeviation="{{uint8 turbBlur decimals=1}}"
+        in="SourceAlpha"
+        result="tb{{@index}}"
+      />
+      <feDisplacementMap
+        scale="{{uint8 dispScale}}"
+        in="tb{{@index}}"
+        in2="t{{@index}}"
+        result="dt{{@index}}"
+      />
+      <feColorMatrix
+        type="matrix"
+        values="0 0 0 0 0,
+                0 0 0 0 0,
+                0 0 0 0 0,
+                0 0 0 1 0"
+        in="dt{{@index}}"
+        result="cm{{@index}}"
+      />
+      <feGaussianBlur
+        stdDeviation="{{uint8 blurX decimals=1}} {{uint8 blurY decimals=1}}"
+        in="cm{{@index}}"
+        result="bcm{{@index}}"
+      />
+      <feSpecularLighting
+        surfaceScale="{{uint8 surfaceScale}}"
+        specularConstant="{{uint8 specConstant decimals=2}}"
+        specularExponent="{{uint8 specExponent}}"
+        lighting-color="{{lightColor}}"
+        in="bcm{{@index}}"
+        result="l{{@index}}"
+      >
+        <fePointLight x="{{int16 pointX}}" y="{{int16 pointY}}" z="{{int16 pointZ}}"/>
+      </feSpecularLighting>
+      <feComposite
+        operator="in"
+        in="l{{@index}}"
+        in2="cm{{@index}}"
+        result="cl1{{@index}}"
+      />
+      <feComposite
+        operator="arithmetic"
+        k1="0"
+        k2="0"
+        k3="{{uint8 opacity decimals=2}}"
+        k4="0"
+        in="dt{{@index}}"
+        in2="cl1{{@index}}"
+        result="cl2{{@index}}"
+      />
+      <feComposite
+        operator="in"
+        in2="SourceAlpha"
+        in="cl2{{@index}}"
+        result="clf{{@index}}"
+      />
+
+    {{/each}}
+
+    <feMerge>
+      <feMergeNode in="bgg"/>
+      <feMergeNode in="SourceGraphic"/>
+      {{#each layers}}
+        <feMergeNode in="clf{{@index}}"/>
+      {{/each}}
+    </feMerge>
+  </filter>
+
+  <filter id="bb">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+  </filter>
+</defs>

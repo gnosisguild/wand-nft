@@ -1,0 +1,118 @@
+<filter id="s">
+  <feTurbulence
+    {{#if fractalNoise}}type="fractalNoise"{{/if}}
+    baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
+    numOctaves="{{uint8 turbOct}}"
+    seed="{{uint seed}}"
+  />
+  <feComponentTransfer>
+    <feFuncR
+      type="gamma"
+      amplitude="{{int8 redAmp decimals=2}}"
+      exponent="{{int8 redExp decimals=2}}"
+      offset="{{int8 redOff decimals=2}}"
+    />
+    <feFuncG
+      type="gamma"
+      amplitude="{{int8 greenAmp decimals=2}}"
+      exponent="{{int8 greenExp decimals=2}}"
+      offset="{{int8 greenOff decimals=2}}"
+    />
+    <feFuncB
+      type="gamma"
+      amplitude="{{int8 blueAmp decimals=2}}"
+      exponent="{{int8 blueExp decimals=2}}"
+      offset="{{int8 blueOff decimals=2}}"
+    />
+    <feFuncA type="discrete" tableValues="1"/>
+  </feComponentTransfer>
+  <feComposite
+    operator="in"
+    in2="SourceGraphic"
+    result="tex"
+  />
+
+  {{! <!-- Background glow  --> }}
+  <feGaussianBlur
+    in="SourceAlpha"
+    stdDeviation="30"
+    result="glow"
+  />
+  <feColorMatrix
+    in="glow"
+    result="bgg"
+    type="matrix"
+    values="-1 0 0 0 1
+            0 -1 0 0 1
+            0 0 -1 0 1
+            0 0 0 .8 0 "
+  />
+
+  <feMerge>
+    <feMergeNode in="bgg"/>
+    <feMergeNode in="tex"/>
+  </feMerge>
+</filter>
+<radialGradient id="ss">
+  <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/>
+  <stop offset="90%" stop-color="hsla(0, 0%, 0%, .8)"/>
+</radialGradient>
+<defs>
+  {{! clip paths }}
+  <clipPath id="sc">
+    <circle cx="1000" cy="1060" r="260"/>
+  </clipPath>
+
+</defs>
+{{! stone base }}
+<circle
+  transform="rotate({{uint16 rotation}}, 1000, 1060)"
+  cx="1000"
+  cy="1060"
+  r="260"
+  filter="url(#s)"
+/>
+
+{{! stone shadow }}
+<circle
+  cx="1200"
+  cy="1060"
+  r="520"
+  fill="url(#ss)"
+  clip-path="url(#sc)"
+/>
+<defs>
+  <radialGradient
+    id="sf"
+    cx="606.78"
+    cy="1003.98"
+    fx="606.78"
+    fy="1003.98"
+    r="2"
+    gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)"
+    gradientUnits="userSpaceOnUse"
+  >
+    <stop offset=".05" stop-color="#fff" stop-opacity=".7"/>
+    <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/>
+    <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/>
+    <stop offset=".63" stop-color="#929292" stop-opacity=".5"/>
+    <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/>
+    <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/>
+  </radialGradient>
+  <radialGradient
+    id="sh"
+    cx="1149"
+    cy="2660"
+    fx="1149"
+    fy="2660"
+    r="76"
+    gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)"
+    gradientUnits="userSpaceOnUse"
+  >
+    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+
+<path fill="url(#sf)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/>
+<path fill="url(#sh)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>

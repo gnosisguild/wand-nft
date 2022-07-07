@@ -1,0 +1,14 @@
+<defs>
+  <style type="text/css">
+    .sp { fill: white }
+  </style>
+  <symbol id="sp" viewBox="0 0 250 377">
+    <path class="sp" d="m4 41 121 146 125 2-122 2 118 146-121-146-125-2 122-2L4 41Z"/>
+    <path class="sp" d="m105 0 21 185 86-83-86 88 18 187-20-185-87 84 87-88L105 0Z"/>
+  </symbol>
+</defs>
+<g filter="url(#bb)" style="opacity: .6">
+  {{#each sparkles}}
+    <use width="250" height="377" transform="translate({{int16 tx}} {{int16 ty}}) scale({{uint8 scale decimals=2}})" href="#sp" />
+  {{/each}}
+</g>

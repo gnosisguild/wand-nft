@@ -2,8 +2,13 @@ node_modules
 build
 .DS_Store
 artifacts/
+cache/
 env/
 .env
 .history
 coverage*
 deployments
+
+# Local Netlify folder
+.netlify
+.vercel
