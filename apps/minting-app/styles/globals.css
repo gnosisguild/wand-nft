@@ -1,6 +1,12 @@
-html,
+:root {
+  --selectedColor: hsl(0, 100%, 50%);
+}
+
 body {
   background: #1d1d25;
+  background-image: url("/test-bg-small.jpg");
+  background-position: center;
+  background-size: cover;
   color: #ffffff;
   padding: 0;
   margin: 0;

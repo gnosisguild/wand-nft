@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import StoneViewer from "./StoneViewer";
 import stones from "../../context/presets/stoneList";
 import styles from "./StonePicker.module.css";
+import { UiCircle } from "../";
 import { useAppContext } from "../../context/AppContext";
 
 interface Props {}
@@ -31,28 +32,30 @@ const StonePicker: React.FC<Props> = () => {
   return (
     <div className={styles.stoneBag}>
       <p>Double click to choose a stone</p>
-      <ul>
-        {stonesWithPosition.map((stone, index) => (
-          <DraggableNoType key={index} bounds="parent" nodeRef={nodeRef}>
-            <li
-              ref={nodeRef}
-              onClick={(e) => {
-                switch (e.detail) {
-                  case 2:
-                    // double click
-                    dispatch({ type: "changeStone", value: stone });
-                    break;
-                  default:
-                    return;
-                }
-              }}
-              style={stone.position}
-            >
-              <StoneViewer settings={stone} />
-            </li>
-          </DraggableNoType>
-        ))}
-      </ul>
+      <UiCircle>
+        <ul>
+          {stonesWithPosition.map((stone, index) => (
+            <DraggableNoType key={index} bounds="parent" nodeRef={nodeRef}>
+              <li
+                ref={nodeRef}
+                onClick={(e) => {
+                  switch (e.detail) {
+                    case 2:
+                      // double click
+                      dispatch({ type: "changeStone", value: stone });
+                      break;
+                    default:
+                      return;
+                  }
+                }}
+                style={stone.position}
+              >
+                <StoneViewer settings={stone} />
+              </li>
+            </DraggableNoType>
+          ))}
+        </ul>
+      </UiCircle>
     </div>
   );
 };

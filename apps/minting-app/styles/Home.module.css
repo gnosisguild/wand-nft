@@ -15,12 +15,8 @@
   width: 45%;
   max-width: 400px;
   margin: 0 auto;
-<<<<<<< HEAD
-}
-=======
 }
 .ui {
   display: flex;
   justify-content: center;
 }
->>>>>>> 8fcaa7e (basic ui element and state handling)
