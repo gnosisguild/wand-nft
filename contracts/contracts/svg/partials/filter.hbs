@@ -30,7 +30,7 @@
     />
 
     {{! Emboss/Bevel }}
-    {{#each layers}}
+    {{#each filterLayers}}
       <feTurbulence
         {{#if fractalNoise}}type="fractalNoise"{{/if}}
         baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
@@ -101,7 +101,7 @@
     <feMerge>
       <feMergeNode in="bgg"/>
       <feMergeNode in="SourceGraphic"/>
-      {{#each layers}}
+      {{#each filterLayers}}
         <feMergeNode in="clf{{@index}}"/>
       {{/each}}
     </feMerge>

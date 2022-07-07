@@ -5,10 +5,10 @@ string constant __constant0 = '%, 0)"/> </radialGradient> <circle style="fill:ur
 
 library Template {
   struct __Input {
-    Filter filter;
+    FilterLayer[] filterLayers;
     Background background;
     Xp xp;
-    Stars stars;
+    uint256 starsSeed;
     Stone stone;
     Frame frame;
     Halo halo;
@@ -18,11 +18,7 @@ library Template {
     Sparkle[] sparkles;
   }
 
-  struct Filter {
-    Layer[] layers;
-  }
-
-  struct Layer {
+  struct FilterLayer {
     bool fractalNoise;
     uint8 turbFreqX;
     uint8 turbFreqY;
@@ -60,10 +56,6 @@ library Template {
     uint32 amount;
     uint32 cap;
     bool crown;
-  }
-
-  struct Stars {
-    uint256 starsSeed;
   }
 
   struct Stone {
@@ -139,10 +131,10 @@ library Template {
       abi.encodePacked(
         __result,
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 3000" shape-rendering="geometricPrecision" > <style type="text/css"> .bc{fill:none;stroke:#8BA0A5;} </style>',
-        BackgroundLayer.filter(__input.filter),
+        BackgroundLayer.filter(__input),
         BackgroundLayer.background(__input.background),
         BackgroundLayer.xpBar(__input.xp),
-        BackgroundLayer.stars(__input.stars),
+        BackgroundLayer.stars(__input),
         stone(__input.stone),
         FrameLayer.frame(__input.frame),
         halo(__input.halo),
@@ -372,7 +364,7 @@ library Template {
 }
 
 library BackgroundLayer {
-  function filter(Template.Filter memory __input)
+  function filter(Template.__Input memory __input)
     external
     pure
     returns (string memory __result)
@@ -385,26 +377,41 @@ library BackgroundLayer {
         " "
       )
     );
-    for (uint256 __i; __i < __input.layers.length; __i++) {
+    for (uint256 __i; __i < __input.filterLayers.length; __i++) {
       __result = string(
         abi.encodePacked(
           __result,
           " <feTurbulence ",
-          __input.layers[__i].fractalNoise ? 'type="fractalNoise"' : "",
+          __input.filterLayers[__i].fractalNoise ? 'type="fractalNoise"' : "",
           ' baseFrequency="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbFreqX, 3),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbFreqX,
+            3
+          ),
           " ",
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbFreqY, 3),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbFreqY,
+            3
+          ),
           '" numOctaves="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbOct, 0),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbOct,
+            0
+          ),
           '" seed="1004123123" result="t',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbBlur, 1),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbBlur,
+            1
+          ),
           '" in="SourceAlpha" result="tb',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feDisplacementMap scale="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].dispScale, 0)
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].dispScale,
+            0
+          )
         )
       );
       __result = string(
@@ -421,9 +428,9 @@ library BackgroundLayer {
           '" result="cm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].blurX, 1),
+          SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurX, 1),
           " ",
-          SolidMustacheHelpers.uintToString(__input.layers[__i].blurY, 1),
+          SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurY, 1),
           '" in="cm',
           SolidMustacheHelpers.uintToString(__i, 0)
         )
@@ -435,36 +442,36 @@ library BackgroundLayer {
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feSpecularLighting surfaceScale="',
           SolidMustacheHelpers.uintToString(
-            __input.layers[__i].surfaceScale,
+            __input.filterLayers[__i].surfaceScale,
             0
           ),
           '" specularConstant="',
           SolidMustacheHelpers.uintToString(
-            __input.layers[__i].specConstant,
+            __input.filterLayers[__i].specConstant,
             2
           ),
           '" specularExponent="',
           SolidMustacheHelpers.uintToString(
-            __input.layers[__i].specExponent,
+            __input.filterLayers[__i].specExponent,
             0
           ),
           '" lighting-color="',
-          __input.layers[__i].lightColor,
+          __input.filterLayers[__i].lightColor,
           '" in="bcm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" result="l',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" > <fePointLight x="',
-          SolidMustacheHelpers.intToString(__input.layers[__i].pointX, 0)
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointX, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
           '" y="',
-          SolidMustacheHelpers.intToString(__input.layers[__i].pointY, 0),
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointY, 0),
           '" z="',
-          SolidMustacheHelpers.intToString(__input.layers[__i].pointZ, 0),
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointZ, 0),
           '"/> </feSpecularLighting> <feComposite operator="in" in="l',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" in2="cm',
@@ -472,7 +479,10 @@ library BackgroundLayer {
           '" result="cl1',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feComposite operator="arithmetic" k1="0" k2="0" k3="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].opacity, 2),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].opacity,
+            2
+          ),
           '" k4="0" in="dt',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" in2="cl1',
@@ -498,7 +508,7 @@ library BackgroundLayer {
         ' <feMerge> <feMergeNode in="bgg"/> <feMergeNode in="SourceGraphic"/> '
       )
     );
-    for (uint256 __i2; __i2 < __input.layers.length; __i2++) {
+    for (uint256 __i2; __i2 < __input.filterLayers.length; __i2++) {
       __result = string(
         abi.encodePacked(
           __result,
@@ -637,7 +647,7 @@ library BackgroundLayer {
     );
   }
 
-  function stars(Template.Stars memory __input)
+  function stars(Template.__Input memory __input)
     external
     pure
     returns (string memory __result)
