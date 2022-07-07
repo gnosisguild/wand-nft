@@ -6,10 +6,7 @@ export const Canvas = () => {
   const canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
   let ctx = canvasCtxRef.current;
 
-  // State
-  // let [hueValue, setHueValue] = useState({ x: 0, y: 0 });
-  // let [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  // let [elementPosition, setElementPosition] = useState({x: circleOffset.left, y: circleOffset.top})
+  const parentRef = useRef<HTMLElement | null>(null);
 
   // ----- CONFIG ----- //
 
@@ -17,15 +14,17 @@ export const Canvas = () => {
   const size = 200;
   const thickness = size / 20;
   const knobRadius = 15;
-  // let pickerElement = document.querySelector(".circlePicker")
-  // let circleOffset = {top: pickerElement?.offsetTop, left: pickerElement?.offsetLeft};
   let mouseDown = false;
   let knobType;
+  let mousePosition;
+  let elementPosition;
+  let raf;
 
   // Hue
   const hueRadius = size / 2;
-  let hueTarget = 180;
-  let hueKnobPos = { x: 0, y: 0 };
+  let hueTarget = 0;
+  // Todo: figure out how to set initial state to top center dynamically by calling setHueKnobPosition().
+  const [hueKnobPos, setHueKnobPos] = useState({ x: 85, y: -11 });
 
   // Lightness
   const lightnessSize = size * 0.75;
@@ -33,13 +32,19 @@ export const Canvas = () => {
   const lightnessRange = [80, 40]; // Max lightness, Min lightness
 
   const updateSlider = () => {
-    setHueKnobPosition();
+    let pickerElement = parentRef.current;
+    let pickerOffset = {
+      left: pickerElement?.offsetLeft,
+      top: pickerElement?.offsetTop,
+    };
+    elementPosition = { x: pickerOffset.left, y: pickerOffset.top };
+    let mousePosition = { x: 0, y: 0 };
+
     drawHueArc();
     drawLightnessArc();
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    console.log(e.target.id);
     mouseDown = true;
     knobType = e.target.id;
   };
@@ -51,7 +56,9 @@ export const Canvas = () => {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (mouseDown) {
       if (knobType === "hue") {
-        // setHueValue();
+        setHueTarget(e);
+        console.log("updated posisition", hueTarget);
+        setHueKnobPosition();
       } else {
         // setLightnessPosition(event);
       }
@@ -69,6 +76,9 @@ export const Canvas = () => {
       hueRadius -
       knobRadius +
       4;
+
+    console.log("updating state", { x: hueKnobPos.x, y: hueKnobPos.y });
+    setHueKnobPos({ x: hueKnobPos.x, y: hueKnobPos.y });
   };
 
   const drawHueArc = () => {
@@ -118,20 +128,17 @@ export const Canvas = () => {
     ctx!.restore();
   };
 
-  // const setHueValue = (e: React.MouseEvent) => {
-  //   let atan, hueTarget, val;
-  //   setMousePosition = {
-  //     x: e.pageX - elementPosition.x,
-  //     y: e.pageY - elementPosition.y
-  //   };
-  //   atan = Math.atan2(mousePosition.x - hueRadius, mousePosition.y - hueRadius);
-  //   hueTarget = -atan / (Math.PI / 180) + 180;
+  const setHueTarget = (e: React.MouseEvent) => {
+    let atan, _hueTarget, val;
+    mousePosition = {
+      x: e.pageX - elementPosition.x,
+      y: e.pageY - elementPosition.y,
+    };
+    atan = Math.atan2(mousePosition.x - hueRadius, mousePosition.y - hueRadius);
+    _hueTarget = -atan / (Math.PI / 180) + 180;
 
-  //   hueValue = hueTarget;
-
-  //   return hueValue
-  //   };
-  // }
+    hueTarget = _hueTarget;
+  };
 
   useEffect(() => {
     if (ref.current) {
@@ -140,21 +147,26 @@ export const Canvas = () => {
       document
         .querySelector("body")
         ?.addEventListener("mouseup", handleMouseUp);
+      document
+        .querySelector("body")
+        ?.addEventListener("mousemove", handleMouseMove);
 
       updateSlider();
     }
   }, []);
 
   return (
-    <div className={classes.colorPicker} style={{ width: size, height: size }}>
+    <div
+      ref={parentRef}
+      className={classes.colorPicker}
+      style={{ width: size, height: size }}
+    >
       <canvas ref={ref} width={size} height={size} />
       <span className={classes.value}></span>
       <div
         id="hue"
         className={classes.knob}
-        unselectable="on"
         onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
         style={{
           height: knobRadius * 2,
           left: hueKnobPos.x,
@@ -165,9 +177,7 @@ export const Canvas = () => {
       <div
         id="lightness"
         className={classes.knob}
-        unselectable="on"
         onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
         style={{ width: knobRadius * 2, height: knobRadius * 2 }}
       />
     </div>
