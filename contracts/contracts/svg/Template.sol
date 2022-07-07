@@ -5,16 +5,16 @@ string constant __constant0 = '%, 0)"/> </radialGradient> <circle style="fill:ur
 
 library Template {
   struct __Input {
-    FilterLayer[] filterLayers;
-    Background background;
-    Xp xp;
-    uint256 starsSeed;
-    Stone stone;
-    Frame frame;
-    Halo halo;
     Handle handle;
-    Aspect[8] aspects;
+    Xp xp;
+    Background background;
+    uint256 starsSeed;
+    Halo halo;
     Planet[8] planets;
+    Stone stone;
+    Aspect[8] aspects;
+    FilterLayer[] filterLayers;
+    Frame frame;
     Sparkle[] sparkles;
   }
 
@@ -30,32 +30,32 @@ library Template {
     uint8 surfaceScale;
     uint8 specConstant;
     uint8 specExponent;
-    string lightColor;
+    uint8 opacity;
     int16 pointX;
     int16 pointY;
     int16 pointZ;
-    uint8 opacity;
+    LightColor lightColor;
+  }
+
+  struct LightColor {
+    uint8 saturation;
+    uint8 lightness;
+    uint16 hue;
   }
 
   struct Background {
-    uint16 hue;
     bool radial;
     bool light;
-    Color color;
     bool dark;
     bool linear;
-  }
-
-  struct Color {
-    uint16 hue;
-    uint8 saturation;
-    uint8 lightness;
+    uint16 hueRotate;
+    LightColor color;
   }
 
   struct Xp {
+    bool crown;
     uint32 amount;
     uint32 cap;
-    bool crown;
   }
 
   struct Stone {
@@ -63,7 +63,6 @@ library Template {
     uint8 turbFreqX;
     uint8 turbFreqY;
     uint8 turbOct;
-    uint256 seed;
     int8 redAmp;
     int8 redExp;
     int8 redOff;
@@ -74,6 +73,7 @@ library Template {
     int8 blueExp;
     int8 blueOff;
     uint16 rotation;
+    uint256 seed;
   }
 
   struct Frame {
@@ -117,9 +117,9 @@ library Template {
   }
 
   struct Sparkle {
+    uint8 scale;
     int16 tx;
     int16 ty;
-    uint8 scale;
   }
 
   function render(__Input memory __input)
@@ -455,19 +455,32 @@ library BackgroundLayer {
             __input.filterLayers[__i].specExponent,
             0
           ),
-          '" lighting-color="',
-          __input.filterLayers[__i].lightColor,
-          '" in="bcm',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="l',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" > <fePointLight x="',
-          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointX, 0)
+          '" lighting-color="hsl(',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].lightColor.hue,
+            0
+          ),
+          ", ",
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].lightColor.saturation,
+            0
+          ),
+          "%, ",
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].lightColor.lightness,
+            0
+          ),
+          '%)" in="bcm',
+          SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" result="l',
+          SolidMustacheHelpers.uintToString(__i, 0),
+          '" > <fePointLight x="',
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointX, 0),
           '" y="',
           SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointY, 0),
           '" z="',
@@ -482,16 +495,16 @@ library BackgroundLayer {
           SolidMustacheHelpers.uintToString(
             __input.filterLayers[__i].opacity,
             2
-          ),
-          '" k4="0" in="dt',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" in2="cl1',
-          SolidMustacheHelpers.uintToString(__i, 0)
+          )
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" k4="0" in="dt',
+          SolidMustacheHelpers.uintToString(__i, 0),
+          '" in2="cl1',
+          SolidMustacheHelpers.uintToString(__i, 0),
           '" result="cl2',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feComposite operator="in" in2="SourceAlpha" in="cl2',
@@ -535,7 +548,7 @@ library BackgroundLayer {
       abi.encodePacked(
         __result,
         '<g style="filter: hue-rotate(',
-        SolidMustacheHelpers.uintToString(__input.hue, 0),
+        SolidMustacheHelpers.uintToString(__input.hueRotate, 0),
         'deg);"> '
       )
     );

@@ -30,7 +30,11 @@ export interface EmbossLayer {
   surfaceScale: number;
   specConstant: number;
   specExponent: number;
-  lightColor: string;
+  lightColor: {
+    hue: number;
+    saturation: number;
+    lightness: number;
+  };
   pointX: number;
   pointY: number;
   pointZ: number;
