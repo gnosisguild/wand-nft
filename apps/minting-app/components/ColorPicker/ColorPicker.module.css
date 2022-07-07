@@ -4,32 +4,6 @@
   left: calc(50% - 400px);
 }
 
-.value {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 25%;
-  width: 25%;
-  border-radius: 999px;
-  transform: translate(-50%,-50%);
-  z-index: 100;
-  background-color: var(--selectedColor)
-}
-
-.circle {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  left: 50%;
-  top: 50%;
-  margin-left: -150px;
-  margin-top: -150px;
-  cursor: pointer;
-  -webkit-touch-callout: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-}
-
 .knob {
   position: absolute;
   top: -10px;
@@ -43,17 +17,4 @@
   -webkit-touch-callout: none;
   -webkit-user-drag: none;
   -webkit-user-select: none;
-}
-
-.progress {
-  position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
-  height: 300px;
-  border-radius: 9999px;
-  -webkit-touch-callout: none;
-  -webkit-user-drag: none;
-  -webkut-user-select: none;
 }

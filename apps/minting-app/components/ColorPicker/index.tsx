@@ -204,7 +204,6 @@ export const ColorPicker = () => {
       } else {
         const lightnessTarget = getColorValue({ x: mouseX, y: mouseY });
         const lightnessVal = (lightnessTarget / 360) * 100;
-        console.log(lightnessVal);
         dispatch({
           type: "changeBackground",
           value: {
@@ -232,15 +231,6 @@ export const ColorPicker = () => {
       style={{ width: size, height: size }}
     >
       <canvas ref={ref} width={size} height={size} />
-      <span
-        className={classes.value}
-        style={{
-          backgroundColor: `hsl(${Math.round(hueValue)}deg, 100%, ${Math.round(
-            lightnessRange[0] -
-              ((lightnessRange[0] - lightnessRange[1]) * lightnessValue) / 100
-          )}%)`,
-        }}
-      ></span>
       {["hue", "lightness"].map((colorType) => {
         let knob = colorType === "hue" ? hueKnobPos : lightnessKnobPos;
         return (
