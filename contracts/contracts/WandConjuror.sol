@@ -6,15 +6,12 @@ import "./svg/Template.sol";
 import "base64-sol/base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-uint256 constant HALO_RHYTHMS = 0x55ffffff;
-uint256 constant HALO_RHYTHM_LENGTH = 24;
-
 contract WandConjuror {
   using Strings for uint8;
 
   constructor() {}
 
-  function generateWandURI(IWands.Wand memory wand)
+  function generateWandURI(IWands.Wand memory wand, uint256 seed, uint32 xp)
     external
     view
     returns (string memory)
@@ -29,7 +26,7 @@ contract WandConjuror {
                 '{"name":"',
                 "name",
                 '", "description":"A unique Wand, designed and built on-chain. 1 of 5000.", "image": "data:image/svg+xml;base64,',
-                Base64.encode(bytes(generateSVG(wand))),
+                Base64.encode(bytes(generateSVG(wand, seed, xp))),
                 '", "attributes": ',
                 "attributes",
                 "}"
@@ -40,111 +37,197 @@ contract WandConjuror {
       );
   }
 
-  function generateSVG(IWands.Wand memory wand)
+  function generateSVG(IWands.Wand memory wand, uint256 seed, uint32 xp)
     internal
     view
     returns (string memory svg)
   {
+    uint32 xpCap = 10000;
     return
       Template.render(
         Template.__Input({
-          title: "FLOURISHING MISTY WORLD",
-          background: Template.Background({bg0: true}),
-          planets: [
-            Template.Planet({x: -114, y: 370}),
-            Template.Planet({x: -225, y: 334}),
-            Template.Planet({x: -227, y: 379}),
-            Template.Planet({x: 121, y: 295}),
-            Template.Planet({x: -19, y: 357}),
-            Template.Planet({x: 361, y: 13}),
-            Template.Planet({x: 176, y: 259}),
-            Template.Planet({x: -156, y: 388})
-          ],
-          aspects: [
-            Template.Aspect({x1: 259, y1: 26, x2: -91, y2: -244}),
-            Template.Aspect({x1: 259, y1: 26, x2: -259, y2: -26}),
-            Template.Aspect({x1: 83, y1: 247, x2: 84, y2: 246}),
-            Template.Aspect({x1: 83, y1: 247, x2: 258, y2: 34}),
-            Template.Aspect({x1: 87, y1: 245, x2: 258, y2: 30}),
-            Template.Aspect({x1: 248, y1: 77, x2: 191, y2: -177}),
-            Template.Aspect({x1: 0, y1: 0, x2: 0, y2: 0}),
-            Template.Aspect({x1: 0, y1: 0, x2: 0, y2: 0})
-          ],
-          starsSeed: 5,
-          stone: generateStone(wand),
-          halo: generateHalo(wand)
+          background: wand.background,
+          starsSeed: seed,
+          planets: scalePlanets(wand.planets),
+          aspects: scaleAspects(wand.aspects),
+          
+          handle: Template.Handle({ handle0: wand.handle == 0, handle1: wand.handle == 1, handle2: wand.handle == 2, handle3: wand.handle == 3 }),
+          xp: Template.Xp({ cap: xpCap, amount: xp, crown: xp >= xpCap}),
+          stone: decodeStone(wand, seed),
+          halo: decodeHalo(wand),
+          frame: generateFrame(wand),
+          sparkles: generateSparkles(wand, seed),
+          filterLayers: generateFilterLayers(wand)
         })
       );
   }
 
-  function generateStone(IWands.Wand memory wand)
+  function decodeStone(IWands.Wand memory wand, uint256 seed)
     internal
-    view
+    pure
     returns (Template.Stone memory)
   {
-    // 24 * 60 * 60 seconds in a day * longitude / max longitude
-    uint256 localTimestamp = uint256(
-      int256(block.timestamp) + (int256(86400) * wand.longitude) / 32767
-    );
-    uint256 secondInDay = localTimestamp % 86400; // 866400 seconds per day
-
-    // length of solar year: 365 days 5 hours 48 minutes 46 seconds = 31556926 seconds
-    // midwinter is 11 days 8 hours (= 979200 seconds) before the start of the calendar year
-    uint256 secondsSinceMidwinter = (localTimestamp - 979200) % 31556926;
-
-    return
+    return [
       Template.Stone({
-        seed: 1,
-        color: "crimson",
-        seasonsAmplitude: (int256(-wand.latitude) * 260) / 32767, // scale from [-32767,32767] to [-260,260] and switch sign
-        secondInYear: secondsSinceMidwinter,
-        secondInDay: secondInDay
-      });
+        fractalNoise: false,
+        turbFreqX: 2,
+        turbFreqY: 1,
+        turbOct: 3,
+        redAmp: 90,
+        redExp: 15,
+        redOff: -69,
+        greenAmp: 66,
+        greenExp: -24,
+        greenOff: -23,
+        blueAmp: 11,
+        blueExp: -85,
+        blueOff: -16,
+        rotation: 218,
+        seed: seed
+      }),
+      Template.Stone({
+       fractalNoise: true,
+        turbFreqX: 4,
+        turbFreqY: 7,
+        turbOct: 2,
+        redAmp: 69,
+        redExp: -43,
+        redOff: 16,
+        greenAmp: 61,
+        greenExp: -66,
+        greenOff: -63,
+        blueAmp: 58,
+        blueExp: 1,
+        blueOff: -15,
+        rotation: 306,
+        seed: seed
+      })
+    ][wand.stone];
   }
 
-  function generateHalo(IWands.Wand memory wand)
+  function decodeHalo(IWands.Wand memory wand)
     internal
-    view
+    pure
     returns (Template.Halo memory)
   {
-    uint256 haloShape = wand.halo / (2**4); // first 4 bits are halo shape index
-    uint256 rhytmIndex = wand.halo % (2**4); // last 4 bits are rhythm index
+    uint256 shape = wand.halo / (2**3); // first 3 bits are halo shape index
+    uint256 rhythmBits = wand.halo % (2**3); // remaining 13 bits give the rhythm
+    bool[24] memory rhythm;
+    for(uint256 i = 0; i < 24; i++) {
+      rhythm[i] = (1 << 0) & rhythmBits > 0;
+    }
     return
       Template.Halo({
-        halo0: haloShape == 0,
-        halo1: haloShape == 1,
-        halo2: haloShape == 2,
-        halo3: haloShape == 3,
-        halo4: haloShape == 4,
-        halo5: haloShape == 5,
-        rhythm: [
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 0)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 1)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 2)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 3)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 4)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 5)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 6)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 7)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 8)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 9)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 10)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 11)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 12)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 13)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 14)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 15)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 16)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 17)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 18)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 19)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 20)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 21)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 22)) == 1,
-          HALO_RHYTHMS & (1 << (rhytmIndex * HALO_RHYTHM_LENGTH + 23)) == 1
-        ]
+        halo0: shape == 0,
+        halo1: shape == 1,
+        halo2: shape == 2,
+        halo3: shape == 3,
+        halo4: shape == 4,
+        halo5: shape == 5,
+        hue: (wand.background.color.hue + 180) % 360,
+        rhythm: rhythm
       });
   }
+
+  function generateFrame(IWands.Wand memory wand) internal pure returns (Template.Frame memory) {
+    return Template.Frame({
+      level1: wand.evolution == 0,
+      level2: wand.evolution == 1,
+      level3: wand.evolution == 2,
+      level4: wand.evolution == 3,
+      level5: wand.evolution == 4,
+      title: "FLOURISHING MISTY WORLD"
+    });
+  }
+
+  function generateFilterLayers(IWands.Wand memory wand) internal pure returns (Template.FilterLayer[3] memory) {
+    return [
+      Template.FilterLayer({
+        blurX: 19,
+        blurY: 17,
+        dispScale: 77,
+        lightColor: Template.Color({ hue: 0, saturation: 0, lightness: 100 }),
+        opacity: 20,
+        pointX: -493,
+        pointY: 514,
+        pointZ: 104,
+        specConstant: 819,
+        specExponent: 4,
+        surfaceScale: -7,
+        turbBlur: 54,
+        turbFreqX: 17,
+        turbFreqY: 17,
+        turbOct: 1,
+        fractalNoise: true
+      }),
+      Template.FilterLayer({
+        blurX: 19,
+        blurY: 17,
+        dispScale: 90,
+        lightColor: Template.Color({ hue: 0, saturation: 0, lightness: 100 }),
+        opacity: 25,
+        pointX: -139,
+        pointY: 514,
+        pointZ: 104,
+        specConstant: 762,
+        specExponent: 4,
+        surfaceScale: -11,
+        turbBlur: 76,
+        turbFreqX: 1,
+        turbFreqY: 9,
+        turbOct: 1,
+        fractalNoise: true
+      }),
+      Template.FilterLayer({
+        blurX: 19,
+        blurY: 17,
+        dispScale: 88,
+        lightColor: Template.Color({ hue: 58, saturation: 100, lightness: 94 }),
+        opacity: 34,
+        pointX: -493,
+        pointY: 514,
+        pointZ: 104,
+        specConstant: 359,
+        specExponent: 3,
+        surfaceScale: 157,
+        turbBlur: 73,
+        turbFreqX: 19,
+        turbFreqY: 19,
+        turbOct: 1,
+        fractalNoise: true
+      })
+    ];
+  }
+
+  function generateSparkles(IWands.Wand memory wand, uint256 seed) internal pure returns (Template.Sparkle[] memory result) {
+    uint256 sparkleCount = 4 + (uint256(keccak256(abi.encodePacked(seed))) % 4);
+    for(uint256 i = 0; i < sparkleCount; i++) {
+      result[i] = Template.Sparkle({
+        tx: uint16(1820 - uint(keccak256(abi.encodePacked(seed, i, 'x'))) % 1640),
+        ty: uint16(1880 - uint(keccak256(abi.encodePacked(seed, i, 'y'))) % 1640),
+        scale: uint8(30 + uint(keccak256(abi.encodePacked(seed, i, 's'))) % 70)
+      });
+    }
+    return result;
+  }
+
+  function scalePlanets(IWands.Planet[8] memory planets) internal pure returns (Template.Planet[8] memory result) {
+    for(uint256 i = 0; i < 8; i++) {
+      result[i].visible = planets[i].visible;
+      result[i].x = planets[i].x * 520 / 127;
+      result[i].y = planets[i].y * 520 / 127;
+    }
+  }
+
+  function scaleAspects(IWands.Aspect[8] memory aspects) internal pure returns (Template.Aspect[8] memory result) {
+    for(uint256 i = 0; i < 8; i++) {
+      result[i].x1 = int16(int256(aspects[i].x1) * 260 / 127);
+      result[i].y1 = int16(int256(aspects[i].y1) * 260 / 127);
+      result[i].x1 = int16(int256(aspects[i].x1) * 260 / 127);
+      result[i].y1 = int16(int256(aspects[i].y1) * 260 / 127);
+    }
+  }
+
   // function generateName(
   //     string memory fieldTitle,
   //     string memory hardwareTitle,

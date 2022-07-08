@@ -35,11 +35,15 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   function build(
     uint256 tokenId,
-    uint8 halo,
+    uint16 halo,
+    uint8 stone,
+    uint8 handle,
     int16 latitude,
     int16 longitude,
-    Template.Planet[8] memory planets,
-    Template.Aspect[8] memory aspects
+    Template.Background memory background,
+    IWands.Planet[8] memory planets,
+    IWands.Aspect[8] memory aspects
+
   ) external override {
     require(
       msg.sender == ERC721.ownerOf(tokenId),
@@ -49,12 +53,16 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     Wand memory wand = Wand({
       built: true,
       halo: halo,
-      evolution: 0,
-      birth: block.timestamp,
+      stone: stone,
+      handle: handle,
       latitude: latitude,
       longitude: longitude,
+      background: background,
       planets: planets,
-      aspects: aspects
+      aspects: aspects,
+      seed: tokenId,
+      evolution: 0,
+      birth: block.timestamp
     });
     _wands[tokenId] = wand;
     emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
@@ -90,7 +98,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     view
     override
     returns (
-      uint8 halo,
+      uint16 halo,
       uint256 evolution,
       uint256 birth
     )

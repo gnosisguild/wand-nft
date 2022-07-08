@@ -13,7 +13,7 @@ library Template {
     Planet[8] planets;
     Stone stone;
     Aspect[8] aspects;
-    FilterLayer[] filterLayers;
+    FilterLayer[3] filterLayers;
     Frame frame;
     Sparkle[] sparkles;
   }
@@ -27,10 +27,10 @@ library Template {
     uint8 dispScale;
     uint8 blurX;
     uint8 blurY;
-    uint8 surfaceScale;
-    uint8 specConstant;
     uint8 specExponent;
     uint8 opacity;
+    int16 surfaceScale;
+    uint16 specConstant;
     int16 pointX;
     int16 pointY;
     int16 pointZ;
@@ -124,8 +124,8 @@ library Template {
 
   struct Sparkle {
     uint8 scale;
-    int16 tx;
-    int16 ty;
+    uint16 tx;
+    uint16 ty;
   }
 
   function render(__Input memory __input)
@@ -356,9 +356,9 @@ library Template {
         abi.encodePacked(
           __result,
           ' <use width="250" height="377" transform="translate(',
-          SolidMustacheHelpers.intToString(__input.sparkles[__i].tx, 0),
+          SolidMustacheHelpers.uintToString(__input.sparkles[__i].tx, 0),
           " ",
-          SolidMustacheHelpers.intToString(__input.sparkles[__i].ty, 0),
+          SolidMustacheHelpers.uintToString(__input.sparkles[__i].ty, 0),
           ") scale(",
           SolidMustacheHelpers.uintToString(__input.sparkles[__i].scale, 2),
           ')" href="#sp" /> '
@@ -447,7 +447,7 @@ library BackgroundLayer {
           '" result="bcm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feSpecularLighting surfaceScale="',
-          SolidMustacheHelpers.uintToString(
+          SolidMustacheHelpers.intToString(
             __input.filterLayers[__i].surfaceScale,
             0
           ),
