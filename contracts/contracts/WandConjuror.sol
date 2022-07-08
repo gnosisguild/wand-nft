@@ -4,18 +4,15 @@ pragma solidity ^0.8.6;
 import "./interfaces/IWands.sol";
 import "./svg/Template.sol";
 import "base64-sol/base64.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract WandConjuror {
-  using Strings for uint8;
-
   constructor() {}
 
-  function generateWandURI(IWands.Wand memory wand, uint256 seed, uint32 xp)
-    external
-    view
-    returns (string memory)
-  {
+  function generateWandURI(
+    IWands.Wand memory wand,
+    uint256 seed,
+    uint32 xp
+  ) external view returns (string memory) {
     return
       string(
         abi.encodePacked(
@@ -37,11 +34,11 @@ contract WandConjuror {
       );
   }
 
-  function generateSVG(IWands.Wand memory wand, uint256 seed, uint32 xp)
-    internal
-    view
-    returns (string memory svg)
-  {
+  function generateSVG(
+    IWands.Wand memory wand,
+    uint256 seed,
+    uint32 xp
+  ) internal view returns (string memory svg) {
     uint32 xpCap = 10000;
     return
       Template.render(
@@ -50,9 +47,13 @@ contract WandConjuror {
           starsSeed: seed,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
-          
-          handle: Template.Handle({ handle0: wand.handle == 0, handle1: wand.handle == 1, handle2: wand.handle == 2, handle3: wand.handle == 3 }),
-          xp: Template.Xp({ cap: xpCap, amount: xp, crown: xp >= xpCap}),
+          handle: Template.Handle({
+            handle0: wand.handle == 0,
+            handle1: wand.handle == 1,
+            handle2: wand.handle == 2,
+            handle3: wand.handle == 3
+          }),
+          xp: Template.Xp({cap: xpCap, amount: xp, crown: xp >= xpCap}),
           stone: decodeStone(wand, seed),
           halo: decodeHalo(wand),
           frame: generateFrame(wand, seed),
@@ -67,42 +68,43 @@ contract WandConjuror {
     pure
     returns (Template.Stone memory)
   {
-    return [
-      Template.Stone({
-        fractalNoise: false,
-        turbFreqX: 2,
-        turbFreqY: 1,
-        turbOct: 3,
-        redAmp: 90,
-        redExp: 15,
-        redOff: -69,
-        greenAmp: 66,
-        greenExp: -24,
-        greenOff: -23,
-        blueAmp: 11,
-        blueExp: -85,
-        blueOff: -16,
-        rotation: 218,
-        seed: seed
-      }),
-      Template.Stone({
-       fractalNoise: true,
-        turbFreqX: 4,
-        turbFreqY: 7,
-        turbOct: 2,
-        redAmp: 69,
-        redExp: -43,
-        redOff: 16,
-        greenAmp: 61,
-        greenExp: -66,
-        greenOff: -63,
-        blueAmp: 58,
-        blueExp: 1,
-        blueOff: -15,
-        rotation: 306,
-        seed: seed
-      })
-    ][wand.stone];
+    return
+      [
+        Template.Stone({
+          fractalNoise: false,
+          turbFreqX: 2,
+          turbFreqY: 1,
+          turbOct: 3,
+          redAmp: 90,
+          redExp: 15,
+          redOff: -69,
+          greenAmp: 66,
+          greenExp: -24,
+          greenOff: -23,
+          blueAmp: 11,
+          blueExp: -85,
+          blueOff: -16,
+          rotation: 218,
+          seed: seed
+        }),
+        Template.Stone({
+          fractalNoise: true,
+          turbFreqX: 4,
+          turbFreqY: 7,
+          turbOct: 2,
+          redAmp: 69,
+          redExp: -43,
+          redOff: 16,
+          greenAmp: 61,
+          greenExp: -66,
+          greenOff: -63,
+          blueAmp: 58,
+          blueExp: 1,
+          blueOff: -15,
+          rotation: 306,
+          seed: seed
+        })
+      ][wand.stone];
   }
 
   function decodeHalo(IWands.Wand memory wand)
@@ -113,7 +115,7 @@ contract WandConjuror {
     uint256 shape = wand.halo / (2**3); // first 3 bits are halo shape index
     uint256 rhythmBits = wand.halo % (2**3); // remaining 13 bits give the rhythm
     bool[24] memory rhythm;
-    for(uint256 i = 0; i < 24; i++) {
+    for (uint256 i = 0; i < 24; i++) {
       rhythm[i] = (1 << 0) & rhythmBits > 0;
     }
     return
@@ -129,24 +131,33 @@ contract WandConjuror {
       });
   }
 
-  function generateFrame(IWands.Wand memory wand, uint256 seed) internal pure returns (Template.Frame memory) {
-    return Template.Frame({
-      level1: wand.evolution == 0,
-      level2: wand.evolution == 1,
-      level3: wand.evolution == 2,
-      level4: wand.evolution == 3,
-      level5: wand.evolution == 4,
-      title: generateWandName(seed)
-    });
+  function generateFrame(IWands.Wand memory wand, uint256 seed)
+    internal
+    pure
+    returns (Template.Frame memory)
+  {
+    return
+      Template.Frame({
+        level1: wand.evolution == 0,
+        level2: wand.evolution == 1,
+        level3: wand.evolution == 2,
+        level4: wand.evolution == 3,
+        level5: wand.evolution == 4,
+        title: generateWandName(seed)
+      });
   }
 
-  function generateFilterLayers(IWands.Wand memory wand) internal pure returns (Template.FilterLayer[3] memory) {
+  function generateFilterLayers(IWands.Wand memory wand)
+    internal
+    pure
+    returns (Template.FilterLayer[3] memory)
+  {
     return [
       Template.FilterLayer({
         blurX: 19,
         blurY: 17,
         dispScale: 77,
-        lightColor: Template.Color({ hue: 0, saturation: 0, lightness: 100 }),
+        lightColor: Template.Color({hue: 0, saturation: 0, lightness: 100}),
         opacity: 20,
         pointX: -493,
         pointY: 514,
@@ -164,7 +175,7 @@ contract WandConjuror {
         blurX: 19,
         blurY: 17,
         dispScale: 90,
-        lightColor: Template.Color({ hue: 0, saturation: 0, lightness: 100 }),
+        lightColor: Template.Color({hue: 0, saturation: 0, lightness: 100}),
         opacity: 25,
         pointX: -139,
         pointY: 514,
@@ -182,7 +193,7 @@ contract WandConjuror {
         blurX: 19,
         blurY: 17,
         dispScale: 88,
-        lightColor: Template.Color({ hue: 58, saturation: 100, lightness: 94 }),
+        lightColor: Template.Color({hue: 58, saturation: 100, lightness: 94}),
         opacity: 34,
         pointX: -493,
         pointY: 514,
@@ -199,37 +210,58 @@ contract WandConjuror {
     ];
   }
 
-  function generateSparkles(IWands.Wand memory wand, uint256 seed) internal pure returns (Template.Sparkle[] memory result) {
+  function generateSparkles(IWands.Wand memory wand, uint256 seed)
+    internal
+    pure
+    returns (Template.Sparkle[] memory result)
+  {
     uint256 sparkleCount = 4 + (uint256(keccak256(abi.encodePacked(seed))) % 4);
-    for(uint256 i = 0; i < sparkleCount; i++) {
+    for (uint256 i = 0; i < sparkleCount; i++) {
       result[i] = Template.Sparkle({
-        tx: uint16(1820 - uint(keccak256(abi.encodePacked(seed, i, 'x'))) % 1640),
-        ty: uint16(1880 - uint(keccak256(abi.encodePacked(seed, i, 'y'))) % 1640),
-        scale: uint8(30 + uint(keccak256(abi.encodePacked(seed, i, 's'))) % 70)
+        tx: uint16(
+          1820 -
+            (uint256(keccak256(abi.encodePacked(seed + 10 * i + 0))) % 1640)
+        ),
+        ty: uint16(
+          1880 -
+            (uint256(keccak256(abi.encodePacked(seed + 10 * i + 1))) % 1640)
+        ),
+        scale: uint8(
+          30 + (uint256(keccak256(abi.encodePacked(seed + 10 * i + 1))) % 70)
+        )
       });
     }
     return result;
   }
 
-  function scalePlanets(IWands.Planet[8] memory planets) internal pure returns (Template.Planet[8] memory result) {
-    for(uint256 i = 0; i < 8; i++) {
+  function scalePlanets(IWands.Planet[8] memory planets)
+    internal
+    pure
+    returns (Template.Planet[8] memory result)
+  {
+    for (uint256 i = 0; i < 8; i++) {
       result[i].visible = planets[i].visible;
-      result[i].x = int16(int256(planets[i].x) * 520 / 127);
-      result[i].y = int16(int256(planets[i].y) * 520 / 127);
+      result[i].x = int16((int256(planets[i].x) * 520) / 127);
+      result[i].y = int16((int256(planets[i].y) * 520) / 127);
     }
   }
 
-  function scaleAspects(IWands.Aspect[8] memory aspects) internal pure returns (Template.Aspect[8] memory result) {
-    for(uint256 i = 0; i < 8; i++) {
-      result[i].x1 = int16(int256(aspects[i].x1) * 260 / 127);
-      result[i].y1 = int16(int256(aspects[i].y1) * 260 / 127);
-      result[i].x1 = int16(int256(aspects[i].x1) * 260 / 127);
-      result[i].y1 = int16(int256(aspects[i].y1) * 260 / 127);
+  function scaleAspects(IWands.Aspect[8] memory aspects)
+    internal
+    pure
+    returns (Template.Aspect[8] memory result)
+  {
+    for (uint256 i = 0; i < 8; i++) {
+      result[i].x1 = int16((int256(aspects[i].x1) * 260) / 127);
+      result[i].y1 = int16((int256(aspects[i].y1) * 260) / 127);
+      result[i].x1 = int16((int256(aspects[i].x1) * 260) / 127);
+      result[i].y1 = int16((int256(aspects[i].y1) * 260) / 127);
     }
   }
 
-function generateWandName(uint256 seed)
-    public
+  function generateWandName(uint256 seed)
+    internal
+    pure
     returns (string memory wandName)
   {
     string[83] memory actionAdjectives = [
