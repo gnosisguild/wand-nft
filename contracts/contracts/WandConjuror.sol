@@ -3,6 +3,7 @@ pragma solidity ^0.8.6;
 
 import "./interfaces/IWands.sol";
 import "./svg/Template.sol";
+import "./WandName.sol";
 import "base64-sol/base64.sol";
 
 contract WandConjuror {
@@ -12,7 +13,7 @@ contract WandConjuror {
     IWands.Wand memory wand,
     uint256 seed,
     uint32 xp
-  ) external view returns (string memory) {
+  ) external pure returns (string memory) {
     return
       string(
         abi.encodePacked(
@@ -38,7 +39,7 @@ contract WandConjuror {
     IWands.Wand memory wand,
     uint256 seed,
     uint32 xp
-  ) internal view returns (string memory svg) {
+  ) internal pure returns (string memory svg) {
     uint32 xpCap = 10000;
     return
       Template.render(
@@ -57,8 +58,8 @@ contract WandConjuror {
           stone: decodeStone(wand, seed),
           halo: decodeHalo(wand),
           frame: generateFrame(wand, seed),
-          sparkles: generateSparkles(wand, seed),
-          filterLayers: generateFilterLayers(wand)
+          sparkles: generateSparkles(seed),
+          filterLayers: generateFilterLayers()
         })
       );
   }
@@ -143,11 +144,11 @@ contract WandConjuror {
         level3: wand.evolution == 2,
         level4: wand.evolution == 3,
         level5: wand.evolution == 4,
-        title: generateWandName(seed)
+        title: WandName.generateWandName(seed)
       });
   }
 
-  function generateFilterLayers(IWands.Wand memory wand)
+  function generateFilterLayers()
     internal
     pure
     returns (Template.FilterLayer[3] memory)
@@ -210,7 +211,7 @@ contract WandConjuror {
     ];
   }
 
-  function generateSparkles(IWands.Wand memory wand, uint256 seed)
+  function generateSparkles(uint256 seed)
     internal
     pure
     returns (Template.Sparkle[] memory result)
@@ -257,317 +258,5 @@ contract WandConjuror {
       result[i].x1 = int16((int256(aspects[i].x1) * 260) / 127);
       result[i].y1 = int16((int256(aspects[i].y1) * 260) / 127);
     }
-  }
-
-  function generateWandName(uint256 seed)
-    internal
-    pure
-    returns (string memory wandName)
-  {
-    string[83] memory actionAdjectives = [
-      "adrift",
-      "advancing",
-      "aerial",
-      "amplifying",
-      "animate",
-      "ascending",
-      "ascending",
-      "augmenting",
-      "budding",
-      "burgeoning",
-      "changing",
-      "climbing",
-      "collapsing",
-      "crescent",
-      "decreasing",
-      "descending",
-      "developing",
-      "diminishing",
-      "drifting",
-      "ebbing",
-      "elevated",
-      "emerging",
-      "enlarging",
-      "expanding",
-      "express",
-      "flapping",
-      "fleet",
-      "floating",
-      "flourishing",
-      "fluttering",
-      "flying",
-      "free",
-      "gesturing",
-      "gliding",
-      "growing",
-      "hollow",
-      "hovering",
-      "increasing",
-      "inflated",
-      "light",
-      "living",
-      "lofty",
-      "loose",
-      "lowering",
-      "maturing",
-      "migrating",
-      "mobile",
-      "mushrooming",
-      "plumed",
-      "plunging",
-      "roaming",
-      "sailing",
-      "settling",
-      "shifting",
-      "sinking",
-      "sliding",
-      "slipping",
-      "soaring",
-      "spiraling",
-      "spreading",
-      "sprouting",
-      "stepping",
-      "stirring",
-      "streaming",
-      "stretching",
-      "subsiding",
-      "surging",
-      "swelling",
-      "swimming",
-      "swooping",
-      "thriving",
-      "tottering",
-      "towering",
-      "tumbling",
-      "viable",
-      "volatile",
-      "voyaging",
-      "wafting",
-      "waning",
-      "waving",
-      "waxing",
-      "winging",
-      "zooming"
-    ];
-    string[103] memory adjectives = [
-      "dazzling",
-      "mirrorlike",
-      "cloudy",
-      "nontranslucent",
-      "nontransparent",
-      "coarse",
-      "nubilous",
-      "obscure",
-      "moist",
-      "dense",
-      "leaden",
-      "gleaming",
-      "opaque",
-      "glistening",
-      "glittering",
-      "moonlit",
-      "humid",
-      "dark",
-      "igneous",
-      "fierce",
-      "misty",
-      "phosphorescent",
-      "mucky",
-      "damp",
-      "fiery",
-      "flaming",
-      "flaring",
-      "murky",
-      "fervid",
-      "flashing",
-      "dark",
-      "aglow",
-      "dim",
-      "light",
-      "fluid",
-      "alight",
-      "lighted",
-      "aqueous",
-      "foggy",
-      "relucent",
-      "auroral",
-      "bawdy",
-      "gloomy",
-      "resplendent",
-      "burnished",
-      "beaming",
-      "robust",
-      "dewy",
-      "glossy",
-      "fulgent",
-      "funky",
-      "illuminated",
-      "enveloped",
-      "illumined",
-      "glowing",
-      "incandescent",
-      "luminous",
-      "lustrous",
-      "mushy",
-      "shimmering",
-      "dusky",
-      "ablaze",
-      "feverish",
-      "shiny",
-      "indefinite",
-      "marshy",
-      "shrouded",
-      "enthusiastic",
-      "emulsified",
-      "natural",
-      "inflamed",
-      "intense",
-      "fuzzy",
-      "golden",
-      "nebulous",
-      "bleary",
-      "glaring",
-      "clouded",
-      "burning",
-      "blurred",
-      "silvery",
-      "hazy",
-      "febrile",
-      "brilliant",
-      "blazing",
-      "heated",
-      "heavy",
-      "hot",
-      "overcast",
-      "polished",
-      "radiant",
-      "rough",
-      "somber",
-      "sparkling",
-      "spirited",
-      "sullen",
-      "sunless",
-      "sunlit",
-      "sunny",
-      "twinkling",
-      "vaporous",
-      "vivid",
-      "waterlike"
-    ];
-    string[101] memory nouns = [
-      "obscurity",
-      "heavens",
-      "band",
-      "billow",
-      "globe",
-      "bowl",
-      "wandering star",
-      "celestial sphere",
-      "rack",
-      "orb",
-      "vault",
-      "colure",
-      "circlet",
-      "compass",
-      "island universe",
-      "revolution",
-      "empyrean",
-      "mist",
-      "universe",
-      "star system",
-      "heavens",
-      "world",
-      "ring",
-      "meridian",
-      "ether",
-      "entry",
-      "nature",
-      "perimeter",
-      "frost",
-      "opening",
-      "milky way",
-      "equator",
-      "orbit",
-      "smog",
-      "gloom",
-      "gate",
-      "spiral galaxy",
-      "macrocosm",
-      "irregular galaxy",
-      "cloud",
-      "overcast",
-      "pother",
-      "lid",
-      "hoop",
-      "entrance",
-      "pressure",
-      "coil",
-      "periphery",
-      "puff",
-      "scud",
-      "star cluster",
-      "fog",
-      "asteroid",
-      "fogginess",
-      "galaxy",
-      "horoscope",
-      "vault of heaven",
-      "luminous body",
-      "veil",
-      "cosmos",
-      "steam",
-      "creation",
-      "aureole",
-      "cycle",
-      "murk",
-      "earth",
-      "darkness",
-      "planetoid",
-      "halo",
-      "astrometry",
-      "sphere",
-      "vapor",
-      "disk",
-      "sky",
-      "azure",
-      "smoke",
-      "microcosm",
-      "film",
-      "crown",
-      "star",
-      "doorway",
-      "haze",
-      "disc",
-      "belt",
-      "round",
-      "terrene",
-      "dimness",
-      "elliptical galaxy",
-      "wheel",
-      "circuit",
-      "cirque",
-      "corona",
-      "ecliptic",
-      "enclosure",
-      "full turn",
-      "gateway",
-      "haziness",
-      "heavenly body",
-      "horizon",
-      "nebula",
-      "air"
-    ];
-    string memory actionAdjective = actionAdjectives[
-      seed % actionAdjectives.length
-    ];
-    string memory adjective = adjectives[seed % adjectives.length];
-    string memory noun = nouns[seed % nouns.length];
-    string memory space = " ";
-
-    wandName = string(
-      abi.encodePacked(actionAdjective, space, adjective, space, noun)
-    );
-
-    return wandName;
   }
 }
