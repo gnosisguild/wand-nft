@@ -1,6 +1,6 @@
-import { StoneSettings } from "../../types";
+import { Stone } from "../../types";
 
-const stoneList: StoneSettings[] = [
+const stoneList: Stone[] = [
   {
     fractalNoise: false,
     turbFreqX: 2,

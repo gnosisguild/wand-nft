@@ -344,7 +344,7 @@ const Home: NextPage = () => {
                 { length: 24 },
                 (v, i) => rhythm[i % rhythm.length] !== "0"
               ),
-              hue: bgColor.hue + 180,
+              hue: (bgColor.hue + 180) % 360,
             }}
             handle={{ [handle]: true }}
             filter={{ layers: embossLayers }}

@@ -2,8 +2,8 @@
 pragma solidity ^0.8.6;
 
 library WandName {
-  function generateWandName(uint256 randomSeed)
-    public
+  function generateWandName(uint256 seed)
+    public pure
     returns (string memory wandName)
   {
     string[83] memory actionAdjectives = [
@@ -116,7 +116,7 @@ library WandName {
       "phosphorescent",
       "mucky",
       "damp",
-      "Fiery",
+      "fiery",
       "flaming",
       "flaring",
       "murky",
@@ -227,7 +227,7 @@ library WandName {
       "perimeter",
       "frost",
       "opening",
-      "Milky Way",
+      "milky way",
       "equator",
       "orbit",
       "smog",
@@ -300,10 +300,10 @@ library WandName {
       "air"
     ];
     string memory actionAdjective = actionAdjectives[
-      randomSeed % actionAdjectives.length
+      seed % actionAdjectives.length
     ];
-    string memory adjective = adjectives[randomSeed % adjectives.length];
-    string memory noun = nouns[randomSeed % nouns.length];
+    string memory adjective = adjectives[seed % adjectives.length];
+    string memory noun = nouns[seed % nouns.length];
     string memory space = " ";
 
     wandName = string(

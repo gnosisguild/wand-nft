@@ -1,19 +1,19 @@
-<g style="filter: hue-rotate({{uint16 hue}}deg);">
+<g style="filter: hue-rotate({{uint16 hueRotate}}deg);">
 {{#if radial}}
   {{#if light}}
-      <path style="fill:hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 1)" d="M0 0h2000v3000H0z"/>
+      <path style="fill:hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)" d="M0 0h2000v3000H0z"/>
       <radialGradient id="grad0">
-        <stop offset="0" style="stop-color:hsla({{uint8 color.hue}}, 100%, 95%, 1)"/>
+        <stop offset="0" style="stop-color:hsl({{uint16 color.hue}}, 100%, 95%)"/>
         <stop offset="1" style="stop-color:hsla(55, 66%, 83%, 0)"/>
       </radialGradient>
       <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/>
       <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/>
   {{/if}}
   {{#if dark}}
-      <path style="fill:hsl({{uint8 color.hue}}, 30%, 7%)" d="M0 0h2000v3000H0z"/>
+      <path style="fill:hsl({{uint16 color.hue}}, 30%, 7%)" d="M0 0h2000v3000H0z"/>
       <radialGradient id="grad0">
-        <stop offset="0" style="stop-color: hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 1)"/>
-        <stop offset="1" style="stop-color: hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 0)"/>
+        <stop offset="0" style="stop-color: hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
+        <stop offset="1" style="stop-color: hsla({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 0)"/>
       </radialGradient>
       <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/>
       <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/>
@@ -22,15 +22,15 @@
 {{#if linear}}
   {{#if light}}
       <linearGradient id="l0" gradientTransform="rotate(90)">
-        <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"/>
-        <stop offset="100%" stop-color="hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 1)"/>
+        <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/>
+        <stop offset="100%" stop-color="hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
       </linearGradient>
       <rect style="fill:url(#l0)" width="2000" height="3000"/>
   {{/if}}
   {{#if dark}}
       <linearGradient id="l0" gradientTransform="rotate(90)">
-        <stop offset="0%" stop-color="hsl({{uint8 color.hue}}, 30%, 7%)"/>
-        <stop offset="100%" stop-color="hsla({{uint8 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 1)"/>
+        <stop offset="0%" stop-color="hsl({{uint16 color.hue}}, 30%, 7%)"/>
+        <stop offset="100%" stop-color="hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
       </linearGradient>
       <rect style="fill:url(#l0)" width="2000" height="3000"/>
   {{/if}}

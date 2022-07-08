@@ -3,7 +3,7 @@ export const embossPresets = [
     blurX: 19,
     blurY: 17,
     dispScale: 77,
-    lightColor: "#ffffff",
+    lightColor: { hue: 0, saturation: 0, lightness: 100 },
     opacity: 20,
     pointX: -493,
     pointY: 514,
@@ -15,13 +15,13 @@ export const embossPresets = [
     turbFreqX: 17,
     turbFreqY: 17,
     turbOct: 1,
-    fractalNoise: true
+    fractalNoise: true,
   },
   {
     blurX: 19,
     blurY: 17,
     dispScale: 90,
-    lightColor: "#ffffff",
+    lightColor: { hue: 0, saturation: 0, lightness: 100 },
     opacity: 25,
     pointX: -139,
     pointY: 514,
@@ -33,13 +33,13 @@ export const embossPresets = [
     turbFreqX: 1,
     turbFreqY: 9,
     turbOct: 1,
-    fractalNoise: true
+    fractalNoise: true,
   },
   {
     blurX: 19,
     blurY: 17,
     dispScale: 88,
-    lightColor: "#fffee0",
+    lightColor: { hue: 58, saturation: 100, lightness: 94 },
     opacity: 34,
     pointX: -493,
     pointY: 514,
@@ -51,6 +51,6 @@ export const embossPresets = [
     turbFreqX: 19,
     turbFreqY: 19,
     turbOct: 1,
-    fractalNoise: true
+    fractalNoise: true,
   },
 ];

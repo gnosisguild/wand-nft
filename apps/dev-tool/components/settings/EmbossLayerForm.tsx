@@ -157,7 +157,11 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
                 value={props.layer.lightColor}
                 className="color-input"
                 onChange={(e) => {
-                  props.changeVal(props.index, "lightColor", e.target.value);
+                  props.changeVal(
+                    props.index,
+                    "lightColor",
+                    hexToHsl(e.target.value)
+                  );
                 }}
               />
             </div>
@@ -256,3 +260,49 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
 };
 
 export default EmbossLayerForm;
+
+function hexToHsl(hex: string) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+  if (!result) throw new Error(`invalid color value: ${hex}`);
+
+  const r = parseInt(result[1], 16) / 255;
+  const g = parseInt(result[2], 16) / 255;
+  const b = parseInt(result[3], 16) / 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+
+  const lightness = (max + min) / 2;
+
+  let hue: number;
+  let saturation: number;
+  if (max == min) {
+    // achromatic
+    hue = 0;
+    saturation = 0;
+  } else {
+    const d = max - min;
+    saturation = lightness > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        hue = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        hue = (b - r) / d + 2;
+        break;
+      case b:
+        hue = (r - g) / d + 4;
+        break;
+      default:
+        throw new Error("invariant violation");
+    }
+    hue /= 6;
+  }
+
+  return {
+    hue: Math.round(360 * hue),
+    saturation: saturation * 100,
+    lightness: lightness * 100,
+  };
+}
