@@ -24,8 +24,6 @@ interface IWands is IERC721 {
     uint8 stone;
     uint8 handle;
     uint16 halo;
-    int16 latitude;
-    int16 longitude;
     Template.Background background;
     Planet[8] planets;
     Aspect[8] aspects;
@@ -39,8 +37,6 @@ interface IWands is IERC721 {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    int16 latitude,
-    int16 longitude,
     Template.Background memory background,
     Planet[8] memory planets,
     Aspect[8] memory aspects

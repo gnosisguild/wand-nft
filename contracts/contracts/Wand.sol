@@ -18,9 +18,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint256 indexed tokenId,
     uint16 halo,
     uint256 evolution,
-    uint256 birth,
-    int256 latitude,
-    int256 longitude
+    uint256 birth
   );
 
   constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
@@ -38,8 +36,6 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    int16 latitude,
-    int16 longitude,
     Template.Background memory background,
     IWands.Planet[8] memory planets,
     IWands.Aspect[8] memory aspects
@@ -54,8 +50,6 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       halo: halo,
       stone: stone,
       handle: handle,
-      latitude: latitude,
-      longitude: longitude,
       background: background,
       planets: planets,
       aspects: aspects,
@@ -64,7 +58,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       birth: block.timestamp
     });
     _wands[tokenId] = wand;
-    emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
+    emit WandBuilt(tokenId, halo, 0, block.timestamp);
   }
 
   function tokenURI(uint256 tokenId)
