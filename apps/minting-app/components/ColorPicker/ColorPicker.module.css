@@ -1,7 +1,8 @@
 .colorPicker {
   position: absolute;
-  bottom: 5vh;
-  left: calc(50% - 400px);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .knob {
