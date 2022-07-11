@@ -6,6 +6,8 @@ import { SvgTemplate } from "../components";
 import { ColorPicker } from "../components";
 import StonePicker from "../components/stonePicker";
 import styles from "../styles/Home.module.css";
+import CornerGilding from "../components/Gilding/Corners";
+import CenterGilding from "../components/Gilding/Center";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -14,22 +16,22 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <Head>
         <title>Minting App</title>
-        <meta
-          name="description"
-          content="App for playing around with Wand settings"
-        />
+        <meta name="description" content="Minting app for Zodiac NFT" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Minting App</h1>
       <main className={styles.main}>
-        <div className={styles.wandImage}>
-          <SvgTemplate settings={state} />
-        </div>
-        <div className={styles.ui}>
+        <CornerGilding />
+        <div className={styles.centerContainer}>
+          <CenterGilding />
+          <div className={styles.svgPreview}>
+            <SvgTemplate settings={state} />
+          </div>
           <div className={styles.colorPicker}>
             <ColorPicker />
           </div>
-          <StonePicker />
+          <div className={styles.stonePicker}>
+            <StonePicker />
+          </div>
         </div>
       </main>
     </div>

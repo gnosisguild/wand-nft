@@ -1,2 +1,5 @@
-.container svg {
+.container {
+  width: 22%;
+  margin: 0 auto;
+  max-width: 425px;
 }

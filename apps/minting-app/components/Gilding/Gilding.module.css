@@ -1,0 +1,66 @@
+.upperLeft {
+  position: fixed;
+  top: 1vw;
+  left: 1vw;
+  width: 36%;
+  max-width: 800px;
+}
+
+.lowerLeft {
+  position: fixed;
+  bottom: 1vw;
+  left: 1vw;
+  width: 38%;
+  max-width: 800px;
+}
+
+.upperRight {
+  position: fixed;
+  top: 1vw;
+  right: 1vw;
+  width: 36%;
+  max-width: 800px;
+}
+
+.lowerRight {
+  position: fixed;
+  bottom: 1vw;
+  right: 1vw;
+  width: 19%;
+  max-width: 400px;
+}
+
+.center {
+  width: 100%;
+}
+.center .gildPiece {
+  display: block;
+  width: 52%;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+.gildPiece {
+  width: 100%;
+}
+.gildPiece path,
+.gildPiece circle {
+  fill: none;
+  stroke-width: 0.15vw;
+  stroke: #d9d4ad;
+}
+.gildComposite {
+  opacity: 0.3;
+  mix-blend-mode: color-dodge;
+}
+
+.zodiacIcon {
+  position: fixed;
+  top: 3.2%;
+  left: 2.38%;
+  width: 6.5%;
+}
+
+.zodiacIcon svg {
+  width: 100%;
+}

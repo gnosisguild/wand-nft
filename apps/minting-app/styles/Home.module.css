@@ -1,22 +1,41 @@
-.container {
-  padding: 0 2rem;
-}
-
 .main {
-  height: calc(98vh - 3rem);
-  padding: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: absolute;
+  inset: 0.5vw;
+  width: 99vw;
+  height: 99vh;
 }
 
-.wandImage {
-  width: 45%;
-  max-width: 400px;
-  margin: 0 auto;
+.centerContainer {
+  position: absolute;
+  top: 2.5%;
+  left: 0;
+  width: 100%;
+  padding-bottom: 2%;
 }
-.ui {
-  display: flex;
-  justify-content: center;
+
+.svgPreview {
+  position: absolute;
+  top: 15.5%;
+  left: 0;
+  width: 100%;
+}
+
+.colorPicker,
+.stonePicker {
+  aspect-ratio: 1;
+  width: 15%;
+  border: 3px solid green;
+  border-radius: 50%;
+}
+
+.colorPicker {
+  position: absolute;
+  left: 24%;
+  top: 63%;
+}
+
+.stonePicker {
+  position: absolute;
+  left: 60.1%;
+  top: 63.2%;
 }
