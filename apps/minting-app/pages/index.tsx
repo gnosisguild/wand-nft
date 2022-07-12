@@ -21,6 +21,7 @@ import {
   stoneList,
   xp,
 } from "../template";
+import HaloPicker from "../components/halo-picker";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -45,6 +46,7 @@ const Home: NextPage = () => {
           <div className={styles.stonePicker}>
             <StonePicker />
           </div>
+          <HaloPicker />
         </div>
       </main>
     </div>

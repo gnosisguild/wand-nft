@@ -1,10 +1,8 @@
 export const VIEWBOX_WIDTH = 1000;
 export const VIEWBOX_HEIGHT = 1000;
-export const WIDE_SEGMENTS = segments(12);
-export const NARROW_SEGMENTS = segments(24);
 
-const PERC_BORDER = 0.135;
-const PERC_THICKNESS = 0.08;
+const PERC_BORDER = 0;
+const PERC_THICKNESS = 0.1;
 const ANGLE_GAP = 1;
 
 const CENTER_X = VIEWBOX_WIDTH / 2;
@@ -17,12 +15,15 @@ const RADIUS_INNER =
     VIEWBOX_WIDTH * PERC_THICKNESS * 2) /
   2;
 
+export const WIDE_SEGMENTS = segments(12);
+export const NARROW_SEGMENTS = segments(24);
+
 function segments(count: number) {
   const arcSize = 360 / count;
 
   let result = [segment(360 - arcSize / 2, arcSize / 2)];
 
-  for (let left = arcSize / 2; left < 360; left += arcSize) {
+  for (let left = arcSize / 2; left + arcSize < 360; left += arcSize) {
     const right = left + arcSize;
     result = [...result, segment(left, right)];
   }
@@ -33,7 +34,7 @@ function segment(startAngle: number, endAngle: number) {
   const upperLeft = polarToCartesian(RADIUS_OUTER, startAngle + ANGLE_GAP);
   const lowerRight = polarToCartesian(RADIUS_INNER, endAngle - ANGLE_GAP);
 
-  var d = [
+  return [
     "M",
     upperLeft.x,
     upperLeft.y,
@@ -46,8 +47,6 @@ function segment(startAngle: number, endAngle: number) {
     upperLeft.x,
     upperLeft.y,
   ].join(" ");
-
-  return d;
 }
 
 function arc(radius: number, angle: number, direction: boolean) {
@@ -67,5 +66,3 @@ function polarToCartesian(radius: number, angleInDegrees: number) {
     y: CENTER_Y + radius * Math.sin(angleInRadians),
   };
 }
-
-export function describeSegments() {}
