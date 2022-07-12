@@ -19,7 +19,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    Template.Background background,
+    IWands.Background background,
     IWands.Planet[8] planets,
     IWands.Aspect[8] aspects
   );
@@ -39,7 +39,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    Template.Background memory background,
+    IWands.Background memory background,
     IWands.Planet[8] memory planets,
     IWands.Aspect[8] memory aspects
   ) external override {
@@ -57,7 +57,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     wand.halo = halo;
     wand.background = background;
     wand.evolution = 0;
-    wand.birth = block.timestamp;
+    wand.birth = uint64(block.timestamp);
     for(uint256 i = 0; i < 8; i++) {
       wand.planets[i] = IWands.Planet({visible: planets[i].visible, x: planets[i].x, y: planets[i].y });
       wand.aspects[i] = IWands.Aspect({ x1: aspects[i].x1, y1: aspects[i].y1, x2: aspects[i].x2, y2: aspects[i].y2 });
@@ -77,7 +77,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     if (!wand.built) {
       //return wandConjuror.generateWandBadgeURI(calculateWandBadge(tokenId));
     } else {
-      return wandConjuror.generateWandURI(wand);
+      return wandConjuror.generateWandURI(wand, tokenId);
     }
   }
 
@@ -87,8 +87,8 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     override
     returns (
       uint16 halo,
-      uint256 evolution,
-      uint256 birth
+      uint32 evolution,
+      uint64 birth
     )
   {
     require(_exists(tokenId), "Wand: tokenID does not exist");
@@ -115,7 +115,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       // we are transfering
       // reset evolutions and age?
       _wands[tokenId].evolution = 0;
-      _wands[tokenId].birth = block.timestamp;
+      _wands[tokenId].birth = uint64(block.timestamp);
     }
   }
 }

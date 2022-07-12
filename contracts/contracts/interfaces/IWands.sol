@@ -30,12 +30,11 @@ interface IWands is IERC721 {
     uint8 stone;
     uint8 handle;
     uint16 halo;
+    uint32 evolution;
+    uint64 birth;
     Background background;
     Planet[8] planets;
     Aspect[8] aspects;
-    uint256 seed;
-    uint256 evolution;
-    uint256 birth;
   }
 
   function build(
@@ -53,7 +52,7 @@ interface IWands is IERC721 {
     view
     returns (
       uint16 halo,
-      uint256 evolution,
-      uint256 birth
+      uint32 evolution,
+      uint64 birth
     );
 }

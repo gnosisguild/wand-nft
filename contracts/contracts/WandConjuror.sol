@@ -11,8 +11,7 @@ contract WandConjuror {
 
   function generateWandURI(
     IWands.Wand memory wand,
-    uint256 seed,
-    uint32 xp
+    uint256 seed
   ) external pure returns (string memory) {
     return
       string(
@@ -24,7 +23,7 @@ contract WandConjuror {
                 '{"name":"',
                 "name",
                 '", "description":"A unique Wand, designed and built on-chain. 1 of 5000.", "image": "data:image/svg+xml;base64,',
-                Base64.encode(bytes(generateSVG(wand, seed, xp))),
+                Base64.encode(bytes(generateSVG(wand, seed))),
                 '", "attributes": ',
                 "attributes",
                 "}"
@@ -37,14 +36,13 @@ contract WandConjuror {
 
   function generateSVG(
     IWands.Wand memory wand,
-    uint256 seed,
-    uint32 xp
+    uint256 seed
   ) internal pure returns (string memory svg) {
     uint32 xpCap = 10000;
     return
       Template.render(
         Template.__Input({
-          background: wand.background,
+          background: decodeBackground(wand),
           starsSeed: seed,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
@@ -54,7 +52,7 @@ contract WandConjuror {
             handle2: wand.handle == 2,
             handle3: wand.handle == 3
           }),
-          xp: Template.Xp({cap: xpCap, amount: xp, crown: xp >= xpCap}),
+          xp: Template.Xp({cap: xpCap, amount: wand.evolution, crown: wand.evolution >= xpCap}),
           stone: decodeStone(wand, seed),
           halo: decodeHalo(wand),
           frame: generateFrame(wand, seed),
@@ -62,6 +60,20 @@ contract WandConjuror {
           filterLayers: generateFilterLayers()
         })
       );
+  }
+
+  function decodeBackground(IWands.Wand memory wand)
+    internal
+    pure
+    returns (Template.Background memory)
+  {
+    return Template.Background({
+      radial: wand.background.radial,
+      linear: !wand.background.radial,
+      dark: wand.background.dark,
+      light: !wand.background.dark,
+      color: wand.background.color
+    });
   }
 
   function decodeStone(IWands.Wand memory wand, uint256 seed)
@@ -217,6 +229,7 @@ contract WandConjuror {
     returns (Template.Sparkle[] memory result)
   {
     uint256 sparkleCount = 4 + (uint256(keccak256(abi.encodePacked(seed))) % 4);
+    result = new Template.Sparkle[](sparkleCount);
     for (uint256 i = 0; i < sparkleCount; i++) {
       result[i] = Template.Sparkle({
         tx: uint16(
