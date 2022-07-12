@@ -1,7 +1,7 @@
 .containerCircle {
   position: relative;
   aspect-ratio: 1/1;
-  width: 240px;
+  width: 100%;
 }
 .uiCircle {
   position: absolute;
