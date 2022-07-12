@@ -25,7 +25,6 @@
 .stonePicker {
   aspect-ratio: 1;
   width: 29%;
-  border: 3px solid green;
   border-radius: 50%;
   max-width: 290px;
 }
