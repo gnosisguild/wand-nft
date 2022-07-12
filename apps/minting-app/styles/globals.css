@@ -1,5 +1,5 @@
-:root {
-  --selectedColor: hsl(0, 100%, 50%);
+html {
+  background: #1d1d25;
 }
 
 body {
