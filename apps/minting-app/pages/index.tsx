@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useAppContext } from "../context/AppContext";
 import { SvgTemplate } from "../components";
 import { ColorPicker } from "../components";
+import StonePicker from "../components/stonePicker";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -24,8 +25,11 @@ const Home: NextPage = () => {
         <div className={styles.wandImage}>
           <SvgTemplate settings={state} />
         </div>
-        <div className={styles.colorPicker}>
-          <ColorPicker />
+        <div className={styles.ui}>
+          <div className={styles.colorPicker}>
+            <ColorPicker />
+          </div>
+          <StonePicker />
         </div>
       </main>
     </div>
