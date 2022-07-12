@@ -7,7 +7,7 @@ import {
   VIEWBOX_WIDTH,
   VIEWBOX_HEIGHT,
 } from "./rhythm";
-import BUTTONS from "./buttons";
+import buttons from "./buttons";
 import { Halo } from "../../types";
 
 const HaloPicker: React.FC = () => {
@@ -36,7 +36,7 @@ const HaloPicker: React.FC = () => {
               }}
             />
           ))}
-          {BUTTONS.map(({ x, y, r }, index) => (
+          {buttons.map(({ x, y, r }, index) => (
             <circle
               key={index}
               cx={x}

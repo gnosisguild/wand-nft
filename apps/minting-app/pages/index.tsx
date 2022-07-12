@@ -46,7 +46,9 @@ const Home: NextPage = () => {
           <div className={styles.stonePicker}>
             <StonePicker />
           </div>
-          <HaloPicker />
+          <div className={styles.haloPicker}>
+            <HaloPicker />
+          </div>
         </div>
       </main>
     </div>
