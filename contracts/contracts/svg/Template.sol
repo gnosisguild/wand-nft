@@ -6,8 +6,8 @@ string constant __constant0 = '%, 0)"/> </radialGradient> <circle style="fill:ur
 library Template {
   struct __Input {
     Handle handle;
-    Xp xp;
     Background background;
+    Xp xp;
     uint256 starsSeed;
     Halo halo;
     Planet[8] planets;
@@ -54,7 +54,6 @@ library Template {
     bool light;
     bool dark;
     bool linear;
-    uint16 hueRotate;
     Color color;
   }
 
@@ -550,14 +549,6 @@ library BackgroundLayer {
     pure
     returns (string memory __result)
   {
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '<g style="filter: hue-rotate(',
-        SolidMustacheHelpers.uintToString(__input.hueRotate, 0),
-        'deg);"> '
-      )
-    );
     if (__input.radial) {
       __result = string(abi.encodePacked(__result, " "));
       if (__input.light) {
@@ -641,7 +632,7 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        ' </g> <path filter="url(#bb)" style="opacity: .5" d="m1000 2435-199 334 195-335-573 212 570-214-892-20 889 18-1123-339 1121 335-1244-713 1243 709-1242-1106L988 2418-133 938 990 2415 101 616l892 1796L423 382l573 2028L801 260l199 2149 199-2149-195 2150 573-2028-569 2030 891-1796-889 1799L2133 938 1012 2418l1244-1102-1243 1106 1243-709-1244 713 1121-335-1123 338 889-17-892 20 570 214-573-212 195 335-199-334z" fill="white" />'
+        ' <path filter="url(#bb)" style="opacity: .5" d="m1000 2435-199 334 195-335-573 212 570-214-892-20 889 18-1123-339 1121 335-1244-713 1243 709-1242-1106L988 2418-133 938 990 2415 101 616l892 1796L423 382l573 2028L801 260l199 2149 199-2149-195 2150 573-2028-569 2030 891-1796-889 1799L2133 938 1012 2418l1244-1102-1243 1106 1243-709-1244 713 1121-335-1123 338 889-17-892 20 570 214-573-212 195 335-199-334z" fill="white" />'
       )
     );
   }
