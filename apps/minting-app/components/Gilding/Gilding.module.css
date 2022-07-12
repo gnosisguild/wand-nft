@@ -4,6 +4,7 @@
   left: 0.5vw;
   width: 36%;
   max-width: 800px;
+  mix-blend-mode: color-dodge;
 }
 
 .lowerLeft {
@@ -12,6 +13,7 @@
   left: 0.7vw;
   width: 37%;
   max-width: 800px;
+  mix-blend-mode: color-dodge;
 }
 
 .upperRight {
@@ -20,6 +22,7 @@
   right: 0.5vw;
   width: 36%;
   max-width: 800px;
+  mix-blend-mode: color-dodge;
 }
 
 .lowerRight {
@@ -28,10 +31,12 @@
   right: 0.7vw;
   width: 18%;
   max-width: 400px;
+  mix-blend-mode: color-dodge;
 }
 
 .center {
   width: 100%;
+  mix-blend-mode: color-dodge;
 }
 
 .gildPiece {
@@ -46,7 +51,6 @@
 }
 .gildComposite {
   opacity: 0.3;
-  mix-blend-mode: color-dodge;
 }
 
 .zodiacIcon {
