@@ -20,8 +20,8 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint8 handle,
     uint16 halo,
     Template.Background background,
-    uint256 evolution,
-    uint256 birth
+    IWands.Planet[8] planets,
+    IWands.Aspect[8] aspects
   );
 
   constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
@@ -62,7 +62,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       wand.planets[i] = IWands.Planet({visible: planets[i].visible, x: planets[i].x, y: planets[i].y });
       wand.aspects[i] = IWands.Aspect({ x1: aspects[i].x1, y1: aspects[i].y1, x2: aspects[i].x2, y2: aspects[i].y2 });
     }
-    emit WandBuilt(tokenId, stone, handle, halo, background, 0, block.timestamp);
+    emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
   }
 
   function tokenURI(uint256 tokenId)

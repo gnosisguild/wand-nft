@@ -1,10 +1,7 @@
 import { Equator, Horizon, Observer } from "astronomy-engine";
+import { Planet } from "../../types";
 import { ALL_BODIES, CHART_RADIUS } from "./const";
-import { Planet } from "../components/SvgTemplate";
 
-// http://ip-api.com/json
-const latitude = 52.5422;
-const longitude = 13.3495;
 const toRad = (deg: number) => deg * (Math.PI / 180);
 
 export const calculateBodyPositions = (

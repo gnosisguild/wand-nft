@@ -3,7 +3,7 @@ export interface Planet {
   y: number;
   visible: boolean;
 }
-interface Aspect {
+export interface Aspect {
   x1: number;
   y1: number;
   x2: number;
@@ -16,7 +16,7 @@ export interface Sparkle {
   ty: number;
 }
 
-export interface EmbossLayer {
+export interface FilterLayer {
   fractalNoise: boolean;
   turbFreqX: number;
   turbFreqY: number;
@@ -102,13 +102,9 @@ export interface Settings {
   sparkle: {
     sparkles: Sparkle[];
   };
-  filter: {
-    layers: EmbossLayer[];
-  };
+  filterLayers: FilterLayer[];
   stone: Stone;
-  stars: {
-    starsSeed: number;
-  };
+  starsSeed: number;
   xp: {
     cap: number;
     amount: number;

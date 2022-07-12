@@ -1,5 +1,5 @@
 import { Settings, Background, Stone, Halo } from "../types";
-import { embossPresets } from "./presets/embossPresets";
+import { filterLayers } from "../template";
 import { sparklePresets } from "./presets/sparklePresets";
 import {
   secondInDay,
@@ -7,16 +7,17 @@ import {
   secondInYear,
 } from "./presets/timePresets";
 import stoneList from "./presets/stoneList";
-import { calculateAspects, calculatePlanetPositions } from "../birthchart";
+import {
+  calculateAspects,
+  calculatePlanetPositions,
+} from "../template/birthchart";
 
 export const initialState: Settings = {
   frame: {
     title: "Crossed Spring Crux",
     level1: true,
   },
-  filter: {
-    layers: embossPresets,
-  },
+  filterLayers,
   background: {
     hue: 0,
     radial: true,

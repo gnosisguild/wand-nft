@@ -228,7 +228,7 @@ contract WandConjuror {
             (uint256(keccak256(abi.encodePacked(seed + 10 * i + 1))) % 1640)
         ),
         scale: uint8(
-          30 + (uint256(keccak256(abi.encodePacked(seed + 10 * i + 1))) % 70)
+          30 + (uint256(keccak256(abi.encodePacked(seed + 10 * i + 2))) % 70)
         )
       });
     }
