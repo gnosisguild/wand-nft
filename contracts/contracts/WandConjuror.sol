@@ -9,10 +9,14 @@ import "base64-sol/base64.sol";
 contract WandConjuror {
   constructor() {}
 
-  function generateWandURI(
-    IWands.Wand memory wand,
-    uint256 seed
-  ) external pure returns (string memory) {
+  function generateWandURI(IWands.Wand memory wand, uint256 tokenId)
+    external
+    pure
+    returns (string memory)
+  {
+    uint256 seed = uint256(keccak256(abi.encodePacked(tokenId)));
+    string memory name = WandName.generateWandName(tokenId);
+
     return
       string(
         abi.encodePacked(
@@ -20,13 +24,13 @@ contract WandConjuror {
           Base64.encode(
             bytes(
               abi.encodePacked(
-                '{"name":"',
-                "name",
-                '", "description":"A unique Wand, designed and built on-chain. 1 of 5000.", "image": "data:image/svg+xml;base64,',
-                Base64.encode(bytes(generateSVG(wand, seed))),
-                '", "attributes": ',
-                "attributes",
-                "}"
+                '{"name": "',
+                name,
+                '", "description":"A unique Wand, designed and built on-chain", "image": "data:image/svg+xml;base64,', // TODO: edit description
+                Base64.encode(bytes(generateSVG(wand, seed, name))),
+                '", "attributes": [',
+                generateAttributes(wand),
+                "]}"
               )
             )
           )
@@ -34,9 +38,25 @@ contract WandConjuror {
       );
   }
 
+  function generateAttributes(IWands.Wand memory wand) internal pure returns (string memory) {
+    return
+      string(
+        abi.encodePacked(
+          '{"trait_type": "Level", "value": ',
+          SolidMustacheHelpers.uintToString(0, 0), // TODO
+          '},{"trait_type": "Evolution", "value": ',
+          SolidMustacheHelpers.uintToString(wand.evolution, 0),
+          '},{"trait_type": "Birth", "display_type": "date", "value": ',
+          SolidMustacheHelpers.uintToString(wand.birth, 0),
+          "}"
+        )
+      );
+  }
+
   function generateSVG(
     IWands.Wand memory wand,
-    uint256 seed
+    uint256 seed,
+    string memory name
   ) internal pure returns (string memory svg) {
     uint32 xpCap = 10000;
     return
@@ -52,10 +72,14 @@ contract WandConjuror {
             handle2: wand.handle == 2,
             handle3: wand.handle == 3
           }),
-          xp: Template.Xp({cap: xpCap, amount: wand.evolution, crown: wand.evolution >= xpCap}),
+          xp: Template.Xp({
+            cap: xpCap,
+            amount: wand.evolution,
+            crown: wand.evolution >= xpCap
+          }),
           stone: decodeStone(wand, seed),
           halo: decodeHalo(wand),
-          frame: generateFrame(wand, seed),
+          frame: generateFrame(wand, name),
           sparkles: generateSparkles(seed),
           filterLayers: generateFilterLayers()
         })
@@ -67,13 +91,14 @@ contract WandConjuror {
     pure
     returns (Template.Background memory)
   {
-    return Template.Background({
-      radial: wand.background.radial,
-      linear: !wand.background.radial,
-      dark: wand.background.dark,
-      light: !wand.background.dark,
-      color: wand.background.color
-    });
+    return
+      Template.Background({
+        radial: wand.background.radial,
+        linear: !wand.background.radial,
+        dark: wand.background.dark,
+        light: !wand.background.dark,
+        color: wand.background.color
+      });
   }
 
   function decodeStone(IWands.Wand memory wand, uint256 seed)
@@ -144,7 +169,7 @@ contract WandConjuror {
       });
   }
 
-  function generateFrame(IWands.Wand memory wand, uint256 seed)
+  function generateFrame(IWands.Wand memory wand, string memory name)
     internal
     pure
     returns (Template.Frame memory)
@@ -156,7 +181,7 @@ contract WandConjuror {
         level3: wand.evolution == 2,
         level4: wand.evolution == 3,
         level5: wand.evolution == 4,
-        title: WandName.generateWandName(seed)
+        title: name
       });
   }
 

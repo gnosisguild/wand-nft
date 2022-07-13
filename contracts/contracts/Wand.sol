@@ -58,9 +58,18 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     wand.background = background;
     wand.evolution = 0;
     wand.birth = uint64(block.timestamp);
-    for(uint256 i = 0; i < 8; i++) {
-      wand.planets[i] = IWands.Planet({visible: planets[i].visible, x: planets[i].x, y: planets[i].y });
-      wand.aspects[i] = IWands.Aspect({ x1: aspects[i].x1, y1: aspects[i].y1, x2: aspects[i].x2, y2: aspects[i].y2 });
+    for (uint256 i = 0; i < 8; i++) {
+      wand.planets[i] = IWands.Planet({
+        visible: planets[i].visible,
+        x: planets[i].x,
+        y: planets[i].y
+      });
+      wand.aspects[i] = IWands.Aspect({
+        x1: aspects[i].x1,
+        y1: aspects[i].y1,
+        x2: aspects[i].x2,
+        y2: aspects[i].y2
+      });
     }
     emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
   }
