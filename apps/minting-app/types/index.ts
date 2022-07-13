@@ -16,6 +16,12 @@ export interface Sparkle {
   ty: number;
 }
 
+interface Color {
+  hue: number;
+  saturation: number;
+  lightness: number;
+}
+
 export interface FilterLayer {
   fractalNoise: boolean;
   turbFreqX: number;
@@ -26,7 +32,7 @@ export interface FilterLayer {
   surfaceScale: number;
   specConstant: number;
   specExponent: number;
-  lightColor: string;
+  lightColor: Color;
   pointX: number;
   pointY: number;
   pointZ: number;
@@ -50,7 +56,6 @@ export interface Stone {
   blueExp: number;
   blueOff: number;
   rotation: number;
-  seed: number;
   seasonsAmplitude?: number;
   secondInYear?: number;
   secondInDay?: number;
@@ -62,11 +67,7 @@ export interface Background {
   radial?: boolean;
   light?: boolean;
   dark?: boolean;
-  color: {
-    hue: number;
-    saturation: number;
-    lightness: number;
-  };
+  color: Color;
 }
 
 export interface Halo {
@@ -80,7 +81,7 @@ export interface Halo {
   hue: number;
 }
 
-export interface Settings {
+export interface TemplateInput {
   frame: {
     title: string;
     level1?: boolean;
@@ -99,12 +100,10 @@ export interface Settings {
     handle2?: boolean;
     handle3?: boolean;
   };
-  sparkle: {
-    sparkles: Sparkle[];
-  };
+  sparkles: Sparkle[];
   filterLayers: FilterLayer[];
   stone: Stone;
-  starsSeed: number;
+  seed: number;
   xp: {
     cap: number;
     amount: number;

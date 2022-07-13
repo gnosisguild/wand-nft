@@ -1,10 +1,10 @@
 import React from "react";
-import { Settings } from "../types";
+import { TemplateInput } from "../types";
 import classes from "./SvgTemplate.module.css";
 import template from "../../../contracts/contracts/svg/template.svg.hbs";
 
 interface Props {
-  settings: Settings;
+  settings: TemplateInput;
 }
 const SvgTemplate: React.FC<Props> = (props) => (
   <div

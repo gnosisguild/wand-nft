@@ -8,10 +8,10 @@ library Template {
     Handle handle;
     Background background;
     Xp xp;
-    uint256 starsSeed;
+    Stone stone;
+    uint256 seed;
     Halo halo;
     Planet[8] planets;
-    Stone stone;
     Aspect[8] aspects;
     FilterLayer[3] filterLayers;
     Frame frame;
@@ -78,7 +78,6 @@ library Template {
     int8 blueExp;
     int8 blueOff;
     uint16 rotation;
-    uint256 seed;
   }
 
   struct Frame {
@@ -140,7 +139,7 @@ library Template {
         BackgroundLayer.background(__input.background),
         BackgroundLayer.xpBar(__input.xp),
         BackgroundLayer.stars(__input),
-        stone(__input.stone),
+        stone(__input),
         FrameLayer.frame(__input.frame),
         halo(__input.halo),
         HandleLayer.handles(__input.handle),
@@ -151,7 +150,7 @@ library Template {
     );
   }
 
-  function stone(Stone memory __input)
+  function stone(__Input memory __input)
     internal
     pure
     returns (string memory __result)
@@ -160,38 +159,38 @@ library Template {
       abi.encodePacked(
         __result,
         '<filter id="s"> <feTurbulence ',
-        __input.fractalNoise ? 'type="fractalNoise"' : "",
+        __input.stone.fractalNoise ? 'type="fractalNoise"' : "",
         ' baseFrequency="',
-        SolidMustacheHelpers.uintToString(__input.turbFreqX, 3),
+        SolidMustacheHelpers.uintToString(__input.stone.turbFreqX, 3),
         " ",
-        SolidMustacheHelpers.uintToString(__input.turbFreqY, 3),
+        SolidMustacheHelpers.uintToString(__input.stone.turbFreqY, 3),
         '" numOctaves="',
-        SolidMustacheHelpers.uintToString(__input.turbOct, 0),
+        SolidMustacheHelpers.uintToString(__input.stone.turbOct, 0),
         '" seed="',
         SolidMustacheHelpers.uintToString(__input.seed, 0),
         '" /> <feComponentTransfer> <feFuncR type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.redAmp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.redAmp, 2),
         '" exponent="',
-        SolidMustacheHelpers.intToString(__input.redExp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.redExp, 2),
         '" offset="',
-        SolidMustacheHelpers.intToString(__input.redOff, 2)
+        SolidMustacheHelpers.intToString(__input.stone.redOff, 2)
       )
     );
     __result = string(
       abi.encodePacked(
         __result,
         '" /> <feFuncG type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.greenAmp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.greenAmp, 2),
         '" exponent="',
-        SolidMustacheHelpers.intToString(__input.greenExp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.greenExp, 2),
         '" offset="',
-        SolidMustacheHelpers.intToString(__input.greenOff, 2),
+        SolidMustacheHelpers.intToString(__input.stone.greenOff, 2),
         '" /> <feFuncB type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.blueAmp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.blueAmp, 2),
         '" exponent="',
-        SolidMustacheHelpers.intToString(__input.blueExp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.blueExp, 2),
         '" offset="',
-        SolidMustacheHelpers.intToString(__input.blueOff, 2),
+        SolidMustacheHelpers.intToString(__input.stone.blueOff, 2),
         '" /> <feFuncA type="discrete" tableValues="1"/> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="tex" /> ',
         ' <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="glow" /> <feColorMatrix in="glow" result="bgg" type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 .8 0 " /> <feMerge> <feMergeNode in="bgg"/> <feMergeNode in="tex"/> </feMerge> </filter> <radialGradient id="ss"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/> <stop offset="90%" stop-color="hsla(0, 0%, 0%, .8)"/> </radialGradient> <defs> ',
         ' <clipPath id="sc"> <circle cx="1000" cy="1060" r="260"/> </clipPath> </defs> ',
@@ -201,7 +200,7 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
-        SolidMustacheHelpers.uintToString(__input.rotation, 0),
+        SolidMustacheHelpers.uintToString(__input.stone.rotation, 0),
         ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#s)" /> ',
         ' <circle cx="1200" cy="1060" r="520" fill="url(#ss)" clip-path="url(#sc)" /> <defs> <radialGradient id="sf" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"/> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/> <stop offset=".63" stop-color="#929292" stop-opacity=".5"/> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/> </radialGradient> <radialGradient id="sh" cx="1149" cy="2660" fx="1149" fy="2660" r="76" gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity=".7"/> <stop offset="1" stop-color="#fff" stop-opacity="0"/> </radialGradient> </defs> <path fill="url(#sf)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/> <path fill="url(#sh)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>'
       )
@@ -666,7 +665,7 @@ library BackgroundLayer {
       abi.encodePacked(
         __result,
         '<defs> <filter id="st"> <feTurbulence baseFrequency=".1" seed="',
-        SolidMustacheHelpers.uintToString(__input.starsSeed, 0),
+        SolidMustacheHelpers.uintToString(__input.seed, 0),
         '"/> <feColorMatrix values="0 0 0 7 -4 0 0 0 7 -4 0 0 0 7 -4 0 0 0 0 1" /> </filter> </defs> <clipPath id="stc"> <circle cx="1000" cy="1060" r="520"/> </clipPath> <mask id="stm"> <g filter="url(#st)" transform="scale(2)"> <rect width="100%" height="100%"/> </g> </mask> <circle class="bc" cx="1000" cy="1060" r="260"/> <circle class="bc" cx="1000" cy="1060" r="360"/> <circle class="bc" cx="1000" cy="1060" r="440"/> <circle class="bc" cx="1000" cy="1060" r="520"/> <line class="bc" x1="740" y1="610" x2="1260" y2="1510"/> <line class="bc" x1="1260" y1="610" x2="740" y2="1510"/> <line class="bc" x1="1450" y1="800" x2="550" y2="1320"/> <line class="bc" x1="1450" y1="1320" x2="550" y2="800"/> <g style="filter: blur(2px);"> <rect width="100%" height="100%" fill="white" mask="url(#stm)" clip-path="url(#stc)" /> </g>'
       )
     );
@@ -682,7 +681,7 @@ library FrameLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        '<defs> <linearGradient id="gradient-fill"> <stop offset="0" stop-color="black"/> <stop offset="0.5" stop-color="rgba(255,255,255,0.5)"/> <stop offset="1" stop-color="rgba(255,255,255,0.8)"/> </linearGradient> <style type="text/css"> .title {font: 45px serif; fill: #999777; mix-blend-mode: difference; text-transform: uppercase; letter-spacing: 5px} .titleBox {fill: none; stroke:#DCD7AF; stroke-width: 4px;} .frame-line { fill: none; stroke: url(#gradient-fill); stroke-miterlimit: 10; stroke-width: 2px; mix-blend-mode: plus-lighter; } .frame-circ { fill: url(#gradient-fill); mix-blend-mode: plus-lighter; } </style> </defs>',
+        '<defs> <linearGradient id="gradient-fill"> <stop offset="0" stop-color="black"/> <stop offset="0.5" stop-color="rgba(255,255,255,0.5)"/> <stop offset="1" stop-color="rgba(255,255,255,0.8)"/> </linearGradient> <style type="text/css"> .title {font: 45px serif; fill: #999777; mix-blend-mode: difference; letter-spacing: 5px} .titleBox {fill: none; stroke:#DCD7AF; stroke-width: 4px;} .frame-line { fill: none; stroke: url(#gradient-fill); stroke-miterlimit: 10; stroke-width: 2px; mix-blend-mode: plus-lighter; } .frame-circ { fill: url(#gradient-fill); mix-blend-mode: plus-lighter; } </style> </defs>',
         __input.level1
           ? ' <g> <g id="half1"> <polyline class="frame-line" points="999.95 170.85 1383.84 170.85 1862.82 137.14 1862.82 1863.5 1759.46 2478.5 1481.46 2794.5 999.98 2794.5" /> <polyline class="frame-line" points="1000 69 1931.46 68.5 1931.39 2930.43 1569.96 2931 1480.96 2828 999.99 2828" /> </g> <use href="#half1" transform="scale(-1,1) translate(-2000,0)"/> <circle class="frame-circ" cx="1000" cy="68.5" r="16.65"/> </g>'
           : "",

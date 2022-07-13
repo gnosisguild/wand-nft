@@ -1,7 +1,7 @@
-export const generateName = (seed: number) => {
-  const actionAdjective = actionAdjectives[seed % actionAdjectives.length];
-  const adjective = adjectives[seed % adjectives.length];
-  const noun = nouns[seed % nouns.length];
+export const generateName = (tokenId: number) => {
+  const actionAdjective = actionAdjectives[tokenId % actionAdjectives.length];
+  const adjective = adjectives[tokenId % adjectives.length];
+  const noun = nouns[tokenId % nouns.length];
   return `${actionAdjective} ${adjective} ${noun}`;
 };
 

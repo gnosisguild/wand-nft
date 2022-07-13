@@ -48,5 +48,12 @@ export const calculatePlanetPositions = (
   date = new Date()
 ) => {
   const positions = calculateBodyPositions(latitude, longitude, altitude, date);
-  return Object.values(positions).slice(2); // skip sun and moon
+  return Object.values(positions)
+    .slice(2) // skip sun and moon
+    .map(({ x, y, visible }) => ({
+      // zero coordinates if invisible
+      visible,
+      x: visible ? x : 0,
+      y: visible ? y : 0,
+    }));
 };

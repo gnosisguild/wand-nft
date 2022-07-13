@@ -1,6 +1,6 @@
-import { Stone } from "../SvgTemplate";
+import { Stone } from "../types";
 
-const stoneList: Stone[] = [
+export const stoneList: Stone[] = [
   {
     fractalNoise: false,
     turbFreqX: 2,
@@ -495,5 +495,3 @@ const stoneList: Stone[] = [
     seed: 1004123123,
   },
 ];
-
-export default stoneList;

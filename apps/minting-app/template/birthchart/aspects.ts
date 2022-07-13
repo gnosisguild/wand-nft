@@ -59,5 +59,12 @@ export const calculateAspects = (
     }
   }
 
-  return aspectLines;
+  const fixedLengthResult = aspectLines.slice(0, 8);
+  for (let i = fixedLengthResult.length; i < 8; i++) {
+    fixedLengthResult.push(emptyAspectLine);
+  }
+
+  return fixedLengthResult;
 };
+
+const emptyAspectLine = { x1: 0, y1: 0, x2: 0, y2: 0 };

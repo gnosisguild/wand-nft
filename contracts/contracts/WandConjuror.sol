@@ -5,16 +5,16 @@ import "./interfaces/IWands.sol";
 import "./svg/Template.sol";
 import "./WandName.sol";
 import "base64-sol/base64.sol";
+import "hardhat/console.sol";
 
 contract WandConjuror {
   constructor() {}
 
   function generateWandURI(IWands.Wand memory wand, uint256 tokenId)
     external
-    pure
+    view
     returns (string memory)
   {
-    uint256 seed = uint256(keccak256(abi.encodePacked(tokenId)));
     string memory name = WandName.generateWandName(tokenId);
 
     return
@@ -27,7 +27,7 @@ contract WandConjuror {
                 '{"name": "',
                 name,
                 '", "description":"A unique Wand, designed and built on-chain", "image": "data:image/svg+xml;base64,', // TODO: edit description
-                Base64.encode(bytes(generateSVG(wand, seed, name))),
+                Base64.encode(bytes(generateSVG(wand, tokenId, name))),
                 '", "attributes": [',
                 generateAttributes(wand),
                 "]}"
@@ -38,7 +38,11 @@ contract WandConjuror {
       );
   }
 
-  function generateAttributes(IWands.Wand memory wand) internal pure returns (string memory) {
+  function generateAttributes(IWands.Wand memory wand)
+    internal
+    pure
+    returns (string memory)
+  {
     return
       string(
         abi.encodePacked(
@@ -55,15 +59,15 @@ contract WandConjuror {
 
   function generateSVG(
     IWands.Wand memory wand,
-    uint256 seed,
+    uint256 tokenId,
     string memory name
-  ) internal pure returns (string memory svg) {
+  ) internal view returns (string memory svg) {
     uint32 xpCap = 10000;
     return
       Template.render(
         Template.__Input({
           background: decodeBackground(wand),
-          starsSeed: seed,
+          seed: tokenId,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
           handle: Template.Handle({
@@ -77,10 +81,10 @@ contract WandConjuror {
             amount: wand.evolution,
             crown: wand.evolution >= xpCap
           }),
-          stone: decodeStone(wand, seed),
+          stone: decodeStone(wand),
           halo: decodeHalo(wand),
           frame: generateFrame(wand, name),
-          sparkles: generateSparkles(seed),
+          sparkles: generateSparkles(tokenId),
           filterLayers: generateFilterLayers()
         })
       );
@@ -101,7 +105,7 @@ contract WandConjuror {
       });
   }
 
-  function decodeStone(IWands.Wand memory wand, uint256 seed)
+  function decodeStone(IWands.Wand memory wand)
     internal
     pure
     returns (Template.Stone memory)
@@ -122,8 +126,7 @@ contract WandConjuror {
           blueAmp: 11,
           blueExp: -85,
           blueOff: -16,
-          rotation: 218,
-          seed: seed
+          rotation: 218
         }),
         Template.Stone({
           fractalNoise: true,
@@ -139,23 +142,24 @@ contract WandConjuror {
           blueAmp: 58,
           blueExp: 1,
           blueOff: -15,
-          rotation: 306,
-          seed: seed
+          rotation: 306
         })
       ][wand.stone];
   }
 
   function decodeHalo(IWands.Wand memory wand)
     internal
-    pure
+    view
     returns (Template.Halo memory)
   {
-    uint256 shape = wand.halo / (2**3); // first 3 bits are halo shape index
-    uint256 rhythmBits = wand.halo % (2**3); // remaining 13 bits give the rhythm
+    uint256 rhythmBits = wand.halo >> 3; // first 13 bits give the rhythm
+    uint256 shape = wand.halo % rhythmBits; // remaining 3 bits are the halo shape index
+    
     bool[24] memory rhythm;
     for (uint256 i = 0; i < 24; i++) {
-      rhythm[i] = (1 << 0) & rhythmBits > 0;
+      rhythm[i] = (1 << i) & rhythmBits > 0;
     }
+
     return
       Template.Halo({
         halo0: shape == 0,

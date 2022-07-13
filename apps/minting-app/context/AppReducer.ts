@@ -1,4 +1,4 @@
-import { Settings, Background, Stone, Halo } from "../types";
+import { TemplateInput, Background, Stone, Halo } from "../types";
 import { filterLayers } from "../template";
 import { sparklePresets } from "./presets/sparklePresets";
 import {
@@ -12,7 +12,7 @@ import {
   calculatePlanetPositions,
 } from "../template/birthchart";
 
-export const initialState: Settings = {
+export const initialState: TemplateInput = {
   frame: {
     title: "Crossed Spring Crux",
     level1: true,
@@ -63,13 +63,9 @@ export const initialState: Settings = {
   },
   planets: calculatePlanetPositions(0, 0),
   aspects: calculateAspects(0, 0),
-  sparkle: {
-    sparkles: sparklePresets,
-  },
+  sparkles: sparklePresets,
   stone: { ...stoneList[5], seasonsAmplitude, secondInDay, secondInYear },
-  stars: {
-    starsSeed: 123,
-  },
+  seed: 123,
   xp: {
     cap: 10000,
     amount: 3221,
@@ -79,7 +75,7 @@ export const initialState: Settings = {
 
 export interface ChangeSettingsAction {
   type: "changeSettings";
-  value: Settings;
+  value: TemplateInput;
 }
 
 export interface ChangeBackgroundAction {
@@ -103,7 +99,7 @@ export type ActionTypes =
   | ChangeHaloAction
   | ChangeStoneAction;
 
-export const AppReducer = (state: Settings, action: ActionTypes) => {
+export const AppReducer = (state: TemplateInput, action: ActionTypes) => {
   switch (action.type) {
     case "changeSettings": {
       return {

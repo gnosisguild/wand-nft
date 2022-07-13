@@ -1,12 +1,18 @@
 import { useState } from "react";
-import { EmbossLayer } from "../SvgTemplate";
+import { FilterLayer } from "../SvgTemplate";
 import styles from "./Settings.module.css";
 
+interface Color {
+  hue: number;
+  saturation: number;
+  lightness: number;
+}
+
 interface Props {
-  layer: EmbossLayer;
+  layer: FilterLayer;
   index: number;
   removeLayer(index: number): void;
-  changeVal(index: number, key: string, value: string): void;
+  changeVal(index: number, key: string, value: string | Color): void;
 }
 
 const EmbossLayerForm: React.FC<Props> = (props) => {
@@ -151,10 +157,21 @@ const EmbossLayerForm: React.FC<Props> = (props) => {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Light Color — {props.layer.lightColor}</label>
+              <label>
+                Light Color —{" "}
+                {hslToHex(
+                  props.layer.lightColor.hue,
+                  props.layer.lightColor.saturation,
+                  props.layer.lightColor.lightness
+                )}
+              </label>
               <input
                 type="color"
-                value={props.layer.lightColor}
+                value={hslToHex(
+                  props.layer.lightColor.hue,
+                  props.layer.lightColor.saturation,
+                  props.layer.lightColor.lightness
+                )}
                 className="color-input"
                 onChange={(e) => {
                   props.changeVal(
@@ -305,4 +322,17 @@ function hexToHsl(hex: string) {
     saturation: saturation * 100,
     lightness: lightness * 100,
   };
+}
+
+function hslToHex(h: number, s: number, l: number) {
+  l /= 100;
+  const a = (s * Math.min(l, 1 - l)) / 100;
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0"); // convert to Hex and prefix "0" if needed
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
 }

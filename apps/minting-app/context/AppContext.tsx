@@ -1,10 +1,10 @@
 import React, { useEffect, createContext, useContext, useReducer } from "react";
 
 import { AppReducer, ActionTypes, initialState } from "./AppReducer";
-import { Settings } from "../types";
+import { TemplateInput } from "../types";
 
 const AppContext = createContext<{
-  state: Settings;
+  state: TemplateInput;
   dispatch: React.Dispatch<ActionTypes>;
 }>({ state: initialState, dispatch: () => {} });
 

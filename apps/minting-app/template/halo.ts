@@ -13,6 +13,11 @@ export const generateHalo = (
   rhythm: rhythm,
 });
 
-export const encodeHalo = (shapeId: number, rhythm: boolean[]) =>
-  shapeId.toString(2).padStart(3, "0") +
-  rhythm.map((x) => (x ? "1" : "0")).join("");
+export const encodeHalo = (shapeId: number, rhythm: boolean[]) => {
+  if (rhythm.length !== 13) throw new Error("Rhythm must have length 13");
+  return parseInt(
+    rhythm.map((x) => (x ? "1" : "0")).join("") +
+      shapeId.toString(2).padStart(3, "0"),
+    2
+  );
+};
