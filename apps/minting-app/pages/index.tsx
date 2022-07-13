@@ -3,6 +3,8 @@ import React from "react";
 import Head from "next/head";
 import { useAppContext } from "../context/AppContext";
 import { SvgTemplate } from "../components";
+import { ColorPicker } from "../components";
+import StonePicker from "../components/stonePicker";
 import styles from "../styles/Home.module.css";
 import { AppState, TemplateInput } from "../types";
 
@@ -23,6 +25,12 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.wandImage}>
           <SvgTemplate input={deriveTemplateInput(state)} />
+        </div>
+        <div className={styles.ui}>
+          <div className={styles.colorPicker}>
+            <ColorPicker />
+          </div>
+          <StonePicker />
         </div>
       </main>
     </div>

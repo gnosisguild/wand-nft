@@ -7,7 +7,7 @@
   padding: 0;
   flex: 1;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
 }
 
@@ -15,4 +15,8 @@
   width: 45%;
   max-width: 400px;
   margin: 0 auto;
+}
+.ui {
+  display: flex;
+  justify-content: center;
 }

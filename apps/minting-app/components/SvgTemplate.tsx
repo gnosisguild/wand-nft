@@ -1,7 +1,7 @@
 import React from "react";
 import { TemplateInput } from "../types";
 import classes from "./SvgTemplate.module.css";
-import template from "../../../contracts/contracts/svg/template.svg.hbs";
+const template = require("../../../contracts/contracts/svg/template.svg.hbs");
 
 interface Props {
   input: TemplateInput;
