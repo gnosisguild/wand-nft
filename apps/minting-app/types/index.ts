@@ -81,6 +81,15 @@ export interface Halo {
   hue: number;
 }
 
+export interface AppState {
+  planets: Planet[];
+  aspects: Aspect[];
+  background: Background;
+  handle: number;
+  stone: number;
+  seed: number;
+}
+
 export interface TemplateInput {
   frame: {
     title: string;

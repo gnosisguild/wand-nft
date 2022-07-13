@@ -1,6 +1,6 @@
 import { Equator, Horizon, Observer } from "astronomy-engine";
 import { Planet } from "../../types";
-import { ALL_BODIES, CHART_RADIUS } from "./const";
+import { ALL_BODIES, MAX_VALUE } from "./const";
 
 const toRad = (deg: number) => deg * (Math.PI / 180);
 
@@ -30,8 +30,8 @@ export const calculateBodyPositions = (
     // scale by circle radius and make sure north is up on screen coordinate system
     // east we want to keep to the right, since the viewer is looking onto the sphere from above (out in space)
     positions[body] = {
-      x: Math.round(CHART_RADIUS * flatX),
-      y: Math.round(-CHART_RADIUS * flatY),
+      x: Math.round(MAX_VALUE * flatX),
+      y: Math.round(-MAX_VALUE * flatY),
 
       // coordinates further away than 1 mean that the planet is not currently visible on the local celestial sphere
       visible: Math.sqrt(flatX * flatX + flatY * flatY) <= 1,
@@ -41,7 +41,7 @@ export const calculateBodyPositions = (
   return positions;
 };
 
-export const calculatePlanetPositions = (
+export const calculatePlanets = (
   latitude: number,
   longitude: number,
   altitude = 0,
@@ -52,8 +52,8 @@ export const calculatePlanetPositions = (
     .slice(2) // skip sun and moon
     .map(({ x, y, visible }) => ({
       // zero coordinates if invisible
-      visible,
       x: visible ? x : 0,
       y: visible ? y : 0,
+      visible,
     }));
 };

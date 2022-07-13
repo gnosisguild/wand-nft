@@ -4,7 +4,7 @@ import "@nomiclabs/hardhat-ethers";
 
 import {
   encodeHalo,
-  calculatePlanetPositions,
+  calculatePlanets,
   calculateAspects,
   scalePlanets,
   scaleAspects,
@@ -87,7 +87,7 @@ describe("GuildWand", async () => {
 
       const latBerlin = 52.5422;
       const lngBerlin = 13.3495;
-      const planets = calculatePlanetPositions(
+      const planets = calculatePlanets(
         latBerlin,
         lngBerlin,
         0,
@@ -123,8 +123,8 @@ describe("GuildWand", async () => {
         handle,
         encodeHalo(haloShape, haloRhythm),
         background,
-        scalePlanets(planets),
-        scaleAspects(aspects)
+        planets,
+        aspects
       );
       const tokenUri = await wand.tokenURI(0);
       const tokenUriJson = JSON.parse(
@@ -140,8 +140,8 @@ describe("GuildWand", async () => {
       console.log(svgFromContract);
       // generate SVG via handlebars.js
       const svgFromHandlebars = renderSvgTemplate({
-        planets,
-        aspects,
+        planets: scalePlanets(planets),
+        aspects: scaleAspects(aspects),
         halo: generateHalo(haloShape, haloRhythm, background.color.hue),
         frame: {
           level1: true,
@@ -155,7 +155,12 @@ describe("GuildWand", async () => {
         xp,
         handle: generateHandle(handle),
       });
-
+      console.log({
+        planets,
+        aspects,
+        sp: scalePlanets(planets),
+        sa: scaleAspects(aspects),
+      });
       expect(svgFromContract).to.equal(svgFromHandlebars);
     });
   });

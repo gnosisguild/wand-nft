@@ -1,17 +1,17 @@
 import { Planet, Aspect } from "../../types";
-import { CHART_RADIUS, STONE_RADIUS } from "./const";
+import { MAX_VALUE, CHART_RADIUS, STONE_RADIUS } from "./const";
 
 export const scaleAspects = (aspects: Aspect[]) =>
   aspects.map((aspect) => ({
-    x1: Math.round((aspect.x1 * 127) / STONE_RADIUS),
-    y1: Math.round((aspect.y1 * 127) / STONE_RADIUS),
-    x2: Math.round((aspect.x2 * 127) / STONE_RADIUS),
-    y2: Math.round((aspect.y2 * 127) / STONE_RADIUS),
+    x1: Math.round((aspect.x1 * STONE_RADIUS) / MAX_VALUE),
+    y1: Math.round((aspect.y1 * STONE_RADIUS) / MAX_VALUE),
+    x2: Math.round((aspect.x2 * STONE_RADIUS) / MAX_VALUE),
+    y2: Math.round((aspect.y2 * STONE_RADIUS) / MAX_VALUE),
   }));
 
 export const scalePlanets = (planets: Planet[]) =>
   planets.map((planet) => ({
-    x: Math.round((planet.x * 127) / CHART_RADIUS),
-    y: Math.round((planet.y * 127) / CHART_RADIUS),
+    x: Math.round((planet.x * CHART_RADIUS) / MAX_VALUE),
+    y: Math.round((planet.y * CHART_RADIUS) / MAX_VALUE),
     visible: planet.visible,
   }));

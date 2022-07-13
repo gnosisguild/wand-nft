@@ -4,12 +4,12 @@ import classes from "./SvgTemplate.module.css";
 import template from "../../../contracts/contracts/svg/template.svg.hbs";
 
 interface Props {
-  settings: TemplateInput;
+  input: TemplateInput;
 }
 const SvgTemplate: React.FC<Props> = (props) => (
   <div
     dangerouslySetInnerHTML={{
-      __html: template(props.settings, {
+      __html: template(props.input, {
         allowProtoMethodsByDefault: true,
         allowProtoPropertiesByDefault: true,
       }),

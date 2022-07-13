@@ -13,5 +13,6 @@ export const ALL_BODIES = [
   Body.Pluto,
 ];
 
+export const MAX_VALUE = 127;
 export const STONE_RADIUS = 260;
 export const CHART_RADIUS = 520;

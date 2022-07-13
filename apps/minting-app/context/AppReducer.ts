@@ -7,10 +7,7 @@ import {
   secondInYear,
 } from "./presets/timePresets";
 import stoneList from "./presets/stoneList";
-import {
-  calculateAspects,
-  calculatePlanetPositions,
-} from "../template/birthchart";
+import { calculateAspects, calculatePlanets } from "../template/birthchart";
 
 export const initialState: TemplateInput = {
   frame: {
@@ -61,7 +58,7 @@ export const initialState: TemplateInput = {
   handle: {
     handle0: true,
   },
-  planets: calculatePlanetPositions(0, 0),
+  planets: calculatePlanets(0, 0),
   aspects: calculateAspects(0, 0),
   sparkles: sparklePresets,
   stone: { ...stoneList[5], seasonsAmplitude, secondInDay, secondInYear },
