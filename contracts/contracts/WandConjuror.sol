@@ -149,15 +149,15 @@ contract WandConjuror {
 
   function decodeHalo(IWands.Wand memory wand)
     internal
-    view
+    pure
     returns (Template.Halo memory)
   {
     uint256 rhythmBits = wand.halo >> 3; // first 13 bits give the rhythm
     uint256 shape = wand.halo % rhythmBits; // remaining 3 bits are the halo shape index
-    
     bool[24] memory rhythm;
     for (uint256 i = 0; i < 24; i++) {
-      rhythm[i] = (1 << i) & rhythmBits > 0;
+      uint256 bit = i > 12 ? 24 - i : i; // rhythm repeats backwards after 13 beats
+      rhythm[i] = (1 << bit) & rhythmBits > 0; 
     }
 
     return

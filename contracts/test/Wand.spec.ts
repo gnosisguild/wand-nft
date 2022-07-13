@@ -137,14 +137,12 @@ describe("GuildWand", async () => {
         // remove the prefix
         tokenUriJson.image.substring("data:image/svg+xml;base64,".length)
       );
-
+      console.log(svgFromContract);
       // generate SVG via handlebars.js
-      const halo = generateHalo(haloShape, haloRhythm, background.color.hue);
-
       const svgFromHandlebars = renderSvgTemplate({
         planets,
         aspects,
-        halo,
+        halo: generateHalo(haloShape, haloRhythm, background.color.hue),
         frame: {
           level1: true,
           title: generateName(tokenId),

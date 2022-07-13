@@ -31,7 +31,6 @@ const baseStoneSettings: Stone = {
   blueExp: -32,
   blueOff: -6,
   rotation: 21,
-  seed: 1004123123,
 };
 
 const baseSparkleSet: Sparkle[] = [

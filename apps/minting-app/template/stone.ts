@@ -16,7 +16,6 @@ export const stoneList: Stone[] = [
     blueExp: -85,
     blueOff: -16,
     rotation: 218,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -33,7 +32,6 @@ export const stoneList: Stone[] = [
     blueExp: 1,
     blueOff: -15,
     rotation: 306,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -50,7 +48,6 @@ export const stoneList: Stone[] = [
     blueExp: 48,
     blueOff: 46,
     rotation: 43,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -67,7 +64,6 @@ export const stoneList: Stone[] = [
     blueExp: 18,
     blueOff: 12,
     rotation: 43,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -84,7 +80,6 @@ export const stoneList: Stone[] = [
     blueExp: -72,
     blueOff: -63,
     rotation: 310,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -101,7 +96,6 @@ export const stoneList: Stone[] = [
     blueExp: -99,
     blueOff: 1,
     rotation: 190,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -118,7 +112,6 @@ export const stoneList: Stone[] = [
     blueExp: -39,
     blueOff: 76,
     rotation: 216,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -135,7 +128,6 @@ export const stoneList: Stone[] = [
     blueExp: -82,
     blueOff: -36,
     rotation: 75,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -152,7 +144,6 @@ export const stoneList: Stone[] = [
     blueExp: 51,
     blueOff: -80,
     rotation: 295,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -169,7 +160,6 @@ export const stoneList: Stone[] = [
     blueExp: 100,
     blueOff: 17,
     rotation: 69,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -186,7 +176,6 @@ export const stoneList: Stone[] = [
     blueExp: 86,
     blueOff: -26,
     rotation: 304,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -203,7 +192,6 @@ export const stoneList: Stone[] = [
     blueExp: 79,
     blueOff: 67,
     rotation: 37,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -220,7 +208,6 @@ export const stoneList: Stone[] = [
     blueExp: 79,
     blueOff: 36,
     rotation: 147,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -237,7 +224,6 @@ export const stoneList: Stone[] = [
     blueExp: -32,
     blueOff: -6,
     rotation: 21,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -254,7 +240,6 @@ export const stoneList: Stone[] = [
     blueExp: -65,
     blueOff: -79,
     rotation: 56,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -271,7 +256,6 @@ export const stoneList: Stone[] = [
     blueExp: 71,
     blueOff: -4,
     rotation: 329,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -288,7 +272,6 @@ export const stoneList: Stone[] = [
     blueExp: 5,
     blueOff: -16,
     rotation: 35,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -305,7 +288,6 @@ export const stoneList: Stone[] = [
     blueExp: 6,
     blueOff: 76,
     rotation: 242,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -322,7 +304,6 @@ export const stoneList: Stone[] = [
     blueExp: 100,
     blueOff: 14,
     rotation: 86,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -339,7 +320,6 @@ export const stoneList: Stone[] = [
     blueExp: -51,
     blueOff: 82,
     rotation: 43,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -356,7 +336,6 @@ export const stoneList: Stone[] = [
     blueExp: -87,
     blueOff: -89,
     rotation: 43,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -373,7 +352,6 @@ export const stoneList: Stone[] = [
     blueExp: -88,
     blueOff: -100,
     rotation: 43,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -390,7 +368,6 @@ export const stoneList: Stone[] = [
     blueExp: -93,
     blueOff: 48,
     rotation: 2,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -407,7 +384,6 @@ export const stoneList: Stone[] = [
     blueExp: -83,
     blueOff: -80,
     rotation: 31,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -424,7 +400,6 @@ export const stoneList: Stone[] = [
     blueExp: -61,
     blueOff: -70,
     rotation: 56,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -441,7 +416,6 @@ export const stoneList: Stone[] = [
     blueExp: -39,
     blueOff: 76,
     rotation: 114,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -458,7 +432,6 @@ export const stoneList: Stone[] = [
     blueExp: -65,
     blueOff: -81,
     rotation: 244,
-    seed: 1004123123,
   },
   {
     fractalNoise: false,
@@ -475,7 +448,6 @@ export const stoneList: Stone[] = [
     blueExp: -32,
     blueOff: -6,
     rotation: 48,
-    seed: 1004123123,
   },
   {
     fractalNoise: true,
@@ -492,6 +464,5 @@ export const stoneList: Stone[] = [
     blueExp: -99,
     blueOff: -52,
     rotation: 111,
-    seed: 1004123123,
   },
 ];

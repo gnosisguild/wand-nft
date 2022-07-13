@@ -268,23 +268,25 @@ library Template {
       )
     );
     for (uint256 __i; __i < __input.rhythm.length; __i++) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <g style="transform: rotate(calc(',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          " * 15deg)) translateY(",
-          __input.halo0 ? "-770px" : "",
-          __input.halo1 ? "-800px" : "",
-          __input.halo2 ? "-800px" : "",
-          __input.halo3 ? "-800px" : "",
-          __input.halo4 ? "-740px" : "",
-          __input.halo5 ? "-720px" : "",
-          ');" > ',
-          __input.rhythm[__i] ? '<use href="#halo"/>' : "",
-          " </g> "
-        )
-      );
+      __result = string(abi.encodePacked(__result, " "));
+      if (__input.rhythm[__i]) {
+        __result = string(
+          abi.encodePacked(
+            __result,
+            ' <g style="transform: rotate(calc(',
+            SolidMustacheHelpers.uintToString(__i, 0),
+            " * 15deg)) translateY(",
+            __input.halo0 ? "-770px" : "",
+            __input.halo1 ? "-800px" : "",
+            __input.halo2 ? "-800px" : "",
+            __input.halo3 ? "-800px" : "",
+            __input.halo4 ? "-740px" : "",
+            __input.halo5 ? "-720px" : "",
+            ');" ><use href="#halo"/></g> '
+          )
+        );
+      }
+      __result = string(abi.encodePacked(__result, " "));
     }
     __result = string(abi.encodePacked(__result, " </g>"));
   }
@@ -402,7 +404,9 @@ library BackgroundLayer {
             __input.filterLayers[__i].turbOct,
             0
           ),
-          '" seed="1004123123" result="t',
+          '" seed=',
+          SolidMustacheHelpers.uintToString(__input.seed, 0),
+          ' result="t',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
           SolidMustacheHelpers.uintToString(
@@ -410,17 +414,17 @@ library BackgroundLayer {
             1
           ),
           '" in="SourceAlpha" result="tb',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" /> <feDisplacementMap scale="',
-          SolidMustacheHelpers.uintToString(
-            __input.filterLayers[__i].dispScale,
-            0
-          )
+          SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" /> <feDisplacementMap scale="',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].dispScale,
+            0
+          ),
           '" in="tb',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" in2="t',
@@ -434,14 +438,14 @@ library BackgroundLayer {
           '" /> <feGaussianBlur stdDeviation="',
           SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurX, 1),
           " ",
-          SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurY, 1),
-          '" in="cm',
-          SolidMustacheHelpers.uintToString(__i, 0)
+          SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurY, 1)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" in="cm',
+          SolidMustacheHelpers.uintToString(__i, 0),
           '" result="bcm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feSpecularLighting surfaceScale="',
@@ -473,14 +477,14 @@ library BackgroundLayer {
           SolidMustacheHelpers.uintToString(
             __input.filterLayers[__i].lightColor.lightness,
             0
-          ),
-          '%)" in="bcm',
-          SolidMustacheHelpers.uintToString(__i, 0)
+          )
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '%)" in="bcm',
+          SolidMustacheHelpers.uintToString(__i, 0),
           '" result="l',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" > <fePointLight x="',
@@ -494,17 +498,17 @@ library BackgroundLayer {
           '" in2="cm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" result="cl1',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" /> <feComposite operator="arithmetic" k1="0" k2="0" k3="',
-          SolidMustacheHelpers.uintToString(
-            __input.filterLayers[__i].opacity,
-            2
-          )
+          SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" /> <feComposite operator="arithmetic" k1="0" k2="0" k3="',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].opacity,
+            2
+          ),
           '" k4="0" in="dt',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" in2="cl1',

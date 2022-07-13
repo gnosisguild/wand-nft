@@ -40,31 +40,31 @@
 --}}
 <g transform="translate(1000 1060)">
   {{#each rhythm length=24}}
-    <g
-      style="transform: rotate(calc({{
-        @index
-      }} * 15deg)) translateY(
-      {{~#if ../halo0~}}
-      -770px
-      {{~/if~}}
-      {{~#if ../halo1~}}
-      -800px
-      {{~/if~}}
-      {{~#if ../halo2~}}
-      -800px
-      {{~/if~}}
-      {{~#if ../halo3~}}
-      -800px
-      {{~/if~}}
-      {{~#if ../halo4~}}
-      -740px
-      {{~/if~}}
-      {{~#if ../halo5~}}
-      -720px
-      {{~/if~}}
-      );"
-    >
-      {{#if .}}<use href="#halo"/>{{/if}}
-    </g>
+    {{#if .}}
+      <g
+        style="transform: rotate(calc({{
+          @index
+        }} * 15deg)) translateY(
+        {{~#if ../halo0~}}
+        -770px
+        {{~/if~}}
+        {{~#if ../halo1~}}
+        -800px
+        {{~/if~}}
+        {{~#if ../halo2~}}
+        -800px
+        {{~/if~}}
+        {{~#if ../halo3~}}
+        -800px
+        {{~/if~}}
+        {{~#if ../halo4~}}
+        -740px
+        {{~/if~}}
+        {{~#if ../halo5~}}
+        -720px
+        {{~/if~}}
+        );"
+      ><use href="#halo"/></g>
+    {{/if}}
   {{/each}}
 </g>
