@@ -30,3 +30,9 @@
   overflow: hidden;
   cursor: grab;
 }
+.icon {
+  position: absolute;
+  bottom: 3%;
+  right: 3%;
+  width: 20%;
+}

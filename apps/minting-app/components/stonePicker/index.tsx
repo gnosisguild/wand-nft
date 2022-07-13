@@ -5,6 +5,7 @@ import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
+import IconButton from "../IconButton";
 
 const DraggableNoType: any = Draggable;
 
@@ -53,6 +54,9 @@ const StonePicker: React.FC = () => {
           ))}
         </ul>
       </UiCircle>
+      <div className={styles.icon}>
+        <IconButton icon="PickerStone" shadow />
+      </div>
     </div>
   );
 };

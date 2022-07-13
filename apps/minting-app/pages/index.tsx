@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
-import ColorPicker from "../components/ColorPicker";
 import styles from "../styles/Home.module.css";
 import CornerGilding from "../components/Gilding/Corners";
 import CenterGilding from "../components/Gilding/Center";
@@ -24,6 +23,7 @@ import {
 } from "../template";
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
+import IconButton from "../components/IconButton";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -51,6 +51,22 @@ const Home: NextPage = () => {
           <div className={styles.haloPicker}>
             <HaloPicker />
           </div>
+        </div>
+
+        <div className={styles.iconTest}>
+          <IconButton thickBorder icon="Dark" />
+          <IconButton thickBorder icon="Light" />
+          <IconButton thickBorder icon="Radial" />
+          <IconButton thickBorder icon="Linear" />
+          <IconButton icon="PickerStone" />
+          <IconButton icon="PickerAura" />
+          <IconButton icon="PickerHalo" />
+          <IconButton thickBorder icon="Halo0" />
+          <IconButton thickBorder icon="Halo1" />
+          <IconButton thickBorder icon="Halo2" />
+          <IconButton thickBorder icon="Halo3" />
+          <IconButton thickBorder icon="Halo4" />
+          <IconButton thickBorder icon="Halo5" />
         </div>
       </main>
     </div>
