@@ -72,6 +72,9 @@ const HaloPicker: React.FC = () => {
           ))}
         </div>
       </UiCircle>
+      <div className={styles.icon}>
+        <IconButton icon="PickerHalo" shadow />
+      </div>
     </div>
   );
 };

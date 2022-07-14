@@ -40,3 +40,9 @@
   top: 43%;
   right: 26%;
 }
+.icon {
+  position: absolute;
+  bottom: -21%;
+  right: 40%;
+  width: 20%;
+}
