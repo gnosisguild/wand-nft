@@ -5,14 +5,13 @@ import "./interfaces/IWands.sol";
 import "./svg/Template.sol";
 import "./WandName.sol";
 import "base64-sol/base64.sol";
-import "hardhat/console.sol";
 
 contract WandConjuror {
   constructor() {}
 
   function generateWandURI(IWands.Wand memory wand, uint256 tokenId)
     external
-    view
+    pure
     returns (string memory)
   {
     string memory name = WandName.generateWandName(tokenId);
@@ -61,7 +60,7 @@ contract WandConjuror {
     IWands.Wand memory wand,
     uint256 tokenId,
     string memory name
-  ) internal view returns (string memory svg) {
+  ) internal pure returns (string memory svg) {
     uint32 xpCap = 10000;
     return
       Template.render(
@@ -252,25 +251,26 @@ contract WandConjuror {
     ];
   }
 
-  function generateSparkles(uint256 seed)
+  function generateSparkles(uint256 tokenId)
     internal
     pure
     returns (Template.Sparkle[] memory result)
   {
-    uint256 sparkleCount = 4 + (uint256(keccak256(abi.encodePacked(seed))) % 4);
+    uint256 seed = uint256(keccak256(abi.encodePacked(tokenId)));
+    uint256 sparkleCount = 4 + (seed % 4);
     result = new Template.Sparkle[](sparkleCount);
     for (uint256 i = 0; i < sparkleCount; i++) {
       result[i] = Template.Sparkle({
         tx: uint16(
           1820 -
-            (uint256(keccak256(abi.encodePacked(seed + 10 * i + 0))) % 1640)
+            (uint256(keccak256(abi.encodePacked(seed + 3 * i + 0))) % 1640)
         ),
         ty: uint16(
           1880 -
-            (uint256(keccak256(abi.encodePacked(seed + 10 * i + 1))) % 1640)
+            (uint256(keccak256(abi.encodePacked(seed + 3 * i + 1))) % 1640)
         ),
         scale: uint8(
-          30 + (uint256(keccak256(abi.encodePacked(seed + 10 * i + 2))) % 70)
+          30 + (uint256(keccak256(abi.encodePacked(seed + 3 * i + 2))) % 70)
         )
       });
     }
@@ -297,8 +297,8 @@ contract WandConjuror {
     for (uint256 i = 0; i < 8; i++) {
       result[i].x1 = int16((int256(aspects[i].x1) * 260) / 127);
       result[i].y1 = int16((int256(aspects[i].y1) * 260) / 127);
-      result[i].x1 = int16((int256(aspects[i].x1) * 260) / 127);
-      result[i].y1 = int16((int256(aspects[i].y1) * 260) / 127);
+      result[i].x2 = int16((int256(aspects[i].x2) * 260) / 127);
+      result[i].y2 = int16((int256(aspects[i].y2) * 260) / 127);
     }
   }
 }

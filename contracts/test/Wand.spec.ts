@@ -137,7 +137,7 @@ describe("GuildWand", async () => {
         // remove the prefix
         tokenUriJson.image.substring("data:image/svg+xml;base64,".length)
       );
-      console.log(svgFromContract);
+
       // generate SVG via handlebars.js
       const svgFromHandlebars = renderSvgTemplate({
         planets: scalePlanets(planets),
@@ -155,12 +155,7 @@ describe("GuildWand", async () => {
         xp,
         handle: generateHandle(handle),
       });
-      console.log({
-        planets,
-        aspects,
-        sp: scalePlanets(planets),
-        sa: scaleAspects(aspects),
-      });
+
       expect(svgFromContract).to.equal(svgFromHandlebars);
     });
   });
