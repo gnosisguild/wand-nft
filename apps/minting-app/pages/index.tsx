@@ -6,6 +6,7 @@ import { SvgTemplate } from "../components";
 import { ColorPicker } from "../components";
 import StonePicker from "../components/stonePicker";
 import styles from "../styles/Home.module.css";
+import { AppState, TemplateInput } from "../types";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -23,7 +24,7 @@ const Home: NextPage = () => {
       <h1>Minting App</h1>
       <main className={styles.main}>
         <div className={styles.wandImage}>
-          <SvgTemplate settings={state} />
+          <SvgTemplate input={deriveTemplateInput(state)} />
         </div>
         <div className={styles.ui}>
           <div className={styles.colorPicker}>
@@ -37,3 +38,24 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+function deriveTemplateInput(state: TemplateInput): TemplateInput {
+  throw new Error("Function not implemented.");
+}
+
+// const deriveTemplateInput = (state: AppState): TemplateInput => ({
+//   // planets,
+//   // aspects,
+//   halo: generateHalo(haloShape, haloRhythm, background.color.hue),
+//   frame: {
+//     level1: true,
+//     title: generateName(tokenId),
+//   },
+//   background: state.background,
+//   filterLayers,
+//   sparkles: generateSparkles(tokenId),
+//   seed: tokenId,
+//   stone: stoneList[stone],
+//   xp,
+//   handle: generateHandle(handle),
+// });

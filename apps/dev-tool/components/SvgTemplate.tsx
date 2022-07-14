@@ -20,7 +20,7 @@ export interface Sparkle {
   ty: number;
 }
 
-export interface EmbossLayer {
+export interface FilterLayer {
   fractalNoise: boolean;
   turbFreqX: number;
   turbFreqY: number;
@@ -30,7 +30,11 @@ export interface EmbossLayer {
   surfaceScale: number;
   specConstant: number;
   specExponent: number;
-  lightColor: string;
+  lightColor: {
+    hue: number;
+    saturation: number;
+    lightness: number;
+  };
   pointX: number;
   pointY: number;
   pointZ: number;
@@ -38,7 +42,7 @@ export interface EmbossLayer {
   blurX: number;
   blurY: number;
 }
-export interface StoneSettings {
+export interface Stone {
   fractalNoise: boolean;
   turbFreqX: number;
   turbFreqY: number;
@@ -53,7 +57,6 @@ export interface StoneSettings {
   blueExp: number;
   blueOff: number;
   rotation: number;
-  seed: number;
   seasonsAmplitude?: number;
   secondInYear?: number;
   secondInDay?: number;
@@ -97,15 +100,10 @@ interface Props {
     handle2?: boolean;
     handle3?: boolean;
   };
-
   sparkles: Sparkle[];
-  filter: {
-    layers: EmbossLayer[];
-  };
-  stone: StoneSettings;
-  stars: {
-    starsSeed: number;
-  };
+  filterLayers: FilterLayer[];
+  stone: Stone;
+  seed: number;
   xp: {
     cap: number;
     amount: number;

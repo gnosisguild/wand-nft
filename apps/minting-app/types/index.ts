@@ -3,7 +3,7 @@ export interface Planet {
   y: number;
   visible: boolean;
 }
-interface Aspect {
+export interface Aspect {
   x1: number;
   y1: number;
   x2: number;
@@ -16,7 +16,13 @@ export interface Sparkle {
   ty: number;
 }
 
-export interface EmbossLayer {
+interface Color {
+  hue: number;
+  saturation: number;
+  lightness: number;
+}
+
+export interface FilterLayer {
   fractalNoise: boolean;
   turbFreqX: number;
   turbFreqY: number;
@@ -26,7 +32,7 @@ export interface EmbossLayer {
   surfaceScale: number;
   specConstant: number;
   specExponent: number;
-  lightColor: string;
+  lightColor: Color;
   pointX: number;
   pointY: number;
   pointZ: number;
@@ -50,7 +56,6 @@ export interface Stone {
   blueExp: number;
   blueOff: number;
   rotation: number;
-  seed: number;
   seasonsAmplitude?: number;
   secondInYear?: number;
   secondInDay?: number;
@@ -62,11 +67,7 @@ export interface Background {
   radial?: boolean;
   light?: boolean;
   dark?: boolean;
-  color: {
-    hue: number;
-    saturation: number;
-    lightness: number;
-  };
+  color: Color;
 }
 
 export interface Halo {
@@ -80,7 +81,16 @@ export interface Halo {
   hue: number;
 }
 
-export interface Settings {
+export interface AppState {
+  planets: Planet[];
+  aspects: Aspect[];
+  background: Background;
+  handle: number;
+  stone: number;
+  seed: number;
+}
+
+export interface TemplateInput {
   frame: {
     title: string;
     level1?: boolean;
@@ -99,16 +109,10 @@ export interface Settings {
     handle2?: boolean;
     handle3?: boolean;
   };
-  sparkle: {
-    sparkles: Sparkle[];
-  };
-  filter: {
-    layers: EmbossLayer[];
-  };
+  sparkles: Sparkle[];
+  filterLayers: FilterLayer[];
   stone: Stone;
-  stars: {
-    starsSeed: number;
-  };
+  seed: number;
   xp: {
     cap: number;
     amount: number;

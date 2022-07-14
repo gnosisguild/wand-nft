@@ -1,5 +1,5 @@
 import { PairLongitude } from "astronomy-engine";
-import { ALL_BODIES, STONE_RADIUS } from "./const";
+import { ALL_BODIES, MAX_VALUE } from "./const";
 import { calculateBodyPositions } from "./planets";
 
 const fuzziness = 4;
@@ -50,14 +50,21 @@ export const calculateAspects = (
 
         // calculate line start and end points
         aspectLines.push({
-          x1: Math.round(STONE_RADIUS * Math.cos(startAngle)),
-          y1: Math.round(STONE_RADIUS * Math.sin(startAngle)),
-          x2: Math.round(STONE_RADIUS * Math.cos(endAngle)),
-          y2: Math.round(STONE_RADIUS * Math.sin(endAngle)),
+          x1: Math.round(MAX_VALUE * Math.cos(startAngle)),
+          y1: Math.round(MAX_VALUE * Math.sin(startAngle)),
+          x2: Math.round(MAX_VALUE * Math.cos(endAngle)),
+          y2: Math.round(MAX_VALUE * Math.sin(endAngle)),
         });
       }
     }
   }
 
-  return aspectLines;
+  const fixedLengthResult = aspectLines.slice(0, 8);
+  for (let i = fixedLengthResult.length; i < 8; i++) {
+    fixedLengthResult.push(emptyAspectLine);
+  }
+
+  return fixedLengthResult;
 };
+
+const emptyAspectLine = { x1: 0, y1: 0, x2: 0, y2: 0 };

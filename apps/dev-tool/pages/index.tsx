@@ -12,11 +12,11 @@ import {
 } from "../components";
 import styles from "../styles/Home.module.css";
 import { embossPresets } from "../components/settings/embossPresets";
-import { EmbossLayer, StoneSettings, Sparkle } from "../components/SvgTemplate";
+import { FilterLayer, Stone, Sparkle } from "../components/SvgTemplate";
 import { HSLColor } from "../components/settings/BackgroundPicker";
 import { calculateAspects, calculatePlanetPositions } from "../birthchart";
 
-const baseStoneSettings: StoneSettings = {
+const baseStoneSettings: Stone = {
   fractalNoise: false,
   turbFreqX: 2,
   turbFreqY: 4,
@@ -31,7 +31,6 @@ const baseStoneSettings: StoneSettings = {
   blueExp: -32,
   blueOff: -6,
   rotation: 21,
-  seed: 1004123123,
 };
 
 const baseSparkleSet: Sparkle[] = [
@@ -152,23 +151,23 @@ const Home: NextPage = () => {
   };
 
   const removeEmbossLayer = (index: number) => {
-    const layers: EmbossLayer[] = [...embossLayers];
+    const layers: FilterLayer[] = [...embossLayers];
     layers.splice(index, 1);
     setEmbossLayers(layers);
   };
 
   const changeEmbossVal = (
     index: number,
-    key: keyof EmbossLayer,
+    key: keyof FilterLayer,
     value: any
   ) => {
-    const layers: EmbossLayer[] = [...embossLayers];
+    const layers: FilterLayer[] = [...embossLayers];
     const layer = layers[index];
     layer[key] = value;
     setEmbossLayers(layers);
   };
 
-  const changeStoneSetting = (key: keyof StoneSettings, value: any) => {
+  const changeStoneSetting = (key: keyof Stone, value: any) => {
     const settings = { ...stoneSettings, [key]: value };
     setStoneSettings(settings);
   };
@@ -310,7 +309,7 @@ const Home: NextPage = () => {
               <StoneForm
                 settings={stoneSettings}
                 changeVal={changeStoneSetting}
-                swapStone={(settings: StoneSettings) => {
+                swapStone={(settings: Stone) => {
                   setStoneSettings(settings);
                 }}
               />
@@ -323,7 +322,7 @@ const Home: NextPage = () => {
         <div className={styles.wandImage}>
           <SvgTemplate
             frame={{ title: "FLOURISHING MISTY WORLD", [level]: true }}
-            stars={{ starsSeed: 132413 }}
+            seed={123}
             planets={calculatePlanetPositions(
               location?.latitude || 0,
               location?.longitude || 0
@@ -344,10 +343,10 @@ const Home: NextPage = () => {
                 { length: 24 },
                 (v, i) => rhythm[i % rhythm.length] !== "0"
               ),
-              hue: bgColor.hue + 180,
+              hue: (bgColor.hue + 180) % 360,
             }}
             handle={{ [handle]: true }}
-            filter={{ layers: embossLayers }}
+            filterLayers={embossLayers}
             stone={{
               ...stoneSettings,
               seasonsAmplitude: Math.round(

@@ -1,10 +1,10 @@
-import { StoneSettings } from "../SvgTemplate";
+import { Stone } from "../SvgTemplate";
 import styles from "./Settings.module.css";
 import stoneTemplate from "../../../../contracts/contracts/svg/partials/stone.hbs";
 import { useMemo } from "react";
 
 interface Props {
-  settings: StoneSettings;
+  settings: Stone;
 }
 const StoneViewer = ({ settings }: Props) => {
   const svgData = useMemo(() => {
@@ -15,7 +15,7 @@ const StoneViewer = ({ settings }: Props) => {
     viewBox="0 0 2000 3000"
     shapeRendering="geometricPrecision"
   >
-    ${stoneTemplate(settings)}
+    ${stoneTemplate({ seed: 123, stone: settings })}
     </svg>`)
       )
     );

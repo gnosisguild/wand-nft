@@ -1,6 +1,6 @@
-import { Stone } from "../../types";
+import { Stone } from "../types";
 
-const stoneList: Stone[] = [
+export const stoneList: Stone[] = [
   {
     fractalNoise: false,
     turbFreqX: 2,
@@ -466,5 +466,3 @@ const stoneList: Stone[] = [
     rotation: 111,
   },
 ];
-
-export default stoneList;

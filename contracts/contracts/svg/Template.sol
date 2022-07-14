@@ -5,24 +5,20 @@ string constant __constant0 = '%, 0)"/> </radialGradient> <circle style="fill:ur
 
 library Template {
   struct __Input {
-    Filter filter;
+    Handle handle;
     Background background;
     Xp xp;
-    Stars stars;
     Stone stone;
-    Frame frame;
+    uint256 seed;
     Halo halo;
-    Handle handle;
-    Aspect[8] aspects;
     Planet[8] planets;
+    Aspect[8] aspects;
+    FilterLayer[3] filterLayers;
+    Frame frame;
     Sparkle[] sparkles;
   }
 
-  struct Filter {
-    Layer[] layers;
-  }
-
-  struct Layer {
+  struct FilterLayer {
     bool fractalNoise;
     uint8 turbFreqX;
     uint8 turbFreqY;
@@ -31,39 +27,40 @@ library Template {
     uint8 dispScale;
     uint8 blurX;
     uint8 blurY;
-    uint8 surfaceScale;
-    uint8 specConstant;
     uint8 specExponent;
-    string lightColor;
+    uint8 opacity;
+    int16 surfaceScale;
+    uint16 specConstant;
     int16 pointX;
     int16 pointY;
     int16 pointZ;
-    uint8 opacity;
-  }
-
-  struct Background {
-    uint16 hue;
-    bool radial;
-    bool light;
-    Color color;
-    bool dark;
-    bool linear;
+    Color lightColor;
   }
 
   struct Color {
-    uint8 hue;
     uint8 saturation;
     uint8 lightness;
+    uint16 hue;
+  }
+
+  struct LightColor {
+    uint8 saturation;
+    uint8 lightness;
+    uint16 hue;
+  }
+
+  struct Background {
+    bool radial;
+    bool light;
+    bool dark;
+    bool linear;
+    Color color;
   }
 
   struct Xp {
+    bool crown;
     uint32 amount;
     uint32 cap;
-    bool crown;
-  }
-
-  struct Stars {
-    uint256 starsSeed;
   }
 
   struct Stone {
@@ -71,7 +68,6 @@ library Template {
     uint8 turbFreqX;
     uint8 turbFreqY;
     uint8 turbOct;
-    uint256 seed;
     int8 redAmp;
     int8 redExp;
     int8 redOff;
@@ -100,7 +96,7 @@ library Template {
     bool halo3;
     bool halo4;
     bool halo5;
-    uint8 hue;
+    uint16 hue;
     bool[24] rhythm;
   }
 
@@ -125,9 +121,9 @@ library Template {
   }
 
   struct Sparkle {
-    int16 tx;
-    int16 ty;
     uint8 scale;
+    uint16 tx;
+    uint16 ty;
   }
 
   function render(__Input memory __input)
@@ -139,11 +135,11 @@ library Template {
       abi.encodePacked(
         __result,
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 3000" shape-rendering="geometricPrecision" > <style type="text/css"> .bc{fill:none;stroke:#8BA0A5;} </style>',
-        BackgroundLayer.filter(__input.filter),
+        BackgroundLayer.filter(__input),
         BackgroundLayer.background(__input.background),
         BackgroundLayer.xpBar(__input.xp),
-        BackgroundLayer.stars(__input.stars),
-        stone(__input.stone),
+        BackgroundLayer.stars(__input),
+        stone(__input),
         FrameLayer.frame(__input.frame),
         halo(__input.halo),
         HandleLayer.handles(__input.handle),
@@ -154,7 +150,7 @@ library Template {
     );
   }
 
-  function stone(Stone memory __input)
+  function stone(__Input memory __input)
     internal
     pure
     returns (string memory __result)
@@ -163,38 +159,38 @@ library Template {
       abi.encodePacked(
         __result,
         '<filter id="s"> <feTurbulence ',
-        __input.fractalNoise ? 'type="fractalNoise"' : "",
+        __input.stone.fractalNoise ? 'type="fractalNoise"' : "",
         ' baseFrequency="',
-        SolidMustacheHelpers.uintToString(__input.turbFreqX, 3),
+        SolidMustacheHelpers.uintToString(__input.stone.turbFreqX, 3),
         " ",
-        SolidMustacheHelpers.uintToString(__input.turbFreqY, 3),
+        SolidMustacheHelpers.uintToString(__input.stone.turbFreqY, 3),
         '" numOctaves="',
-        SolidMustacheHelpers.uintToString(__input.turbOct, 0),
+        SolidMustacheHelpers.uintToString(__input.stone.turbOct, 0),
         '" seed="',
         SolidMustacheHelpers.uintToString(__input.seed, 0),
         '" /> <feComponentTransfer> <feFuncR type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.redAmp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.redAmp, 2),
         '" exponent="',
-        SolidMustacheHelpers.intToString(__input.redExp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.redExp, 2),
         '" offset="',
-        SolidMustacheHelpers.intToString(__input.redOff, 2)
+        SolidMustacheHelpers.intToString(__input.stone.redOff, 2)
       )
     );
     __result = string(
       abi.encodePacked(
         __result,
         '" /> <feFuncG type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.greenAmp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.greenAmp, 2),
         '" exponent="',
-        SolidMustacheHelpers.intToString(__input.greenExp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.greenExp, 2),
         '" offset="',
-        SolidMustacheHelpers.intToString(__input.greenOff, 2),
+        SolidMustacheHelpers.intToString(__input.stone.greenOff, 2),
         '" /> <feFuncB type="gamma" amplitude="',
-        SolidMustacheHelpers.intToString(__input.blueAmp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.blueAmp, 2),
         '" exponent="',
-        SolidMustacheHelpers.intToString(__input.blueExp, 2),
+        SolidMustacheHelpers.intToString(__input.stone.blueExp, 2),
         '" offset="',
-        SolidMustacheHelpers.intToString(__input.blueOff, 2),
+        SolidMustacheHelpers.intToString(__input.stone.blueOff, 2),
         '" /> <feFuncA type="discrete" tableValues="1"/> </feComponentTransfer> <feComposite operator="in" in2="SourceGraphic" result="tex" /> ',
         ' <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="glow" /> <feColorMatrix in="glow" result="bgg" type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 .8 0 " /> <feMerge> <feMergeNode in="bgg"/> <feMergeNode in="tex"/> </feMerge> </filter> <radialGradient id="ss"> <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/> <stop offset="90%" stop-color="hsla(0, 0%, 0%, .8)"/> </radialGradient> <defs> ',
         ' <clipPath id="sc"> <circle cx="1000" cy="1060" r="260"/> </clipPath> </defs> ',
@@ -204,7 +200,7 @@ library Template {
     __result = string(
       abi.encodePacked(
         __result,
-        SolidMustacheHelpers.uintToString(__input.rotation, 0),
+        SolidMustacheHelpers.uintToString(__input.stone.rotation, 0),
         ', 1000, 1060)" cx="1000" cy="1060" r="260" filter="url(#s)" /> ',
         ' <circle cx="1200" cy="1060" r="520" fill="url(#ss)" clip-path="url(#sc)" /> <defs> <radialGradient id="sf" cx="606.78" cy="1003.98" fx="606.78" fy="1003.98" r="2" gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)" gradientUnits="userSpaceOnUse" > <stop offset=".05" stop-color="#fff" stop-opacity=".7"/> <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/> <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/> <stop offset=".63" stop-color="#929292" stop-opacity=".5"/> <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/> <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/> </radialGradient> <radialGradient id="sh" cx="1149" cy="2660" fx="1149" fy="2660" r="76" gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)" gradientUnits="userSpaceOnUse" > <stop offset="0" stop-color="#fff" stop-opacity=".7"/> <stop offset="1" stop-color="#fff" stop-opacity="0"/> </radialGradient> </defs> <path fill="url(#sf)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/> <path fill="url(#sh)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>'
       )
@@ -272,23 +268,25 @@ library Template {
       )
     );
     for (uint256 __i; __i < __input.rhythm.length; __i++) {
-      __result = string(
-        abi.encodePacked(
-          __result,
-          ' <g style="transform: rotate(calc(',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          " * 15deg)) translateY(",
-          __input.halo0 ? "-770px" : "",
-          __input.halo1 ? "-800px" : "",
-          __input.halo2 ? "-800px" : "",
-          __input.halo3 ? "-800px" : "",
-          __input.halo4 ? "-740px" : "",
-          __input.halo5 ? "-720px" : "",
-          ');" > ',
-          __input.rhythm[__i] ? '<use href="#halo"/>' : "",
-          " </g> "
-        )
-      );
+      __result = string(abi.encodePacked(__result, " "));
+      if (__input.rhythm[__i]) {
+        __result = string(
+          abi.encodePacked(
+            __result,
+            ' <g style="transform: rotate(calc(',
+            SolidMustacheHelpers.uintToString(__i, 0),
+            " * 15deg)) translateY(",
+            __input.halo0 ? "-770px" : "",
+            __input.halo1 ? "-800px" : "",
+            __input.halo2 ? "-800px" : "",
+            __input.halo3 ? "-800px" : "",
+            __input.halo4 ? "-740px" : "",
+            __input.halo5 ? "-720px" : "",
+            ');" ><use href="#halo"/></g> '
+          )
+        );
+      }
+      __result = string(abi.encodePacked(__result, " "));
     }
     __result = string(abi.encodePacked(__result, " </g>"));
   }
@@ -358,9 +356,9 @@ library Template {
         abi.encodePacked(
           __result,
           ' <use width="250" height="377" transform="translate(',
-          SolidMustacheHelpers.intToString(__input.sparkles[__i].tx, 0),
+          SolidMustacheHelpers.uintToString(__input.sparkles[__i].tx, 0),
           " ",
-          SolidMustacheHelpers.intToString(__input.sparkles[__i].ty, 0),
+          SolidMustacheHelpers.uintToString(__input.sparkles[__i].ty, 0),
           ") scale(",
           SolidMustacheHelpers.uintToString(__input.sparkles[__i].scale, 2),
           ')" href="#sp" /> '
@@ -372,7 +370,7 @@ library Template {
 }
 
 library BackgroundLayer {
-  function filter(Template.Filter memory __input)
+  function filter(Template.__Input memory __input)
     external
     pure
     returns (string memory __result)
@@ -385,31 +383,48 @@ library BackgroundLayer {
         " "
       )
     );
-    for (uint256 __i; __i < __input.layers.length; __i++) {
+    for (uint256 __i; __i < __input.filterLayers.length; __i++) {
       __result = string(
         abi.encodePacked(
           __result,
           " <feTurbulence ",
-          __input.layers[__i].fractalNoise ? 'type="fractalNoise"' : "",
+          __input.filterLayers[__i].fractalNoise ? 'type="fractalNoise"' : "",
           ' baseFrequency="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbFreqX, 3),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbFreqX,
+            3
+          ),
           " ",
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbFreqY, 3),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbFreqY,
+            3
+          ),
           '" numOctaves="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbOct, 0),
-          '" seed="1004123123" result="t',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbOct,
+            0
+          ),
+          '" seed=',
+          SolidMustacheHelpers.uintToString(__input.seed, 0),
+          ' result="t',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].turbBlur, 1),
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].turbBlur,
+            1
+          ),
           '" in="SourceAlpha" result="tb',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" /> <feDisplacementMap scale="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].dispScale, 0)
+          SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" /> <feDisplacementMap scale="',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].dispScale,
+            0
+          ),
           '" in="tb',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" in2="t',
@@ -421,67 +436,83 @@ library BackgroundLayer {
           '" result="cm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].blurX, 1),
+          SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurX, 1),
           " ",
-          SolidMustacheHelpers.uintToString(__input.layers[__i].blurY, 1),
-          '" in="cm',
-          SolidMustacheHelpers.uintToString(__i, 0)
+          SolidMustacheHelpers.uintToString(__input.filterLayers[__i].blurY, 1)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" in="cm',
+          SolidMustacheHelpers.uintToString(__i, 0),
           '" result="bcm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feSpecularLighting surfaceScale="',
-          SolidMustacheHelpers.uintToString(
-            __input.layers[__i].surfaceScale,
+          SolidMustacheHelpers.intToString(
+            __input.filterLayers[__i].surfaceScale,
             0
           ),
           '" specularConstant="',
           SolidMustacheHelpers.uintToString(
-            __input.layers[__i].specConstant,
+            __input.filterLayers[__i].specConstant,
             2
           ),
           '" specularExponent="',
           SolidMustacheHelpers.uintToString(
-            __input.layers[__i].specExponent,
+            __input.filterLayers[__i].specExponent,
             0
           ),
-          '" lighting-color="',
-          __input.layers[__i].lightColor,
-          '" in="bcm',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" result="l',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" > <fePointLight x="',
-          SolidMustacheHelpers.intToString(__input.layers[__i].pointX, 0)
+          '" lighting-color="hsl(',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].lightColor.hue,
+            0
+          ),
+          ", ",
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].lightColor.saturation,
+            0
+          ),
+          "%, ",
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].lightColor.lightness,
+            0
+          )
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '%)" in="bcm',
+          SolidMustacheHelpers.uintToString(__i, 0),
+          '" result="l',
+          SolidMustacheHelpers.uintToString(__i, 0),
+          '" > <fePointLight x="',
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointX, 0),
           '" y="',
-          SolidMustacheHelpers.intToString(__input.layers[__i].pointY, 0),
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointY, 0),
           '" z="',
-          SolidMustacheHelpers.intToString(__input.layers[__i].pointZ, 0),
+          SolidMustacheHelpers.intToString(__input.filterLayers[__i].pointZ, 0),
           '"/> </feSpecularLighting> <feComposite operator="in" in="l',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" in2="cm',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" result="cl1',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" /> <feComposite operator="arithmetic" k1="0" k2="0" k3="',
-          SolidMustacheHelpers.uintToString(__input.layers[__i].opacity, 2),
-          '" k4="0" in="dt',
-          SolidMustacheHelpers.uintToString(__i, 0),
-          '" in2="cl1',
           SolidMustacheHelpers.uintToString(__i, 0)
         )
       );
       __result = string(
         abi.encodePacked(
           __result,
+          '" /> <feComposite operator="arithmetic" k1="0" k2="0" k3="',
+          SolidMustacheHelpers.uintToString(
+            __input.filterLayers[__i].opacity,
+            2
+          ),
+          '" k4="0" in="dt',
+          SolidMustacheHelpers.uintToString(__i, 0),
+          '" in2="cl1',
+          SolidMustacheHelpers.uintToString(__i, 0),
           '" result="cl2',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feComposite operator="in" in2="SourceAlpha" in="cl2',
@@ -498,7 +529,7 @@ library BackgroundLayer {
         ' <feMerge> <feMergeNode in="bgg"/> <feMergeNode in="SourceGraphic"/> '
       )
     );
-    for (uint256 __i2; __i2 < __input.layers.length; __i2++) {
+    for (uint256 __i2; __i2 < __input.filterLayers.length; __i2++) {
       __result = string(
         abi.encodePacked(
           __result,
@@ -521,29 +552,21 @@ library BackgroundLayer {
     pure
     returns (string memory __result)
   {
-    __result = string(
-      abi.encodePacked(
-        __result,
-        '<g style="filter: hue-rotate(',
-        SolidMustacheHelpers.uintToString(__input.hue, 0),
-        'deg);"> '
-      )
-    );
     if (__input.radial) {
       __result = string(abi.encodePacked(__result, " "));
       if (__input.light) {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <path style="fill:hsla(',
+            ' <path style="fill:hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsla(',
+            '%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 100%, 95%, 1)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
+            ', 100%, 95%)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
             __constant0
           )
         );
@@ -555,13 +578,13 @@ library BackgroundLayer {
             __result,
             ' <path style="fill:hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 30%, 7%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color: hsla(',
+            ', 30%, 7%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color: hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> <stop offset="1" style="stop-color: hsla(',
+            '%)"/> <stop offset="1" style="stop-color: hsla(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
@@ -580,13 +603,13 @@ library BackgroundLayer {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsla(55, 66%, 83%, 1)"/> <stop offset="100%" stop-color="hsla(',
+            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/> <stop offset="100%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
+            '%)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
           )
         );
       }
@@ -597,13 +620,13 @@ library BackgroundLayer {
             __result,
             ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 30%, 7%)"/> <stop offset="100%" stop-color="hsla(',
+            ', 30%, 7%)"/> <stop offset="100%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
             "%, ",
             SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%, 1)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
+            '%)"/> </linearGradient> <rect style="fill:url(#l0)" width="2000" height="3000"/> '
           )
         );
       }
@@ -612,7 +635,7 @@ library BackgroundLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        ' </g> <path filter="url(#bb)" style="opacity: .5" d="m1000 2435-199 334 195-335-573 212 570-214-892-20 889 18-1123-339 1121 335-1244-713 1243 709-1242-1106L988 2418-133 938 990 2415 101 616l892 1796L423 382l573 2028L801 260l199 2149 199-2149-195 2150 573-2028-569 2030 891-1796-889 1799L2133 938 1012 2418l1244-1102-1243 1106 1243-709-1244 713 1121-335-1123 338 889-17-892 20 570 214-573-212 195 335-199-334z" fill="white" />'
+        ' <path filter="url(#bb)" style="opacity: .5" d="m1000 2435-199 334 195-335-573 212 570-214-892-20 889 18-1123-339 1121 335-1244-713 1243 709-1242-1106L988 2418-133 938 990 2415 101 616l892 1796L423 382l573 2028L801 260l199 2149 199-2149-195 2150 573-2028-569 2030 891-1796-889 1799L2133 938 1012 2418l1244-1102-1243 1106 1243-709-1244 713 1121-335-1123 338 889-17-892 20 570 214-573-212 195 335-199-334z" fill="white" />'
       )
     );
   }
@@ -637,7 +660,7 @@ library BackgroundLayer {
     );
   }
 
-  function stars(Template.Stars memory __input)
+  function stars(Template.__Input memory __input)
     external
     pure
     returns (string memory __result)
@@ -646,7 +669,7 @@ library BackgroundLayer {
       abi.encodePacked(
         __result,
         '<defs> <filter id="st"> <feTurbulence baseFrequency=".1" seed="',
-        SolidMustacheHelpers.uintToString(__input.starsSeed, 0),
+        SolidMustacheHelpers.uintToString(__input.seed, 0),
         '"/> <feColorMatrix values="0 0 0 7 -4 0 0 0 7 -4 0 0 0 7 -4 0 0 0 0 1" /> </filter> </defs> <clipPath id="stc"> <circle cx="1000" cy="1060" r="520"/> </clipPath> <mask id="stm"> <g filter="url(#st)" transform="scale(2)"> <rect width="100%" height="100%"/> </g> </mask> <circle class="bc" cx="1000" cy="1060" r="260"/> <circle class="bc" cx="1000" cy="1060" r="360"/> <circle class="bc" cx="1000" cy="1060" r="440"/> <circle class="bc" cx="1000" cy="1060" r="520"/> <line class="bc" x1="740" y1="610" x2="1260" y2="1510"/> <line class="bc" x1="1260" y1="610" x2="740" y2="1510"/> <line class="bc" x1="1450" y1="800" x2="550" y2="1320"/> <line class="bc" x1="1450" y1="1320" x2="550" y2="800"/> <g style="filter: blur(2px);"> <rect width="100%" height="100%" fill="white" mask="url(#stm)" clip-path="url(#stc)" /> </g>'
       )
     );
@@ -662,7 +685,7 @@ library FrameLayer {
     __result = string(
       abi.encodePacked(
         __result,
-        '<defs> <linearGradient id="gradient-fill"> <stop offset="0" stop-color="black"/> <stop offset="0.5" stop-color="rgba(255,255,255,0.5)"/> <stop offset="1" stop-color="rgba(255,255,255,0.8)"/> </linearGradient> <style type="text/css"> .title {font: 45px serif; fill: #999777; mix-blend-mode: difference; text-transform: uppercase; letter-spacing: 5px} .titleBox {fill: none; stroke:#DCD7AF; stroke-width: 4px;} .frame-line { fill: none; stroke: url(#gradient-fill); stroke-miterlimit: 10; stroke-width: 2px; mix-blend-mode: plus-lighter; } .frame-circ { fill: url(#gradient-fill); mix-blend-mode: plus-lighter; } </style> </defs>',
+        '<defs> <linearGradient id="gradient-fill"> <stop offset="0" stop-color="black"/> <stop offset="0.5" stop-color="rgba(255,255,255,0.5)"/> <stop offset="1" stop-color="rgba(255,255,255,0.8)"/> </linearGradient> <style type="text/css"> .title {font: 45px serif; fill: #ffffffbb; letter-spacing: 10px} .frame-line { fill: none; stroke: url(#gradient-fill); stroke-miterlimit: 10; stroke-width: 2px; mix-blend-mode: plus-lighter; } .frame-circ { fill: url(#gradient-fill); mix-blend-mode: plus-lighter; } </style> </defs>',
         __input.level1
           ? ' <g> <g id="half1"> <polyline class="frame-line" points="999.95 170.85 1383.84 170.85 1862.82 137.14 1862.82 1863.5 1759.46 2478.5 1481.46 2794.5 999.98 2794.5" /> <polyline class="frame-line" points="1000 69 1931.46 68.5 1931.39 2930.43 1569.96 2931 1480.96 2828 999.99 2828" /> </g> <use href="#half1" transform="scale(-1,1) translate(-2000,0)"/> <circle class="frame-circ" cx="1000" cy="68.5" r="16.65"/> </g>'
           : "",
@@ -678,7 +701,7 @@ library FrameLayer {
         __input.level5
           ? ' <g> <g id="half5"> <circle class="frame-circ" cx="1730.45" cy="2846.73" r="16.65"/> <path class="frame-circ" d="M1373.87,2812.06c0-19.52,108.68-17.5,108.68-17.5h-482.63l.2,17.5h373.75Z" /> <path class="frame-circ" d="M1373.87,2826.85c0-19.52,108.68-17.5,108.68-17.5h-482.63l.2,17.5h373.75Z" /> <polyline class="frame-line" points="1000 137.11 1131.57 137.04 1178.34 68.9 1931.5 68.5 1931.43 2930.43 1570 2931 1481 2828 1000 2828" /> <polyline class="frame-line" points="1897.28 863.04 1897.2 102.86 1210.67 102.86 1165.79 170.24 1000 170.31" /> <line class="frame-line" x1="1897.28" y1="863.04" x2="1897.5" y2="2880.53" /> <polyline class="frame-line" points="1897.5 2880.53 1897.5 2896.5 1710.61 2897.5 1607.61 2811.25 1000 2811.25" /> <polyline class="frame-line" points="1897.28 863.04 1880.5 941.98 1880.5 2482.5 1668.74 2606.83 1516.66 2779.74 1533.6 2794.5 1754.59 2794.5 1854.26 2880.53 1897.5 2880.53" /> <polyline class="frame-line" points="1897.5 2880.53 1897.5 2880.53 1897.5 862.02 1897.28 863.04" /> <polyline class="frame-line" points="1827.78 1192.28 1827.78 1797.3 1505.26 2329.59 1505.26 2741.32 1474.99 2773.5 1108.16 2773.5" /> <polyline class="frame-line" points="1108.16 2773.5 1001.4 2773.5 1000.22 2773.5 1000.04 2773.5 1000 2773.5" /> <polyline class="frame-line" points="1795.65 693.48 1342.17 240 1000 240" /> <line class="frame-line" x1="1827.78" y1="1192.28" x2="1827.78" y2="1061.42" /> <polyline class="frame-line" points="1827.78 1061.42 1827.78 725.62 1795.65 693.48" /> <polyline class="frame-line" points="1000 205.71 1343.14 205.71 1387.55 137.14 1637.33 137.14 1862.86 724.46 1862.86 1863.5 1759.5 2478.5 1481.5 2794.5 1000 2794.5" /> <polygon class="frame-line" points="1391.12 258.56 1749.43 619.82 1802.81 619.82 1623.32 160.77 1403.75 160.77 1391.12 258.56" /> <polyline class="frame-line" points="1743.58 1781.6 1792.75 1724.22 1792.75 1218.65 1827.78 1061.42" /> <line class="frame-line" x1="1827.82" y1="1061.26" x2="1827.78" y2="1061.42" /> <polyline class="frame-line" points="1367.45 2484.94 1367.45 2554.29 1433.9 2622.34 1433.9 2734.78 1412.76 2756.5 1188.13 2756.5 1108.16 2773.5" /> <polyline class="frame-line" points="1367.45 2484.94 1367.45 2220.5 1743.58 1781.6" /> <polyline class="frame-line" points="1367.45 2484.94 1268.07 2424.5 1268.07 1931.48 1725.5 1592.76 1725.5 1218.65 1760.57 1061.26 1760.57 658.41" /> <polyline class="frame-line" points="1760.57 1761.76 1760.57 1218.65 1795.65 1061.26 1795.65 972.9" /> <line class="frame-line" x1="1795.65" y1="693.48" x2="1795.65" y2="972.9" /> <polygon class="frame-line" points="1354.28 1995.11 1516.66 1871.28 1516.66 1822.34 1608.69 1751.67 1608.69 1697.46 1281.35 1941.68 1281.35 2416.1 1354.28 2461.09 1354.28 1995.11" /> <polygon class="frame-line" points="1367.48 2197.71 1728.39 1776.02 1725.8 1612.05 1621.83 1687.86 1621.83 1758.95 1528.89 1828.67 1528.89 1882.83 1367.48 2003.92 1367.48 2197.71" /> <polygon class="frame-line" points="1504.51 2079.27 1504.51 2307.23 1795.65 1826.17 1795.65 1741.8 1504.51 2079.27" /> <polygon class="frame-line" points="1379.42 2225.53 1379.42 2544.67 1447.81 2613.04 1488.39 2613.04 1488.39 2097.65 1379.42 2225.53" /> <polygon class="frame-line" points="1810.37 1957.47 1584.83 2627.74 1598.53 2636.23 1743.99 2466.19 1833.34 1957.47 1810.37 1957.47" /> <polygon class="frame-line" points="1792.74 1887.34 1521.19 2335.31 1519.33 2728.41 1540.01 2703.32 1792.74 1957.47 1792.74 1887.34" /> <polyline class="frame-line" points="1827.78 1192.28 1810.78 1272.24 1810.78 1825.36" /> <polyline class="frame-line" points="1743.58 1781.6 1743.58 1217.84 1795.65 972.9" /> <polygon class="frame-line" points="1880.5 2511.85 1862.86 2511.85 1681.48 2620.12 1580.39 2737.19 1618.59 2777.12 1759.78 2776.27 1859.09 2863.38 1880.17 2863.38 1880.5 2511.85" /> </g> <use href="#half5" transform="scale(-1,1) translate(-2000,0)"/> <circle class="frame-circ" cx="1000" cy="68.5" r="16.65"/> </g>'
           : "",
-        ' <text text-anchor="middle" x="1000" y="2895" class="title">',
+        '<path opacity="0.4" d="M 529.085 2844.789 L 454.584 2930.999 L 1545.417 2930.989 L 1470.942 2844.789 L 529.085 2844.789 Z" fill="#00000055" stroke="white" stroke-width="3.75"/> <text text-anchor="middle" x="1000" y="2905" class="title">',
         __input.title,
         "</text>"
       )

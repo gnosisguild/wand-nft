@@ -30,11 +30,6 @@ const nextConfig = {
                   null,
                   path.join(__dirname, "./handlebars-helpers", "int-helper.js")
                 );
-              } else if (helper.startsWith("./eq")) {
-                callback(
-                  null,
-                  path.join(__dirname, "./handlebars-helpers", "eq-helper.js")
-                );
               } else {
                 callback();
               }

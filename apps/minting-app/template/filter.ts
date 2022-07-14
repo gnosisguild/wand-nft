@@ -1,4 +1,4 @@
-export const embossPresets = [
+export const filterLayers = [
   {
     blurX: 19,
     blurY: 17,

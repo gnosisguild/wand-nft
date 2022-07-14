@@ -1,28 +1,28 @@
 <filter id="s">
   <feTurbulence
-    {{#if fractalNoise}}type="fractalNoise"{{/if}}
-    baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
-    numOctaves="{{uint8 turbOct}}"
+    {{#if stone.fractalNoise}}type="fractalNoise"{{/if}}
+    baseFrequency="{{uint8 stone.turbFreqX decimals=3}} {{uint8 stone.turbFreqY decimals=3}}"
+    numOctaves="{{uint8 stone.turbOct}}"
     seed="{{uint seed}}"
   />
   <feComponentTransfer>
     <feFuncR
       type="gamma"
-      amplitude="{{int8 redAmp decimals=2}}"
-      exponent="{{int8 redExp decimals=2}}"
-      offset="{{int8 redOff decimals=2}}"
+      amplitude="{{int8 stone.redAmp decimals=2}}"
+      exponent="{{int8 stone.redExp decimals=2}}"
+      offset="{{int8 stone.redOff decimals=2}}"
     />
     <feFuncG
       type="gamma"
-      amplitude="{{int8 greenAmp decimals=2}}"
-      exponent="{{int8 greenExp decimals=2}}"
-      offset="{{int8 greenOff decimals=2}}"
+      amplitude="{{int8 stone.greenAmp decimals=2}}"
+      exponent="{{int8 stone.greenExp decimals=2}}"
+      offset="{{int8 stone.greenOff decimals=2}}"
     />
     <feFuncB
       type="gamma"
-      amplitude="{{int8 blueAmp decimals=2}}"
-      exponent="{{int8 blueExp decimals=2}}"
-      offset="{{int8 blueOff decimals=2}}"
+      amplitude="{{int8 stone.blueAmp decimals=2}}"
+      exponent="{{int8 stone.blueExp decimals=2}}"
+      offset="{{int8 stone.blueOff decimals=2}}"
     />
     <feFuncA type="discrete" tableValues="1"/>
   </feComponentTransfer>
@@ -66,7 +66,7 @@
 </defs>
 {{! stone base }}
 <circle
-  transform="rotate({{uint16 rotation}}, 1000, 1060)"
+  transform="rotate({{uint16 stone.rotation}}, 1000, 1060)"
   cx="1000"
   cy="1060"
   r="260"

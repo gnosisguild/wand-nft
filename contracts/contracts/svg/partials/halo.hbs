@@ -21,14 +21,14 @@
       M157 46Q136 199 50 201c-16 0-33 2-49 4l10 79a442 442 0 0 1 115 0Z
       {{~/if~}}
       "
-      fill="hsl({{uint8 hue}}, 10%, 64%)"
+      fill="hsl({{uint16 hue}}, 10%, 64%)"
       style="transform: translateX(-50%); transform-box: fill-box;"
     />
     {{#if halo4}}
-      <circle fill="hsl({{uint8 hue}}, 10%, 64%)" cx="0" cy="80" r="40"/>
+      <circle fill="hsl({{uint16 hue}}, 10%, 64%)" cx="0" cy="80" r="40"/>
     {{/if}}
     {{#if halo5}}
-      <circle fill="hsl({{uint8 hue}}, 10%, 64%)" cx="0" cy="60" r="40"/>
+      <circle fill="hsl({{uint16 hue}}, 10%, 64%)" cx="0" cy="60" r="40"/>
     {{/if}}
   </g>
 </defs>
@@ -40,31 +40,31 @@
 --}}
 <g transform="translate(1000 1060)">
   {{#each rhythm length=24}}
-    <g
-      style="transform: rotate(calc({{
-        @index
-      }} * 15deg)) translateY(
-      {{~#if ../halo0~}}
-      -770px
-      {{~/if~}}
-      {{~#if ../halo1~}}
-      -800px
-      {{~/if~}}
-      {{~#if ../halo2~}}
-      -800px
-      {{~/if~}}
-      {{~#if ../halo3~}}
-      -800px
-      {{~/if~}}
-      {{~#if ../halo4~}}
-      -740px
-      {{~/if~}}
-      {{~#if ../halo5~}}
-      -720px
-      {{~/if~}}
-      );"
-    >
-      {{#if .}}<use href="#halo"/>{{/if}}
-    </g>
+    {{#if .}}
+      <g
+        style="transform: rotate(calc({{
+          @index
+        }} * 15deg)) translateY(
+        {{~#if ../halo0~}}
+        -770px
+        {{~/if~}}
+        {{~#if ../halo1~}}
+        -800px
+        {{~/if~}}
+        {{~#if ../halo2~}}
+        -800px
+        {{~/if~}}
+        {{~#if ../halo3~}}
+        -800px
+        {{~/if~}}
+        {{~#if ../halo4~}}
+        -740px
+        {{~/if~}}
+        {{~#if ../halo5~}}
+        -720px
+        {{~/if~}}
+        );"
+      ><use href="#halo"/></g>
+    {{/if}}
   {{/each}}
 </g>

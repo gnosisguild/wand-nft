@@ -30,12 +30,12 @@
     />
 
     {{! Emboss/Bevel }}
-    {{#each layers}}
+    {{#each filterLayers length=3}}
       <feTurbulence
         {{#if fractalNoise}}type="fractalNoise"{{/if}}
         baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
         numOctaves="{{uint8 turbOct}}"
-        seed="1004123123"
+        seed={{uint ../seed}}
         result="t{{@index}}"
       />
       <feGaussianBlur
@@ -64,10 +64,10 @@
         result="bcm{{@index}}"
       />
       <feSpecularLighting
-        surfaceScale="{{uint8 surfaceScale}}"
-        specularConstant="{{uint8 specConstant decimals=2}}"
+        surfaceScale="{{int16 surfaceScale}}"
+        specularConstant="{{uint16 specConstant decimals=2}}"
         specularExponent="{{uint8 specExponent}}"
-        lighting-color="{{lightColor}}"
+        lighting-color="hsl({{uint16 lightColor.hue}}, {{uint8 lightColor.saturation}}%, {{uint8 lightColor.lightness}}%)"
         in="bcm{{@index}}"
         result="l{{@index}}"
       >
@@ -101,7 +101,7 @@
     <feMerge>
       <feMergeNode in="bgg"/>
       <feMergeNode in="SourceGraphic"/>
-      {{#each layers}}
+      {{#each filterLayers}}
         <feMergeNode in="clf{{@index}}"/>
       {{/each}}
     </feMerge>
