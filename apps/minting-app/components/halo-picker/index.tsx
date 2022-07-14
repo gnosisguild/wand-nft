@@ -51,7 +51,13 @@ const HaloPicker: React.FC = () => {
             />
           ))}
           {fillers.map((d, index) => (
-            <path key={index} d={d} fill="purple" />
+            <path
+              key={index}
+              d={d}
+              fill="#D9D4AD"
+              opacity="0.7"
+              style={{ mixBlendMode: "color-dodge" }}
+            />
           ))}
         </svg>
         <div className={styles.buttonContainer}>

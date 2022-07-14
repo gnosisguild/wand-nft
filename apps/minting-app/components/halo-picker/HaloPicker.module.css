@@ -1,6 +1,7 @@
 .rhythm {
   cursor: pointer;
   fill: transparent;
+  transition: all 0.05s ease;
 }
 
 .rhythmActive {
@@ -8,7 +9,7 @@
 }
 
 .rhythm:hover {
-  fill: #65da45;
+  fill: rgba(111, 255, 229, 0.4);
 }
 
 .haloButtonContainer {
