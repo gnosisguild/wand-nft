@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import UiCircle from "../uiCircle";
-import { useAppContext } from "../../state/AppContext";
+import { useAppContext } from "../../state";
 import classes from "./ColorPicker.module.css";
 
 export const ColorPicker = () => {

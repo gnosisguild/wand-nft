@@ -1,0 +1,11 @@
+.rhythmOn {
+  fill: turquoise;
+}
+
+.rhythmOff {
+  fill: transparent;
+}
+
+.rhythmOff:hover {
+  fill: #65da45;
+}
