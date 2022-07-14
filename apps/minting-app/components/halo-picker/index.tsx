@@ -5,10 +5,11 @@ import { useAppContext } from "../../state";
 import {
   NARROW_SEGMENTS,
   WIDE_SEGMENTS,
+  NARROW_FILLERS,
+  WIDE_FILLERS,
   VIEWBOX_WIDTH,
   VIEWBOX_HEIGHT,
 } from "./rhythm";
-import buttons from "./buttons";
 import { Halo } from "../../types";
 import { isWideShape } from "../../template";
 import IconButton from "../IconButton";
@@ -17,7 +18,9 @@ const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { halo } = state;
-  const segments = isWideShape(halo.shape) ? WIDE_SEGMENTS : NARROW_SEGMENTS;
+  const [segments, fillers] = isWideShape(halo.shape)
+    ? [WIDE_SEGMENTS, WIDE_FILLERS]
+    : [NARROW_SEGMENTS, NARROW_FILLERS];
 
   return (
     <div>
@@ -46,6 +49,9 @@ const HaloPicker: React.FC = () => {
                 });
               }}
             />
+          ))}
+          {fillers.map((d, index) => (
+            <path key={index} d={d} fill="purple" />
           ))}
         </svg>
         <div className={styles.buttonContainer}>
