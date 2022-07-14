@@ -52,22 +52,6 @@ const Home: NextPage = () => {
             <HaloPicker />
           </div>
         </div>
-
-        <div className={styles.iconTest}>
-          <IconButton thickBorder icon="Dark" />
-          <IconButton thickBorder icon="Light" />
-          <IconButton thickBorder icon="Radial" />
-          <IconButton thickBorder icon="Linear" />
-          <IconButton icon="PickerStone" />
-          <IconButton icon="PickerAura" />
-          <IconButton icon="PickerHalo" />
-          <IconButton thickBorder icon="Halo0" />
-          <IconButton thickBorder icon="Halo1" />
-          <IconButton thickBorder icon="Halo2" />
-          <IconButton thickBorder icon="Halo3" />
-          <IconButton thickBorder icon="Halo4" />
-          <IconButton thickBorder icon="Halo5" />
-        </div>
       </main>
     </div>
   );

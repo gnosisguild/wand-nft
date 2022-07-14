@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import window from "global";
 
 const useEventListener = (eventName, handler) => {
   const savedHandler = useRef(null);
