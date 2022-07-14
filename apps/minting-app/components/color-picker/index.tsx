@@ -14,7 +14,7 @@ const HaloPicker: React.FC = () => {
     <div>
       <UiCircle>
         <Slider
-          value={background.hue}
+          value={background.color.hue}
           onChange={(nextValue) => {
             dispatch({
               type: "changeBackground",
