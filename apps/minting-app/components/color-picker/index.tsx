@@ -1,4 +1,3 @@
-import styles from "./HaloPicker.module.css";
 import UiCircle from "../uiCircle";
 import Slider from "./Slider";
 import { useAppContext } from "../../state";
@@ -8,27 +7,27 @@ const HaloPicker: React.FC = () => {
 
   const { background } = state;
 
-  const handleHue = (nextValue: number) => {
+  const onHueChange = (nextValue: number) => {
     dispatch({
       type: "changeBackground",
       value: {
         ...background,
         color: {
           ...background.color,
-          hue: nextValue,
+          hue: Math.round(nextValue),
         },
       },
     });
   };
 
-  const handleLightness = (nextValue: number) => {
+  const onLightnessChange = (nextValue: number) => {
     dispatch({
       type: "changeBackground",
       value: {
         ...background,
         color: {
           ...background.color,
-          lightness: nextValue,
+          lightness: Math.round(nextValue),
         },
       },
     });
@@ -41,13 +40,13 @@ const HaloPicker: React.FC = () => {
           <Slider
             wide={true}
             value={background.color.hue}
-            onChange={handleHue}
+            onChange={(nextValue: number) => onHueChange(nextValue)}
           />
           <Slider
             wide={false}
             value={from100To360(background.color.lightness)}
             onChange={(nextValue: number) =>
-              handleLightness(from360To100(nextValue))
+              onLightnessChange(from360To100(nextValue))
             }
           />
         </svg>
