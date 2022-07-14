@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
-import ColorPicker from "../components/ColorPicker";
 import styles from "../styles/Home.module.css";
 import CornerGilding from "../components/Gilding/Corners";
 import CenterGilding from "../components/Gilding/Center";
