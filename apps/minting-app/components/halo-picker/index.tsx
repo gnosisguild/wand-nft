@@ -3,8 +3,7 @@ import styles from "./HaloPicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import {
-  VIEWBOX_WIDTH,
-  VIEWBOX_HEIGHT,
+  VIEWBOX_SIZE,
   SEGMENTS_WIDE,
   SEGMENTS_NARROW,
   FILLERS_NARROW,
@@ -26,7 +25,7 @@ const HaloPicker: React.FC = () => {
   return (
     <div>
       <UiCircle>
-        <svg viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}>
+        <svg viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}>
           <circle
             cy="500"
             cx="500"

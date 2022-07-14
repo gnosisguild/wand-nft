@@ -11,8 +11,7 @@ const CONFIG = {
   },
 };
 
-export const VIEWBOX_WIDTH = 1000;
-export const VIEWBOX_HEIGHT = 1000;
+export const VIEWBOX_SIZE = 1000;
 export const SEGMENTS_WIDE = segments(12);
 export const SEGMENTS_NARROW = segments(24);
 export const FILLERS_WIDE = fillers(12);
@@ -85,11 +84,11 @@ function arc(radius: number, angle: number, direction: boolean) {
 }
 
 function radius(percBorder: number, percThickness: number) {
-  const outer = (VIEWBOX_WIDTH - VIEWBOX_WIDTH * percBorder * 2) / 2;
+  const outer = (VIEWBOX_SIZE - VIEWBOX_SIZE * percBorder * 2) / 2;
   const inner =
-    (VIEWBOX_WIDTH -
-      VIEWBOX_WIDTH * percBorder * 2 -
-      VIEWBOX_WIDTH * percThickness * 2) /
+    (VIEWBOX_SIZE -
+      VIEWBOX_SIZE * percBorder * 2 -
+      VIEWBOX_SIZE * percThickness * 2) /
     2;
 
   return [outer, inner];
@@ -98,7 +97,7 @@ function radius(percBorder: number, percThickness: number) {
 function coordinates(radius: number, degrees: number) {
   const radians = ((degrees - 90) * Math.PI) / 180.0;
 
-  const center = { x: VIEWBOX_WIDTH / 2, y: VIEWBOX_HEIGHT / 2 };
+  const center = { x: VIEWBOX_SIZE / 2, y: VIEWBOX_SIZE / 2 };
 
   return {
     x: center.x + radius * Math.cos(radians),
