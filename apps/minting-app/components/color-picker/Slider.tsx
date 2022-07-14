@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useEventListener } from "usehooks-ts";
 
 import {
@@ -8,73 +8,92 @@ import {
   positionToAngle,
 } from "./trigonometry";
 
-const WIDTH = 1000;
+const SIZE = 1000;
+const WIDE_MARGIN = 0.1;
+const NARROW_MARGIN = 0.5;
+
+const WIDE = {
+  size: SIZE,
+  radius: (SIZE * (1 - WIDE_MARGIN)) / 2,
+  center: { x: SIZE / 2, y: SIZE / 2 },
+  d: arc(SIZE, WIDE_MARGIN),
+};
+
+const NARROW = {
+  size: SIZE,
+  radius: (SIZE * (1 - NARROW_MARGIN)) / 2,
+  center: { x: SIZE / 2, y: SIZE / 2 },
+  d: arc(SIZE, NARROW_MARGIN),
+};
 
 interface Props {
+  wide: boolean;
   value: number;
   onChange: (nextValue: number) => void;
 }
 
-export function createSlider(marginPerc: number) {
-  const D = arc(marginPerc);
-  const CENTER = { x: WIDTH / 2, y: WIDTH / 2 };
-  const RADIUS = (WIDTH * (1 - marginPerc)) / 2;
+const Slider = ({ wide, value, onChange }: Props) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const arcRef = useRef<SVGPathElement | null>(null);
 
-  const Slider = ({ value, onChange = () => {} }: Props) => {
-    const [isDragging, setIsDragging] = useState(false);
-    const arcRef = useRef<SVGPathElement | null>(null);
+  const config = wide ? WIDE : NARROW;
 
-    const onMouseDown = () => {
-      setIsDragging(true);
-    };
+  const onMouseDown = () => {
+    setIsDragging(true);
+  };
 
-    const onMouseUp = () => {
-      setIsDragging(false);
-    };
+  const onMouseUp = () => {
+    setIsDragging(false);
+  };
 
-    const onMouseMove = (event: Event) => {
-      if (!isDragging) return;
-      event.preventDefault();
+  const onMouseMove = (event: Event) => {
+    if (!isDragging) return;
+    event.preventDefault();
 
-      const { clientX, clientY } =
-        event as unknown as React.MouseEvent<SVGSVGElement>;
+    const { clientX, clientY } =
+      event as unknown as React.MouseEvent<SVGSVGElement>;
 
-      const { center, radius } = centerAndRadius(
-        arcRef.current?.getBoundingClientRect() as DOMRect
-      );
+    const { center, radius } = centerAndRadius(
+      arcRef.current?.getBoundingClientRect() as DOMRect
+    );
 
-      onChange(
-        positionToAngle(
-          center,
-          closestPointInCircumference(center, radius, {
-            x: clientX,
-            y: clientY,
-          })
-        )
-      );
-    };
-
-    useEventListener("mousemove", onMouseMove);
-    useEventListener("mouseup", onMouseUp);
-
-    const { x, y } = angleToPosition(CENTER, RADIUS, value);
-
-    return (
-      <svg viewBox={`0 0 ${WIDTH} ${WIDTH}`}>
-        <path ref={arcRef} fill="none" stroke="red" strokeWidth="15" d={D} />
-        <circle fill="yellow" cx={x} cy={y} r={20} onMouseDown={onMouseDown} />
-      </svg>
+    onChange(
+      positionToAngle(
+        center,
+        closestPointInCircumference(center, radius, {
+          x: clientX,
+          y: clientY,
+        })
+      )
     );
   };
 
-  return Slider;
-}
+  useEventListener("mousemove", onMouseMove);
+  useEventListener("mouseup", onMouseUp);
 
-function arc(percMargin: number) {
-  const radius = (WIDTH * (1 - percMargin)) / 2;
+  const { x, y } = angleToPosition(config.center, config.radius, value);
 
-  const topCenter = { x: WIDTH / 2, y: WIDTH / 2 - radius };
-  const bottomCenter = { x: WIDTH / 2, y: WIDTH / 2 + radius };
+  return (
+    <svg viewBox={`0 0 ${config.size} ${config.size}`}>
+      <path
+        ref={arcRef}
+        fill="none"
+        stroke="red"
+        strokeWidth="15"
+        d={config.d}
+      />
+      <circle fill="yellow" cx={x} cy={y} r={33} onMouseDown={onMouseDown} />
+    </svg>
+  );
+};
+
+export default Slider;
+
+function arc(size: number, margin: number) {
+  const radius = (size * (1 - margin)) / 2;
+
+  const topCenter = { x: size / 2, y: size / 2 - radius };
+  const bottomCenter = { x: size / 2, y: size / 2 + radius };
 
   let largeArcFlag = "0";
   let sweepArcFlag = "0";
