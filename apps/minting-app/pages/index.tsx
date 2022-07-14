@@ -4,7 +4,10 @@ import Head from "next/head";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
+import ColorPicker from "../components/ColorPicker";
 import styles from "../styles/Home.module.css";
+import CornerGilding from "../components/Gilding/Corners";
+import CenterGilding from "../components/Gilding/Center";
 import { AppState, TemplateInput } from "../types";
 import {
   calculateAspects,
@@ -27,19 +30,22 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <Head>
         <title>Minting App</title>
-        <meta
-          name="description"
-          content="App for playing around with Wand settings"
-        />
+        <meta name="description" content="Minting app for Zodiac NFT" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Minting App</h1>
       <main className={styles.main}>
-        <div className={styles.wandImage}>
-          <SvgTemplate input={deriveTemplateInput(state)} />
-        </div>
-        <div className={styles.ui}>
-          <StonePicker />
+        <CornerGilding />
+        <div className={styles.centerContainer}>
+          <CenterGilding />
+          <div className={styles.svgPreview}>
+            <SvgTemplate input={deriveTemplateInput(state)} />
+          </div>
+          <div className={styles.colorPicker}>
+            <ColorPicker />
+          </div>
+          <div className={styles.stonePicker}>
+            <StonePicker />
+          </div>
         </div>
       </main>
     </div>

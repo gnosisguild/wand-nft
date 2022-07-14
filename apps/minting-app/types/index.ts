@@ -85,7 +85,7 @@ export interface AppState {
   latitude: number;
   longitude: number;
   background: Background;
-  handle: number;
+  handle: 0 | 1 | 2 | 3 | 4 | 5;
   stone: number;
   tokenId: number;
   halo: {
