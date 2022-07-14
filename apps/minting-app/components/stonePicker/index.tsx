@@ -21,8 +21,8 @@ const randomStonePosision = () => {
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const [stonesWithPosition, setStonesWithPosition] = useState(
-    stoneList.map((stone) => {
-      return { ...stone, position: randomStonePosision() };
+    stoneList.map((stone, id) => {
+      return { id, position: randomStonePosision() };
     })
   );
   const nodeRef = useRef(null);
@@ -31,23 +31,23 @@ const StonePicker: React.FC = () => {
     <div className={styles.stoneBag}>
       <UiCircle>
         <ul>
-          {stonesWithPosition.map((stone, index) => (
-            <DraggableNoType key={index} bounds="parent" nodeRef={nodeRef}>
+          {stonesWithPosition.map(({ id, position }) => (
+            <DraggableNoType key={id} bounds="parent" nodeRef={nodeRef}>
               <li
                 ref={nodeRef}
                 onClick={(e) => {
                   switch (e.detail) {
                     case 2:
                       // double click
-                      dispatch({ type: "changeStone", value: index });
+                      dispatch({ type: "changeStone", value: id });
                       break;
                     default:
                       return;
                   }
                 }}
-                style={stone.position}
+                style={position}
               >
-                <StoneViewer settings={stone} />
+                <StoneViewer seed={state.tokenId} id={id} />
               </li>
             </DraggableNoType>
           ))}

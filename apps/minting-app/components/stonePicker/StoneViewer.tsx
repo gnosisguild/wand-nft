@@ -1,13 +1,14 @@
 import { useMemo } from "react";
-import { Stone } from "../../types";
+import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
 const stoneTemplate = require("../../../../contracts/contracts/svg/partials/stone.hbs");
 
-interface Props {
-  settings: Stone;
-}
-const StoneViewer = ({ settings }: Props) => {
+const StoneViewer: React.FC<{
+  seed: number;
+  id: number;
+}> = ({ seed, id }) => {
   const svgData = useMemo(() => {
+    const stone = stoneList[id];
     return btoa(
       unescape(
         encodeURIComponent(`<svg
@@ -15,11 +16,11 @@ const StoneViewer = ({ settings }: Props) => {
     viewBox="0 0 2000 3000"
     shapeRendering="geometricPrecision"
   >
-    ${stoneTemplate(settings)}
+    ${stoneTemplate({ seed, stone })}
     </svg>`)
       )
     );
-  }, [settings]);
+  }, [seed, id]);
 
   return (
     /* eslint-disable-next-line @next/next/no-img-element */
