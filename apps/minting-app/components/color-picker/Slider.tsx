@@ -1,24 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useEventListener } from "usehooks-ts";
+
 import {
   angleToPosition,
   closestPointInCircumference,
   centerAndRadius,
   toUnscaledPoint,
+  positionToAngle,
 } from "./trigonometry";
 
-import useEventListener from "../useEventListener";
-
 const WIDTH = 1000;
-const touchSupported = false; //"ontouchstart" in window;
-const SLIDER_EVENT = {
-  DOWN: touchSupported ? "touchstart" : "mousedown",
-  UP: touchSupported ? "touchend" : "mouseup",
-  MOVE: touchSupported ? "touchmove" : "mousemove",
-};
 
 interface Props {
   value: number;
-  onChange: () => void;
+  onChange: (nextValue: number) => void;
 }
 
 export function createSlider(marginPerc: number) {
@@ -45,7 +40,7 @@ export function createSlider(marginPerc: number) {
       setIsDragging(false);
     };
 
-    const onMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const onMouseMove = (event: Event) => {
       if (!isDragging) return;
       event.preventDefault();
 
@@ -53,11 +48,12 @@ export function createSlider(marginPerc: number) {
         arcRef.current?.getBoundingClientRect() as DOMRect
       );
 
-      console.log(event);
+      const { clientX, clientY } =
+        event as unknown as React.MouseEvent<SVGSVGElement>;
 
       const point = closestPointInCircumference(center, radius, {
-        x: event.clientX,
-        y: event.clientY,
+        x: clientX,
+        y: clientY,
       });
 
       const unscaledPoint = toUnscaledPoint(
@@ -67,10 +63,11 @@ export function createSlider(marginPerc: number) {
       );
 
       setPosition(unscaledPoint);
+      onChange(positionToAngle(WIDTH / 2, unscaledPoint));
     };
 
-    useEventListener(SLIDER_EVENT.MOVE, onMouseMove);
-    useEventListener(SLIDER_EVENT.UP, onMouseUp);
+    useEventListener("mousemove", onMouseMove);
+    useEventListener("mouseup", onMouseUp);
 
     return (
       <svg viewBox={`0 0 ${WIDTH} ${WIDTH}`} ref={containerRef}>

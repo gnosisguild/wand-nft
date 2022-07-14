@@ -8,12 +8,26 @@ const Slider = createSlider(0.1);
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
-  const { halo } = state;
+  const { background } = state;
 
   return (
     <div>
       <UiCircle>
-        <Slider value={0} onChange={() => {}} />
+        <Slider
+          value={background.hue}
+          onChange={(nextValue) => {
+            dispatch({
+              type: "changeBackground",
+              value: {
+                ...background,
+                color: {
+                  ...background.color,
+                  hue: nextValue,
+                },
+              },
+            });
+          }}
+        />
       </UiCircle>
     </div>
   );

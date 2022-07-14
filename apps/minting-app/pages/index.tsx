@@ -23,7 +23,7 @@ import {
 } from "../template";
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
-import IconButton from "../components/IconButton";
+// import IconButton from "../components/IconButton";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
