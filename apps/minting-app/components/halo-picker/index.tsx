@@ -18,7 +18,8 @@ const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { halo } = state;
-  const [segments, fillers] = isWideShape(halo.shape)
+  const isWide = isWideShape(halo.shape);
+  const [segments, fillers] = isWide
     ? [SEGMENTS_WIDE, FILLERS_WIDE]
     : [SEGMENTS_NARROW, FILLERS_NARROW];
 
@@ -40,7 +41,7 @@ const HaloPicker: React.FC = () => {
               className={classNames(styles.rhythm, {
                 [styles.rhythmActive]: isRhythmSet(halo, index),
               })}
-              key={index}
+              key={`${isWide}-${index}`}
               d={d}
               onClick={() => {
                 dispatch({
@@ -52,7 +53,7 @@ const HaloPicker: React.FC = () => {
           ))}
           {fillers.map((d, index) => (
             <path
-              key={index}
+              key={`${isWide}-${index}`}
               d={d}
               fill="#D9D4AD"
               opacity="0.7"
