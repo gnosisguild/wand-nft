@@ -1,0 +1,87 @@
+.iconButton {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shadow {
+  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.7));
+}
+
+.iconButtonSvg {
+  cursor: pointer;
+  width: 100%;
+  display: block;
+}
+
+.iconButtonSvg .hoverIndicator {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.iconButtonSvg:hover .hoverIndicator {
+  opacity: 0.6;
+}
+
+.iconContainer {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconContainer svg {
+  display: block;
+  width: 50%;
+}
+
+/* Individual Icon adjustments */
+.Light svg {
+  width: 55%;
+}
+.Dark svg {
+  width: 55%;
+}
+.Radial svg {
+  width: 45%;
+}
+.Linear svg {
+  width: 40%;
+}
+.PickerAura svg {
+  width: 40%;
+  padding-bottom: 6%;
+}
+.PickerStone svg {
+}
+.PickerHalo svg {
+  width: 48%;
+}
+.Halo0 svg {
+  width: 45%;
+}
+.Halo1 svg {
+  width: 38%;
+}
+.Halo2 svg {
+  width: 45%;
+}
+.Halo3 svg {
+  width: 55%;
+  padding-top: 2%;
+}
+.Halo4 svg {
+  width: 53%;
+  padding: 0 0 2% 7%;
+}
+.Halo5 svg {
+  width: 38%;
+}
