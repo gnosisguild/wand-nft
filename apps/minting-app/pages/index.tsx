@@ -23,10 +23,6 @@ import {
 } from "../template";
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
-<<<<<<< HEAD
-// import IconButton from "../components/IconButton";
-=======
->>>>>>> ceaebd6 (halo button hookup)
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
