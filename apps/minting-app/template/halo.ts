@@ -1,5 +1,7 @@
+type ShapeId = 0 | 1 | 2 | 3 | 4 | 5;
+
 export const generateHalo = (
-  shape: number,
+  shape: ShapeId,
   rhythm: boolean[],
   backgroundHue: number
 ) => ({
@@ -10,19 +12,28 @@ export const generateHalo = (
   halo4: shape == 4,
   halo5: shape == 5,
   hue: (backgroundHue + 180) % 360,
-  rhythm: mirrorRhythm(rhythm),
+  rhythm: mirrorRhythm(rhythm, isWideShape(shape)),
 });
 
-const mirrorRhythm = (rhythm: boolean[]) => {
+const mirrorRhythm = (rhythm: boolean[], isWide: boolean) => {
   if (rhythm.length !== 13) throw new Error("Rhythm must have length 13");
-  return [...rhythm, ...rhythm.slice(1, -1).reverse()];
+  const cleanRhythm = isWide
+    ? rhythm.map((x, index) => x && index % 2 === 0)
+    : rhythm;
+  return [...cleanRhythm, ...cleanRhythm.slice(1, -1).reverse()];
 };
 
-export const encodeHalo = (shapeId: number, rhythm: boolean[]) => {
+export const isWideShape = (shape: ShapeId) => ![1, 5].includes(shape);
+
+export const encodeHalo = (shapeId: ShapeId, rhythm: boolean[]) => {
   if (rhythm.length !== 13) throw new Error("Rhythm must have length 13");
+  const isWide = isWideShape(shapeId);
   return parseInt(
     rhythm
-      .map((x) => (x ? "1" : "0"))
+      .map((x, index) => {
+        const oddIndex = index % 2 === 0;
+        return x && !(isWide && oddIndex) ? "1" : "0";
+      })
       .reverse()
       .join("") + shapeId.toString(2).padStart(3, "0"),
     2

@@ -9,12 +9,13 @@ import {
 } from "./rhythm";
 import buttons from "./buttons";
 import { Halo } from "../../types";
+import { isWideShape } from "../../template";
 
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { halo } = state;
-  const segments = _isWide(halo) ? WIDE_SEGMENTS : NARROW_SEGMENTS;
+  const segments = isWideShape(halo.shape) ? WIDE_SEGMENTS : NARROW_SEGMENTS;
 
   return (
     <div>
@@ -46,7 +47,7 @@ const HaloPicker: React.FC = () => {
               onClick={() => {
                 dispatch({
                   type: "changeHalo",
-                  value: { ...halo, shape: index },
+                  value: { ...halo, shape: index as Halo["shape"] },
                 });
               }}
             />
@@ -74,21 +75,8 @@ function setRhythm(halo: Halo, index: number): Halo {
   };
 }
 
-function _isWide(halo: Halo): boolean {
-  return (
-    {
-      0: true,
-      1: false,
-      2: true,
-      3: true,
-      4: true,
-      5: true,
-    }[halo.shape] || false
-  );
-}
-
 function teflonIndex(halo: Halo, index: number) {
-  const isWide = _isWide(halo);
+  const isWide = isWideShape(halo.shape);
   const threshold = isWide ? 6 : 12;
 
   const deduped = index > threshold ? threshold - (index - threshold) : index;
