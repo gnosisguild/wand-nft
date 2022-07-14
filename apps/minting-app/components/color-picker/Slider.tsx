@@ -6,6 +6,7 @@ import {
   closestPointInCircumference,
   angleToPosition,
   positionToAngle,
+  Point,
 } from "./trigonometry";
 
 const SIZE = 1000;
@@ -38,21 +39,7 @@ const Slider = ({ wide, value, onChange }: Props) => {
 
   const config = wide ? WIDE : NARROW;
 
-  const onMouseDown = () => {
-    setIsDragging(true);
-  };
-
-  const onMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const onMouseMove = (event: Event) => {
-    if (!isDragging) return;
-    event.preventDefault();
-
-    const { clientX, clientY } =
-      event as unknown as React.MouseEvent<SVGSVGElement>;
-
+  const moveTo = (point: Point) => {
     const { center, radius } = centerAndRadius(
       arcRef.current?.getBoundingClientRect() as DOMRect
     );
@@ -60,16 +47,17 @@ const Slider = ({ wide, value, onChange }: Props) => {
     onChange(
       positionToAngle(
         center,
-        closestPointInCircumference(center, radius, {
-          x: clientX,
-          y: clientY,
-        })
+        closestPointInCircumference(center, radius, point)
       )
     );
   };
 
-  useEventListener("mousemove", onMouseMove);
-  useEventListener("mouseup", onMouseUp);
+  useEventListener("mousemove", (event: MouseEvent) => {
+    if (!isDragging) return;
+    event.preventDefault();
+    moveTo({ x: event.clientX, y: event.clientY });
+  });
+  useEventListener("mouseup", () => setIsDragging(false));
 
   const { x, y } = angleToPosition(config.center, config.radius, value);
 
@@ -79,10 +67,20 @@ const Slider = ({ wide, value, onChange }: Props) => {
         ref={arcRef}
         fill="none"
         stroke="red"
-        strokeWidth="15"
+        strokeWidth="25"
         d={config.d}
+        onClick={(event: React.MouseEvent<SVGPathElement>) => {
+          event.preventDefault();
+          moveTo({ x: event.clientX, y: event.clientY });
+        }}
       />
-      <circle fill="yellow" cx={x} cy={y} r={33} onMouseDown={onMouseDown} />
+      <circle
+        fill="yellow"
+        cx={x}
+        cy={y}
+        r={33}
+        onMouseDown={() => setIsDragging(true)}
+      />
     </>
   );
 };
