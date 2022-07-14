@@ -3,12 +3,12 @@ import styles from "./HaloPicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import {
-  NARROW_SEGMENTS,
-  WIDE_SEGMENTS,
-  NARROW_FILLERS,
-  WIDE_FILLERS,
   VIEWBOX_WIDTH,
   VIEWBOX_HEIGHT,
+  SEGMENTS_WIDE,
+  SEGMENTS_NARROW,
+  FILLERS_NARROW,
+  FILLERS_WIDE,
 } from "./rhythm";
 import { Halo } from "../../types";
 import { isWideShape } from "../../template";
@@ -19,8 +19,8 @@ const HaloPicker: React.FC = () => {
 
   const { halo } = state;
   const [segments, fillers] = isWideShape(halo.shape)
-    ? [WIDE_SEGMENTS, WIDE_FILLERS]
-    : [NARROW_SEGMENTS, NARROW_FILLERS];
+    ? [SEGMENTS_WIDE, FILLERS_WIDE]
+    : [SEGMENTS_NARROW, FILLERS_NARROW];
 
   return (
     <div>

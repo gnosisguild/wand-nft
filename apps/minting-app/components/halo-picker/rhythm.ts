@@ -1,46 +1,35 @@
+const CONFIG = {
+  SEGMENT: {
+    percBorder: 0.91,
+    percThickness: 0.05,
+    angleGap: 2,
+  },
+  FILLER: {
+    percBorder: 0.9,
+    percThickness: 0.07,
+    angleGap: 0.7,
+  },
+};
+
 export const VIEWBOX_WIDTH = 1000;
 export const VIEWBOX_HEIGHT = 1000;
-
-const PERC_BORDER = 0.91;
-const PERC_THICKNESS = 0.05;
-const FILLER_PERC_BORDER = 0.9;
-const FILLER_PERC_THICKNESS = 0.07;
-
-const ANGLE_GAP = 2;
-
-const CENTER_X = VIEWBOX_WIDTH / 2;
-const CENTER_Y = VIEWBOX_HEIGHT / 2;
-
-const RADIUS_OUTER = (VIEWBOX_WIDTH - VIEWBOX_WIDTH * PERC_BORDER * 2) / 2;
-const RADIUS_INNER =
-  (VIEWBOX_WIDTH -
-    VIEWBOX_WIDTH * PERC_BORDER * 2 -
-    VIEWBOX_WIDTH * PERC_THICKNESS * 2) /
-  2;
-
-const FILLER_RADIUS_OUTER =
-  (VIEWBOX_WIDTH - VIEWBOX_WIDTH * FILLER_PERC_BORDER * 2) / 2;
-const FILLER_RADIUS_INNER =
-  (VIEWBOX_WIDTH -
-    VIEWBOX_WIDTH * FILLER_PERC_BORDER * 2 -
-    VIEWBOX_WIDTH * FILLER_PERC_THICKNESS * 2) /
-  2;
-
-export const WIDE_SEGMENTS = segments(12);
-export const NARROW_SEGMENTS = segments(24);
-export const WIDE_FILLERS = fillers(12);
-export const NARROW_FILLERS = fillers(24);
+export const SEGMENTS_WIDE = segments(12);
+export const SEGMENTS_NARROW = segments(24);
+export const FILLERS_WIDE = fillers(12);
+export const FILLERS_NARROW = fillers(24);
 
 function segments(count: number) {
   let result: string[] = [];
 
   const arcSize = 360 / count;
+  const { percBorder, percThickness, angleGap } = CONFIG.SEGMENT;
+  const [outerRadius, innerRadius] = radius(percBorder, percThickness);
 
   for (let i = 0; i < count; i++) {
     const midway = i * arcSize;
-    const left = midway - arcSize / 2 + ANGLE_GAP;
-    const right = midway + arcSize / 2 - ANGLE_GAP;
-    result = [...result, path(left, right)];
+    const left = midway - arcSize / 2 + angleGap;
+    const right = midway + arcSize / 2 - angleGap;
+    result = [...result, path(left, right, outerRadius, innerRadius)];
   }
   return result;
 }
@@ -49,15 +38,14 @@ function fillers(count: number) {
   let result: string[] = [];
 
   const arcSize = 360 / count;
+  const { percBorder, percThickness, angleGap } = CONFIG.FILLER;
+  const [outerRadius, innerRadius] = radius(percBorder, percThickness);
 
   for (let i = 0; i < count; i++) {
     const midway = i * arcSize + arcSize / 2;
-    const left = midway - ANGLE_GAP + 1.3;
-    const right = midway + ANGLE_GAP - 1.3;
-    result = [
-      ...result,
-      path(left, right, FILLER_RADIUS_INNER, FILLER_RADIUS_OUTER),
-    ];
+    const left = midway - angleGap;
+    const right = midway + angleGap;
+    result = [...result, path(left, right, outerRadius, innerRadius)];
   }
 
   return result;
@@ -66,8 +54,8 @@ function fillers(count: number) {
 function path(
   startAngle: number,
   endAngle: number,
-  radiusInner: number = RADIUS_INNER,
-  radiusOuter: number = RADIUS_OUTER
+  radiusOuter: number,
+  radiusInner: number
 ): string {
   const upperLeft = coordinates(radiusOuter, startAngle);
   const lowerRight = coordinates(radiusInner, endAngle);
@@ -96,11 +84,24 @@ function arc(radius: number, angle: number, direction: boolean) {
   return ["A", radius, radius, 0, largeArcFlag, sweepArcFlag, end.x, end.y];
 }
 
+function radius(percBorder: number, percThickness: number) {
+  const outer = (VIEWBOX_WIDTH - VIEWBOX_WIDTH * percBorder * 2) / 2;
+  const inner =
+    (VIEWBOX_WIDTH -
+      VIEWBOX_WIDTH * percBorder * 2 -
+      VIEWBOX_WIDTH * percThickness * 2) /
+    2;
+
+  return [outer, inner];
+}
+
 function coordinates(radius: number, degrees: number) {
   const radians = ((degrees - 90) * Math.PI) / 180.0;
 
+  const center = { x: VIEWBOX_WIDTH / 2, y: VIEWBOX_HEIGHT / 2 };
+
   return {
-    x: CENTER_X + radius * Math.cos(radians),
-    y: CENTER_Y + radius * Math.sin(radians),
+    x: center.x + radius * Math.cos(radians),
+    y: center.y + radius * Math.sin(radians),
   };
 }
