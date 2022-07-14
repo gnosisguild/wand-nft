@@ -109,12 +109,12 @@ function setRhythm(halo: Halo, index: number): Halo {
 }
 
 function teflonIndex(halo: Halo, index: number) {
-  const isWide = isWideShape(halo.shape);
-  const threshold = isWide ? 6 : 12;
+  const [midway, multiplier] = isWideShape(halo.shape) ? [6, 2] : [12, 1];
 
-  const deduped = index > threshold ? threshold - (index - threshold) : index;
+  const skew = Math.max(0, index - midway);
+  const unmirrored = skew > 0 ? midway - skew : index;
 
-  return isWide ? deduped * 2 : deduped;
+  return unmirrored * multiplier;
 }
 
 export default HaloPicker;
