@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Draggable from "react-draggable";
-import { StoneSettings } from "../SvgTemplate";
+import { Stone } from "../SvgTemplate";
 import StoneViewer from "./StoneViewer";
 import stones from "./stoneList";
 import styles from "./Settings.module.css";
 interface Props {
-  settings: StoneSettings;
+  settings: Stone;
   changeVal(key: string, value: any): void;
-  swapStone<SetStateAction>(settings: StoneSettings): void;
+  swapStone<SetStateAction>(settings: Stone): void;
 }
 
 const DraggableNoType: any = Draggable;

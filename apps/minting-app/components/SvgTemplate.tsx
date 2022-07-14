@@ -1,15 +1,15 @@
 import React from "react";
-import { Settings } from "../types";
+import { TemplateInput } from "../types";
 import classes from "./SvgTemplate.module.css";
 const template = require("../../../contracts/contracts/svg/template.svg.hbs");
 
 interface Props {
-  settings: Settings;
+  input: TemplateInput;
 }
 const SvgTemplate: React.FC<Props> = (props) => (
   <div
     dangerouslySetInnerHTML={{
-      __html: template(props.settings, {
+      __html: template(props.input, {
         allowProtoMethodsByDefault: true,
         allowProtoPropertiesByDefault: true,
       }),

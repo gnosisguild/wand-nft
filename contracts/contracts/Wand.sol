@@ -16,11 +16,12 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   event WandBuilt(
     uint256 indexed tokenId,
+    uint8 stone,
+    uint8 handle,
     uint16 halo,
-    uint256 evolution,
-    uint256 birth,
-    int256 latitude,
-    int256 longitude
+    IWands.Background background,
+    IWands.Planet[8] planets,
+    IWands.Aspect[8] aspects
   );
 
   constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
@@ -35,29 +36,42 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   function build(
     uint256 tokenId,
-    uint8 halo,
-    int16 latitude,
-    int16 longitude,
-    Template.Planet[8] memory planets,
-    Template.Aspect[8] memory aspects
+    uint8 stone,
+    uint8 handle,
+    uint16 halo,
+    IWands.Background memory background,
+    IWands.Planet[8] memory planets,
+    IWands.Aspect[8] memory aspects
   ) external override {
     require(
       msg.sender == ERC721.ownerOf(tokenId),
       "Wands: only owner can build wand"
     );
+
+    // TODO: check tokenID is not already built?
     // Construct Wand
-    Wand memory wand = Wand({
-      built: true,
-      halo: halo,
-      evolution: 0,
-      birth: block.timestamp,
-      latitude: latitude,
-      longitude: longitude,
-      planets: planets,
-      aspects: aspects
-    });
-    _wands[tokenId] = wand;
-    emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
+    Wand storage wand = _wands[tokenId];
+    wand.built = true;
+    wand.stone = stone;
+    wand.handle = handle;
+    wand.halo = halo;
+    wand.background = background;
+    wand.evolution = 0;
+    wand.birth = uint64(block.timestamp);
+    for (uint256 i = 0; i < 8; i++) {
+      wand.planets[i] = IWands.Planet({
+        visible: planets[i].visible,
+        x: planets[i].x,
+        y: planets[i].y
+      });
+      wand.aspects[i] = IWands.Aspect({
+        x1: aspects[i].x1,
+        y1: aspects[i].y1,
+        x2: aspects[i].x2,
+        y2: aspects[i].y2
+      });
+    }
+    emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
   }
 
   function tokenURI(uint256 tokenId)
@@ -72,17 +86,8 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     if (!wand.built) {
       //return wandConjuror.generateWandBadgeURI(calculateWandBadge(tokenId));
     } else {
-      return wandConjuror.generateWandURI(wand);
+      return wandConjuror.generateWandURI(wand, tokenId);
     }
-  }
-
-  function psuedoRandom() private view returns (uint256) {
-    return
-      uint256(
-        keccak256(
-          abi.encodePacked(block.difficulty, block.timestamp, msg.sender)
-        )
-      );
   }
 
   function wands(uint256 tokenId)
@@ -90,9 +95,9 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     view
     override
     returns (
-      uint8 halo,
-      uint256 evolution,
-      uint256 birth
+      uint16 halo,
+      uint32 evolution,
+      uint64 birth
     )
   {
     require(_exists(tokenId), "Wand: tokenID does not exist");
@@ -119,7 +124,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       // we are transfering
       // reset evolutions and age?
       _wands[tokenId].evolution = 0;
-      _wands[tokenId].birth = block.timestamp;
+      _wands[tokenId].birth = uint64(block.timestamp);
     }
   }
 }

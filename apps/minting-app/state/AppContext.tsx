@@ -1,24 +1,27 @@
 import React, { useEffect, createContext, useContext, useReducer } from "react";
 
-import { AppReducer, ActionTypes, initialState } from "./AppReducer";
-import { Settings } from "../types";
+import { AppReducer, initialState, Action } from "./AppReducer";
+import { AppState } from "../types";
 
 const AppContext = createContext<{
-  state: Settings;
-  dispatch: React.Dispatch<ActionTypes>;
+  state: AppState;
+  dispatch: React.Dispatch<Action>;
 }>({ state: initialState, dispatch: () => {} });
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  let existingState;
-  if (typeof window !== "undefined") {
-    const storedState = localStorage.getItem("state");
-    if (storedState) {
-      existingState = JSON.parse(storedState);
-    }
-  }
   const [state, dispatch] = useReducer(
     AppReducer,
-    existingState ? existingState : initialState
+    initialState,
+    (initialState: AppState): AppState => {
+      let existingState;
+      if (typeof window !== "undefined") {
+        const storedState = localStorage.getItem("appState");
+        if (storedState) {
+          existingState = JSON.parse(storedState);
+        }
+      }
+      return existingState ? existingState : initialState;
+    }
   );
 
   const contextValue = { state, dispatch };
