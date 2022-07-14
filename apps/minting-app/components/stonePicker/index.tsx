@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import StoneViewer from "./StoneViewer";
-import stones from "../../context/presets/stoneList";
+import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
-import { UiCircle } from "../";
-import { useAppContext } from "../../context/AppContext";
+import UiCircle from "../uiCircle";
+import { useAppContext } from "../../state/AppContext";
 
 const DraggableNoType: any = Draggable;
 
@@ -21,7 +21,7 @@ const randomStonePosision = () => {
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const [stonesWithPosition, setStonesWithPosition] = useState(
-    stones.map((stone) => {
+    stoneList.map((stone) => {
       return { ...stone, position: randomStonePosision() };
     })
   );
@@ -39,7 +39,7 @@ const StonePicker: React.FC = () => {
                   switch (e.detail) {
                     case 2:
                       // double click
-                      dispatch({ type: "changeStone", value: stone });
+                      dispatch({ type: "changeStone", value: index });
                       break;
                     default:
                       return;

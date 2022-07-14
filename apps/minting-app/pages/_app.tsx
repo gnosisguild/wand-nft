@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import { AppWrapper } from "../context/AppContext";
+import { AppWrapper } from "../state";
 import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {

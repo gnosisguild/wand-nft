@@ -77,17 +77,21 @@ export interface Halo {
   halo3?: boolean;
   halo4?: boolean;
   halo5?: boolean;
-  rhythm: Boolean[];
+  rhythm: boolean[];
   hue: number;
 }
 
 export interface AppState {
-  planets: Planet[];
-  aspects: Aspect[];
+  latitude: number;
+  longitude: number;
   background: Background;
   handle: number;
   stone: number;
-  seed: number;
+  tokenId: number;
+  halo: {
+    shape: number;
+    rhythm: boolean[];
+  };
 }
 
 export interface TemplateInput {
