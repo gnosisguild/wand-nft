@@ -37,14 +37,20 @@ const HaloPicker: React.FC = () => {
   return (
     <div>
       <UiCircle>
-        {/* <Slider wide={true} value={background.color.hue} onChange={handleHue} /> */}
-        <Slider
-          wide={false}
-          value={from100To360(background.color.lightness)}
-          onChange={(nextValue: number) =>
-            handleLightness(from360To100(nextValue))
-          }
-        />
+        <svg viewBox={`0 0 1000 1000`}>
+          <Slider
+            wide={true}
+            value={background.color.hue}
+            onChange={handleHue}
+          />
+          <Slider
+            wide={false}
+            value={from100To360(background.color.lightness)}
+            onChange={(nextValue: number) =>
+              handleLightness(from360To100(nextValue))
+            }
+          />
+        </svg>
       </UiCircle>
     </div>
   );

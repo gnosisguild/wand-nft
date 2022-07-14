@@ -74,7 +74,7 @@ const Slider = ({ wide, value, onChange }: Props) => {
   const { x, y } = angleToPosition(config.center, config.radius, value);
 
   return (
-    <svg viewBox={`0 0 ${config.size} ${config.size}`}>
+    <>
       <path
         ref={arcRef}
         fill="none"
@@ -83,7 +83,7 @@ const Slider = ({ wide, value, onChange }: Props) => {
         d={config.d}
       />
       <circle fill="yellow" cx={x} cy={y} r={33} onMouseDown={onMouseDown} />
-    </svg>
+    </>
   );
 };
 
