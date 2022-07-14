@@ -22,6 +22,7 @@ import {
   xp,
 } from "../template";
 import HaloPicker from "../components/halo-picker";
+import ColorPicker from "../components/ColorPicker";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();

@@ -71,6 +71,11 @@ export interface Background {
 }
 
 export interface Halo {
+  shape: number;
+  rhythm: boolean[];
+}
+
+export interface HaloInput {
   halo0?: boolean;
   halo1?: boolean;
   halo2?: boolean;
@@ -88,10 +93,7 @@ export interface AppState {
   handle: 0 | 1 | 2 | 3 | 4 | 5;
   stone: number;
   tokenId: number;
-  halo: {
-    shape: number;
-    rhythm: boolean[];
-  };
+  halo: Halo;
 }
 
 export interface TemplateInput {
@@ -106,7 +108,7 @@ export interface TemplateInput {
   planets: Planet[];
   aspects: Aspect[];
   background: Background;
-  halo: Halo;
+  halo: HaloInput;
   handle: {
     handle0?: boolean;
     handle1?: boolean;

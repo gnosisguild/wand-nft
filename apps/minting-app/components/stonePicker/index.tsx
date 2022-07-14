@@ -4,7 +4,7 @@ import StoneViewer from "./StoneViewer";
 import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
-import { useAppContext } from "../../state/AppContext";
+import { useAppContext } from "../../state";
 
 const DraggableNoType: any = Draggable;
 

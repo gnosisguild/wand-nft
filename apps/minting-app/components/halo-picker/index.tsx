@@ -1,6 +1,6 @@
 import styles from "./HaloPicker.module.css";
-import { UiCircle } from "../";
-import { useAppContext } from "../../context/AppContext";
+import UiCircle from "../uiCircle";
+import { useAppContext } from "../../state";
 import {
   NARROW_SEGMENTS,
   WIDE_SEGMENTS,
@@ -42,9 +42,12 @@ const HaloPicker: React.FC = () => {
               cx={x}
               cy={y}
               r={r}
-              fill={isHaloSet(halo, index) ? "green" : "yellow"}
+              fill={halo.shape === index ? "green" : "yellow"}
               onClick={() => {
-                dispatch({ type: "changeHalo", value: setHalo(halo, index) });
+                dispatch({
+                  type: "changeHalo",
+                  value: { ...halo, shape: index },
+                });
               }}
             />
           ))}
@@ -71,65 +74,17 @@ function setRhythm(halo: Halo, index: number): Halo {
   };
 }
 
-function isHaloSet(halo: Halo, type: number) {
-  if (type < 0 || type > 5) {
-    throw new Error("Huuuuh?");
-  }
-
-  if (type === 0) {
-    return halo.halo0;
-  } else if (type === 1) {
-    return halo.halo1;
-  } else if (type === 2) {
-    return halo.halo2;
-  } else if (type === 3) {
-    return halo.halo3;
-  } else if (type === 4) {
-    return halo.halo4;
-  } else if (type === 5) {
-    return halo.halo5;
-  }
-}
-
-function setHalo(halo: Halo, type: number): Halo {
-  if (type < 0 || type > 5) {
-    throw new Error();
-  }
-
-  return {
-    ...halo,
-    halo0: type === 0,
-    halo1: type === 1,
-    halo2: type === 2,
-    halo3: type === 3,
-    halo4: type === 4,
-    halo5: type === 5,
-  };
-}
-
 function _isWide(halo: Halo): boolean {
-  /*
-    0 - wide
-    1 - narrow
-    2 - wide
-    3 - wide
-    4 - wide
-    5 - narrow
-  */
-  if (halo.halo0) {
-    return true;
-  } else if (halo.halo1) {
-    return false;
-  } else if (halo.halo2) {
-    return true;
-  } else if (halo.halo3) {
-    return true;
-  } else if (halo.halo4) {
-    return true;
-  } else if (halo.halo5) {
-    return false;
-  }
-  throw Error("huh??");
+  return (
+    {
+      0: true,
+      1: false,
+      2: true,
+      3: true,
+      4: true,
+      5: true,
+    }[halo.shape] || false
+  );
 }
 
 function teflonIndex(halo: Halo, index: number) {
