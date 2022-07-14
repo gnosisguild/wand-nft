@@ -3,9 +3,9 @@ import { useEventListener } from "usehooks-ts";
 
 import {
   centerAndRadius,
-  closestPointInCircumference,
-  angleToPosition,
-  positionToAngle,
+  findClosestInCircumference,
+  toAngle,
+  toPosition,
   Point,
 } from "./trigonometry";
 
@@ -34,8 +34,8 @@ interface Props {
 }
 
 const Slider = ({ wide, value, onChange }: Props) => {
-  const [isDragging, setIsDragging] = useState(false);
   const arcRef = useRef<SVGPathElement | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const config = wide ? WIDE : NARROW;
 
@@ -45,10 +45,7 @@ const Slider = ({ wide, value, onChange }: Props) => {
     );
 
     onChange(
-      positionToAngle(
-        center,
-        closestPointInCircumference(center, radius, point)
-      )
+      toAngle(center, findClosestInCircumference(center, radius, point))
     );
   };
 
@@ -59,7 +56,7 @@ const Slider = ({ wide, value, onChange }: Props) => {
   });
   useEventListener("mouseup", () => setIsDragging(false));
 
-  const { x, y } = angleToPosition(config.center, config.radius, value);
+  const { x, y } = toPosition(config.center, config.radius, value);
 
   return (
     <>

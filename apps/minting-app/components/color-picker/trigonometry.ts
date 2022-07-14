@@ -12,19 +12,7 @@ export function centerAndRadius(rect: DOMRect) {
   return { center, radius };
 }
 
-export function angleToPosition(
-  center: Point,
-  radius: number,
-  degrees: number
-) {
-  const radians = ((degrees - 90) * Math.PI) / 180.0;
-  return {
-    x: center.x + radius * Math.cos(radians),
-    y: center.y + radius * Math.sin(radians),
-  };
-}
-
-export function closestPointInCircumference(
+export function findClosestInCircumference(
   center: Point,
   radius: number,
   point: Point
@@ -32,13 +20,14 @@ export function closestPointInCircumference(
   const vX = point.x - center.x;
   const vY = point.y - center.y;
   const magV = Math.sqrt(vX * vX + vY * vY);
-  const aX = center.x + (vX / magV) * radius;
-  const aY = center.y + (vY / magV) * radius;
 
-  return { x: aX, y: aY };
+  return {
+    x: center.x + (vX / magV) * radius,
+    y: center.y + (vY / magV) * radius,
+  };
 }
 
-export function positionToAngle(center: Point, { x, y }: Point) {
+export function toAngle(center: Point, { x, y }: Point) {
   let carry;
   let opposite;
   let adjacent;
@@ -70,14 +59,10 @@ export function positionToAngle(center: Point, { x, y }: Point) {
   return degrees;
 }
 
-export function toUnscaledPoint(
-  rectangle: DOMRect,
-  point: Point,
-  realSize: number
-) {
-  const size = rectangle.right - rectangle.left;
-  const xInPerc = (point.x - rectangle.left) / size;
-  const yInPerc = (point.y - rectangle.top) / size;
-
-  return { x: xInPerc * realSize, y: yInPerc * realSize };
+export function toPosition(center: Point, radius: number, degrees: number) {
+  const radians = ((degrees - 90) * Math.PI) / 180.0;
+  return {
+    x: center.x + radius * Math.cos(radians),
+    y: center.y + radius * Math.sin(radians),
+  };
 }
