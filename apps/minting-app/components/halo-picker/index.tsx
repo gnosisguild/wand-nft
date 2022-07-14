@@ -23,13 +23,21 @@ const HaloPicker: React.FC = () => {
     <div>
       <UiCircle>
         <svg viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}>
+          <circle
+            cy="500"
+            cx="500"
+            r="475"
+            stroke="#D9D4AD"
+            strokeWidth="16"
+            opacity="0.7"
+            style={{ mixBlendMode: "color-dodge" }}
+          />
           {segments.map((d, index) => (
             <path
-              className={
-                isRhythmSet(halo, index) ? styles.rhythmOn : styles.rhythmOff
-              }
+              className={classNames(styles.rhythm, {
+                [styles.rhythmActive]: isRhythmSet(halo, index),
+              })}
               key={index}
-              stroke="red"
               d={d}
               onClick={() => {
                 dispatch({

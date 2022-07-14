@@ -1,12 +1,13 @@
-.rhythmOn {
-  fill: turquoise;
-}
-
-.rhythmOff {
+.rhythm {
+  cursor: pointer;
   fill: transparent;
 }
 
-.rhythmOff:hover {
+.rhythmActive {
+  fill: rgba(111, 255, 229, 0.7);
+}
+
+.rhythm:hover {
   fill: #65da45;
 }
 

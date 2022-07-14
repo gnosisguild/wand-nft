@@ -25,7 +25,7 @@
 .stonePicker,
 .haloPicker {
   aspect-ratio: 1;
-  width: 29%;
+  width: 25%;
   border-radius: 50%;
   max-width: 290px;
 }
@@ -38,8 +38,8 @@
 
 .haloPicker {
   position: absolute;
-  left: 35.5%;
-  top: 70.2%;
+  left: 37.5%;
+  top: 71.9%;
 }
 
 .stonePicker {

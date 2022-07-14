@@ -1,9 +1,9 @@
 export const VIEWBOX_WIDTH = 1000;
 export const VIEWBOX_HEIGHT = 1000;
 
-const PERC_BORDER = 0;
-const PERC_THICKNESS = 0.1;
-const ANGLE_GAP = 1;
+const PERC_BORDER = 0.91;
+const PERC_THICKNESS = 0.05;
+const ANGLE_GAP = 2;
 
 const CENTER_X = VIEWBOX_WIDTH / 2;
 const CENTER_Y = VIEWBOX_HEIGHT / 2;
