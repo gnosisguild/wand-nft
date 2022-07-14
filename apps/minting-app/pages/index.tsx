@@ -22,7 +22,7 @@ import {
   xp,
 } from "../template";
 import HaloPicker from "../components/halo-picker";
-import ColorPicker from "../components/ColorPicker";
+import ColorPicker from "../components/color-picker";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
