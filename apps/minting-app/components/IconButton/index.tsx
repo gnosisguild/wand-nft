@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import classnames from "classnames";
 import uiCircleBg from "../uiCircle/uiCirclebg.jpg";
 import styles from "./IconButton.module.css";
@@ -19,9 +19,10 @@ import {
 } from "./Icons";
 
 interface Props {
-  onClick?: (event: MouseEvent) => void;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   shadow?: boolean;
   thickBorder?: boolean;
+  active?: boolean;
   icon:
     | "Light"
     | "Dark"
@@ -43,6 +44,7 @@ const IconButton: React.FC<Props> = ({
   shadow = false,
   icon = "light",
   thickBorder = false,
+  active = false,
 }) => {
   const iconSwitch = (iconName: string) => {
     switch (iconName) {
@@ -77,7 +79,14 @@ const IconButton: React.FC<Props> = ({
     }
   };
   return (
-    <div className={classnames(styles.iconButton, { [styles.shadow]: shadow })}>
+    <div
+      className={classnames(
+        styles.iconButton,
+        { [styles.shadow]: shadow },
+        { [styles.active]: active }
+      )}
+      onClick={onClick}
+    >
       <svg
         viewBox="0 0 33 33"
         fill="none"
@@ -85,13 +94,7 @@ const IconButton: React.FC<Props> = ({
         className={styles.iconButtonSvg}
       >
         {!shadow && (
-          <circle
-            style={{ mixBlendMode: "color-dodge" }}
-            cx="16.5"
-            cy="16.5"
-            r="15.75"
-            fill="rgba(0,0,0,0.6)"
-          />
+          <circle cx="16.5" cy="16.5" r="16" fill="rgba(0,0,0,0.6)" />
         )}
         <g
           style={{ mixBlendMode: "color-dodge" }}

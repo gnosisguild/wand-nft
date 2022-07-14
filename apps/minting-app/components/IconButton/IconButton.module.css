@@ -19,10 +19,14 @@
 
 .iconButtonSvg .hoverIndicator {
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.1s ease;
 }
 
 .iconButtonSvg:hover .hoverIndicator {
+  opacity: 0.6;
+}
+
+.active .iconButtonSvg .hoverIndicator {
   opacity: 0.6;
 }
 
