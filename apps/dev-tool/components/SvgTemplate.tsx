@@ -73,10 +73,7 @@ interface Props {
   planets: Planet[];
   aspects: Aspect[];
   background: {
-    hue: number;
-    linear?: boolean;
     radial?: boolean;
-    light?: boolean;
     dark?: boolean;
     color: {
       hue: number;

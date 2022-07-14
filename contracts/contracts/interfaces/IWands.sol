@@ -19,12 +19,6 @@ interface IWands is IERC721 {
     int8 y;
   }
 
-  struct Background {
-    bool radial;
-    bool dark;
-    Template.Color color;
-  }
-
   struct Wand {
     bool built;
     uint8 stone;
@@ -32,7 +26,7 @@ interface IWands is IERC721 {
     uint16 halo;
     uint32 evolution;
     uint64 birth;
-    Background background;
+    Template.Background background;
     Planet[8] planets;
     Aspect[8] aspects;
   }
@@ -42,7 +36,7 @@ interface IWands is IERC721 {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    Background memory background,
+    Template.Background memory background,
     Planet[8] memory planets,
     Aspect[8] memory aspects
   ) external;

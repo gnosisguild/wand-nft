@@ -332,10 +332,9 @@ const Home: NextPage = () => {
               location?.longitude || 0
             )}
             background={{
-              hue,
-              [background]: true,
+              radial: background === "radial",
               color: bgColor,
-              [bgRealm]: true,
+              dark: bgRealm === "dark",
             }}
             halo={{
               [shape]: true,

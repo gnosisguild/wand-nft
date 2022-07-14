@@ -65,7 +65,7 @@ contract WandConjuror {
     return
       Template.render(
         Template.__Input({
-          background: decodeBackground(wand),
+          background: wand.background,
           seed: tokenId,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
@@ -87,21 +87,6 @@ contract WandConjuror {
           filterLayers: generateFilterLayers()
         })
       );
-  }
-
-  function decodeBackground(IWands.Wand memory wand)
-    internal
-    pure
-    returns (Template.Background memory)
-  {
-    return
-      Template.Background({
-        radial: wand.background.radial,
-        linear: !wand.background.radial,
-        dark: wand.background.dark,
-        light: !wand.background.dark,
-        color: wand.background.color
-      });
   }
 
   function decodeStone(IWands.Wand memory wand)

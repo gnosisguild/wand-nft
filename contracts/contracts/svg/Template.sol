@@ -51,9 +51,7 @@ library Template {
 
   struct Background {
     bool radial;
-    bool light;
     bool dark;
-    bool linear;
     Color color;
   }
 
@@ -404,9 +402,9 @@ library BackgroundLayer {
             __input.filterLayers[__i].turbOct,
             0
           ),
-          '" seed=',
+          '" seed="',
           SolidMustacheHelpers.uintToString(__input.seed, 0),
-          ' result="t',
+          '" result="t',
           SolidMustacheHelpers.uintToString(__i, 0),
           '" /> <feGaussianBlur stdDeviation="',
           SolidMustacheHelpers.uintToString(
@@ -554,24 +552,6 @@ library BackgroundLayer {
   {
     if (__input.radial) {
       __result = string(abi.encodePacked(__result, " "));
-      if (__input.light) {
-        __result = string(
-          abi.encodePacked(
-            __result,
-            ' <path style="fill:hsl(',
-            SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ", ",
-            SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
-            "%, ",
-            SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
-            '%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsl(',
-            SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 100%, 95%)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
-            __constant0
-          )
-        );
-      }
-      __result = string(abi.encodePacked(__result, " "));
       if (__input.dark) {
         __result = string(
           abi.encodePacked(
@@ -595,15 +575,35 @@ library BackgroundLayer {
         );
       }
       __result = string(abi.encodePacked(__result, " "));
-    }
-    __result = string(abi.encodePacked(__result, " "));
-    if (__input.linear) {
-      __result = string(abi.encodePacked(__result, " "));
-      if (__input.light) {
+      if (!__input.dark) {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/> <stop offset="100%" stop-color="hsl(',
+            ' <path style="fill:hsl(',
+            SolidMustacheHelpers.uintToString(__input.color.hue, 0),
+            ", ",
+            SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
+            "%, ",
+            SolidMustacheHelpers.uintToString(__input.color.lightness, 0),
+            '%)" d="M0 0h2000v3000H0z"/> <radialGradient id="grad0"> <stop offset="0" style="stop-color:hsl(',
+            SolidMustacheHelpers.uintToString(__input.color.hue, 0),
+            ', 100%, 95%)"/> <stop offset="1" style="stop-color:hsla(55, 66%, 83',
+            __constant0
+          )
+        );
+      }
+      __result = string(abi.encodePacked(__result, " "));
+    }
+    __result = string(abi.encodePacked(__result, " "));
+    if (!__input.radial) {
+      __result = string(abi.encodePacked(__result, " "));
+      if (__input.dark) {
+        __result = string(
+          abi.encodePacked(
+            __result,
+            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(',
+            SolidMustacheHelpers.uintToString(__input.color.hue, 0),
+            ', 30%, 7%)"/> <stop offset="100%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),
@@ -614,13 +614,11 @@ library BackgroundLayer {
         );
       }
       __result = string(abi.encodePacked(__result, " "));
-      if (__input.dark) {
+      if (!__input.dark) {
         __result = string(
           abi.encodePacked(
             __result,
-            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(',
-            SolidMustacheHelpers.uintToString(__input.color.hue, 0),
-            ', 30%, 7%)"/> <stop offset="100%" stop-color="hsl(',
+            ' <linearGradient id="l0" gradientTransform="rotate(90)"> <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/> <stop offset="100%" stop-color="hsl(',
             SolidMustacheHelpers.uintToString(__input.color.hue, 0),
             ", ",
             SolidMustacheHelpers.uintToString(__input.color.saturation, 0),

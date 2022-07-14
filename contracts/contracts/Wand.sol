@@ -19,7 +19,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    IWands.Background background,
+    Template.Background background,
     IWands.Planet[8] planets,
     IWands.Aspect[8] aspects
   );
@@ -39,7 +39,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     uint8 stone,
     uint8 handle,
     uint16 halo,
-    IWands.Background memory background,
+    Template.Background memory background,
     IWands.Planet[8] memory planets,
     IWands.Aspect[8] memory aspects
   ) external override {

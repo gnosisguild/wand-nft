@@ -35,7 +35,7 @@
         {{#if fractalNoise}}type="fractalNoise"{{/if}}
         baseFrequency="{{uint8 turbFreqX decimals=3}} {{uint8 turbFreqY decimals=3}}"
         numOctaves="{{uint8 turbOct}}"
-        seed={{uint ../seed}}
+        seed="{{uint ../seed}}"
         result="t{{@index}}"
       />
       <feGaussianBlur
