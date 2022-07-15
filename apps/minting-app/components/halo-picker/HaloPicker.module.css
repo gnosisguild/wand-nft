@@ -1,11 +1,49 @@
-.rhythmOn {
-  fill: turquoise;
-}
-
-.rhythmOff {
+.rhythm {
+  cursor: pointer;
   fill: transparent;
+  transition: all 0.05s ease;
 }
 
-.rhythmOff:hover {
-  fill: #65da45;
+.rhythmActive {
+  fill: rgba(111, 255, 229, 0.7);
+}
+
+.rhythm:hover {
+  fill: rgba(111, 255, 229, 0.4);
+}
+
+.haloButtonContainer {
+  width: 14%;
+  position: absolute;
+}
+
+.halo0 {
+  top: 28%;
+  left: 35%;
+}
+.halo1 {
+  top: 28%;
+  right: 35%;
+}
+.halo2 {
+  top: 58%;
+  right: 35%;
+}
+.halo3 {
+  top: 58%;
+  left: 35%;
+}
+.halo4 {
+  top: 43%;
+  left: 26%;
+}
+.halo5 {
+  top: 43%;
+  right: 26%;
+}
+.icon {
+  position: absolute;
+  bottom: -21%;
+  right: 40%;
+  width: 20%;
 }

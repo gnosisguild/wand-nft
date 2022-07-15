@@ -1,33 +1,46 @@
+import classNames from "classnames";
 import styles from "./HaloPicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import {
-  NARROW_SEGMENTS,
-  WIDE_SEGMENTS,
-  VIEWBOX_WIDTH,
-  VIEWBOX_HEIGHT,
+  VIEWBOX_SIZE,
+  SEGMENTS_WIDE,
+  SEGMENTS_NARROW,
+  FILLERS_NARROW,
+  FILLERS_WIDE,
 } from "./rhythm";
-import buttons from "./buttons";
 import { Halo } from "../../types";
 import { isWideShape } from "../../template";
+import IconButton from "../IconButton";
 
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { halo } = state;
-  const segments = isWideShape(halo.shape) ? WIDE_SEGMENTS : NARROW_SEGMENTS;
+  const isWide = isWideShape(halo.shape);
+  const [segments, fillers] = isWide
+    ? [SEGMENTS_WIDE, FILLERS_WIDE]
+    : [SEGMENTS_NARROW, FILLERS_NARROW];
 
   return (
     <div>
       <UiCircle>
-        <svg viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}>
+        <svg viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}>
+          <circle
+            cy="500"
+            cx="500"
+            r="475"
+            stroke="#D9D4AD"
+            strokeWidth="16"
+            opacity="0.7"
+            style={{ mixBlendMode: "color-dodge" }}
+          />
           {segments.map((d, index) => (
             <path
-              className={
-                isRhythmSet(halo, index) ? styles.rhythmOn : styles.rhythmOff
-              }
-              key={index}
-              stroke="red"
+              className={classNames(styles.rhythm, {
+                [styles.rhythmActive]: isRhythmSet(halo, index),
+              })}
+              key={`${isWide}-${index}`}
               d={d}
               onClick={() => {
                 dispatch({
@@ -37,23 +50,43 @@ const HaloPicker: React.FC = () => {
               }}
             />
           ))}
-          {buttons.map(({ x, y, r }, index) => (
-            <circle
-              key={index}
-              cx={x}
-              cy={y}
-              r={r}
-              fill={halo.shape === index ? "green" : "yellow"}
-              onClick={() => {
-                dispatch({
-                  type: "changeHalo",
-                  value: { ...halo, shape: index as Halo["shape"] },
-                });
-              }}
+          {fillers.map((d, index) => (
+            <path
+              key={`${isWide}-${index}`}
+              d={d}
+              fill="#D9D4AD"
+              opacity="0.7"
+              style={{ mixBlendMode: "color-dodge" }}
             />
           ))}
         </svg>
+        <div className={styles.buttonContainer}>
+          {[0, 1, 2, 3, 4, 5].map((haloNum) => (
+            <div
+              key={haloNum}
+              className={classNames(
+                styles.haloButtonContainer,
+                styles[`halo${haloNum}`]
+              )}
+            >
+              <IconButton
+                thickBorder
+                active={halo.shape === haloNum}
+                icon={`Halo${haloNum}`}
+                onClick={() => {
+                  dispatch({
+                    type: "changeHalo",
+                    value: { ...halo, shape: haloNum as Halo["shape"] },
+                  });
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </UiCircle>
+      <div className={styles.icon}>
+        <IconButton icon="PickerHalo" shadow />
+      </div>
     </div>
   );
 };
@@ -76,12 +109,10 @@ function setRhythm(halo: Halo, index: number): Halo {
 }
 
 function teflonIndex(halo: Halo, index: number) {
-  const isWide = isWideShape(halo.shape);
-  const threshold = isWide ? 6 : 12;
+  const [midway, multiplier] = isWideShape(halo.shape) ? [6, 2] : [12, 1];
 
-  const deduped = index > threshold ? threshold - (index - threshold) : index;
-
-  return isWide ? deduped * 2 : deduped;
+  const skew = Math.max(0, index - midway);
+  return (skew > 0 ? midway - skew : index) * multiplier;
 }
 
 export default HaloPicker;

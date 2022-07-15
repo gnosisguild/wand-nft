@@ -8,7 +8,7 @@
 .centerContainer {
   position: relative;
   display: block;
-  width: 52%;
+  width: 47%;
   margin: 0 auto;
   max-width: 1000px;
   padding: 1.5% 0 2%;
@@ -25,7 +25,7 @@
 .stonePicker,
 .haloPicker {
   aspect-ratio: 1;
-  width: 29%;
+  width: 25%;
   border-radius: 50%;
   max-width: 290px;
 }
@@ -38,14 +38,14 @@
 
 .haloPicker {
   position: absolute;
-  left: 35.5%;
-  top: 70.5%;
+  left: 37.5%;
+  top: 71.9%;
 }
 
 .stonePicker {
   position: absolute;
-  left: 70%;
-  top: 64%;
+  left: 71.8%;
+  top: 65.5%;
 }
 
 .iconTest {
