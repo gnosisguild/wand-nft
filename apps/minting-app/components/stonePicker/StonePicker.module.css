@@ -1,43 +1,24 @@
-.stoneList ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-}
-.stoneList li {
-  width: 10%;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-}
-.stoneViewSvg {
-  width: 300%;
-  position: absolute;
-  top: -109%;
-  left: -100%;
-}
-.stoneContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  aspect-ratio: 1/1;
-  z-index: 11;
-}
-.stoneBag ul {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  border-radius: 50%;
-}
-.stoneBag li {
-  position: absolute;
-  width: 18%;
-  aspect-ratio: 1/1;
-  overflow: hidden;
+.container {
   cursor: grab;
 }
+
+.stone {
+  pointer-events: none;
+  width: 45%;
+  height: 45%;
+  margin: 27.5%;
+  overflow: hidden;
+  background-color: #ff00ffaa;
+  border-radius: 50%;
+  position: relative;
+}
+.stoneViewSvg {
+  width: 387%;
+  position: absolute;
+  top: -155%;
+  left: -144%;
+}
+
 .icon {
   position: absolute;
   z-index: 12;

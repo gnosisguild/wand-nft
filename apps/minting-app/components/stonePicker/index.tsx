@@ -1,125 +1,96 @@
-import { useRef, useState } from "react";
-import Draggable from "react-draggable";
+import { useEffect, useRef, useState } from "react";
+import { animated } from "react-spring";
+import { useDrag } from "react-use-gesture";
 import StoneViewer from "./StoneViewer";
 import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
+import useInertia from "./useInertia";
 
-import uiCirclebg from "../uiCircle/uiCirclebg.jpg";
+const stoneCount = stoneList.length;
 
-const DraggableNoType: any = Draggable;
-
-const randomStonePosision = () => {
-  const stoneWidth = 18;
-  const angle = Math.random() * Math.PI * 2;
-  const r = 41 * Math.sqrt(Math.random());
-  const x = 41 + r * Math.cos(angle);
-  const y = 41 + r * Math.sin(angle);
-
-  return { top: `${y}%`, left: `${x}%` };
-};
+const ANGLE_STEP = 5;
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const [stonesWithPosition, setStonesWithPosition] = useState(
-    stoneList.map((stone, id) => {
-      return { id, position: randomStonePosision() };
-    })
+  const [tempStone, setTempStone] = useState(state.stone);
+  // const rotate = (360 / stoneCount) * state.stone;
+
+  const [{ rotation, turbFreqX }, set] = useInertia({
+    rotation: ANGLE_STEP * tempStone,
+    turbFreqX: stoneList[tempStone].turbFreqX,
+    onChange(rotation: any) {
+      if (isNaN(rotation)) return;
+      const i = Math.round(rotation / ANGLE_STEP) % stoneCount;
+      const stoneIndex = i < 0 ? stoneCount + i : i;
+      if (stoneIndex !== tempStone) {
+        setTempStone(stoneIndex);
+      }
+    },
+  });
+
+  if (!rotation) throw new Error("huh");
+
+  const bind = useDrag(
+    ({ down, movement: [mx, my], vxvy: [vx, vy] }) => {
+      if (down) {
+        // console.log({
+        //   mx,
+        //   my,
+        //   vx,
+        //   vy,
+        //   rotation: Math.atan2(mx, my),
+        //   velocity: Math.sqrt(vx ** vx + vy ** vy),
+        // });
+        set({
+          rotation: Math.atan2(mx, my),
+          immediate: true,
+          config: { decay: false },
+        });
+      } else {
+        set({
+          rotation: Math.atan2(mx, my),
+          turbFreqX: stoneList[tempStone + 1].turbFreqX,
+
+          immediate: false,
+          config: () => ({
+            inertia: true,
+            bounds: [-100, 100],
+            velocity: Math.sqrt(vx ** vx + vy ** vy),
+          }),
+        });
+      }
+    },
+    {
+      initial: () => [0, 0],
+      threshold: 10,
+      bounds: { top: -250, bottom: 250, left: -100, right: 100 },
+      rubberband: true,
+    }
   );
-  const nodeRef = useRef(null);
 
   return (
-    <div className={styles.stoneBag}>
-      <UiCircle>
-        <svg
-          viewBox="0 0 120 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={styles.bgCircle}
-        >
-          <defs>
-            <linearGradient
-              id="bg_grad"
-              x1="60"
-              y1="3.28491"
-              x2="60"
-              y2="118.027"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#EFEBCE" stopOpacity="0.5" />
-              <stop offset="1" stopColor="#EFEBCE" />
-            </linearGradient>
-            <pattern
-              id="pattern0"
-              patternContentUnits="objectBoundingBox"
-              width="1"
-              height="1"
-            >
-              <use
-                xlinkHref="#image0_616_1329"
-                transform="translate(-0.0166667) scale(0.00123457)"
-              />
-            </pattern>
-            <image
-              id="image0_616_1329"
-              width="837"
-              height="810"
-              href={uiCirclebg.src}
+    <div className={styles.container}>
+      <animated.div
+        {...bind()}
+        style={{
+          transform: rotation.interpolate((angle) => `rotate(${angle}deg)`),
+        }}
+      >
+        <UiCircle>
+          <div className={styles.stone}>
+            <StoneViewer
+              seed={state.tokenId}
+              stone={{
+                ...stoneList[tempStone],
+                turbFreqX: turbFreqX?.get() || stoneList[tempStone].turbFreqX,
+              }}
             />
-          </defs>
-          <circle
-            cx="60"
-            cy="60"
-            r="58"
-            fill="url(#pattern0)"
-            fillOpacity="0.8"
-          />
-          <circle
-            cx="60"
-            cy="60"
-            r="52"
-            stroke="url(#bg_grad)"
-            strokeWidth="5"
-            opacity="0.4"
-            style={{ mixBlendMode: "color-dodge" }}
-          />
-          <circle
-            cx="60"
-            cy="60"
-            r="57"
-            stroke="url(#bg_grad)"
-            strokeWidth="2"
-            opacity="0.4"
-            style={{ mixBlendMode: "color-dodge" }}
-          />
-        </svg>
-        <div className={styles.stoneContainer}>
-          <ul>
-            {stonesWithPosition.map(({ id, position }) => (
-              <DraggableNoType key={id} bounds="parent" nodeRef={nodeRef}>
-                <li
-                  ref={nodeRef}
-                  onClick={(e) => {
-                    switch (e.detail) {
-                      case 2:
-                        // double click
-                        dispatch({ type: "changeStone", value: id });
-                        break;
-                      default:
-                        return;
-                    }
-                  }}
-                  style={position}
-                >
-                  <StoneViewer seed={state.tokenId} id={id} />
-                </li>
-              </DraggableNoType>
-            ))}
-          </ul>
-        </div>
-      </UiCircle>
+          </div>
+        </UiCircle>
+      </animated.div>
       <div className={styles.icon}>
         <IconButton icon="PickerStone" shadow />
       </div>
