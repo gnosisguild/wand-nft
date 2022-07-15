@@ -1,8 +1,8 @@
 const CONFIG = {
   SEGMENT: {
-    percBorder: 0.034,
-    percThickness: 0.062,
-    angleGap: 1.4,
+    percBorder: 0.041,
+    percThickness: 0.048,
+    angleGap: 2,
   },
   FILLER: {
     percBorder: 0.034,
