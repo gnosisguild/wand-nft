@@ -23,6 +23,7 @@ import {
 } from "../template";
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
+import MintButton from "../components/MintButton";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -38,6 +39,7 @@ const Home: NextPage = () => {
         <CornerGilding />
         <div className={styles.centerContainer}>
           <CenterGilding />
+          <MintButton />
           <div className={styles.svgPreview}>
             <SvgTemplate input={deriveTemplateInput(state)} />
           </div>
