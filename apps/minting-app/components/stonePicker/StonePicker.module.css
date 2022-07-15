@@ -16,6 +16,14 @@
   top: -109%;
   left: -100%;
 }
+.stoneContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1/1;
+  z-index: 11;
+}
 .stoneBag ul {
   position: relative;
   width: 100%;
@@ -35,4 +43,8 @@
   bottom: -4%;
   right: -4%;
   width: 20%;
+}
+.bgCircle {
+  position: relative;
+  z-index: 5;
 }

@@ -5,8 +5,8 @@ const CONFIG = {
     angleGap: 2,
   },
   FILLER: {
-    percBorder: 0.034,
-    percThickness: 0.062,
+    percBorder: 0.031,
+    percThickness: 0.07,
     angleSpan: 2,
   },
 };

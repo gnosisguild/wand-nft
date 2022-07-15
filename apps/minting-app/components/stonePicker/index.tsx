@@ -7,6 +7,8 @@ import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 
+import uiCirclebg from "../uiCircle/uiCirclebg.jpg";
+
 const DraggableNoType: any = Draggable;
 
 const randomStonePosision = () => {
@@ -49,14 +51,38 @@ const StonePicker: React.FC = () => {
               <stop stopColor="#EFEBCE" stopOpacity="0.5" />
               <stop offset="1" stopColor="#EFEBCE" />
             </linearGradient>
+            <pattern
+              id="pattern0"
+              patternContentUnits="objectBoundingBox"
+              width="1"
+              height="1"
+            >
+              <use
+                xlinkHref="#image0_616_1329"
+                transform="translate(-0.0166667) scale(0.00123457)"
+              />
+            </pattern>
+            <image
+              id="image0_616_1329"
+              width="837"
+              height="810"
+              href={uiCirclebg.src}
+            />
           </defs>
+          <circle
+            cx="60"
+            cy="60"
+            r="58"
+            fill="url(#pattern0)"
+            fillOpacity="0.8"
+          />
           <circle
             cx="60"
             cy="60"
             r="52"
             stroke="url(#bg_grad)"
             strokeWidth="5"
-            opacity="1"
+            opacity="0.4"
             style={{ mixBlendMode: "color-dodge" }}
           />
           <circle
@@ -65,32 +91,34 @@ const StonePicker: React.FC = () => {
             r="57"
             stroke="url(#bg_grad)"
             strokeWidth="2"
-            opacity="1"
+            opacity="0.4"
             style={{ mixBlendMode: "color-dodge" }}
           />
         </svg>
-        <ul>
-          {stonesWithPosition.map(({ id, position }) => (
-            <DraggableNoType key={id} bounds="parent" nodeRef={nodeRef}>
-              <li
-                ref={nodeRef}
-                onClick={(e) => {
-                  switch (e.detail) {
-                    case 2:
-                      // double click
-                      dispatch({ type: "changeStone", value: id });
-                      break;
-                    default:
-                      return;
-                  }
-                }}
-                style={position}
-              >
-                <StoneViewer seed={state.tokenId} id={id} />
-              </li>
-            </DraggableNoType>
-          ))}
-        </ul>
+        <div className={styles.stoneContainer}>
+          <ul>
+            {stonesWithPosition.map(({ id, position }) => (
+              <DraggableNoType key={id} bounds="parent" nodeRef={nodeRef}>
+                <li
+                  ref={nodeRef}
+                  onClick={(e) => {
+                    switch (e.detail) {
+                      case 2:
+                        // double click
+                        dispatch({ type: "changeStone", value: id });
+                        break;
+                      default:
+                        return;
+                    }
+                  }}
+                  style={position}
+                >
+                  <StoneViewer seed={state.tokenId} id={id} />
+                </li>
+              </DraggableNoType>
+            ))}
+          </ul>
+        </div>
       </UiCircle>
       <div className={styles.icon}>
         <IconButton icon="PickerStone" shadow />

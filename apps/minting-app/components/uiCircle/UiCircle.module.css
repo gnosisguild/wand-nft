@@ -6,6 +6,7 @@
 .uiCircle {
   position: absolute;
   inset: 10%;
+  z-index: 10;
 }
 .childrenContainer {
   position: absolute;
