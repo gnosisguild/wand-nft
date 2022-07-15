@@ -1,13 +1,13 @@
 const CONFIG = {
   SEGMENT: {
-    percBorder: 0.91,
-    percThickness: 0.05,
-    angleGap: 2,
+    percBorder: 0.034,
+    percThickness: 0.062,
+    angleGap: 1.4,
   },
   FILLER: {
-    percBorder: 0.9,
-    percThickness: 0.07,
-    angleGap: 0.7,
+    percBorder: 0.034,
+    percThickness: 0.062,
+    angleSpan: 2,
   },
 };
 
@@ -37,13 +37,13 @@ function fillers(count: number) {
   let result: string[] = [];
 
   const arcSize = 360 / count;
-  const { percBorder, percThickness, angleGap } = CONFIG.FILLER;
+  const { percBorder, percThickness, angleSpan } = CONFIG.FILLER;
   const [outerRadius, innerRadius] = radius(percBorder, percThickness);
 
   for (let i = 0; i < count; i++) {
-    const midway = i * arcSize + arcSize / 2;
-    const left = midway - angleGap;
-    const right = midway + angleGap;
+    const midway = i * arcSize + arcSize / 2 - 180;
+    const left = midway - angleSpan / 2;
+    const right = midway + angleSpan / 2;
     result = [...result, path(left, right, outerRadius, innerRadius)];
   }
 

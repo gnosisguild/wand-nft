@@ -112,9 +112,7 @@ function teflonIndex(halo: Halo, index: number) {
   const [midway, multiplier] = isWideShape(halo.shape) ? [6, 2] : [12, 1];
 
   const skew = Math.max(0, index - midway);
-  const unmirrored = skew > 0 ? midway - skew : index;
-
-  return unmirrored * multiplier;
+  return (skew > 0 ? midway - skew : index) * multiplier;
 }
 
 export default HaloPicker;
