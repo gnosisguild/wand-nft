@@ -3,15 +3,6 @@ export type Point = {
   y: number;
 };
 
-export function centerAndRadius(rect: DOMRect) {
-  const { left, right, top } = rect;
-
-  const radius = (right - left) / 2;
-  const center = { x: left + radius, y: top + radius };
-
-  return { center, radius };
-}
-
 export function findClosestInCircumference(
   center: Point,
   radius: number,
@@ -65,4 +56,14 @@ export function toPosition(center: Point, radius: number, degrees: number) {
     x: center.x + radius * Math.cos(radians),
     y: center.y + radius * Math.sin(radians),
   };
+}
+
+export function dimensions(rect: DOMRect) {
+  const { left, right, top, bottom } = rect;
+
+  const width = right - left;
+  const height = bottom - top;
+  const center = { x: left + width / 2, y: top + height / 2 };
+
+  return { center, width, height };
 }
