@@ -8,9 +8,10 @@
   height: 45%;
   margin: 27.5%;
   overflow: hidden;
-  background-color: #ff00ffaa;
   border-radius: 50%;
-  position: relative;
+  top: 0;
+  left: 0;
+  position: absolute;
 }
 .stoneViewSvg {
   width: 387%;
