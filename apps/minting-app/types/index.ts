@@ -62,10 +62,7 @@ export interface Stone {
 }
 
 export interface Background {
-  hue: number;
-  linear?: boolean;
   radial?: boolean;
-  light?: boolean;
   dark?: boolean;
   color: Color;
 }

@@ -108,7 +108,17 @@ const ColorPicker: React.FC = () => {
               styles.darkButton
             )}
           >
-            <IconButton thickBorder icon="Dark" />
+            <IconButton
+              thickBorder
+              icon="Dark"
+              active={background.dark}
+              onClick={() => {
+                dispatch({
+                  type: "changeBackground",
+                  value: { ...background, dark: true },
+                });
+              }}
+            />
           </div>
           <div
             className={classNames(
@@ -116,7 +126,17 @@ const ColorPicker: React.FC = () => {
               styles.lightButton
             )}
           >
-            <IconButton thickBorder icon="Light" />
+            <IconButton
+              thickBorder
+              icon="Light"
+              active={!background.dark}
+              onClick={() => {
+                dispatch({
+                  type: "changeBackground",
+                  value: { ...background, dark: false },
+                });
+              }}
+            />
           </div>
           <div
             className={classNames(
@@ -124,7 +144,17 @@ const ColorPicker: React.FC = () => {
               styles.radialButton
             )}
           >
-            <IconButton thickBorder icon="Radial" />
+            <IconButton
+              thickBorder
+              icon="Radial"
+              active={background.radial}
+              onClick={() => {
+                dispatch({
+                  type: "changeBackground",
+                  value: { ...background, radial: true },
+                });
+              }}
+            />
           </div>
           <div
             className={classNames(
@@ -132,7 +162,17 @@ const ColorPicker: React.FC = () => {
               styles.linearButton
             )}
           >
-            <IconButton thickBorder icon="Linear" />
+            <IconButton
+              thickBorder
+              icon="Linear"
+              active={!background.radial}
+              onClick={() => {
+                dispatch({
+                  type: "changeBackground",
+                  value: { ...background, radial: false },
+                });
+              }}
+            />
           </div>
         </div>
       </UiCircle>
