@@ -18,6 +18,11 @@
   z-index: 11;
 }
 
+.haloSegmentSvg {
+  position: relative;
+  z-index: 11;
+}
+
 .halo0 {
   top: 28%;
   left: 35%;

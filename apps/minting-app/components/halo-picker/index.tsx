@@ -25,13 +25,17 @@ const HaloPicker: React.FC = () => {
   return (
     <div>
       <UiCircle>
-        <svg viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}>
+        <svg
+          viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
+          className={styles.haloSegmentSvg}
+        >
           <circle
             cy="500"
             cx="500"
             r="475"
             stroke="#D9D4AD"
             strokeWidth="16"
+            fill="none"
             opacity="0.7"
             style={{ mixBlendMode: "color-dodge" }}
           />
