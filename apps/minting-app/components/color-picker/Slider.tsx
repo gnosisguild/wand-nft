@@ -33,11 +33,12 @@ const CONFIG = {
 
 interface Props {
   wide: boolean;
+  stroke: string;
   value: number;
   onChange: (nextValue: number) => void;
 }
 
-const Slider = ({ wide, value, onChange }: Props) => {
+const Slider = ({ wide, stroke, value, onChange }: Props) => {
   const arcRef = useRef<SVGPathElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -73,7 +74,7 @@ const Slider = ({ wide, value, onChange }: Props) => {
       <path
         ref={arcRef}
         fill="none"
-        stroke="red"
+        stroke={stroke}
         strokeWidth="25"
         d={d}
         onClick={(event: React.MouseEvent<SVGPathElement>) => {
