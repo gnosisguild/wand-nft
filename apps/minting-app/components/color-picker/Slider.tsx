@@ -3,6 +3,7 @@ import { useEventListener } from "usehooks-ts";
 import { xp } from "../../template";
 
 import uiCirclebg from "../uiCircle/uiCirclebg.jpg";
+import HueSlider from "./HueSlider";
 
 import {
   findClosestInCircumference,
@@ -34,11 +35,12 @@ const CONFIG = {
 interface Props {
   wide: boolean;
   stroke: string;
+  strokeWidth?: number;
   value: number;
   onChange: (nextValue: number) => void;
 }
 
-const Slider = ({ wide, stroke, value, onChange }: Props) => {
+const Slider = ({ wide, stroke, value, strokeWidth = 25, onChange }: Props) => {
   const arcRef = useRef<SVGPathElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -71,11 +73,12 @@ const Slider = ({ wide, stroke, value, onChange }: Props) => {
 
   return (
     <>
+      {wide && <HueSlider />}
       <path
         ref={arcRef}
         fill="none"
         stroke={stroke}
-        strokeWidth="25"
+        strokeWidth={strokeWidth}
         d={d}
         onClick={(event: React.MouseEvent<SVGPathElement>) => {
           event.preventDefault();

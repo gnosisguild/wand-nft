@@ -85,7 +85,8 @@ const ColorPicker: React.FC = () => {
           </linearGradient>
           <Slider
             wide={true}
-            stroke={"url(#gradient)"}
+            stroke={"rgba(0,0,0,0)"}
+            strokeWidth={60}
             value={background.color.hue}
             onChange={(nextValue: number) => onHueChange(nextValue)}
           />
@@ -136,7 +137,7 @@ const ColorPicker: React.FC = () => {
         </div>
       </UiCircle>
       <div className={styles.icon}>
-        <IconButton icon="PickerHalo" shadow />
+        <IconButton icon="PickerAura" shadow />
       </div>
     </div>
   );
