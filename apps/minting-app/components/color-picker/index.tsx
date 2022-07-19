@@ -172,11 +172,3 @@ function toLightness(value: number): number {
 function fromLightness(value: number): number {
   return 180 * (value / 100);
 }
-
-// function from100To360(value: number) {
-//   return 360 * (value / 100);
-// }
-
-// function from360To100(value: number) {
-//   return 100 * (value / 360);
-// }
