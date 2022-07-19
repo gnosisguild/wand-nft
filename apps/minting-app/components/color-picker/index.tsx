@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import UiCircle from "../uiCircle";
-import Slider from "./Slider";
+import Slider from "./slider";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
@@ -75,20 +75,13 @@ const ColorPicker: React.FC = () => {
     <div>
       <UiCircle>
         <svg viewBox={`0 0 1000 1000`} className={styles.svg}>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset={"0%"} stopColor="hsl(0, 0%, 90%)" />
-            <stop offset={"80%"} stopColor="hsl(0, 0%, 10%)" />
-          </linearGradient>
           <Slider
             wide={true}
-            stroke={"rgba(0,0,0,0)"}
-            strokeWidth={60}
             value={background.color.hue}
             onChange={(nextValue: number) => onHueChange(nextValue)}
           />
           <Slider
             wide={false}
-            stroke={"url(#gradient)"}
             value={from100To360(background.color.lightness)}
             onChange={(nextValue: number) =>
               onLightnessChange(from360To100(nextValue))

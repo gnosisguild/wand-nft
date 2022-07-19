@@ -1,10 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useEventListener } from "usehooks-ts";
-import { xp } from "../../template";
 
-import uiCirclebg from "../uiCircle/uiCirclebg.jpg";
-import HueSlider from "./HueSlider";
-
+import Knob from "./Knob";
+import Gradient from "./Gradient";
 import {
   findClosestInCircumference,
   toAngle,
@@ -34,20 +32,18 @@ const CONFIG = {
 
 interface Props {
   wide: boolean;
-  stroke: string;
-  strokeWidth?: number;
   value: number;
   onChange: (nextValue: number) => void;
 }
 
-const Slider = ({ wide, stroke, value, strokeWidth = 25, onChange }: Props) => {
+const Slider = ({ wide, value, onChange }: Props) => {
   const arcRef = useRef<SVGPathElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   // virtual coordinates, SVG modeling unscaled virtual coordinates
   const { center, radius, d } = wide ? CONFIG.WIDE : CONFIG.NARROW;
 
-  const moveTo = (point: Point) => {
+  function moveTo(point: Point) {
     // real coordinates, coming from the DOM
     const { center, width } = dimensions(
       arcRef.current?.getBoundingClientRect() as DOMRect
@@ -58,7 +54,7 @@ const Slider = ({ wide, stroke, value, strokeWidth = 25, onChange }: Props) => {
     onChange(
       toAngle(center, findClosestInCircumference(center, radius, point))
     );
-  };
+  }
 
   useEventListener("mousemove", (event: MouseEvent) => {
     if (isDragging) {
@@ -73,32 +69,19 @@ const Slider = ({ wide, stroke, value, strokeWidth = 25, onChange }: Props) => {
 
   return (
     <>
-      {wide && <HueSlider />}
+      <Gradient wide={wide} />
       <path
         ref={arcRef}
         fill="none"
-        stroke={stroke}
-        strokeWidth={strokeWidth}
+        stroke={wide ? "rgba(0,0,0,0)" : "url(#gray-gradient)"}
+        strokeWidth={wide ? 60 : 25}
         d={d}
         onClick={(event: React.MouseEvent<SVGPathElement>) => {
           event.preventDefault();
           moveTo({ x: event.clientX, y: event.clientY });
         }}
       />
-      <g onMouseDown={() => setIsDragging(true)}>
-        <circle cx={x} cy={y} r="50" fill="url(#paint0_radial_901_4892)" />
-        <circle cx={x} cy={y} r="40" fill="url(#paint1_radial_901_4892)" />
-      </g>
-      <defs>
-        <radialGradient r="0.2" id="paint0_radial_901_4892">
-          <stop stopColor="#EDECE7" />
-          <stop offset="1" stopColor="#49473A" />
-        </radialGradient>
-        <radialGradient r="1.2" id="paint1_radial_901_4892">
-          <stop stopColor="#EDECE7" />
-          <stop offset="1" stopColor="#858272" />
-        </radialGradient>
-      </defs>
+      <Knob x={x} y={y} onMouseDown={() => setIsDragging(true)} />
     </>
   );
 };

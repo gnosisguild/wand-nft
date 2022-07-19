@@ -1,7 +1,17 @@
-import styles from "./ColorPicker.module.css";
+import React from "react";
+import styles from "./Slider.module.css";
 
-const HueSlider: React.FC = () => {
-  return (
+type Props = {
+  wide: boolean;
+};
+
+const Gradient: React.FC<Props> = ({ wide }) =>
+  !wide ? (
+    <linearGradient id="gray-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset={"0%"} stopColor="hsl(0, 0%, 90%)" />
+      <stop offset={"80%"} stopColor="hsl(0, 0%, 10%)" />
+    </linearGradient>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
@@ -914,6 +924,5 @@ const HueSlider: React.FC = () => {
       </g>
     </svg>
   );
-};
 
-export default HueSlider;
+export default React.memo(Gradient);
