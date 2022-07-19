@@ -45,7 +45,7 @@ const ButtonBackground: React.FC<ButtonBgProps> = ({ className }) => {
 
 const ColorPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const [sliderValue, setSliderValue] = useState(
+  const [innerSlider, setInnerSlider] = useState(
     fromLightness(state.background.color.lightness)
   );
   const { background } = state;
@@ -76,9 +76,9 @@ const ColorPicker: React.FC = () => {
           />
           <Slider
             wide={false}
-            value={sliderValue}
+            value={innerSlider}
             onChange={(nextValue: number) => {
-              setSliderValue(nextValue);
+              setInnerSlider(nextValue);
               handleChange({
                 ...background,
                 color: {
@@ -163,12 +163,25 @@ function fromHue(value: number): number {
   return value;
 }
 
-function toLightness(value: number): number {
-  const mirrored = value < 180 ? value : 360 - value;
+const LIGHTNESS_BOUNDS = [40, 80];
 
-  return Math.round((1 - mirrored / 180) * 100);
+function toLightness(value: number): number {
+  const [left, right] = LIGHTNESS_BOUNDS;
+  const stretch = right - left;
+
+  const mirrored = value < 180 ? value : 360 - value;
+  // inverted progress
+  const progress = 1 - mirrored / 180;
+
+  return Math.round(left + progress * stretch);
 }
 
 function fromLightness(value: number): number {
-  return 180 * (value / 100);
+  const [left, right] = LIGHTNESS_BOUNDS;
+  const stretch = right - left;
+
+  // inverted progress
+  const progress = 1 - (value - left) / stretch;
+
+  return progress * 180;
 }
