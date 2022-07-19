@@ -163,7 +163,7 @@ function fromHue(value: number): number {
   return value;
 }
 
-const LIGHTNESS_BOUNDS = [40, 80];
+const LIGHTNESS_BOUNDS = [20, 70];
 
 function toLightness(value: number): number {
   const [left, right] = LIGHTNESS_BOUNDS;
