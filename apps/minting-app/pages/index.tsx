@@ -67,7 +67,11 @@ const deriveTemplateInput = (state: AppState): TemplateInput => ({
   aspects: scaleAspects(
     calculateAspects(state.latitude, state.longitude, 0, new Date())
   ),
-  halo: generateHalo(state.halo.shape, state.halo.rhythm, state.background.hue),
+  halo: generateHalo(
+    state.halo.shape,
+    state.halo.rhythm,
+    state.background.color.hue
+  ),
   frame: {
     level1: true,
     title: generateName(state.tokenId),

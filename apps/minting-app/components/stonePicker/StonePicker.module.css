@@ -40,6 +40,7 @@
 }
 .icon {
   position: absolute;
+  z-index: 12;
   bottom: -4%;
   right: -4%;
   width: 20%;

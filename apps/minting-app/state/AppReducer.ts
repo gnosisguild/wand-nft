@@ -6,7 +6,6 @@ const longitude = 13.3495;
 
 export const initialState: AppState = {
   background: {
-    hue: 0,
     radial: true,
     dark: true,
     color: {

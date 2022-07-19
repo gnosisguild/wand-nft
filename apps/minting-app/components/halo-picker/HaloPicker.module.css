@@ -15,6 +15,13 @@
 .haloButtonContainer {
   width: 14%;
   position: absolute;
+  z-index: 11;
+}
+
+.haloSegmentSvg {
+  position: relative;
+  z-index: 11;
+  mix-blend-mode: color-dodge;
 }
 
 .halo0 {
