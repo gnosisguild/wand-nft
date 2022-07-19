@@ -1,9 +1,12 @@
+import { useState } from "react";
+
 import classNames from "classnames";
 import UiCircle from "../uiCircle";
 import Slider from "./slider";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
+import { Background } from "../../types";
 
 interface ButtonBgProps {
   className: string;
@@ -42,32 +45,15 @@ const ButtonBackground: React.FC<ButtonBgProps> = ({ className }) => {
 
 const ColorPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-
+  const [sliderValue, setSliderValue] = useState(
+    fromLightness(state.background.color.lightness)
+  );
   const { background } = state;
 
-  const onHueChange = (nextValue: number) => {
+  const handleChange = (value: Background) => {
     dispatch({
       type: "changeBackground",
-      value: {
-        ...background,
-        color: {
-          ...background.color,
-          hue: Math.round(nextValue),
-        },
-      },
-    });
-  };
-
-  const onLightnessChange = (nextValue: number) => {
-    dispatch({
-      type: "changeBackground",
-      value: {
-        ...background,
-        color: {
-          ...background.color,
-          lightness: Math.round(nextValue),
-        },
-      },
+      value,
     });
   };
 
@@ -77,15 +63,30 @@ const ColorPicker: React.FC = () => {
         <svg viewBox={`0 0 1000 1000`} className={styles.svg}>
           <Slider
             wide={true}
-            value={background.color.hue}
-            onChange={(nextValue: number) => onHueChange(nextValue)}
+            value={fromHue(background.color.hue)}
+            onChange={(nextValue: number) =>
+              handleChange({
+                ...background,
+                color: {
+                  ...background.color,
+                  hue: toHue(nextValue),
+                },
+              })
+            }
           />
           <Slider
             wide={false}
-            value={from100To360(background.color.lightness)}
-            onChange={(nextValue: number) =>
-              onLightnessChange(from360To100(nextValue))
-            }
+            value={sliderValue}
+            onChange={(nextValue: number) => {
+              setSliderValue(nextValue);
+              handleChange({
+                ...background,
+                color: {
+                  ...background.color,
+                  lightness: toLightness(nextValue),
+                },
+              });
+            }}
           />
         </svg>
         <div className={styles.buttonContainer}>
@@ -101,12 +102,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Dark"
               active={background.dark}
-              onClick={() => {
-                dispatch({
-                  type: "changeBackground",
-                  value: { ...background, dark: true },
-                });
-              }}
+              onClick={() => handleChange({ ...background, dark: true })}
             />
           </div>
           <div
@@ -119,12 +115,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Light"
               active={!background.dark}
-              onClick={() => {
-                dispatch({
-                  type: "changeBackground",
-                  value: { ...background, dark: false },
-                });
-              }}
+              onClick={() => handleChange({ ...background, dark: false })}
             />
           </div>
           <div
@@ -137,12 +128,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Radial"
               active={background.radial}
-              onClick={() => {
-                dispatch({
-                  type: "changeBackground",
-                  value: { ...background, radial: true },
-                });
-              }}
+              onClick={() => handleChange({ ...background, radial: true })}
             />
           </div>
           <div
@@ -155,12 +141,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Linear"
               active={!background.radial}
-              onClick={() => {
-                dispatch({
-                  type: "changeBackground",
-                  value: { ...background, radial: false },
-                });
-              }}
+              onClick={() => handleChange({ ...background, radial: false })}
             />
           </div>
         </div>
@@ -174,10 +155,28 @@ const ColorPicker: React.FC = () => {
 
 export default ColorPicker;
 
-function from100To360(value: number) {
-  return 360 * (value / 100);
+function toHue(value: number): number {
+  return Math.round(value);
 }
 
-function from360To100(value: number) {
-  return 100 * (value / 360);
+function fromHue(value: number): number {
+  return value;
 }
+
+function toLightness(value: number): number {
+  const mirrored = value < 180 ? value : 360 - value;
+
+  return Math.round((1 - mirrored / 180) * 100);
+}
+
+function fromLightness(value: number): number {
+  return 180 * (value / 100);
+}
+
+// function from100To360(value: number) {
+//   return 360 * (value / 100);
+// }
+
+// function from360To100(value: number) {
+//   return 100 * (value / 360);
+// }
