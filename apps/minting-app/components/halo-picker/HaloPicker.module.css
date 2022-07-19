@@ -21,6 +21,7 @@
 .haloSegmentSvg {
   position: relative;
   z-index: 11;
+  mix-blend-mode: color-dodge;
 }
 
 .halo0 {
