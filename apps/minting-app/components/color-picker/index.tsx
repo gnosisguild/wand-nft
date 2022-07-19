@@ -76,12 +76,8 @@ const ColorPicker: React.FC = () => {
       <UiCircle>
         <svg viewBox={`0 0 1000 1000`} className={styles.svg}>
           <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset={"0%"} stopColor="#e40303" />
-            <stop offset={"20%"} stopColor="#ff8c00" />
-            <stop offset={"40%"} stopColor="#ffed00" />
-            <stop offset={"60%"} stopColor="#008026" />
-            <stop offset={"80%"} stopColor="#004dff" />
-            <stop offset={"100%"} stopColor="#750787" />
+            <stop offset={"0%"} stopColor="hsl(0, 0%, 90%)" />
+            <stop offset={"80%"} stopColor="hsl(0, 0%, 10%)" />
           </linearGradient>
           <Slider
             wide={true}
