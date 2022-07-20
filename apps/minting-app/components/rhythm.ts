@@ -1,6 +1,7 @@
 type SegmentConfig = {
   percBorder: number;
   percThickness: number;
+  percSkew: number;
   gapInDegrees: number;
   viewBoxSize: number;
 };
@@ -16,13 +17,12 @@ export function describeSegments(count: number, config: SegmentConfig) {
   let result: string[] = [];
 
   const arcSize = 360 / count;
-  const { gapInDegrees } = config;
+  const { percSkew, gapInDegrees } = config;
   const [outerRadius, innerRadius] = radius(config);
 
   for (let i = 0; i < count; i++) {
-    const midway = i * arcSize;
-    const left = midway - arcSize / 2 + gapInDegrees;
-    const right = midway + arcSize / 2 - gapInDegrees;
+    const left = i * arcSize - percSkew * arcSize + gapInDegrees;
+    const right = (i + 1) * arcSize - percSkew * arcSize - gapInDegrees;
     result = [...result, path(config, left, right, outerRadius, innerRadius)];
   }
   return result;

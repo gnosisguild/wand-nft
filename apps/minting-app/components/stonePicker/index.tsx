@@ -17,6 +17,7 @@ const VIEWBOX_SIZE = 1000;
 const segments = describeSegments(stoneList.length, {
   percBorder: 0.041,
   percThickness: 0.048,
+  percSkew: 0,
   gapInDegrees: 1,
   viewBoxSize: VIEWBOX_SIZE,
 });
@@ -81,20 +82,44 @@ const StonePicker: React.FC = () => {
 
 export default StonePicker;
 
+// TODO fix all this
 function angleToStoneIndex(angle: number) {
   const step = 360 / stoneCount;
   return Math.floor(angle / step);
 }
+function angleToStoneBounds(angle: number) {
+  const step = 360 / stoneCount;
+  const i = Math.floor(angle / step);
+  return [i * step, (i + 1) * step];
+}
+
+function angleToInterpolationParams(angle: number) {
+  const step = 360 / stoneCount;
+  // if we are 50% inside the angle no interpolation
+  const index = angleToStoneIndex(angle);
+  const [left, right] = angleToStoneBounds(angle);
+
+  const midway = left + (right - left) / 2;
+  if (angle < midway) {
+    // going left
+    const progress = (midway - angle) / step;
+    return [index, index - 1, progress];
+  } else {
+    // going right
+    const progress = (angle - midway) / step;
+    return [index, index + 1, progress];
+  }
+}
 
 const interpolateStone = (angle: number): Stone => {
-  const ANGLE_STEP = 45;
+  let [from, to, progress] = angleToInterpolationParams(angle);
 
-  const i = Math.floor(angle / ANGLE_STEP) % stoneCount;
-  const fromIndex = i < 0 ? stoneCount + i : i;
-  const toIndex = (i + 1) % stoneCount;
-  const fromStone = stoneList[fromIndex];
-  const toStone = stoneList[toIndex];
-  const progress = (angle % ANGLE_STEP) / ANGLE_STEP;
+  // TODO fix this by making the above math more robust
+  from = Math.max(Math.min(from, stoneCount - 1), 0);
+  to = Math.max(Math.min(to, stoneCount - 1), 0);
+
+  const fromStone = stoneList[from];
+  const toStone = stoneList[to];
   return {
     turbFreqX: interpolateValue(
       fromStone.turbFreqX,
@@ -127,6 +152,7 @@ const interpolateStone = (angle: number): Stone => {
 const interpolateValue = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
 
+// TODO FIX ALL THIS
 function angleDelta(angleStart: number, angleEnd: number) {
   if (angleStart < angleEnd) {
     return angleEnd - angleStart;
