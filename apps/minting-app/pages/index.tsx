@@ -24,12 +24,16 @@ import {
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
 import MintButton from "../components/MintButton";
+import bgImage from "../public/test-bg-small.jpg";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{ backgroundImage: `url(${bgImage.src})` }}
+    >
       <Head>
         <title>Minting App</title>
         <meta name="description" content="Minting app for Zodiac NFT" />
