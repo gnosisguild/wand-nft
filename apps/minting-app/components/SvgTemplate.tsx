@@ -8,14 +8,11 @@ interface Props {
   input: TemplateInput;
 }
 const SvgTemplate: React.FC<Props> = (props) => {
-  const input = useDebounce<TemplateInput>(props.input, 100);
+  // const input = useDebounce<TemplateInput>(props.input, 100);
   return (
     <div
       dangerouslySetInnerHTML={{
-        __html: template(input, {
-          allowProtoMethodsByDefault: true,
-          allowProtoPropertiesByDefault: true,
-        }),
+        __html: template(props.input),
       }}
       className={classes.container}
     />

@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useMemo } from "react";
 import Head from "next/head";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
@@ -29,6 +29,68 @@ import bgImage from "../public/test-bg-small.jpg";
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
 
+  const planets = useMemo(
+    () =>
+      scalePlanets(
+        calculatePlanets(state.latitude, state.longitude, 0, new Date())
+      ),
+    [state.latitude, state.longitude]
+  );
+  const aspects = useMemo(
+    () =>
+      scaleAspects(
+        calculateAspects(state.latitude, state.longitude, 0, new Date())
+      ),
+    [state.latitude, state.longitude]
+  );
+  const sparkles = useMemo(
+    () => generateSparkles(state.tokenId),
+    [state.tokenId]
+  );
+  const halo = useMemo(
+    () =>
+      generateHalo(
+        state.halo.shape,
+        state.halo.rhythm,
+        state.background.color.hue
+      ),
+    [state.halo, state.background.color.hue]
+  );
+  const frame = useMemo(
+    () => ({
+      level1: true,
+      title: generateName(state.tokenId),
+    }),
+    [state.tokenId]
+  );
+
+  const input = useMemo(
+    () => ({
+      planets,
+      aspects,
+      halo,
+      frame,
+      background: state.background,
+      filterLayers,
+      sparkles,
+      seed: state.tokenId,
+      stone: stoneList[state.stone],
+      xp,
+      handle: generateHandle(state.handle),
+    }),
+    [
+      planets,
+      aspects,
+      sparkles,
+      halo,
+      frame,
+      state.tokenId,
+      state.handle,
+      state.background,
+      state.stone,
+    ]
+  );
+
   return (
     <div
       className={styles.container}
@@ -45,7 +107,7 @@ const Home: NextPage = () => {
           <CenterGilding />
           <MintButton />
           <div className={styles.svgPreview}>
-            <SvgTemplate input={deriveTemplateInput(state)} />
+            <SvgTemplate input={input} />
           </div>
           <div className={styles.colorPicker}>
             <ColorPicker />
@@ -63,28 +125,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const deriveTemplateInput = (state: AppState): TemplateInput => ({
-  planets: scalePlanets(
-    calculatePlanets(state.latitude, state.longitude, 0, new Date())
-  ),
-  aspects: scaleAspects(
-    calculateAspects(state.latitude, state.longitude, 0, new Date())
-  ),
-  halo: generateHalo(
-    state.halo.shape,
-    state.halo.rhythm,
-    state.background.color.hue
-  ),
-  frame: {
-    level1: true,
-    title: generateName(state.tokenId),
-  },
-  background: state.background,
-  filterLayers,
-  sparkles: generateSparkles(state.tokenId),
-  seed: state.tokenId,
-  stone: stoneList[state.stone],
-  xp,
-  handle: generateHandle(state.handle),
-});
