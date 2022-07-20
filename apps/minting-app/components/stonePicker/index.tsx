@@ -8,7 +8,16 @@ import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
-import { dimensions, toAngle } from "../color-picker/slider/trigonometry";
+import { dimensions, toAngle } from "../trigonometry";
+import { describeSegments } from "../rhythm";
+
+const VIEWBOX_SIZE = 1000;
+const segments = describeSegments(stoneList.length, {
+  percBorder: 0.041,
+  percThickness: 0.048,
+  gapInDegrees: 1,
+  viewBoxSize: VIEWBOX_SIZE,
+});
 
 type Rotation = {
   pinned: number;
@@ -44,6 +53,14 @@ const StonePicker: React.FC = () => {
         }}
       >
         <UiCircle>
+          <svg
+            viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
+            className={styles.haloSegmentSvg}
+          >
+            {segments.map((d, index) => (
+              <path key={`${index}`} fill="yellow" d={d} onClick={() => {}} />
+            ))}
+          </svg>
           <div className={styles.stone}>
             <StoneViewer
               seed={state.tokenId}
