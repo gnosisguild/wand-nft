@@ -18,6 +18,7 @@
   position: absolute;
   top: -155%;
   left: -144%;
+  z-index: 11;
 }
 
 .icon {

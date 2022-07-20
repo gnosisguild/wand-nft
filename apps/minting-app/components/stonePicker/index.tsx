@@ -8,7 +8,7 @@ import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
-import { centerAndRadius, positionToAngle } from "../color-picker/trigonometry";
+import { dimensions, toAngle } from "../color-picker/slider/trigonometry";
 
 type Rotation = {
   pinned: number;
@@ -25,9 +25,9 @@ const StonePicker: React.FC = () => {
   const bind = useDrag((state) => {
     const { first, initial, xy, target } = state;
 
-    const { center } = centerAndRadius(target.getBoundingClientRect());
-    const start = positionToAngle(center, { x: initial[0], y: initial[1] });
-    const end = positionToAngle(center, { x: xy[0], y: xy[1] });
+    const { center } = dimensions(target.getBoundingClientRect());
+    const start = toAngle(center, { x: initial[0], y: initial[1] });
+    const end = toAngle(center, { x: xy[0], y: xy[1] });
     const delta = angleDelta(start, end);
 
     const nextPin = first ? rotation.current : rotation.pinned;
