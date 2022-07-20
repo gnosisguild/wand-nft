@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 import classNames from "classnames";
 import UiCircle from "../uiCircle";
 import Slider from "./slider";
-import { useAppContext } from "../../state";
+import { Action, useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
 import { Background } from "../../types";
@@ -48,10 +48,19 @@ const ColorPicker: React.FC = () => {
   const [innerSlider, setInnerSlider] = useState(
     fromLightness(state.background.color.lightness)
   );
-  const { background } = state;
+
+  const [isPending, startTransition] = useTransition();
+  const [background, setBackground] = useState(state.background);
+
+  const throttledDispatch = useMemo(
+    () =>
+      throttle((action: Action) => startTransition(() => dispatch(action)), 50),
+    [startTransition, dispatch]
+  );
 
   const handleChange = (value: Background) => {
-    dispatch({
+    setBackground(value);
+    throttledDispatch({
       type: "changeBackground",
       value,
     });
@@ -185,3 +194,27 @@ function fromLightness(value: number): number {
 
   return progress * 180;
 }
+
+type ThrottledFunction<T extends (...args: any) => void> = (
+  ...args: Parameters<T>
+) => void;
+const throttle = <T extends (...args: any) => void>(
+  func: T,
+  interval: number
+): ThrottledFunction<T> => {
+  let pendingArgs: Parameters<T> | undefined;
+  return (...args: Parameters<T>): void => {
+    if (!pendingArgs) {
+      setTimeout(
+        () =>
+          requestIdleCallback(() => {
+            if (!pendingArgs) throw new Error("invariant violation");
+            func(...pendingArgs);
+            pendingArgs = undefined;
+          }),
+        interval
+      );
+    }
+    pendingArgs = args;
+  };
+};
