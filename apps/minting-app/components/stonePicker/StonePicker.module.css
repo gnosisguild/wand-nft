@@ -5,12 +5,11 @@
 .stone {
   pointer-events: none;
   width: 45%;
-  height: 45%;
-  margin: 27.5%;
+  aspect-ratio: 1;
   overflow: hidden;
   border-radius: 50%;
-  top: 0;
-  left: 0;
+  top: 27.6%;
+  left: 27.6%;
   position: absolute;
 }
 .stoneViewSvg {

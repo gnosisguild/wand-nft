@@ -60,19 +60,9 @@ const StonePicker: React.FC = () => {
             <circle
               cy="500"
               cx="500"
-              r="475"
-              stroke="#D9D4AD"
-              strokeWidth="16"
-              fill="none"
-              opacity="0.7"
-              style={{ mixBlendMode: "color-dodge" }}
-            ></circle>
-            <circle
-              cy="500"
-              cx="500"
               r="410"
               stroke="turquoise"
-              strokeWidth="120"
+              strokeWidth="125"
               fill="none"
               opacity="1"
               strokeDasharray="10% 800%"
@@ -81,6 +71,16 @@ const StonePicker: React.FC = () => {
                 transformBox: "fill-box",
                 transformOrigin: "center",
               }}
+            ></circle>
+            <circle
+              cy="500"
+              cx="500"
+              r="475"
+              stroke="#D9D4AD"
+              strokeWidth="16"
+              fill="none"
+              opacity="0.7"
+              style={{ mixBlendMode: "color-dodge" }}
             ></circle>
             {segments.map((d, index) => (
               <g key={`${index}`}>
