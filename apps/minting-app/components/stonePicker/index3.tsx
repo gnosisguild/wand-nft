@@ -1,57 +1,96 @@
-import { useState } from "react";
-import { useDrag } from "@use-gesture/react";
+import { useEffect, useRef, useState } from "react";
+import { animated } from "react-spring";
+import { useDrag } from "react-use-gesture";
 import StoneViewer from "./StoneViewer";
 import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
+import useInertia from "./useInertia";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
-import { centerAndRadius, positionToAngle } from "../color-picker/trigonometry";
 
-type Rotation = {
-  pinned: number;
-  current: number;
-};
+const stoneCount = stoneList.length;
+
+const ANGLE_STEP = 45;
 
 const StonePicker: React.FC = () => {
-  const { state } = useAppContext();
-  const [rotation, setRotation] = useState<Rotation>({
-    pinned: 0,
-    current: 0,
+  const { state, dispatch } = useAppContext();
+  const [tempStone, setTempStone] = useState(state.stone);
+  const [angle, setAngle] = useState(state.stone * ANGLE_STEP);
+  // const rotate = (360 / stoneCount) * state.stone;
+
+  const [{ rotation }, set] = useInertia({
+    rotation: ANGLE_STEP * tempStone,
+    onChange(rotation: number) {
+      if (isNaN(rotation)) return;
+      setAngle(rotation);
+    },
+    // onChange(rotation: any) {
+    //   if (isNaN(rotation)) return;
+    //   const i = Math.round(rotation / ANGLE_STEP) % stoneCount;
+    //   const stoneIndex = i < 0 ? stoneCount + i : i;
+    //   if (stoneIndex !== tempStone) {
+    //     setTempStone(stoneIndex);
+    //   }
+    // },
   });
 
-  const bind = useDrag((state) => {
-    const { first, initial, xy, target } = state;
+  if (!rotation) throw new Error("huh");
 
-    const { center } = centerAndRadius(target.getBoundingClientRect());
-    const start = positionToAngle(center, { x: initial[0], y: initial[1] });
-    const end = positionToAngle(center, { x: xy[0], y: xy[1] });
-    const delta = angleDelta(start, end);
+  const bind = useDrag(
+    ({ down, movement: [mx, my], vxvy: [vx, vy] }) => {
+      if (down) {
+        // console.log({
+        //   mx,
+        //   my,
+        //   vx,
+        //   vy,
+        //   rotation: Math.atan2(mx, my),
+        //   velocity: Math.sqrt(vx ** vx + vy ** vy),
+        // });
+        set({
+          rotation: Math.atan2(mx, my),
+          immediate: true,
+          config: { decay: false },
+        });
+      } else {
+        set({
+          rotation: Math.atan2(mx, my),
+          turbFreqX: stoneList[tempStone + 1].turbFreqX,
 
-    const nextPin = first ? rotation.current : rotation.pinned;
-    const nextCurrent = (rotation.pinned + delta) % 360;
-    setRotation({ pinned: nextPin, current: nextCurrent });
-  });
+          immediate: false,
+          config: () => ({
+            inertia: true,
+            bounds: [-100, 100],
+            velocity: Math.sqrt(vx ** vx + vy ** vy),
+          }),
+        });
+      }
+    },
+    {
+      initial: () => [0, 0],
+      threshold: 10,
+      bounds: { top: -250, bottom: 250, left: -100, right: 100 },
+      rubberband: true,
+    }
+  );
 
   return (
     <div className={styles.container}>
-      <div
+      <animated.div
         {...bind()}
         style={{
-          transform: `rotate(${rotation.current}deg)`,
+          transform: rotation.interpolate((angle) => `rotate(${angle}deg)`),
         }}
       >
         <UiCircle>
           <div className={styles.stone}>
-            <StoneViewer
-              seed={state.tokenId}
-              stone={interpolateStone(rotation.current)}
-            />
+            <StoneViewer seed={state.tokenId} stone={interpolateStone(angle)} />
           </div>
         </UiCircle>
-      </div>
+      </animated.div>
       <div className={styles.stone}>
         <StoneGlass />
       </div>
@@ -65,9 +104,6 @@ const StonePicker: React.FC = () => {
 export default StonePicker;
 
 const interpolateStone = (angle: number): Stone => {
-  const stoneCount = stoneList.length;
-  const ANGLE_STEP = 45;
-
   const i = Math.floor(angle / ANGLE_STEP) % stoneCount;
   const fromIndex = i < 0 ? stoneCount + i : i;
   const toIndex = (i + 1) % stoneCount;
@@ -105,11 +141,3 @@ const interpolateStone = (angle: number): Stone => {
 
 const interpolateValue = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
-
-function angleDelta(angleStart: number, angleEnd: number) {
-  if (angleStart < angleEnd) {
-    return angleEnd - angleStart;
-  } else {
-    return (360 - angleStart + angleEnd) % 360;
-  }
-}
