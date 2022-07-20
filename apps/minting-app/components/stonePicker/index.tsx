@@ -11,6 +11,8 @@ import StoneGlass from "./StoneGlass";
 import { dimensions, toAngle } from "../trigonometry";
 import { describeSegments } from "../rhythm";
 
+const stoneCount = stoneList.length;
+
 const VIEWBOX_SIZE = 1000;
 const segments = describeSegments(stoneList.length, {
   percBorder: 0.041,
@@ -43,32 +45,31 @@ const StonePicker: React.FC = () => {
     });
   });
 
+  const i = angleToStoneIndex(rotation.current);
+
   return (
     <div className={styles.container}>
-      <div
-        {...bind()}
-        style={{
-          transform: `rotate(${rotation.current}deg)`,
-        }}
-      >
-        <UiCircle>
+      <div {...bind()}>
+        <UiCircle rotation={rotation.current}>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
           >
             {segments.map((d, index) => (
-              <path key={`${index}`} fill="yellow" d={d} />
+              <path
+                key={`${index}`}
+                fill={i === index ? "red" : "yellow"}
+                d={d}
+              />
             ))}
           </svg>
-          <div className={styles.stone}>
-            <StoneViewer
-              seed={state.tokenId}
-              stone={interpolateStone(rotation.current)}
-            />
-          </div>
         </UiCircle>
       </div>
       <div className={styles.stone}>
+        <StoneViewer
+          seed={state.tokenId}
+          stone={interpolateStone(rotation.current)}
+        />
         <StoneGlass />
       </div>
       <div className={styles.icon}>
@@ -80,8 +81,12 @@ const StonePicker: React.FC = () => {
 
 export default StonePicker;
 
+function angleToStoneIndex(angle: number) {
+  const step = 360 / stoneCount;
+  return Math.floor(angle / step);
+}
+
 const interpolateStone = (angle: number): Stone => {
-  const stoneCount = stoneList.length;
   const ANGLE_STEP = 45;
 
   const i = Math.floor(angle / ANGLE_STEP) % stoneCount;

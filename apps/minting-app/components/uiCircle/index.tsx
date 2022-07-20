@@ -1,10 +1,17 @@
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 
-const UiCircle: React.FC = ({ children }) => {
+type Props = {
+  rotation: number;
+};
+
+const UiCircle: React.FC<Props> = ({ children, rotation }) => {
   return (
     <div className={styles.containerCircle}>
       <svg
+        style={{
+          transform: `rotate(${rotation}deg)`,
+        }}
         viewBox="0 0 120 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
