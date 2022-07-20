@@ -10,6 +10,7 @@ import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
 import { dimensions, toAngle } from "../trigonometry";
 import { describeSegments } from "../rhythm";
+import StoneFilter from "./StoneFilter";
 
 const stoneCount = stoneList.length;
 
@@ -18,7 +19,7 @@ const segments = describeSegments(stoneList.length, {
   percBorder: 0.041,
   percThickness: 0.048,
   percSkew: 0,
-  gapInDegrees: 1,
+  gapInDegrees: 2,
   viewBoxSize: VIEWBOX_SIZE,
 });
 
@@ -56,12 +57,46 @@ const StonePicker: React.FC = () => {
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
           >
+            <circle
+              cy="500"
+              cx="500"
+              r="475"
+              stroke="#D9D4AD"
+              strokeWidth="16"
+              fill="none"
+              opacity="0.7"
+              style={{ mixBlendMode: "color-dodge" }}
+            ></circle>
+            <circle
+              cy="500"
+              cx="500"
+              r="410"
+              stroke="turquoise"
+              strokeWidth="120"
+              fill="none"
+              opacity="1"
+              strokeDasharray="10% 800%"
+              style={{
+                transform: `rotate(${rotation.current}deg)`,
+                transformBox: "fill-box",
+                transformOrigin: "center",
+              }}
+            ></circle>
             {segments.map((d, index) => (
-              <path
-                key={`${index}`}
-                fill={i === index ? "red" : "yellow"}
-                d={d}
-              />
+              <g key={`${index}`}>
+                <clipPath id={`stone-clip-${index}`}>
+                  <path d={d} />
+                </clipPath>
+                <g clipPath={`url(#stone-clip-${index})`}>
+                  <StoneFilter
+                    seed={state.tokenId}
+                    stone={stoneList[index]}
+                    filterUniqueId={`stone-segment-${index}`}
+                  />
+                  <path d={d} filter={`url(#stone-segment-${index})`} />
+                  <path d={d} fill="rgba(200,200,200,0.6)" />
+                </g>
+              </g>
             ))}
           </svg>
         </UiCircle>
