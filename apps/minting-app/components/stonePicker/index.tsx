@@ -31,17 +31,16 @@ const StonePicker: React.FC = () => {
     current: 0,
   });
 
-  const bind = useDrag((state) => {
-    const { first, initial, xy, target } = state;
-
+  const bind = useDrag(({ first, initial, xy, target }) => {
     const { center } = dimensions(target.getBoundingClientRect());
     const start = toAngle(center, { x: initial[0], y: initial[1] });
     const end = toAngle(center, { x: xy[0], y: xy[1] });
     const delta = angleDelta(start, end);
 
-    const nextPin = first ? rotation.current : rotation.pinned;
-    const nextCurrent = (rotation.pinned + delta) % 360;
-    setRotation({ pinned: nextPin, current: nextCurrent });
+    setRotation({
+      pinned: first ? rotation.current : rotation.pinned,
+      current: (rotation.pinned + delta) % 360,
+    });
   });
 
   return (
@@ -58,7 +57,7 @@ const StonePicker: React.FC = () => {
             className={styles.haloSegmentSvg}
           >
             {segments.map((d, index) => (
-              <path key={`${index}`} fill="yellow" d={d} onClick={() => {}} />
+              <path key={`${index}`} fill="yellow" d={d} />
             ))}
           </svg>
           <div className={styles.stone}>
