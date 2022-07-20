@@ -21,9 +21,10 @@
 .centerContainer {
   position: relative;
   display: block;
-  width: 47%;
+  max-width: 47%;
   margin: 0 auto;
-  max-width: 1000px;
+  max-height: 96vh;
+  aspect-ratio: 810/1080;
   padding: 2% 0 2%;
 }
 
