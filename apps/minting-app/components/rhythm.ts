@@ -13,17 +13,22 @@ type FillerConfig = {
   viewBoxSize: number;
 };
 
+type SizingConfig = {
+  percBorder: number;
+  percThickness: number;
+  viewBoxSize: number;
+};
+
 export function describeSegments(count: number, config: SegmentConfig) {
   let result: string[] = [];
 
   const arcSize = 360 / count;
   const { percSkew, gapInDegrees } = config;
-  const [outerRadius, innerRadius] = radius(config);
 
   for (let i = 0; i < count; i++) {
     const left = i * arcSize - percSkew * arcSize + gapInDegrees;
     const right = (i + 1) * arcSize - percSkew * arcSize - gapInDegrees;
-    result = [...result, path(config, left, right, outerRadius, innerRadius)];
+    result = [...result, path(config, left, right)];
   }
   return result;
 }
@@ -33,25 +38,24 @@ export function describeFillers(count: number, config: FillerConfig) {
 
   const arcSize = 360 / count;
   const { spanInDegrees } = config;
-  const [outerRadius, innerRadius] = radius(config);
 
   for (let i = 0; i < count; i++) {
     const midway = i * arcSize + arcSize / 2 - 180;
     const left = midway - spanInDegrees / 2;
     const right = midway + spanInDegrees / 2;
-    result = [...result, path(config, left, right, outerRadius, innerRadius)];
+    result = [...result, path(config, left, right)];
   }
 
   return result;
 }
 
-function path(
-  config: SegmentConfig | FillerConfig,
+export function path(
+  config: SizingConfig,
   startAngle: number,
-  endAngle: number,
-  radiusOuter: number,
-  radiusInner: number
+  endAngle: number
 ): string {
+  const [radiusOuter, radiusInner] = radius(config);
+
   const upperLeft = coordinates(config, radiusOuter, startAngle);
   const lowerRight = coordinates(config, radiusInner, endAngle);
 
@@ -71,7 +75,7 @@ function path(
 }
 
 function arc(
-  config: SegmentConfig | FillerConfig,
+  config: SizingConfig,
   radius: number,
   angle: number,
   direction: boolean
@@ -84,11 +88,7 @@ function arc(
   return ["A", radius, radius, 0, largeArcFlag, sweepArcFlag, end.x, end.y];
 }
 
-function radius({
-  percBorder,
-  percThickness,
-  viewBoxSize,
-}: SegmentConfig | FillerConfig) {
+function radius({ percBorder, percThickness, viewBoxSize }: SizingConfig) {
   const outer = (viewBoxSize - viewBoxSize * percBorder * 2) / 2;
   const inner =
     (viewBoxSize -
@@ -100,7 +100,7 @@ function radius({
 }
 
 function coordinates(
-  { viewBoxSize }: SegmentConfig | FillerConfig,
+  { viewBoxSize }: SizingConfig,
   radius: number,
   degrees: number
 ) {

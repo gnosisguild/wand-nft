@@ -9,12 +9,13 @@ import IconButton from "../IconButton";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
 import { dimensions, toAngle } from "../trigonometry";
-import { describeSegments } from "../rhythm";
+import { describeSegments, path } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 
 const stoneCount = stoneList.length;
 
 const VIEWBOX_SIZE = 1000;
+
 const segments = describeSegments(stoneList.length, {
   percBorder: 0.041,
   percThickness: 0.048,
@@ -22,6 +23,16 @@ const segments = describeSegments(stoneList.length, {
   gapInDegrees: 2,
   viewBoxSize: VIEWBOX_SIZE,
 });
+const describePath = (angleStart: number, angleEnd: number) =>
+  path(
+    {
+      percBorder: 0.037,
+      percThickness: 0.054,
+      viewBoxSize: VIEWBOX_SIZE,
+    },
+    angleStart,
+    angleEnd
+  );
 
 type Rotation = {
   pinned: number;
@@ -57,21 +68,10 @@ const StonePicker: React.FC = () => {
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
           >
-            <circle
-              cy="500"
-              cx="500"
-              r="410"
-              stroke="turquoise"
-              strokeWidth="125"
-              fill="none"
-              opacity="1"
-              strokeDasharray="10% 800%"
-              style={{
-                transform: `rotate(${rotation.current}deg)`,
-                transformBox: "fill-box",
-                transformOrigin: "center",
-              }}
-            ></circle>
+            <path
+              d={describePath(rotation.current, rotation.current + 12)}
+              fill="red"
+            />
             <circle
               cy="500"
               cx="500"
@@ -81,7 +81,7 @@ const StonePicker: React.FC = () => {
               fill="none"
               opacity="0.7"
               style={{ mixBlendMode: "color-dodge" }}
-            ></circle>
+            />
             {segments.map((d, index) => (
               <g key={`${index}`}>
                 <clipPath id={`stone-clip-${index}`}>
