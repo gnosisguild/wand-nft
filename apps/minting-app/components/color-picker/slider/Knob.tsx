@@ -3,13 +3,12 @@ import React from "react";
 interface Props {
   x: number;
   y: number;
-  onMouseDown: () => void;
 }
 
-const Knob = ({ x, y, onMouseDown }: Props) => {
+const Knob = ({ x, y }: Props) => {
   return (
     <>
-      <g onMouseDown={onMouseDown}>
+      <g>
         <circle cx={x} cy={y} r="50" fill="url(#paint0_radial_901_4892)" />
         <circle cx={x} cy={y} r="40" fill="url(#paint1_radial_901_4892)" />
       </g>
