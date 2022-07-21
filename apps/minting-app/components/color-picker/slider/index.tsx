@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { useEventListener } from "usehooks-ts";
+import React, { useRef } from "react";
+import { useDrag } from "@use-gesture/react";
 
 import Knob from "./Knob";
 import Gradient from "./Gradient";
@@ -38,7 +38,6 @@ interface Props {
 
 const Slider = ({ wide, value, onChange }: Props) => {
   const arcRef = useRef<SVGPathElement | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   // virtual coordinates, SVG modeling unscaled virtual coordinates
   const { center, radius, d } = wide ? CONFIG.WIDE : CONFIG.NARROW;
@@ -56,13 +55,9 @@ const Slider = ({ wide, value, onChange }: Props) => {
     );
   }
 
-  useEventListener("mousemove", (event: MouseEvent) => {
-    if (isDragging) {
-      event.preventDefault();
-      moveTo({ x: event.clientX, y: event.clientY });
-    }
+  const bind = useDrag(({ xy: [x, y] }) => {
+    moveTo({ x, y });
   });
-  useEventListener("mouseup", () => setIsDragging(false));
 
   // virtual coordinates, SVG modeling unscaled virtual coordinates
   const { x, y } = toPosition(center, radius, value);
@@ -81,7 +76,9 @@ const Slider = ({ wide, value, onChange }: Props) => {
           moveTo({ x: event.clientX, y: event.clientY });
         }}
       />
-      <Knob x={x} y={y} onMouseDown={() => setIsDragging(true)} />
+      <g {...bind()}>
+        <Knob x={x} y={y} />
+      </g>
     </>
   );
 };
