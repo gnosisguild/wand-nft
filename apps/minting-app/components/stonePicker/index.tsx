@@ -8,7 +8,7 @@ import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
-import { dimensions, toAngle } from "../trigonometry";
+import { dimensions, toAngle, toPosition } from "../trigonometry";
 import { describeSegments, path } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 
@@ -16,23 +16,24 @@ const stoneCount = stoneList.length;
 
 const VIEWBOX_SIZE = 1000;
 
-const segments = describeSegments(stoneList.length, {
+const CONFIG_SEGMENT = {
   percBorder: 0.041,
   percThickness: 0.048,
   percSkew: 0,
   gapInDegrees: 2,
   viewBoxSize: VIEWBOX_SIZE,
-});
+};
+
+const CONFIG_POINTER = {
+  percBorder: 0.037,
+  percThickness: 0.054,
+  viewBoxSize: VIEWBOX_SIZE,
+};
+
+const segments = describeSegments(stoneList.length, CONFIG_SEGMENT);
 const describePath = (angleStart: number, angleEnd: number) =>
-  path(
-    {
-      percBorder: 0.037,
-      percThickness: 0.054,
-      viewBoxSize: VIEWBOX_SIZE,
-    },
-    angleStart,
-    angleEnd
-  );
+  path(CONFIG_POINTER, angleStart, angleEnd);
+const segmentCenters = findSegmentCenters();
 
 type Rotation = {
   pinned: number;
@@ -98,6 +99,17 @@ const StonePicker: React.FC = () => {
                 </g>
               </g>
             ))}
+            {segmentCenters.map(({ x, y }, index) => (
+              <circle
+                key={index}
+                cx={x}
+                cy={y}
+                r={20}
+                fill="none"
+                stroke="blue"
+                strokeWidth={5}
+              />
+            ))}
           </svg>
         </UiCircle>
       </div>
@@ -116,6 +128,28 @@ const StonePicker: React.FC = () => {
 };
 
 export default StonePicker;
+
+function findSegmentCenters() {
+  const step = 360 / stoneCount;
+
+  const { percBorder, percThickness, viewBoxSize } = CONFIG_SEGMENT;
+  const center = {
+    x: viewBoxSize / 2,
+    y: viewBoxSize / 2,
+  };
+  const radius =
+    viewBoxSize / 2 -
+    percBorder * viewBoxSize -
+    (percThickness * viewBoxSize) / 2;
+
+  return new Array(stoneCount).fill(null).map((a, index) => {
+    const left = index * step;
+    const right = (index + 1) * step;
+    const midway = left + (right - left) / 2;
+
+    return toPosition(center, radius, midway);
+  });
+}
 
 // TODO fix all this
 function angleToStoneIndex(angle: number) {
