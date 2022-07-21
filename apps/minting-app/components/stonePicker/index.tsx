@@ -64,7 +64,7 @@ const StonePicker: React.FC = () => {
   return (
     <div className={styles.container}>
       <div {...bind()}>
-        <UiCircle rotation={rotation.current}>
+        <UiCircle rotation={rotation.current} showIndicator>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
@@ -104,8 +104,6 @@ const StonePicker: React.FC = () => {
                   cy={y}
                   r={300}
                   filter={`url(#stone-segment-${index})`}
-                  stroke="blue"
-                  strokeWidth={5}
                   style={{
                     transform: "scale(0.15)",
                     transformBox: "fill-box",
