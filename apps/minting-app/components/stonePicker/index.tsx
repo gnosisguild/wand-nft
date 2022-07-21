@@ -20,7 +20,7 @@ const CONFIG_SEGMENT = {
   percBorder: 0.041,
   percThickness: 0.048,
   percSkew: 0,
-  gapInDegrees: 2,
+  gapInDegrees: 1,
   viewBoxSize: VIEWBOX_SIZE,
 };
 
@@ -94,21 +94,27 @@ const StonePicker: React.FC = () => {
                     stone={stoneList[index]}
                     filterUniqueId={`stone-segment-${index}`}
                   />
-                  <path d={d} filter={`url(#stone-segment-${index})`} />
-                  <path d={d} fill="rgba(200,200,200,0.6)" />
                 </g>
               </g>
             ))}
             {segmentCenters.map(({ x, y }, index) => (
-              <circle
-                key={index}
-                cx={x}
-                cy={y}
-                r={20}
-                fill="none"
-                stroke="blue"
-                strokeWidth={5}
-              />
+              <g key={index} clipPath={`url(#stone-clip-${index})`}>
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={300}
+                  filter={`url(#stone-segment-${index})`}
+                  stroke="blue"
+                  strokeWidth={5}
+                  style={{
+                    transform: "scale(0.15)",
+                    transformBox: "fill-box",
+                    transformOrigin: "center",
+                  }}
+                />
+
+                <path d={segments[index]} fill="rgba(200,200,200,0.4)" />
+              </g>
             ))}
           </svg>
         </UiCircle>

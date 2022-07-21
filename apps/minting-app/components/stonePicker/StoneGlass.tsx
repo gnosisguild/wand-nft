@@ -19,12 +19,12 @@ const StoneGlass: React.FC<{}> = () => {
           gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset=".05" stopColor="#fff" stopOpacity=".7" />
-          <stop offset=".26" stopColor="#ececec" stopOpacity=".5" />
-          <stop offset=".45" stopColor="#c4c4c4" stopOpacity=".5" />
-          <stop offset=".63" stopColor="#929292" stopOpacity=".5" />
-          <stop offset=".83" stopColor="#7b7b7b" stopOpacity=".5" />
-          <stop offset="1" stopColor="#cbcbca" stopOpacity=".5" />
+          <stop offset=".05" stopColor="#fff" stopOpacity=".5" />
+          <stop offset=".26" stopColor="#ececec" stopOpacity=".4" />
+          <stop offset=".45" stopColor="#c4c4c4" stopOpacity=".4" />
+          <stop offset=".63" stopColor="#929292" stopOpacity=".4" />
+          <stop offset=".83" stopColor="#7b7b7b" stopOpacity=".4" />
+          <stop offset="1" stopColor="#cbcbca" stopOpacity=".4" />
         </radialGradient>
         <radialGradient
           id="picker_sh"
@@ -36,7 +36,7 @@ const StoneGlass: React.FC<{}> = () => {
           gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stopColor="#fff" stopOpacity=".7" />
+          <stop offset="0" stopColor="#fff" stopOpacity=".3" />
           <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </radialGradient>
       </defs>
