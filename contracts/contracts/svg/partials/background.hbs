@@ -1,38 +1,35 @@
 {{#if radial}}
   {{#if dark}}
-      <path style="fill:hsl({{uint16 color.hue}}, 30%, 7%)" d="M0 0h2000v3000H0z"/>
-      <radialGradient id="grad0">
-        <stop offset="0" style="stop-color: hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
-        <stop offset="1" style="stop-color: hsla({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 0)"/>
-      </radialGradient>
-      <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/>
-      <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/>
+    <path style="fill:hsl({{uint16 color.hue}}, 30%, 7%)" d="M0 0h2000v3000H0z"/>
+    <radialGradient id="grad0">
+      <stop offset="0" style="stop-color: hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
+      <stop offset="1" style="stop-color: hsla({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 0)"/>
+    </radialGradient>
   {{/if}}
   {{#unless dark}}
-      <path style="fill:hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)" d="M0 0h2000v3000H0z"/>
-      <radialGradient id="grad0">
-        <stop offset="0" style="stop-color:hsl({{uint16 color.hue}}, 100%, 95%)"/>
-        <stop offset="1" style="stop-color:hsla(55, 66%, 83%, 0)"/>
-      </radialGradient>
-      <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/>
-      <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/>
+    <path style="fill:hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)" d="M0 0h2000v3000H0z"/>
+    <radialGradient id="grad0">
+      <stop offset="0" style="stop-color:hsl({{uint16 color.hue}}, 100%, 95%)"/>
+      <stop offset="1" style="stop-color:hsla(55, 66%, 83%, 0)"/>
+    </radialGradient>
   {{/unless}}
+  <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/>
+  <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/>
 {{/if}}
 {{#unless radial}}
   {{#if dark}}
-      <linearGradient id="l0" gradientTransform="rotate(90)">
-        <stop offset="0%" stop-color="hsl({{uint16 color.hue}}, 30%, 7%)"/>
-        <stop offset="100%" stop-color="hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
-      </linearGradient>
-      <rect style="fill:url(#l0)" width="2000" height="3000"/>
+    <linearGradient id="l0" gradientTransform="rotate(90)">
+      <stop offset="0%" stop-color="hsl({{uint16 color.hue}}, 30%, 7%)"/>
+      <stop offset="100%" stop-color="hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
+    </linearGradient>
   {{/if}}
   {{#unless dark}}
-      <linearGradient id="l0" gradientTransform="rotate(90)">
-        <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/>
-        <stop offset="100%" stop-color="hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
-      </linearGradient>
-      <rect style="fill:url(#l0)" width="2000" height="3000"/>
+    <linearGradient id="l0" gradientTransform="rotate(90)">
+      <stop offset="0%" stop-color="hsl(55, 66%, 83%)"/>
+      <stop offset="100%" stop-color="hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
+    </linearGradient>
   {{/unless}}
+  <rect style="fill:url(#l0)" width="2000" height="3000"/>
 {{/unless}}
 
 <path
