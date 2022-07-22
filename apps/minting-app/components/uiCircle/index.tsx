@@ -2,13 +2,13 @@ import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 
 type Props = {
-  rotation: number;
+  rotation?: number;
   showIndicator?: boolean;
 };
 
 const UiCircle: React.FC<Props> = ({
   children,
-  rotation,
+  rotation = 0,
   showIndicator = false,
 }) => {
   return (

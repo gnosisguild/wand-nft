@@ -10,57 +10,89 @@ import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
 import {
   dimensions,
-  findClosestInCircumference,
+  // findClosestInCircumference,
   toAngle,
   toPosition,
 } from "../trigonometry";
-import { describeSegments, path } from "../rhythm";
+import { describeFillers, describeSegments, path } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 
 const stoneCount = stoneList.length;
 
 const VIEWBOX_SIZE = 1000;
 
-const CONFIG_SEGMENT = {
-  percBorder: 0.041,
-  percThickness: 0.048,
-  percSkew: 0,
-  gapInDegrees: 1,
-  viewBoxSize: VIEWBOX_SIZE,
+const CONFIG = {
+  segment: {
+    percBorder: 0.041,
+    percThickness: 0.048,
+    percSkew: 0,
+    gapInDegrees: 1,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+  filler: {
+    percBorder: 0.031,
+    percThickness: 0.07,
+    spanInDegrees: 1,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+  pointer: {
+    percBorder: 0.037,
+    percThickness: 0.054,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
 };
 
-const CONFIG_POINTER = {
-  percBorder: 0.037,
-  percThickness: 0.054,
-  viewBoxSize: VIEWBOX_SIZE,
-};
-
-const segments = describeSegments(stoneList.length, CONFIG_SEGMENT);
+const segments = describeSegments(stoneList.length, CONFIG.segment);
+const fillers = describeFillers(stoneList.length, CONFIG.filler);
 const describePath = (angleStart: number, angleEnd: number) =>
-  path(CONFIG_POINTER, angleStart, angleEnd);
+  path(CONFIG.pointer, angleStart, angleEnd);
 const segmentCenters = findSegmentCenters();
+
+type Rotation = {
+  pinned: number;
+  current: number;
+};
 
 const StonePicker: React.FC = () => {
   const { state } = useAppContext();
-  const [rotation, setRotation] = useState<number>(0);
+  const [rotation, setRotation] = useState<Rotation>({
+    pinned: 0,
+    current: 0,
+  });
 
-  const bind = useDrag(({ xy: [x, y], target }) => {
+  const bind = useDrag(({ first, initial, xy, target }) => {
     const { center, width } = dimensions(target.getBoundingClientRect());
+    const start = toAngle(center, { x: initial[0], y: initial[1] });
+    const end = toAngle(center, { x: xy[0], y: xy[1] });
+    const delta = angleDelta(start, end);
 
-    setRotation(
-      toAngle(center, findClosestInCircumference(center, width / 2, { x, y }))
-    );
+    const radius = width / 2;
+
+    // console.log(
+    //   toAngle(
+    //     center,
+    //     findClosestInCircumference(center, radius, { x: xy[0], y: xy[1] })
+    //   )
+    // );
+
+    setRotation({
+      pinned: first ? rotation.current : rotation.pinned,
+      current: (rotation.pinned + delta) % 360,
+    });
   });
 
   return (
     <div className={styles.container}>
       <div {...bind()}>
-        <UiCircle rotation={rotation} showIndicator>
+        <UiCircle rotation={rotation.current} showIndicator>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
           >
-            <path d={describePath(rotation, rotation + 12)} fill="red" />
+            <path
+              d={describePath(rotation.current, rotation.current + 12)}
+              fill="red"
+            />
             <circle
               cy="500"
               cx="500"
@@ -85,6 +117,9 @@ const StonePicker: React.FC = () => {
                 </g>
               </g>
             ))}
+            {fillers.map((d, index) => (
+              <path key={index} d={d} fill="pink" />
+            ))}
             {segmentCenters.map(({ x, y }, index) => (
               <g key={index} clipPath={`url(#stone-clip-${index})`}>
                 <circle
@@ -106,7 +141,10 @@ const StonePicker: React.FC = () => {
         </UiCircle>
       </div>
       <div className={styles.stone}>
-        <StoneViewer seed={state.tokenId} stone={interpolateStone(rotation)} />
+        <StoneViewer
+          seed={state.tokenId}
+          stone={interpolateStone(rotation.current)}
+        />
         <StoneGlass />
       </div>
       <div className={styles.icon}>
@@ -121,7 +159,7 @@ export default StonePicker;
 function findSegmentCenters() {
   const step = 360 / stoneCount;
 
-  const { percBorder, percThickness, viewBoxSize } = CONFIG_SEGMENT;
+  const { percBorder, percThickness, viewBoxSize } = CONFIG.segment;
   const center = {
     x: viewBoxSize / 2,
     y: viewBoxSize / 2,
@@ -209,3 +247,12 @@ const interpolateStone = (angle: number): Stone => {
 
 const interpolateValue = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
+
+// TODO FIX ALL THIS
+function angleDelta(angleStart: number, angleEnd: number) {
+  if (angleStart < angleEnd) {
+    return angleEnd - angleStart;
+  } else {
+    return (360 - angleStart + angleEnd) % 360;
+  }
+}
