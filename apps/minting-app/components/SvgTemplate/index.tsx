@@ -9,41 +9,43 @@ import renderTemplateToVdom from "./renderTemplateToVdom";
 interface Props {
   input: TemplateInput;
 }
+
 const SvgTemplate: React.FC<Props> = (props) => {
+  // return null;
   const elementRef = useRef<HTMLDivElement>(null);
   const workerRef = useRef<Worker>();
   const initialInputRef = useRef<TemplateInput>(props.input);
 
-  useEffect(() => {
-    const vtree = renderTemplateToVdom(initialInputRef.current);
-    let rootNode = createElement(vtree as VNode);
-    elementRef.current?.appendChild(rootNode);
+  const mountCallback = (element: HTMLDivElement | null) => {
+    if (element && !elementRef.current) {
+      // mounted
+      console.log("mounted", element === elementRef.current);
+      elementRef.current = element;
+      const vtree = renderTemplateToVdom(initialInputRef.current);
+      let rootNode = createElement(vtree as VNode);
+      element.appendChild(rootNode);
 
-    workerRef.current = new Worker(new URL("./worker.ts", import.meta.url));
-    workerRef.current.onmessage = (evt) => {
-      console.log("WebWorker Response", evt.data);
-      rootNode = applyPatch(rootNode, evt.data);
-      // const patched = evt.data;
-      // if (tree) {
-      //   rootNode = createElement(tree) as unknown as Element;
-      //   console.log(rootNode);
-      //
-      // }
-      // if (patches) {
-      //   rootNode = patch(rootNode, patches);
-      // }
-    };
-
-    return () => {
+      workerRef.current = new Worker(new URL("./worker.ts", import.meta.url));
+      workerRef.current.addEventListener("message", (evt) => {
+        console.log("WebWorker Response", evt.data);
+        // rootNode = applyPatch(rootNode, evt.data);
+      });
+    } else if (!element) {
+      // unmounting
       workerRef.current?.terminate();
-    };
-  }, []);
+    } else {
+      if (element !== elementRef.current) {
+        throw new Error("Unexpectedly got different element");
+      }
+    }
+  };
 
   useEffect(() => {
+    console.log("post", props.input.background.color.hue, workerRef.current);
     workerRef.current?.postMessage(props.input);
   }, [props.input]);
 
-  return <div ref={elementRef} className={classes.container} />;
+  return <div ref={mountCallback} className={classes.container} />;
 };
 
 export default React.memo(SvgTemplate);

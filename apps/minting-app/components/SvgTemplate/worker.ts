@@ -5,6 +5,7 @@ const serializePatch = require("vdom-serialized-patch/serialize");
 let vtree: VTree | undefined = undefined;
 
 addEventListener("message", (event) => {
+  console.log("receive", event.data);
   const newVtree = renderTemplateToVdom(event.data);
 
   if (vtree) {
