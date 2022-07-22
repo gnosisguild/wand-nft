@@ -54,19 +54,19 @@ type Rotation = {
 };
 
 const StonePicker: React.FC = () => {
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const [rotation, setRotation] = useState<Rotation>({
     pinned: 0,
-    current: 0,
+    current: stoneIndexToAngle(state.stone),
   });
 
-  const bind = useDrag(({ first, initial, xy, target }) => {
-    const { center, width } = dimensions(target.getBoundingClientRect());
+  const bind = useDrag(({ first, last, initial, xy, target }) => {
+    const { center } = dimensions(target.getBoundingClientRect());
     const start = toAngle(center, { x: initial[0], y: initial[1] });
     const end = toAngle(center, { x: xy[0], y: xy[1] });
     const delta = angleDelta(start, end);
 
-    const radius = width / 2;
+    // const radius = width / 2;
 
     // console.log(
     //   toAngle(
@@ -75,9 +75,18 @@ const StonePicker: React.FC = () => {
     //   )
     // );
 
+    const nextAngle = (rotation.pinned + delta) % 360;
+
+    if (last) {
+      dispatch({
+        type: "changeStone",
+        value: angleToStoneIndex(nextAngle),
+      });
+    }
+
     setRotation({
       pinned: first ? rotation.current : rotation.pinned,
-      current: (rotation.pinned + delta) % 360,
+      current: nextAngle,
     });
   });
 
@@ -178,7 +187,11 @@ function findSegmentCenters() {
   });
 }
 
-// TODO fix all this
+// TODO REWRITE ALL THAT'S BELLOW
+function stoneIndexToAngle(index: number) {
+  const step = 360 / stoneCount;
+  return step * index;
+}
 function angleToStoneIndex(angle: number) {
   const step = 360 / stoneCount;
   return Math.floor(angle / step);
