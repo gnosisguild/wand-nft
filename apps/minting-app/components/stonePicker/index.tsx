@@ -8,7 +8,12 @@ import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
-import { dimensions, toAngle, toPosition } from "../trigonometry";
+import {
+  dimensions,
+  findClosestInCircumference,
+  toAngle,
+  toPosition,
+} from "../trigonometry";
 import { describeSegments, path } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 
@@ -35,44 +40,27 @@ const describePath = (angleStart: number, angleEnd: number) =>
   path(CONFIG_POINTER, angleStart, angleEnd);
 const segmentCenters = findSegmentCenters();
 
-type Rotation = {
-  pinned: number;
-  current: number;
-};
-
 const StonePicker: React.FC = () => {
   const { state } = useAppContext();
-  const [rotation, setRotation] = useState<Rotation>({
-    pinned: 0,
-    current: 0,
+  const [rotation, setRotation] = useState<number>(0);
+
+  const bind = useDrag(({ xy: [x, y], target }) => {
+    const { center, width } = dimensions(target.getBoundingClientRect());
+
+    setRotation(
+      toAngle(center, findClosestInCircumference(center, width / 2, { x, y }))
+    );
   });
-
-  const bind = useDrag(({ first, initial, xy, target }) => {
-    const { center } = dimensions(target.getBoundingClientRect());
-    const start = toAngle(center, { x: initial[0], y: initial[1] });
-    const end = toAngle(center, { x: xy[0], y: xy[1] });
-    const delta = angleDelta(start, end);
-
-    setRotation({
-      pinned: first ? rotation.current : rotation.pinned,
-      current: (rotation.pinned + delta) % 360,
-    });
-  });
-
-  const i = angleToStoneIndex(rotation.current);
 
   return (
     <div className={styles.container}>
       <div {...bind()}>
-        <UiCircle rotation={rotation.current} showIndicator>
+        <UiCircle rotation={rotation} showIndicator>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
           >
-            <path
-              d={describePath(rotation.current, rotation.current + 12)}
-              fill="red"
-            />
+            <path d={describePath(rotation, rotation + 12)} fill="red" />
             <circle
               cy="500"
               cx="500"
@@ -118,10 +106,7 @@ const StonePicker: React.FC = () => {
         </UiCircle>
       </div>
       <div className={styles.stone}>
-        <StoneViewer
-          seed={state.tokenId}
-          stone={interpolateStone(rotation.current)}
-        />
+        <StoneViewer seed={state.tokenId} stone={interpolateStone(rotation)} />
         <StoneGlass />
       </div>
       <div className={styles.icon}>
@@ -224,12 +209,3 @@ const interpolateStone = (angle: number): Stone => {
 
 const interpolateValue = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
-
-// TODO FIX ALL THIS
-function angleDelta(angleStart: number, angleEnd: number) {
-  if (angleStart < angleEnd) {
-    return angleEnd - angleStart;
-  } else {
-    return (360 - angleStart + angleEnd) % 360;
-  }
-}
