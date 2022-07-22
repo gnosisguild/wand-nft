@@ -1,34 +1,48 @@
 import { useMemo } from "react";
 import { stoneList } from "../../template";
+import { Stone } from "../../types";
 import styles from "./StonePicker.module.css";
+import StoneFilter from "./StoneFilter";
 const stoneTemplate = require("../../../../contracts/contracts/svg/partials/stone.hbs");
 
 const StoneViewer: React.FC<{
   seed: number;
-  id: number;
-}> = ({ seed, id }) => {
-  const svgData = useMemo(() => {
-    const stone = stoneList[id];
-    return btoa(
-      unescape(
-        encodeURIComponent(`<svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 2000 3000"
-    shapeRendering="geometricPrecision"
-  >
-    ${stoneTemplate({ seed, stone })}
-    </svg>`)
-      )
-    );
-  }, [seed, id]);
-
+  stone: Stone;
+}> = ({ seed, stone }) => {
   return (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
-      src={`data:image/svg+xml;base64,${svgData}`}
+    <svg
       className={styles.stoneViewSvg}
-      alt="stone"
-    />
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 2000 3000"
+      shapeRendering="geometricPrecision"
+    >
+      <StoneFilter seed={seed} stone={stone} />
+      <radialGradient id="picker_ss">
+        <stop offset="0%" stopColor="hsla(0, 0%, 0%, 0)" />
+        <stop offset="90%" stopColor="hsla(0, 0%, 0%, .8)" />
+      </radialGradient>
+      <defs>
+        <clipPath id="picker_sc">
+          <circle cx="1000" cy="1060" r="260" />
+        </clipPath>
+      </defs>
+
+      <circle
+        transform={`rotate(${stone.rotation}, 1000, 1060)`}
+        cx="1000"
+        cy="1060"
+        r="260"
+        filter="url(#picker_s)"
+      />
+
+      <circle
+        cx="1200"
+        cy="1060"
+        r="520"
+        fill="url(#ss)"
+        clipPath="url(#picker_sc)"
+      />
+    </svg>
   );
 };
 

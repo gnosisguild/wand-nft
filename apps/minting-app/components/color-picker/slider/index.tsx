@@ -9,7 +9,7 @@ import {
   toPosition,
   dimensions,
   Point,
-} from "./trigonometry";
+} from "../../trigonometry";
 
 const SIZE = 1000;
 const WIDE_MARGIN = 0.1;
