@@ -447,5 +447,15 @@
 {{~/if~}}
 
 <path opacity="0.4" d="M 529.085 2844.789 L 454.584 2930.999 L 1545.417 2930.989 L 1470.942 2844.789 L 529.085 2844.789 Z" fill="#00000055" stroke="white" stroke-width="3.75"/>
+<clipPath id="tc">
+  <path d="M 529.085 2844.789 L 454.584 2930.999 L 1545.417 2930.989 L 1470.942 2844.789 L 529.085 2844.789 Z" fill="black"/>
+</clipPath>
+{{!-- <text text-anchor="middle" x="1000" y="2905" class="title">{{title}}</text> --}}
 
-<text text-anchor="middle" x="1000" y="2905" class="title">{{title}}</text>
+<path id="ng" d="M 480 2905 L 1520 2905" stroke="none"/>
+<text text-anchor="middle" class="title" clip-path="url(#tc)">
+<textPath href="#ng" startOffset="50%">
+<animate attributeName="startOffset" from="150%" to="-50%" begin="0s" dur="20s" repeatCount="indefinite"></animate>
+{{title}}
+</textPath>
+</text>
