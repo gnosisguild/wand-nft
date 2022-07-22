@@ -30,9 +30,9 @@ const SvgTemplate: React.FC<Props> = (props) => {
   const mountCallback = (element: HTMLDivElement | null) => {
     if (element && !elementRef.current) {
       // mounted
-      console.log("mounted", element === elementRef.current);
       elementRef.current = element;
       const vtree = renderTemplateToVdom(initialInputRef.current);
+      console.log("mounted", vtree);
       element.appendChild(createElement(vtree as VNode));
     } else if (element) {
       if (element !== elementRef.current) {
