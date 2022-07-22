@@ -11,10 +11,21 @@ interface Props {
 }
 
 const SvgTemplate: React.FC<Props> = (props) => {
-  // return null;
   const elementRef = useRef<HTMLDivElement>(null);
   const workerRef = useRef<Worker>();
   const initialInputRef = useRef<TemplateInput>(props.input);
+
+  useEffect(() => {
+    workerRef.current = new Worker(new URL("./worker.ts", import.meta.url));
+    workerRef.current.addEventListener("message", (evt) => {
+      console.log("WebWorker Response", evt.data);
+      applyPatch(elementRef.current?.firstElementChild, evt.data);
+    });
+
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
 
   const mountCallback = (element: HTMLDivElement | null) => {
     if (element && !elementRef.current) {
@@ -22,18 +33,8 @@ const SvgTemplate: React.FC<Props> = (props) => {
       console.log("mounted", element === elementRef.current);
       elementRef.current = element;
       const vtree = renderTemplateToVdom(initialInputRef.current);
-      let rootNode = createElement(vtree as VNode);
-      element.appendChild(rootNode);
-
-      workerRef.current = new Worker(new URL("./worker.ts", import.meta.url));
-      workerRef.current.addEventListener("message", (evt) => {
-        console.log("WebWorker Response", evt.data);
-        // rootNode = applyPatch(rootNode, evt.data);
-      });
-    } else if (!element) {
-      // unmounting
-      workerRef.current?.terminate();
-    } else {
+      element.appendChild(createElement(vtree as VNode));
+    } else if (element) {
       if (element !== elementRef.current) {
         throw new Error("Unexpectedly got different element");
       }
