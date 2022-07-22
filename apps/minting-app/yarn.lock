@@ -2422,6 +2422,20 @@ v8-compile-cache@^2.0.3:
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"
   integrity sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==
 
+vdom-as-json@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/vdom-as-json/-/vdom-as-json-1.0.9.tgz#91a36c769e25913fb53cba56fd6c4bb494df1339"
+  integrity sha512-MOtJwyo//DkMersUasqXnFUg1Imfq/ZgNeefJqLpRz6Ittrz5zIPR592BE8uaAyUtpZ7PwHqkbAU0GK80nX+Sg==
+  dependencies:
+    virtual-dom "^2.1.1"
+
+vdom-serialized-patch@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/vdom-serialized-patch/-/vdom-serialized-patch-1.0.8.tgz#38a5acc1584c5717a162be06cfcd6961cfb1c521"
+  integrity sha512-SftBFdIW6wrKxzXnivf2voVAK4I0HFLoN5seg9Mfx3Fz/ztH6zst7EU5Ko80NFCRKWERF0GXu0FELgYQVGxEAw==
+  dependencies:
+    vdom-as-json "1.0.9"
+
 virtual-dom@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/virtual-dom/-/virtual-dom-2.1.1.tgz#80eda2d481b9ede0c049118cefcb4a05f21d1375"

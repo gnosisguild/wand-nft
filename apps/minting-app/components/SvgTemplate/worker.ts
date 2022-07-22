@@ -1,25 +1,15 @@
-import VNode from "virtual-dom/vnode/vnode";
-import VText from "virtual-dom/vnode/vtext";
 import { diff, VTree } from "virtual-dom";
-
-const template = require("../../../../contracts/contracts/svg/template.svg.hbs");
-
-const htmlToVdom: (html: string) => VTree = require("html-to-vdom")({
-  VNode: VNode,
-  VText: VText,
-});
+import renderTemplateToVdom from "./renderTemplateToVdom";
+const serializePatch = require("vdom-serialized-patch/serialize");
 
 let vtree: VTree | undefined = undefined;
 
 addEventListener("message", (event) => {
-  const html = template(event.data);
-  const newVtree = htmlToVdom(html);
+  const newVtree = renderTemplateToVdom(event.data);
 
-  if (!vtree) {
-    // initial render
-    postMessage({ tree: newVtree });
-  } else {
-    postMessage({ patches: diff(vtree, newVtree) });
+  if (vtree) {
+    const patch = diff(vtree, newVtree);
+    postMessage(serializePatch(patch));
   }
 
   vtree = newVtree;
