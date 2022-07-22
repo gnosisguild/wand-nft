@@ -26,7 +26,7 @@ const CONFIG = {
     percBorder: 0.041,
     percThickness: 0.048,
     percSkew: 0,
-    gapInDegrees: 1,
+    gapInDegrees: 2,
     viewBoxSize: VIEWBOX_SIZE,
   },
   filler: {
@@ -98,10 +98,6 @@ const StonePicker: React.FC = () => {
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
           >
-            <path
-              d={describePath(rotation.current, rotation.current + 12)}
-              fill="red"
-            />
             <circle
               cy="500"
               cx="500"
@@ -127,7 +123,13 @@ const StonePicker: React.FC = () => {
               </g>
             ))}
             {fillers.map((d, index) => (
-              <path key={index} d={d} fill="pink" />
+              <path
+                key={index}
+                d={d}
+                fill="#D9D4AD"
+                opacity="0.7"
+                style={{ mixBlendMode: "color-dodge" }}
+              />
             ))}
             {segmentCenters.map(({ x, y }, index) => (
               <g key={index} clipPath={`url(#stone-clip-${index})`}>

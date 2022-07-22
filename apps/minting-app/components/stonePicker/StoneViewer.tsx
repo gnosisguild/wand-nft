@@ -28,7 +28,7 @@ const StoneViewer: React.FC<{
       </defs>
 
       <circle
-        // transform={`rotate(${stone.rotation}, 1000, 1060)`}
+        transform={`rotate(${stone.rotation}, 1000, 1060)`}
         cx="1000"
         cy="1060"
         r="260"
