@@ -8,14 +8,15 @@ import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import { Stone } from "../../types";
 import StoneGlass from "./StoneGlass";
+import { clockwiseDelta, dimensions, toAngle } from "../trigonometry";
 import {
-  dimensions,
-  // findClosestInCircumference,
-  toAngle,
-  toPosition,
-} from "../trigonometry";
-import { describeFillers, describeSegments, path } from "../rhythm";
+  describeFillers,
+  describeSegments,
+  findSegmentCenters,
+  path,
+} from "../rhythm";
 import StoneFilter from "./StoneFilter";
+import assert from "assert";
 
 const stoneCount = stoneList.length;
 
@@ -25,13 +26,14 @@ const CONFIG = {
   segment: {
     percBorder: 0.041,
     percThickness: 0.048,
-    percSkew: 0,
+    percSkew: 0.5,
     gapInDegrees: 1,
     viewBoxSize: VIEWBOX_SIZE,
   },
   filler: {
     percBorder: 0.031,
     percThickness: 0.07,
+    percSkew: 0.5,
     spanInDegrees: 1,
     viewBoxSize: VIEWBOX_SIZE,
   },
@@ -46,7 +48,7 @@ const segments = describeSegments(stoneList.length, CONFIG.segment);
 const fillers = describeFillers(stoneList.length, CONFIG.filler);
 const describePath = (angleStart: number, angleEnd: number) =>
   path(CONFIG.pointer, angleStart, angleEnd);
-const segmentCenters = findSegmentCenters();
+const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
 
 type Rotation = {
   pinned: number;
@@ -64,18 +66,20 @@ const StonePicker: React.FC = () => {
     const { center } = dimensions(target.getBoundingClientRect());
     const start = toAngle(center, { x: initial[0], y: initial[1] });
     const end = toAngle(center, { x: xy[0], y: xy[1] });
-    const delta = angleDelta(start, end);
 
-    // const radius = width / 2;
+    const nextAngle = add(rotation.pinned, clockwiseDelta(start, end));
 
-    // console.log(
-    //   toAngle(
-    //     center,
-    //     findClosestInCircumference(center, radius, { x: xy[0], y: xy[1] })
-    //   )
-    // );
-
-    const nextAngle = (rotation.pinned + delta) % 360;
+    if (first) {
+      setRotation({
+        pinned: rotation.current,
+        current: rotation.current,
+      });
+    } else {
+      setRotation({
+        pinned: rotation.pinned,
+        current: nextAngle,
+      });
+    }
 
     if (last) {
       dispatch({
@@ -83,11 +87,6 @@ const StonePicker: React.FC = () => {
         value: angleToStoneIndex(nextAngle),
       });
     }
-
-    setRotation({
-      pinned: first ? rotation.current : rotation.pinned,
-      current: nextAngle,
-    });
   });
 
   return (
@@ -99,7 +98,7 @@ const StonePicker: React.FC = () => {
             className={styles.haloSegmentSvg}
           >
             <path
-              d={describePath(rotation.current, rotation.current + 12)}
+              d={describePath(rotation.current - 6, rotation.current + 6)}
               fill="red"
             />
             <circle
@@ -165,70 +164,42 @@ const StonePicker: React.FC = () => {
 
 export default StonePicker;
 
-function findSegmentCenters() {
-  const step = 360 / stoneCount;
-
-  const { percBorder, percThickness, viewBoxSize } = CONFIG.segment;
-  const center = {
-    x: viewBoxSize / 2,
-    y: viewBoxSize / 2,
-  };
-  const radius =
-    viewBoxSize / 2 -
-    percBorder * viewBoxSize -
-    (percThickness * viewBoxSize) / 2;
-
-  return new Array(stoneCount).fill(null).map((a, index) => {
-    const left = index * step;
-    const right = (index + 1) * step;
-    const midway = left + (right - left) / 2;
-
-    return toPosition(center, radius, midway);
-  });
-}
-
-// TODO REWRITE ALL THAT'S BELLOW
 function stoneIndexToAngle(index: number) {
   const step = 360 / stoneCount;
-  return step * index;
+  const skew = step * CONFIG.segment.percSkew;
+  return sub(step * index, skew);
 }
 function angleToStoneIndex(angle: number) {
   const step = 360 / stoneCount;
-  return Math.floor(angle / step);
-}
-function angleToStoneBounds(angle: number) {
-  const step = 360 / stoneCount;
-  const i = Math.floor(angle / step);
-  return [i * step, (i + 1) * step];
+  const skew = step * CONFIG.segment.percSkew;
+  return Math.floor(add(angle, skew) / step);
 }
 
 function angleToInterpolationParams(angle: number) {
-  const step = 360 / stoneCount;
-  // if we are 50% inside the angle no interpolation
   const index = angleToStoneIndex(angle);
-  const [left, right] = angleToStoneBounds(angle);
+  const step = 360 / stoneCount;
+  const skew = step * CONFIG.segment.percSkew;
+  const left = sub(index * step, skew);
+  const midway = add(left, step / 2);
 
-  const midway = left + (right - left) / 2;
-  if (angle < midway) {
-    // going left
-    const progress = (midway - angle) / step;
-    return [index, index - 1, progress];
+  const isGoingLeft =
+    clockwiseDelta(angle, midway) < clockwiseDelta(midway, angle);
+
+  if (isGoingLeft) {
+    const progress = sub(midway, angle) / step;
+    return [index, sub(index, 1, stoneCount - 1), progress];
   } else {
-    // going right
-    const progress = (angle - midway) / step;
-    return [index, index + 1, progress];
+    const progress = sub(angle, midway) / step;
+    return [index, add(index, 1, stoneCount - 1), progress];
   }
 }
 
 const interpolateStone = (angle: number): Stone => {
   let [from, to, progress] = angleToInterpolationParams(angle);
 
-  // TODO fix this by making the above math more robust
-  from = Math.max(Math.min(from, stoneCount - 1), 0);
-  to = Math.max(Math.min(to, stoneCount - 1), 0);
-
   const fromStone = stoneList[from];
   const toStone = stoneList[to];
+
   return {
     turbFreqX: interpolateValue(
       fromStone.turbFreqX,
@@ -261,11 +232,16 @@ const interpolateStone = (angle: number): Stone => {
 const interpolateValue = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
 
-// TODO FIX ALL THIS
-function angleDelta(angleStart: number, angleEnd: number) {
-  if (angleStart < angleEnd) {
-    return angleEnd - angleStart;
-  } else {
-    return (360 - angleStart + angleEnd) % 360;
-  }
+export function add(a: number, b: number, overflow: number = 360) {
+  assert(a >= 0 && a <= overflow);
+  assert(b >= 0 && b <= overflow);
+
+  return (a + b) % overflow;
+}
+
+export function sub(a: number, b: number, overflow: number = 360) {
+  assert(a >= 0 && a <= overflow);
+  assert(b >= 0 && b <= overflow);
+
+  return a > b ? a - b : overflow - (b - a);
 }
