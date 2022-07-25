@@ -19,6 +19,7 @@ const CONFIG = {
   FILLER: {
     percBorder: 0.031,
     percThickness: 0.07,
+    percSkew: 0.5,
     spanInDegrees: 2,
     viewBoxSize: VIEWBOX_SIZE,
   },
