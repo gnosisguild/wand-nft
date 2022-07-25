@@ -13,7 +13,6 @@ import {
   describeFillers,
   describeSegments,
   findSegmentCenters,
-  path,
 } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 import assert from "assert";
@@ -46,53 +45,40 @@ const CONFIG = {
 
 const segments = describeSegments(stoneList.length, CONFIG.segment);
 const fillers = describeFillers(stoneList.length, CONFIG.filler);
-const describePath = (angleStart: number, angleEnd: number) =>
-  path(CONFIG.pointer, angleStart, angleEnd);
 const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
-
-type Rotation = {
-  pinned: number;
-  current: number;
-};
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const [rotation, setRotation] = useState<Rotation>({
-    pinned: 0,
-    current: stoneIndexToAngle(state.stone),
-  });
+  const [to, setTo] = useState<number>(stoneIndexToAngle(state.stone));
+  const [from, setFrom] = useState<number>(0);
 
-  const bind = useDrag(({ first, last, initial, xy, target }) => {
-    const { center } = dimensions(target.getBoundingClientRect());
-    const start = toAngle(center, { x: initial[0], y: initial[1] });
-    const end = toAngle(center, { x: xy[0], y: xy[1] });
+  const bind = useDrag(
+    ({ first, last, initial: [initialX, initialY], xy: [x, y], target }) => {
+      const { center } = dimensions(target.getBoundingClientRect());
+      const start = toAngle(center, { x: initialX, y: initialY });
+      const end = toAngle(center, { x, y });
 
-    const nextAngle = add(rotation.pinned, clockwiseDelta(start, end));
+      const nextAngle = add(from, clockwiseDelta(start, end));
 
-    if (first) {
-      setRotation({
-        pinned: rotation.current,
-        current: rotation.current,
-      });
-    } else {
-      setRotation({
-        pinned: rotation.pinned,
-        current: nextAngle,
-      });
+      if (first) {
+        setFrom(to);
+      } else {
+        setTo(nextAngle);
+      }
+
+      if (last) {
+        dispatch({
+          type: "changeStone",
+          value: angleToStoneIndex(nextAngle),
+        });
+      }
     }
-
-    if (last) {
-      dispatch({
-        type: "changeStone",
-        value: angleToStoneIndex(nextAngle),
-      });
-    }
-  });
+  );
 
   return (
     <div className={styles.container}>
       <div {...bind()}>
-        <UiCircle rotation={rotation.current} showIndicator>
+        <UiCircle rotation={to} showIndicator>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
@@ -151,10 +137,7 @@ const StonePicker: React.FC = () => {
         </UiCircle>
       </div>
       <div className={styles.stone}>
-        <StoneViewer
-          seed={state.tokenId}
-          stone={interpolateStone(rotation.current)}
-        />
+        <StoneViewer seed={state.tokenId} stone={interpolateStone(to)} />
         <StoneGlass />
       </div>
       <div className={styles.icon}>

@@ -52,7 +52,7 @@ export function describeFillers(count: number, config: FillerConfig) {
   return result;
 }
 
-export function path(
+function path(
   config: SizingConfig,
   startAngle: number,
   endAngle: number
