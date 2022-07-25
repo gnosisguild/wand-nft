@@ -1,6 +1,6 @@
 .buttonContainer {
   position: absolute;
-  top: 2.9%;
+  top: -0.1%;
   left: 0;
   width: 100%;
   z-index: 11;
@@ -10,7 +10,7 @@
   cursor: pointer;
   display: block;
   margin: 0 auto;
-  width: 41%;
+  width: 32%;
 }
 
 .border {
