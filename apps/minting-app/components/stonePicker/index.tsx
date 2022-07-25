@@ -77,7 +77,7 @@ const StonePicker: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div {...bind()}>
+      <div {...bind()} className={styles.drag}>
         <UiCircle rotation={to} showIndicator>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
