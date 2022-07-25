@@ -64,9 +64,8 @@ const baseSparkleSet: Sparkle[] = [
 const Home: NextPage = () => {
   const [shape, setShape] = React.useState("halo0");
   const [rhythm, setRhythm] = React.useState("10");
-  const [background, setBackground] = React.useState<"linear" | "radial">(
-    "radial"
-  );
+  const [background, setBackground] =
+    React.useState<"linear" | "radial">("radial");
   const [bgColor, setBgColor] = React.useState<HSLColor>({
     hue: 50,
     saturation: 50,
@@ -80,9 +79,11 @@ const Home: NextPage = () => {
   const [stoneSettings, setStoneSettings] = React.useState(baseStoneSettings);
   const [xp, setXp] = React.useState(3221);
   const [level, setLevel] = React.useState("level3");
-  const [location, setLocation] = React.useState<
-    { latitude: number; longitude: number } | undefined
-  >(undefined);
+  const [title, setTitle] = React.useState("FLOURISHING MISTY WORLD");
+  const [location, setLocation] =
+    React.useState<{ latitude: number; longitude: number } | undefined>(
+      undefined
+    );
   let URLtimer: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
@@ -102,6 +103,7 @@ const Home: NextPage = () => {
       setLevel(decodedSettings.level);
       setBgColor(decodedSettings.bgColor);
       setBgRealm(decodedSettings.bgRealm);
+      setTitle(decodedSettings.title);
     }
   }, []);
 
@@ -121,6 +123,7 @@ const Home: NextPage = () => {
         level,
         bgRealm,
         bgColor,
+        title,
       };
 
       const base64Settings = window.btoa(JSON.stringify(wandState));
@@ -140,6 +143,7 @@ const Home: NextPage = () => {
     level,
     bgRealm,
     bgColor,
+    title,
   ]);
 
   const addEmboss = () => {
@@ -291,6 +295,15 @@ const Home: NextPage = () => {
                 value={xp}
               />
             </CollapseContainer>
+            <CollapseContainer title="Portal Title">
+              <input
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+                type="text"
+                value={title}
+              />
+            </CollapseContainer>
             <CollapseContainer wide title="Emboss Layers" collapse>
               <ul>
                 {embossLayers.map((layer, index) => (
@@ -321,7 +334,7 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.wandImage}>
           <SvgTemplate
-            frame={{ title: "FLOURISHING MISTY WORLD", [level]: true }}
+            frame={{ title, [level]: true }}
             seed={123}
             planets={calculatePlanetPositions(
               location?.latitude || 0,
