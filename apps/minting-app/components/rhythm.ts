@@ -9,6 +9,7 @@ type SegmentConfig = {
 type FillerConfig = {
   percBorder: number;
   percThickness: number;
+  percSkew: number;
   spanInDegrees: number;
   viewBoxSize: number;
 };
@@ -24,10 +25,11 @@ export function describeSegments(count: number, config: SegmentConfig) {
 
   const arcSize = 360 / count;
   const { percSkew, gapInDegrees } = config;
+  const skew = (360 / count) * percSkew;
 
   for (let i = 0; i < count; i++) {
-    const left = i * arcSize - percSkew * arcSize + gapInDegrees;
-    const right = (i + 1) * arcSize - percSkew * arcSize - gapInDegrees;
+    const left = i * arcSize - skew + gapInDegrees;
+    const right = (i + 1) * arcSize - skew - gapInDegrees;
     result = [...result, path(config, left, right)];
   }
   return result;
@@ -37,10 +39,11 @@ export function describeFillers(count: number, config: FillerConfig) {
   let result: string[] = [];
 
   const arcSize = 360 / count;
-  const { spanInDegrees } = config;
+  const { percSkew, spanInDegrees } = config;
+  const skew = (360 / count) * percSkew;
 
   for (let i = 0; i < count; i++) {
-    const midway = i * arcSize + arcSize / 2 - 180;
+    const midway = i * arcSize + skew;
     const left = midway - spanInDegrees / 2;
     const right = midway + spanInDegrees / 2;
     result = [...result, path(config, left, right)];
@@ -49,7 +52,7 @@ export function describeFillers(count: number, config: FillerConfig) {
   return result;
 }
 
-export function path(
+function path(
   config: SizingConfig,
   startAngle: number,
   endAngle: number
@@ -72,6 +75,23 @@ export function path(
     upperLeft.x,
     upperLeft.y,
   ].join(" ");
+}
+
+export function findSegmentCenters(count: number, config: SegmentConfig) {
+  const step = 360 / count;
+
+  const { percBorder, percThickness, percSkew, viewBoxSize } = config;
+  const radius =
+    viewBoxSize / 2 -
+    percBorder * viewBoxSize -
+    (percThickness * viewBoxSize) / 2;
+  const skew = (360 / count) * percSkew;
+
+  return new Array(count).fill(null).map((_, index) => {
+    const left = index * step - skew;
+    const midway = left + step / 2;
+    return coordinates(config, radius, midway);
+  });
 }
 
 function arc(

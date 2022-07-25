@@ -2,6 +2,10 @@
   cursor: grab;
 }
 
+.drag {
+  touch-action: none;
+}
+
 .stone {
   pointer-events: none;
   width: 45%;

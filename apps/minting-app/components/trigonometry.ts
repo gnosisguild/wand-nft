@@ -1,3 +1,5 @@
+import assert from "assert";
+
 export type Point = {
   x: number;
   y: number;
@@ -46,11 +48,13 @@ export function toAngle(center: Point, { x, y }: Point) {
 
   const radians = carry + Math.atan(opposite / adjacent);
   const degrees = (radians * 180) / Math.PI;
+  assertDegrees(degrees);
 
   return degrees;
 }
 
 export function toPosition(center: Point, radius: number, degrees: number) {
+  assertDegrees(degrees);
   const radians = ((degrees - 90) * Math.PI) / 180.0;
   return {
     x: center.x + radius * Math.cos(radians),
@@ -66,4 +70,18 @@ export function dimensions(rect: DOMRect) {
   const center = { x: left + width / 2, y: top + height / 2 };
 
   return { center, width, height };
+}
+
+export function clockwiseDelta(start: number, end: number) {
+  assertDegrees(start);
+  assertDegrees(end);
+  if (start < end) {
+    return end - start;
+  } else {
+    return 360 - start + end;
+  }
+}
+
+function assertDegrees(a: number) {
+  assert(a >= 0 && a <= 360);
 }
