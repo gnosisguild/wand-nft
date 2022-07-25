@@ -26,7 +26,7 @@ const CONFIG = {
   segment: {
     percBorder: 0.041,
     percThickness: 0.048,
-    percSkew: 0,
+    percSkew: 0.5,
     gapInDegrees: 2,
     viewBoxSize: VIEWBOX_SIZE,
   },
