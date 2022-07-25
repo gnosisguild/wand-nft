@@ -56,22 +56,23 @@ const StonePicker: React.FC = () => {
     ({ first, last, initial: [initialX, initialY], xy: [x, y], target }) => {
       const { center } = dimensions(target.getBoundingClientRect());
 
-      const dragStartAngle = toAngle(center, { x: initialX, y: initialY });
-      const dragAngle = toAngle(center, { x, y });
-
-      const nextRotation =
-        (pin + clockwiseDelta(dragStartAngle, dragAngle)) % 360;
+      const delta = clockwiseDelta(
+        //drag start angle
+        toAngle(center, { x: initialX, y: initialY }),
+        //drag current angle
+        toAngle(center, { x, y })
+      );
 
       if (first) {
         setPin(rotation);
       } else {
-        setRotation(nextRotation);
+        setRotation(pin + delta);
       }
 
       if (last) {
         dispatch({
           type: "changeStone",
-          value: angleToStoneIndex(nextRotation),
+          value: angleToStoneIndex(pin + delta),
         });
       }
     }
