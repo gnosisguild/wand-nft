@@ -25,6 +25,7 @@ import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
 import MintButton from "../components/MintButton";
 import bgImage from "../public/test-bg-small.jpg";
+import PickerLabels from "../components/PickerLabels";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -44,6 +45,7 @@ const Home: NextPage = () => {
         <div className={styles.centerContainer}>
           <CenterGilding />
           <MintButton />
+          <PickerLabels />
           <div className={styles.svgPreview}>
             <SvgTemplate input={deriveTemplateInput(state)} />
           </div>
