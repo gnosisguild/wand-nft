@@ -3,8 +3,9 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/IWands.sol";
+import "../interfaces/IForge.sol";
 
-contract Forge is Ownable {
+contract Forge is Ownable, IForge {
   mapping(uint256 => uint256) public XP; // account to XP
   mapping(uint256 => uint8) public iLvl; // portal to iLvl
   uint256 public maxLevel;
@@ -28,6 +29,10 @@ contract Forge is Ownable {
     } else {
       iLvl[_id] = 0;
     }
+  }
+
+  function getILvl(uint256 _id) external view returns(uint8) {
+    return iLvl[_id];
   }
 
   function gainXP(uint256 _id, uint256 _xp) onlyOwner {

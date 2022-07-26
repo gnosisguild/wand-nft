@@ -6,11 +6,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./interfaces/IWandConjuror.sol";
 import "./interfaces/IWands.sol";
+import "./interfaces/IForge.sol";
 
 contract Wand is ERC721URIStorage, IWands, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
+  IForge public forge;
   IWandConjuror public immutable wandConjuror;
   mapping(uint256 => Wand) private _wands;
 
@@ -26,6 +28,10 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
     wandConjuror = _wandConjuror;
+  }
+
+  function setForge(IForge _newForge) onlyOwner {
+    forge = _forge;
   }
 
   function mintWand() public {
