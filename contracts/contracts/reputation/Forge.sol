@@ -31,29 +31,23 @@ contract Forge is Ownable, IForge {
     }
   }
 
-  function getILvl(uint256 _id) external view returns(uint8) {
+  function getILvl(uint256 _id) external view override returns(uint8) {
     return iLvl[_id];
   }
 
-  function gainXP(uint256 _id, uint256 _xp) onlyOwner {
-    XP[_id] += _xp;
+  function adjustXP(uint256 _id, uint256 _xp) public onlyOwner {
+    XP[_id] = _xp;
   }
 
-  function gainXPBatch(uint256[] memory _ids, uint256[] memory _xps) onlyOwner {
+  function adjustXPBatch(uint256[] memory _ids, uint256[] memory _xps) external onlyOwner {
     require(_ids.length == _xps.length);
 
     for(uint256 i=0; i<= _ids.length;  i++) {
-      XP[_ids[i]] += _xps[i];
+      XP[_ids[i]] = _xps[i];
     }  
   }
 
-  function adjustThresholds(uint256[] memory _newValues) onlyOwner {
-    for(uint256 i=0; i<= maxLevel;  i++) {
-
-    }
-  }
-
-  function setMaxLevel(uint256 _maxLevel) onlyOwner {
+  function setMaxLevel(uint256 _maxLevel) public onlyOwner {
     maxLevel = _maxLevel;
   }
 }

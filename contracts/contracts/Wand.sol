@@ -30,8 +30,8 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     wandConjuror = _wandConjuror;
   }
 
-  function setForge(IForge _newForge) onlyOwner {
-    forge = _forge;
+  function setForge(IForge _newForge) public onlyOwner {
+    forge = _newForge;
   }
 
   function mintWand() public {

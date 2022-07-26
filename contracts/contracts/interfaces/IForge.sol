@@ -5,5 +5,5 @@ interface IForge {
   function getILvl(uint256 tokenId)
     external
     view
-    returns (uint 8);
+    returns (uint8);
 }
