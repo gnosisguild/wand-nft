@@ -1,8 +1,4 @@
-import { useMemo } from "react";
-import { stoneList } from "../../template";
 import { Stone } from "../../types";
-import styles from "./StonePicker.module.css";
-const stoneTemplate = require("../../../../contracts/contracts/svg/partials/stone.hbs");
 
 const StoneFilter: React.FC<{
   seed: number;

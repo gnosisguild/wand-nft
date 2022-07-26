@@ -18,7 +18,7 @@ import {
   generateSparkles,
   scaleAspects,
   scalePlanets,
-  stoneList,
+  interpolateStone,
   xp,
 } from "../template";
 import HaloPicker from "../components/halo-picker";
@@ -92,7 +92,7 @@ const deriveTemplateInput = (state: AppState): TemplateInput => ({
   filterLayers,
   sparkles: generateSparkles(state.tokenId),
   seed: state.tokenId,
-  stone: stoneList[state.stone],
+  stone: interpolateStone(state.stone),
   xp,
   handle: generateHandle(state.handle),
 });
