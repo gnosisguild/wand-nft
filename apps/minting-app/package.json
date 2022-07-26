@@ -16,6 +16,7 @@
     "ethers": "^5.6.9",
     "handlebars": "^4.7.7",
     "html-to-vdom": "^0.7.0",
+    "html2hscript": "^2.0.1",
     "next": "^12.2.2",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",

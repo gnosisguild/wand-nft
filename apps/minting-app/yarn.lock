@@ -966,7 +966,7 @@ emojis-list@^2.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
   integrity sha1-TapNnbAPmBmIDHn6RXrlsJof04k=
 
-ent@^2.0.0:
+ent@^2.0.0, ent@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ent/-/ent-2.2.0.tgz#e964219325a21d05f44466a2f686ed6ce5f5dd1d"
   integrity sha512-GHrMyVZQWvTIdDtpiEXdHZnFQKzeO09apj8Cbl4pKWy4i0Oprcq17usfDt5aO63swf0JOeMWjWQE/LzgSRuWpA==
@@ -1521,6 +1521,16 @@ html-to-vdom@^0.7.0:
     ent "^2.0.0"
     htmlparser2 "^3.8.2"
 
+html2hscript@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/html2hscript/-/html2hscript-2.0.1.tgz#1980252375746e60b5b2cb38d118e06b9b0db1dd"
+  integrity sha512-sA8vDJ2RMnmQqENE7zS4RD3IQ26GpvYOByBV7MEcTAGTup/7xzPov39zginylNRjxLa1AEGz6KzRw+QyoccKuQ==
+  dependencies:
+    ent "^2.2.0"
+    htmlparser2 "^3.8.2"
+    is-empty "0.0.1"
+    to-camel-case "^0.2.1"
+
 htmlparser2@^3.8.2:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.10.1.tgz#bd679dc3f59897b6a34bb10749c855bb53a9392f"
@@ -1616,6 +1626,11 @@ is-date-object@^1.0.1:
   integrity sha512-9YQaSxsAiSwcvS33MBk3wTCVnWK+HhF8VZR2jRxehM16QcVOdHqPn4VPHmRK4lSr38n9JriurInLcP90xsYNfQ==
   dependencies:
     has-tostringtag "^1.0.0"
+
+is-empty@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/is-empty/-/is-empty-0.0.1.tgz#09fdc3d649dda5969156c0853a9b76bd781c5a33"
+  integrity sha512-jYWXLEBmq8udg0gP7mw8tmyd9Yahzzp3kfLdcXj7ydkeVxjQkQ82U/Fx1sJRUMfkpO6vDGjWfke1tK8XYv+T5Q==
 
 is-extglob@^2.1.1:
   version "2.1.1"
@@ -2324,12 +2339,31 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
+to-camel-case@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/to-camel-case/-/to-camel-case-0.2.1.tgz#200799152cfa5e752b7aad0dfe8b7af105cafaa2"
+  integrity sha512-4mHiOYZ6OiXZtJEG3rpn1wfk9nVK9Ki+Kn53zzAtDmtg/sKky/FxMQxjB0AaRiZqe4Gt4ptEW8mRKO2+DtQNmg==
+  dependencies:
+    to-space-case "0.1.2"
+
+to-no-case@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/to-no-case/-/to-no-case-0.1.1.tgz#cf33c70e0f28168d95e4159abf150e8c542ef9fe"
+  integrity sha512-XNChsa36ssNQibYbv/kBSLb0jEfPuePdnbX1tBpHypUbtjBSR8ihaDRRYPZLMstjSpPM+onSgxeDjg+lgfIzZQ==
+
 to-regex-range@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/to-regex-range/-/to-regex-range-5.0.1.tgz#1648c44aae7c8d988a326018ed72f5b4dd0392e4"
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+to-space-case@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/to-space-case/-/to-space-case-0.1.2.tgz#9a66be3ebe53f2779f687f0262effd1fc5b6d15e"
+  integrity sha512-DtF9QZwx8W6WMhrCuvUZJYX9sT74/VOdVxi68EkEu3gt0SUQHhJG+UYbQI0559XcchsX7gziPlWuV4dEGC59dA==
+  dependencies:
+    to-no-case "0.1.1"
 
 toggle-selection@^1.0.6:
   version "1.0.6"
