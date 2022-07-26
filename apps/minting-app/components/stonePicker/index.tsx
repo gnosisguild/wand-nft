@@ -49,27 +49,30 @@ const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const [to, setTo] = useState<number>(stoneIndexToAngle(state.stone));
-  const [from, setFrom] = useState<number>(0);
+  const [pin, setPin] = useState<number>(stoneIndexToAngle(state.stone));
+  const [rotation, setRotation] = useState<number>(0);
 
   const bind = useDrag(
     ({ first, last, initial: [initialX, initialY], xy: [x, y], target }) => {
       const { center } = dimensions(target.getBoundingClientRect());
-      const start = toAngle(center, { x: initialX, y: initialY });
-      const end = toAngle(center, { x, y });
 
-      const nextAngle = add(from, clockwiseDelta(start, end));
+      const delta = clockwiseDelta(
+        //drag start angle
+        toAngle(center, { x: initialX, y: initialY }),
+        //drag current angle
+        toAngle(center, { x, y })
+      );
 
       if (first) {
-        setFrom(to);
+        setPin(rotation);
       } else {
-        setTo(nextAngle);
+        setRotation(pin + delta);
       }
 
       if (last) {
         dispatch({
           type: "changeStone",
-          value: angleToStoneIndex(nextAngle),
+          value: angleToStoneIndex(pin + delta),
         });
       }
     }
@@ -78,7 +81,7 @@ const StonePicker: React.FC = () => {
   return (
     <div className={styles.container}>
       <div {...bind()} className={styles.drag}>
-        <UiCircle rotation={to} showIndicator>
+        <UiCircle rotation={rotation} showIndicator>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
@@ -137,7 +140,7 @@ const StonePicker: React.FC = () => {
         </UiCircle>
       </div>
       <div className={styles.stone}>
-        <StoneViewer seed={state.tokenId} stone={interpolateStone(to)} />
+        <StoneViewer seed={state.tokenId} stone={interpolateStone(rotation)} />
         <StoneGlass />
       </div>
       <div className={styles.icon}>
@@ -151,37 +154,34 @@ export default StonePicker;
 
 function stoneIndexToAngle(index: number) {
   const step = 360 / stoneCount;
-  const skew = step * CONFIG.segment.percSkew;
-  return sub(step * index, skew);
+  return withSkew(step * index + step / 2);
 }
+
 function angleToStoneIndex(angle: number) {
   const step = 360 / stoneCount;
-  const skew = step * CONFIG.segment.percSkew;
-  return Math.floor(add(angle, skew) / step);
+  return Math.floor(withoutSkew(angle) / step);
 }
 
-function angleToInterpolationParams(angle: number) {
-  const index = angleToStoneIndex(angle);
+function interpolationParams(angle: number) {
+  angle = withoutSkew(angle);
+
   const step = 360 / stoneCount;
-  const skew = step * CONFIG.segment.percSkew;
-  const left = sub(index * step, skew);
-  const midway = add(left, step / 2);
+  const index = Math.floor(angle / step);
+  const midway = step * index + step / 2;
 
-  const isGoingLeft =
-    clockwiseDelta(angle, midway) < clockwiseDelta(midway, angle);
-
-  if (isGoingLeft) {
-    const progress = sub(midway, angle) / step;
-    return [index, sub(index, 1, stoneCount - 1), progress];
+  if (angle < midway) {
+    // going left
+    const progress = (midway - angle) / step;
+    return [index, stoneIndex(index - 1), progress];
   } else {
-    const progress = sub(angle, midway) / step;
-    return [index, add(index, 1, stoneCount - 1), progress];
+    // going right
+    const progress = (angle - midway) / step;
+    return [index, stoneIndex(index + 1), progress];
   }
 }
 
 const interpolateStone = (angle: number): Stone => {
-  let [from, to, progress] = angleToInterpolationParams(angle);
-
+  const [from, to, progress] = interpolationParams(angle);
   const fromStone = stoneList[from];
   const toStone = stoneList[to];
 
@@ -217,16 +217,18 @@ const interpolateStone = (angle: number): Stone => {
 const interpolateValue = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
 
-export function add(a: number, b: number, overflow: number = 360) {
-  assert(a >= 0 && a <= overflow);
-  assert(b >= 0 && b <= overflow);
-
-  return (a + b) % overflow;
+function stoneIndex(unbound: number): number {
+  return unbound < 0 ? stoneCount - 1 : unbound % stoneCount;
 }
 
-export function sub(a: number, b: number, overflow: number = 360) {
-  assert(a >= 0 && a <= overflow);
-  assert(b >= 0 && b <= overflow);
+function withoutSkew(angle: number) {
+  const step = 360 / stoneCount;
+  return (angle + step * CONFIG.segment.percSkew) % 360;
+}
 
-  return a > b ? a - b : overflow - (b - a);
+function withSkew(angle: number) {
+  const step = 360 / stoneCount;
+  const result = angle - step * CONFIG.segment.percSkew;
+  assert(result >= 0);
+  return result;
 }
