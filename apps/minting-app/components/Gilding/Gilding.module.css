@@ -1,0 +1,74 @@
+.upperLeft {
+  position: fixed;
+  top: 0.7vw;
+  left: 0.5vw;
+  width: 36%;
+  max-width: 800px;
+  mix-blend-mode: color-dodge;
+}
+
+.lowerLeft {
+  position: fixed;
+  bottom: 0.3vw;
+  left: 0.7vw;
+  width: 37%;
+  max-width: 800px;
+  mix-blend-mode: color-dodge;
+}
+
+.upperRight {
+  position: fixed;
+  top: 0.7vw;
+  right: 0.5vw;
+  width: 36%;
+  max-width: 800px;
+  mix-blend-mode: color-dodge;
+}
+
+.lowerRight {
+  position: fixed;
+  bottom: 0.3vw;
+  right: 0.7vw;
+  width: 18%;
+  max-width: 400px;
+  mix-blend-mode: color-dodge;
+}
+
+.center {
+  width: 100%;
+  mix-blend-mode: color-dodge;
+}
+
+.gildPiece {
+  width: 100%;
+  --gild-color: #d9d4ad;
+}
+.gildPiece path,
+.gildPiece circle {
+  fill: none;
+  stroke-width: 0.15vw;
+  stroke: var(--gild-color);
+}
+.gildComposite {
+  opacity: 0.3;
+}
+
+.zodiacIcon {
+  position: absolute;
+  top: 5.8%;
+  left: 3.3%;
+  width: 19%;
+  --icon-color: #aea871;
+}
+
+.zodiacIcon svg {
+  width: 100%;
+}
+
+.iconStroke {
+  stroke: var(--icon-color);
+  stroke-width: 0.367195;
+}
+.iconFill {
+  fill: var(--icon-color);
+}

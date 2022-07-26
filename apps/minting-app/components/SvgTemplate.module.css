@@ -1,0 +1,11 @@
+.container svg {
+  display: block;
+  width: 100%;
+}
+.container {
+  width: 35%;
+  margin: 0 auto;
+  max-width: 425px;
+  filter: drop-shadow(0px 5px 6px rgba(0, 0, 0, 0.85));
+  border: 0.2vw solid rgba(217, 212, 173, 0.7);
+}

@@ -1,0 +1,67 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background: #1d1d25;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  position: fixed;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.main {
+  position: absolute;
+  inset: 0.5vw;
+  width: 99vw;
+  height: 99vh;
+  padding: 2% 0 0%;
+}
+
+.centerContainer {
+  position: relative;
+  display: block;
+  max-width: 61%;
+  margin: 0 auto;
+  max-height: 82vh;
+  aspect-ratio: 1 / 0.9502813647;
+}
+
+.svgPreview {
+  position: absolute;
+  top: 13%;
+  left: 0;
+  width: 100%;
+}
+
+.colorPicker,
+.stonePicker,
+.haloPicker {
+  aspect-ratio: 1;
+  width: 25%;
+  border-radius: 50%;
+  max-width: 290px;
+}
+
+.colorPicker {
+  position: absolute;
+  left: 3%;
+  top: 50.8%;
+}
+
+.haloPicker {
+  position: absolute;
+  left: 37.5%;
+  top: 69.6%;
+}
+
+.stonePicker {
+  position: absolute;
+  left: 72.1%;
+  top: 50.8%;
+}
+
+.iconTest {
+  display: flex;
+}

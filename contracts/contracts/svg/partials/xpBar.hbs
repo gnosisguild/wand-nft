@@ -1,25 +1,34 @@
 <defs>
   <style>
-    .xp-seg {
-      fill: green;
-    }
-    .xp-circ {
+    .xpc {
       fill: none;
       stroke-width: 1;
-      stroke: green;
+      stroke: #FAFFC0;
+      opacity: 0.7;
     }
-    .xp-bar * {
-      transform-box: fill-box;
-      transform-origin: center;
+    .hilt path {
+      fill: url(#hg);
     }
   </style>
-  <symbol id="xp-bar-seg">
-    <circle class="xp-circ" cx="1000" cy="1060.25" r="307.97"/>
-    <path class="xp-seg" d="M1002.84,768.69c-.95,0-1.9-.01-2.84-.01s-1.9,0-2.84,.01l-.16-16c1,0,2-.01,3-.01s2,0,3,.01l-.16,16Z"/>
-  </symbol>
+  <linearGradient id="xpg" x1="80%" x2="20%" y1="200%" y2="-400%">
+    <stop offset="0"/>
+    <stop offset=".4" stop-color="#90ee90" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="hg" x1="80%" x2="20%" y1="200%" y2="-400%">
+    <stop offset="0"/>
+    <stop offset=".4" stop-color="#90ee90"/>
+  </linearGradient>
 </defs>
-<g class="xp-bar">
-  {{#xp cap amount 0.5}}
-    <use xlink:href="#xp-bar-seg" transform="rotate({{this}})"/>
-  {{/xp}}
+
+<circle class="xpc" cx="1000" cy="1060" r="320"/>
+<circle class="xpc" cx="1000" cy="1060" r="290"/>
+
+<path id="xpb" d="M1000 1365a1 1 0 0 0 0-610" stroke-linecap="round" style="stroke-dasharray:calc({{uint32 amount}} / {{uint32 cap}} * 37.2%) 100%;fill:none;stroke-width:28;stroke:url(#xpg);opacity:1;mix-blend-mode:plus-lighter"/>
+<use href="#xpb" transform="matrix(-1 0 0 1 2000 0)"/>
+<g class="hilt" filter="url(#ge)" id="xph">
+  <path transform="rotate(45 1000 1365)" d="M980 1345h40v40h-40z"/>
+  <path d="M980 1345h40v40h-40z"/>
 </g>
+{{#if crown}}
+<use href="#xph" transform="translate(0,-610)"/>
+{{/if}}

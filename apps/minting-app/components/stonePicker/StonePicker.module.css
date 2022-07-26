@@ -1,0 +1,37 @@
+.container {
+  cursor: grab;
+}
+
+.drag {
+  touch-action: none;
+}
+
+.stone {
+  pointer-events: none;
+  width: 45%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  top: 27.6%;
+  left: 27.6%;
+  position: absolute;
+}
+.stoneViewSvg {
+  width: 387%;
+  position: absolute;
+  top: -155%;
+  left: -144%;
+  z-index: 11;
+}
+
+.icon {
+  position: absolute;
+  z-index: 12;
+  bottom: -9%;
+  right: 4%;
+  width: 20%;
+}
+.bgCircle {
+  position: relative;
+  z-index: 5;
+}

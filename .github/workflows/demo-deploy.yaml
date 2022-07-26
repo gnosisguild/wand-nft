@@ -1,0 +1,29 @@
+name: Demo App Deployment
+
+on:
+  push:
+    branches: master
+
+env:
+  BASE_PATH: "/wand-nft"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Demo Site
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+        working-directory: ./apps/minting-app
+      - run: yarn run static
+        working-directory: ./apps/minting-app
+
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: gh-pages
+          folder: ./apps/minting-app/out

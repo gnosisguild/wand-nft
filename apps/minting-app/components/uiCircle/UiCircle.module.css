@@ -1,0 +1,14 @@
+.containerCircle {
+  position: relative;
+  aspect-ratio: 1/1;
+  width: 100%;
+}
+.uiCircle {
+  position: absolute;
+  inset: 10%;
+  z-index: 10;
+}
+.childrenContainer {
+  position: absolute;
+  inset: 0;
+}

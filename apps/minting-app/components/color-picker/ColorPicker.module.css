@@ -1,0 +1,54 @@
+.svg {
+  position: relative;
+  z-index: 11;
+}
+
+.icon {
+  position: absolute;
+  z-index: 12;
+  bottom: -9%;
+  left: 3.9%;
+  width: 20%;
+}
+
+.auraButtonContainer {
+  width: 14%;
+  position: absolute;
+  z-index: 11;
+}
+
+.darkButton {
+  top: 32%;
+  left: 43%;
+}
+.lightButton {
+  top: 43%;
+  right: 30.5%;
+}
+.radialButton {
+  top: 44.2%;
+  left: 31%;
+}
+.linearButton {
+  top: 55.4%;
+  left: 43.6%;
+}
+
+.buttonBackground {
+  width: 28.4%;
+  position: absolute;
+  z-index: 10;
+}
+
+.realmBackground {
+  top: 30.7%;
+  left: 42.1%;
+}
+
+.typeBackground {
+  top: 43%;
+  left: 30.1%;
+}
+.hueSliderSvg path {
+  cursor: pointer;
+}

@@ -1,0 +1,23 @@
+.buttonContainer {
+  position: absolute;
+  top: -0.1%;
+  left: 0;
+  width: 100%;
+  z-index: 11;
+}
+
+.buttonContainer svg {
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  width: 32%;
+}
+
+.border {
+  opacity: 0.7;
+  transition: opacity 0.1 ease;
+}
+
+.buttonContainer svg:hover .border {
+  opacity: 1;
+}

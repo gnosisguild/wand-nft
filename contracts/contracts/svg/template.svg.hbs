@@ -6,13 +6,14 @@
   <style type="text/css">
     .bc{fill:none;stroke:#8BA0A5;}
   </style>
-  {{~>filter filter}}
-  {{~>background background~}}
-  {{~>xpBar xp~}}
-  {{~>stars stars~}}
-  {{~>stone stone~}}
+  {{~>filter extra="BackgroundLayer"~}}
+  {{~>background background extra="BackgroundLayer"~}}
+  {{~>xpBar xp extra="BackgroundLayer"~}}
+  {{~>stars extra="BackgroundLayer"~}}
+  {{~>stone~}}
+  {{~>frame frame extra="FrameLayer"~}}
   {{~>halo halo~}}
-  {{~>handles handle~}}
+  {{~>handles handle extra="HandleLayer"~}}
   {{~>birthchart~}}
-  {{~>sparkle sparkle~}}
+  {{~>sparkle~}}
 </svg>

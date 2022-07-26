@@ -1,94 +1,89 @@
-<filter id="texture">
+<filter id="s">
   <feTurbulence
-    type={{turbType}}
-    id="octave"
-    baseFrequency="{{turbFreqX}} {{turbFreqY}}"
-    numOctaves="{{turbOct}}"
-    seed="1004123123"
-  ></feTurbulence>
+    {{#if stone.fractalNoise}}type="fractalNoise"{{/if}}
+    baseFrequency="{{uint8 stone.turbFreqX decimals=3}} {{uint8 stone.turbFreqY decimals=3}}"
+    numOctaves="{{uint8 stone.turbOct}}"
+    seed="{{uint seed}}"
+  />
   <feComponentTransfer>
     <feFuncR
-      id="r"
       type="gamma"
-      amplitude="{{redAmp}}"
-      exponent="{{redExp}}"
-      offset="{{redOff}}"
-    ></feFuncR>
+      amplitude="{{int8 stone.redAmp decimals=2}}"
+      exponent="{{int8 stone.redExp decimals=2}}"
+      offset="{{int8 stone.redOff decimals=2}}"
+    />
     <feFuncG
-      id="g"
       type="gamma"
-      amplitude="{{greenAmp}}"
-      exponent="{{greenExp}}"
-      offset="{{greenOff}}"
-    ></feFuncG>
+      amplitude="{{int8 stone.greenAmp decimals=2}}"
+      exponent="{{int8 stone.greenExp decimals=2}}"
+      offset="{{int8 stone.greenOff decimals=2}}"
+    />
     <feFuncB
-      id="b"
       type="gamma"
-      amplitude="{{blueAmp}}"
-      exponent="{{blueExp}}"
-      offset="{{blueOff}}"
-    ></feFuncB>
-    <feFuncA type="discrete" tableValues="1"></feFuncA>
+      amplitude="{{int8 stone.blueAmp decimals=2}}"
+      exponent="{{int8 stone.blueExp decimals=2}}"
+      offset="{{int8 stone.blueOff decimals=2}}"
+    />
+    <feFuncA type="discrete" tableValues="1"/>
   </feComponentTransfer>
   <feComposite
     operator="in"
     in2="SourceGraphic"
-    result="stoneTexture"
-  ></feComposite>
+    result="tex"
+  />
 
   {{! <!-- Background glow  --> }}
   <feGaussianBlur
     in="SourceAlpha"
     stdDeviation="30"
     result="glow"
-  ></feGaussianBlur>
+  />
   <feColorMatrix
     in="glow"
-    result="bgGlow"
+    result="bgg"
     type="matrix"
     values="-1 0 0 0 1
             0 -1 0 0 1
             0 0 -1 0 1
-            0 0 0 0.8 0 "
-  ></feColorMatrix>
+            0 0 0 .8 0 "
+  />
 
   <feMerge>
-    <feMergeNode in="bgGlow"></feMergeNode>
-    <feMergeNode in="stoneTexture"></feMergeNode>
+    <feMergeNode in="bgg"/>
+    <feMergeNode in="tex"/>
   </feMerge>
 </filter>
-<radialGradient id="stoneshadow">
-  <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"></stop>
-  <stop offset="90%" stop-color="hsla(0, 0%, 0%, 0.8)"></stop>
+<radialGradient id="ss">
+  <stop offset="0%" stop-color="hsla(0, 0%, 0%, 0)"/>
+  <stop offset="90%" stop-color="hsla(0, 0%, 0%, .8)"/>
 </radialGradient>
 <defs>
   {{! clip paths }}
-  <clipPath id="stoneclip">
-    <circle cx="1000" cy="1060" r="260"></circle>
+  <clipPath id="sc">
+    <circle cx="1000" cy="1060" r="260"/>
   </clipPath>
 
 </defs>
 {{! stone base }}
 <circle
-  id="stone"
-  transform="rotate(100{{rotation}}, 1000, 1060)"
+  transform="rotate({{uint16 stone.rotation}}, 1000, 1060)"
   cx="1000"
   cy="1060"
   r="260"
-  filter="url(#texture)"
-></circle>
+  filter="url(#s)"
+/>
 
 {{! stone shadow }}
 <circle
   cx="1200"
   cy="1060"
   r="520"
-  fill="url(#stoneshadow)"
-  clip-path="url(#stoneclip)"
-></circle>
+  fill="url(#ss)"
+  clip-path="url(#sc)"
+/>
 <defs>
   <radialGradient
-    id="stone-fill"
+    id="sf"
     cx="606.78"
     cy="1003.98"
     fx="606.78"
@@ -97,33 +92,27 @@
     gradientTransform="translate(-187630.67 -88769.1) rotate(-33.42) scale(178.04 178.05)"
     gradientUnits="userSpaceOnUse"
   >
-    <stop offset=".05" stop-color="#fff" stop-opacity=".7"></stop>
-    <stop offset=".26" stop-color="#ececec" stop-opacity=".5"></stop>
-    <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"></stop>
-    <stop offset=".63" stop-color="#929292" stop-opacity=".5"></stop>
-    <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"></stop>
-    <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"></stop>
+    <stop offset=".05" stop-color="#fff" stop-opacity=".7"/>
+    <stop offset=".26" stop-color="#ececec" stop-opacity=".5"/>
+    <stop offset=".45" stop-color="#c4c4c4" stop-opacity=".5"/>
+    <stop offset=".63" stop-color="#929292" stop-opacity=".5"/>
+    <stop offset=".83" stop-color="#7b7b7b" stop-opacity=".5"/>
+    <stop offset="1" stop-color="#cbcbca" stop-opacity=".5"/>
   </radialGradient>
   <radialGradient
-    id="stone-highlight"
-    cx="1148.95"
-    cy="2659.77"
-    fx="1148.95"
-    fy="2659.77"
-    r="75.93"
-    gradientTransform="translate(312.49 2545.6) rotate(-20) scale(1 -.5)"
+    id="sh"
+    cx="1149"
+    cy="2660"
+    fx="1149"
+    fy="2660"
+    r="76"
+    gradientTransform="translate(312 2546) rotate(-20) scale(1 -.5)"
     gradientUnits="userSpaceOnUse"
   >
-    <stop offset="0" stop-color="#fff" stop-opacity="0.7"></stop>
-    <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
   </radialGradient>
 </defs>
-<path
-  fill="url(#stone-fill)"
-  d="M1183.84,876.14c101.54,101.54,101.56,266.17,.04,367.7-101.52,101.52-266.21,101.56-367.74,.02-101.54-101.54-101.54-266.17,0-367.7s266.17-101.56,367.7-.02Z"
-></path>
-<path
-  fill="url(#stone-highlight)"
-  d="M918.85,856.64c48.74-19.4,96.54-14.34,106.77,11.32,10.22,25.66-21.02,62.18-69.78,81.58s-96.54,14.34-106.77-11.32c-10.22-25.64,21.02-62.18,69.78-81.58Z"
->
-</path>
+
+<path fill="url(#sf)" d="M1184 876a260 260 0 1 1-368 368 260 260 0 0 1 368-368Z"/>
+<path fill="url(#sh)" d="M919 857c49-20 96-15 107 11 10 26-21 62-70 82s-97 14-107-12c-10-25 21-62 70-81Z"/>

@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./interfaces/IWandConjuror.sol";
 import "./interfaces/IWands.sol";
-//import "Template.sol"
 
 contract Wand is ERC721URIStorage, IWands, Ownable {
   using Counters for Counters.Counter;
@@ -15,22 +14,15 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
   IWandConjuror public immutable wandConjuror;
   mapping(uint256 => Wand) private _wands;
 
-  mapping(uint256 => uint256) public ILvl;
-  mapping(address => uint256) public XP;
-
   event WandBuilt(
     uint256 indexed tokenId,
+    uint8 stone,
+    uint8 handle,
     uint16 halo,
-    uint256 evolution,
-    uint256 birth,
-    int256 latitude,
-    int256 longitude
+    Template.Background background,
+    IWands.Planet[8] planets,
+    IWands.Aspect[8] aspects
   );
-
-  event XPLevelUp(address indexed id, uint256 indexed levels, uint256 indexed newLevel);
-  event XPLevelDown(address indexed id, uint256 indexed levels, uint256 indexed newLevel);
-  event IlvlLevelUp(uint256 indexed id, uint256 indexed levels, uint256 indexed newLevel);
-  event IlvlLevelDown(uint256 indexed id, uint256 indexed levels, uint256 indexed newLevel);
 
   constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
     wandConjuror = _wandConjuror;
@@ -44,32 +36,42 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   function build(
     uint256 tokenId,
-    uint8 halo,
-    int16 latitude,
-    int16 longitude,
-    Template.Planet[8] memory planets,
-    Template.Aspect[8] memory aspects
+    uint8 stone,
+    uint8 handle,
+    uint16 halo,
+    Template.Background memory background,
+    IWands.Planet[8] memory planets,
+    IWands.Aspect[8] memory aspects
   ) external override {
     require(
       msg.sender == ERC721.ownerOf(tokenId),
       "Wands: only owner can build wand"
     );
+
     // TODO: check tokenID is not already built?
     // Construct Wand
     Wand storage wand = _wands[tokenId];
     wand.built = true;
+    wand.stone = stone;
+    wand.handle = handle;
     wand.halo = halo;
+    wand.background = background;
     wand.evolution = 0;
-    wand.birth = block.timestamp;
-    wand.latitude = latitude;
-    wand.longitude = longitude;
-    for(uint256 i=0; i<planets.length; i++) {
-      //wand.planets.push(Template.Planet(planets[i].x, planets[i].y));
-      //wand.aspects.push(Template.Aspect(aspects[i].x1, aspects[i].y1, aspects[i].x2, aspects[i].y2));
-      wand.planets[i] = Template.Planet(planets[i].x, planets[i].y);
-      wand.aspects[i] = Template.Aspect(aspects[i].x1, aspects[i].y1, aspects[i].x2, aspects[i].y2);
+    wand.birth = uint64(block.timestamp);
+    for (uint256 i = 0; i < 8; i++) {
+      wand.planets[i] = IWands.Planet({
+        visible: planets[i].visible,
+        x: planets[i].x,
+        y: planets[i].y
+      });
+      wand.aspects[i] = IWands.Aspect({
+        x1: aspects[i].x1,
+        y1: aspects[i].y1,
+        x2: aspects[i].x2,
+        y2: aspects[i].y2
+      });
     }
-    emit WandBuilt(tokenId, halo, 0, block.timestamp, latitude, longitude);
+    emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
   }
 
   function tokenURI(uint256 tokenId)
@@ -84,17 +86,8 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     if (!wand.built) {
       //return wandConjuror.generateWandBadgeURI(calculateWandBadge(tokenId));
     } else {
-      return wandConjuror.generateWandURI(wand);
+      return wandConjuror.generateWandURI(wand, tokenId);
     }
-  }
-
-  function psuedoRandom() private view returns (uint256) {
-    return
-      uint256(
-        keccak256(
-          abi.encodePacked(block.difficulty, block.timestamp, msg.sender)
-        )
-      );
   }
 
   function wands(uint256 tokenId)
@@ -102,46 +95,14 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
     view
     override
     returns (
-      uint8 halo,
-      uint256 evolution,
-      uint256 birth
+      uint16 halo,
+      uint32 evolution,
+      uint64 birth
     )
   {
     require(_exists(tokenId), "Wand: tokenID does not exist");
     Wand memory wand = _wands[tokenId];
     return (wand.halo, wand.evolution, wand.birth);
-  }
-
-  function levelUpXP(address _id, uint256 _tokenId, uint256 _levels) public onlyOwner {
-      require(XP[_id] + _levels <= 10, "max level is 10");
-      require(_exists(_tokenId), "nonexistent id");
-      XP[_id] += _levels;
-      emit XPLevelUp(_id, _levels, XP[_id]);
-  }
-
-  function levelUpXPBatch(address[] memory _ids, uint256[] memory _tokenids, uint256[] memory _levels) public onlyOwner {
-      require(_ids.length == _levels.length, "length missmatch");
-      for(uint256 i=0; i<_ids.length; i++) {
-          require(XP[_ids[i]] + _levels[i] <= 10, "max level is 10");
-          require(_exists(_tokenids[i]), "nonexistent id");
-          XP[_ids[i]] += _levels[i];
-          emit XPLevelUp(_ids[i], _levels[i], XP[_ids[i]]);
-      }
-  }
-
-  function levelDownXP(address _id, uint256 _tokenId, uint256 _levels) public onlyOwner {
-      require(_exists(_tokenId), "nonexistent id");
-      XP[_id] -= _levels;
-      emit XPLevelDown(_id, _levels, XP[_id]);
-  }
-
-  function levelDownXPBatch(address[] memory _ids, uint256[] memory _tokenids, uint256[] memory _levels) public onlyOwner {
-      require(_ids.length == _levels.length, "length missmatch");
-      for(uint256 i=0; i<_ids.length; i++) {
-          require(_exists(_tokenids[i]), "nonexistent id");
-          XP[_ids[i]] -= _levels[i];
-          emit XPLevelDown(_ids[i], _levels[i], XP[_ids[i]]);
-      }
   }
 
   function _beforeTokenTransfer(
@@ -163,7 +124,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
       // we are transfering
       // reset evolutions and age?
       _wands[tokenId].evolution = 0;
-      _wands[tokenId].birth = block.timestamp;
+      _wands[tokenId].birth = uint64(block.timestamp);
     }
   }
 }

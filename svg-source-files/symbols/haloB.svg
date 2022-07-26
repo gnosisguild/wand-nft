@@ -1,9 +1,0 @@
-<symbol id="b" viewBox="0 0 210.87 420.03">
-  <style>
-    .halo {
-      fill: var(--halo);
-      stroke: var(--halo);
-    }
-  </style>
-  <path class="halo" d="M210.75,0Q181.91,217,105.43,215,29,217,.12,0L55.41,420q-21.87-164.34,50-164.66,71.91.33,50,164.66Z"/>
-</symbol>
