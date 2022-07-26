@@ -466,3 +466,59 @@ export const stoneList: Stone[] = [
     rotation: 111,
   },
 ];
+
+export function interpolateStone(stoneId: number): Stone {
+  const interpolate = (from: number, to: number, progress: number) =>
+    from + (to - from) * progress;
+
+  const [from, to, progress] = interpolationParams(stoneId);
+  const fromStone = stoneList[from];
+  const toStone = stoneList[to];
+
+  return {
+    turbFreqX: interpolate(fromStone.turbFreqX, toStone.turbFreqX, progress),
+    turbFreqY: interpolate(fromStone.turbFreqY, toStone.turbFreqY, progress),
+    turbOct: Math.round(
+      interpolate(fromStone.turbOct, toStone.turbOct, progress)
+    ),
+    redAmp: interpolate(fromStone.redAmp, toStone.redAmp, progress),
+    redExp: interpolate(fromStone.redExp, toStone.redExp, progress),
+    redOff: interpolate(fromStone.redOff, toStone.redOff, progress),
+    greenAmp: interpolate(fromStone.greenAmp, toStone.greenAmp, progress),
+    greenExp: interpolate(fromStone.greenExp, toStone.greenExp, progress),
+    greenOff: interpolate(fromStone.greenOff, toStone.greenOff, progress),
+    blueAmp: interpolate(fromStone.blueAmp, toStone.blueAmp, progress),
+    blueExp: interpolate(fromStone.blueExp, toStone.blueExp, progress),
+    blueOff: interpolate(fromStone.blueOff, toStone.blueOff, progress),
+    fractalNoise:
+      progress < 0.5 ? fromStone.fractalNoise : toStone.fractalNoise,
+    rotation: interpolate(fromStone.rotation, toStone.rotation, progress),
+  };
+}
+
+function interpolationParams(angle: number) {
+  const step = 360 / stoneCount;
+  const from = Math.floor(angle / step);
+  const midway = step * from + step / 2;
+
+  if (angle < midway) {
+    // going left
+    const to = prevIndex(from);
+    const progress = (midway - angle) / step;
+    return [from, to, progress];
+  } else {
+    // going right
+    const to = nextIndex(from);
+    const progress = (angle - midway) / step;
+    return [from, to, progress];
+  }
+}
+
+function nextIndex(index: number): number {
+  return (index + 1) % (stoneCount - 1);
+}
+function prevIndex(index: number): number {
+  return index > 0 ? index - 1 : stoneCount - 1;
+}
+
+export const stoneCount = stoneList.length;
