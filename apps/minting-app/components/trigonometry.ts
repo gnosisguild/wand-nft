@@ -75,7 +75,7 @@ export function dimensions(rect: DOMRect) {
 export function clockwiseDelta(start: number, end: number) {
   assertDegrees(start);
   assertDegrees(end);
-  if (start < end) {
+  if (start <= end) {
     return end - start;
   } else {
     return 360 - start + end;
