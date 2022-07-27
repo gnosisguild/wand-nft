@@ -67,10 +67,10 @@
 }
 .downloadButtons {
   position: absolute;
-  bottom: 1.5vw;
+  bottom: 2.1vw;
   left: 2.7vw;
   display: flex;
-  width: 9%;
-  column-gap: 6%;
+  width: 6.5%;
+  column-gap: 8%;
   max-width: 190px;
 }

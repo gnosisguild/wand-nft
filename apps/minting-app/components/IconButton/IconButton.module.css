@@ -90,8 +90,10 @@
   width: 38%;
 }
 .PfpDownload svg {
-  width: 80%;
+  width: 76%;
+  padding: 2%;
 }
 .FullDownload svg {
-  width: 80%;
+  width: 76%;
+  padding: 2%;
 }
