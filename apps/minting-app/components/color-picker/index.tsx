@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import classNames from "classnames";
 import UiCircle from "../uiCircle";
-import Slider from "./slider";
+import { BackgroundArc, HueArc } from "./slider";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
@@ -45,9 +45,6 @@ const ButtonBackground: React.FC<ButtonBgProps> = ({ className }) => {
 
 const ColorPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const [innerSlider, setInnerSlider] = useState(
-    fromLightness(state.background.color.lightness)
-  );
   const { background } = state;
 
   const handleChange = (value: Background) => {
@@ -71,24 +68,22 @@ const ColorPicker: React.FC = () => {
             opacity="0.7"
             style={{ mixBlendMode: "color-dodge" }}
           />
-          <Slider
-            wide={true}
-            value={fromHue(background.color.hue)}
-            onChange={(nextValue: number) =>
+          <HueArc
+            onChange={(nextValue: number) => {
+              console.log(nextValue);
               handleChange({
                 ...background,
                 color: {
                   ...background.color,
                   hue: toHue(nextValue),
                 },
-              })
-            }
+              });
+            }}
           />
-          <Slider
-            wide={false}
-            value={innerSlider}
+          <BackgroundArc
             onChange={(nextValue: number) => {
-              setInnerSlider(nextValue);
+              //setInnerSlider(nextValue);
+              console.log(nextValue);
               handleChange({
                 ...background,
                 color: {
