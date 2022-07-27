@@ -1,8 +1,8 @@
-import { useState } from "react";
+import React from "react";
 
 import classNames from "classnames";
 import UiCircle from "../uiCircle";
-import { BackgroundArc, HueArc } from "./slider";
+import { HueArc, LightnessArc } from "./slider";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
@@ -69,6 +69,7 @@ const ColorPicker: React.FC = () => {
             style={{ mixBlendMode: "color-dodge" }}
           />
           <HueArc
+            value={fromHue(state.background.color.hue)}
             onChange={(nextValue: number) => {
               handleChange({
                 ...background,
@@ -79,7 +80,8 @@ const ColorPicker: React.FC = () => {
               });
             }}
           />
-          <BackgroundArc
+          <LightnessArc
+            value={fromLightness(state.background.color.lightness)}
             onChange={(nextValue: number) => {
               handleChange({
                 ...background,
@@ -158,32 +160,32 @@ const ColorPicker: React.FC = () => {
 export default ColorPicker;
 
 function toHue(value: number): number {
-  return Math.round(value);
+  return Math.round(360 - value);
 }
 
 function fromHue(value: number): number {
-  return value;
+  return 360 - value;
 }
 
 const LIGHTNESS_BOUNDS = [20, 70];
 
 function toLightness(value: number): number {
   const [left, right] = LIGHTNESS_BOUNDS;
-  const stretch = right - left;
+  const spectrum = right - left;
 
   const mirrored = value < 180 ? value : 360 - value;
   // inverted progress
   const progress = 1 - mirrored / 180;
 
-  return Math.round(left + progress * stretch);
+  return Math.round(left + progress * spectrum);
 }
 
 function fromLightness(value: number): number {
   const [left, right] = LIGHTNESS_BOUNDS;
-  const stretch = right - left;
+  const spectrum = right - left;
 
   // inverted progress
-  const progress = 1 - (value - left) / stretch;
+  const progress = 1 - (value - left) / spectrum;
 
   return progress * 180;
 }

@@ -4,7 +4,8 @@ import { clockwiseDelta, dimensions, toAngle } from "./trigonometry";
 import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
 
 type Props = {
-  onChange: (angle: number) => void;
+  value?: number;
+  onDragEnd: (nextValue: number) => void;
   children: (props: ChildrenProps) => ReactNode;
 };
 
@@ -15,10 +16,10 @@ type ChildrenProps = {
 
 export type Bind = (...args: any[]) => ReactDOMAttributes;
 
-const DragRotate: React.FC<Props> = ({ children, onChange }) => {
+const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const [pin, setPin] = useState<number>(0);
-  const [rotation, setRotation] = useState<number>(0);
+  const [rotation, setRotation] = useState<number>(value);
 
   const bind = useDrag(
     ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
@@ -42,14 +43,13 @@ const DragRotate: React.FC<Props> = ({ children, onChange }) => {
       }
 
       if (last) {
-        onChange(nextRotation);
+        onDragEnd(nextRotation);
       }
     }
   );
 
   return children({
-    bind: bind,
-    ref: container,
+    bind: () => ({ ...bind(), ref: container }),
     rotation,
   });
 };
