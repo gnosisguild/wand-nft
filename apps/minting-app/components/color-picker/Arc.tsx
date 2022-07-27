@@ -1,6 +1,6 @@
 import React from "react";
-import Gradient from "./Gradient";
-import DragRotate from "../../DragRotate";
+import { HueGradient, LightnessGradient } from "./Gradient";
+import DragRotate from "../DragRotate";
 
 const SIZE = 1000;
 const HUE_MARGIN = 0.1;
@@ -15,13 +15,13 @@ export const HueArc = ({ value, onChange }: Props) => (
   <DragRotate value={value} onDragEnd={onChange}>
     {({ bind, rotation }) => (
       <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
-        <Gradient wide={true} />
+        <HueGradient />
         <path
           {...bind()}
           fill="none"
           stroke={"rgba(0,0,0,0)"}
           strokeWidth={60}
-          d={HUE_ARC_D}
+          d={HUE_D}
           style={{ touchAction: "none" }}
         />
       </g>
@@ -33,13 +33,13 @@ export const LightnessArc = ({ value, onChange }: Props) => (
   <DragRotate value={value} onDragEnd={onChange}>
     {({ bind, rotation }) => (
       <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
-        <Gradient wide={false} />
+        <LightnessGradient />
         <path
           {...bind()}
           fill="none"
-          stroke={"url(#gray-gradient)"}
+          stroke={"url(#lightness-arc-gray-gradient)"}
           strokeWidth={43}
-          d={LIGHTNESS_ARC_D}
+          d={LIGHTNESS_D}
           style={{ touchAction: "none" }}
         />
       </g>
@@ -47,8 +47,8 @@ export const LightnessArc = ({ value, onChange }: Props) => (
   </DragRotate>
 );
 
-const HUE_ARC_D = arc(SIZE, HUE_MARGIN);
-const LIGHTNESS_ARC_D = arc(SIZE, LIGHTNESS_MARGIN);
+const HUE_D = arc(SIZE, HUE_MARGIN);
+const LIGHTNESS_D = arc(SIZE, LIGHTNESS_MARGIN);
 
 function arc(size: number, margin: number) {
   const radius = (size * (1 - margin)) / 2;
