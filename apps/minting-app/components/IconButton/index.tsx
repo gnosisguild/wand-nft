@@ -16,6 +16,8 @@ import {
   Halo3,
   Halo4,
   Halo5,
+  FullDownload,
+  PfpDownload,
 } from "./Icons";
 
 interface Props {
@@ -36,7 +38,9 @@ interface Props {
     | "Halo5"
     | "PickerAura"
     | "PickerStone"
-    | "PickerHalo";
+    | "PickerHalo"
+    | "PfpDownload"
+    | "FullDownload";
 }
 
 const IconButton: React.FC<Props> = ({
@@ -74,6 +78,10 @@ const IconButton: React.FC<Props> = ({
         return <PickerStone />;
       case "PickerHalo":
         return <PickerHalo />;
+      case "PfpDownload":
+        return <PfpDownload />;
+      case "FullDownload":
+        return <FullDownload />;
       default:
         return <Light />;
     }

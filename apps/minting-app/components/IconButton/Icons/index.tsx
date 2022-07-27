@@ -11,3 +11,5 @@ export { default as Halo5 } from "./Halo5";
 export { default as PickerStone } from "./PickerStone";
 export { default as PickerAura } from "./PickerAura";
 export { default as PickerHalo } from "./PickerHalo";
+export { default as PfpDownload } from "./PfpDownload";
+export { default as FullDownload } from "./FullDownload";
