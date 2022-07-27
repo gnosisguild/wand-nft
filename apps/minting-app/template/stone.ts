@@ -469,11 +469,6 @@ export const stoneList: Stone[] = [
 ];
 
 export function interpolateStone(stoneId: number): Stone {
-  // const interpolate = (from: number, to: number, progress: number) =>
-  //   from + Math.floor(((to - from) * progress) / 100);
-  const interpolate = (from: number, to: number, progress: number) =>
-    from + ((to - from) * progress) / 100;
-
   const [from, to, progress] = unpackStoneId(stoneId);
   const fromStone = stoneList[from];
   const toStone = stoneList[to];
@@ -496,6 +491,14 @@ export function interpolateStone(stoneId: number): Stone {
     fractalNoise: progress < 50 ? fromStone.fractalNoise : toStone.fractalNoise,
     rotation: interpolate(fromStone.rotation, toStone.rotation, progress),
   };
+}
+
+function interpolate(from: number, to: number, progress: number) {
+  if (from > to) {
+    return from - Math.floor(((from - to) * progress) / 100);
+  } else {
+    return from + Math.floor(((to - from) * progress) / 100);
+  }
 }
 
 export const stoneCount = stoneList.length;
