@@ -25,15 +25,15 @@ const StonePicker: React.FC = () => {
 
   return (
     <DragRotate
-      onChange={(angle: number) => {
+      onDragEnd={(angle) => {
         dispatch({
           type: "changeStone",
           value: toStoneId(withoutSkew(angle)),
         });
       }}
     >
-      {({ ref, bind, rotation }) => (
-        <div ref={ref} className={styles.container}>
+      {({ bind, rotation }) => (
+        <div className={styles.container}>
           <div {...bind()} className={styles.drag}>
             <UiCircle rotation={rotation} showIndicator>
               <svg
