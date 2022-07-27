@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { useDrag } from "@use-gesture/react";
+import React from "react";
+import DragRotate from "../DragRotate";
 import StoneViewer from "./StoneViewer";
 import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
@@ -7,7 +7,6 @@ import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import StoneGlass from "./StoneGlass";
-import { clockwiseDelta, dimensions, toAngle } from "../trigonometry";
 import {
   describeFillers,
   describeSegments,
@@ -17,111 +16,91 @@ import StoneFilter from "./StoneFilter";
 import assert from "assert";
 
 const StonePicker: React.FC = () => {
-  const container = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useAppContext();
-  const [rotation, setRotation] = useState<number>(0);
-  const [pin, setPin] = useState<number>(0);
-
-  const bind = useDrag(
-    ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
-      const { center } = dimensions(
-        container.current?.getBoundingClientRect() as DOMRect
-      );
-
-      const delta = clockwiseDelta(
-        //drag start angle
-        toAngle(center, { x: initialX, y: initialY }),
-        //drag current angle
-        toAngle(center, { x, y })
-      );
-
-      if (first) {
-        setPin(rotation);
-      } else {
-        setRotation(pin + delta);
-      }
-
-      if (last) {
-        dispatch({
-          type: "changeStone",
-          value: Math.round(withoutSkew(pin + delta) * 10),
-        });
-      }
-    }
-  );
 
   return (
-    <div className={styles.container} ref={container}>
-      <div {...bind()} className={styles.drag}>
-        <UiCircle rotation={rotation} showIndicator>
-          <svg
-            viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
-            className={styles.haloSegmentSvg}
-          >
-            <circle
-              cy="500"
-              cx="500"
-              r="475"
-              stroke="#D9D4AD"
-              strokeWidth="16"
-              fill="none"
-              opacity="0.7"
-              style={{ mixBlendMode: "color-dodge" }}
-            />
-            {segments.map((d, index) => (
-              <g key={`${index}`}>
-                <clipPath id={`stone-clip-${index}`}>
-                  <path d={d} />
-                </clipPath>
-                <g clipPath={`url(#stone-clip-${index})`}>
-                  <StoneFilter
-                    seed={state.tokenId}
-                    stone={stoneList[index]}
-                    filterUniqueId={`stone-segment-${index}`}
-                  />
-                </g>
-              </g>
-            ))}
-            {fillers.map((d, index) => (
-              <path
-                key={index}
-                d={d}
-                fill="#D9D4AD"
-                opacity="0.7"
-                style={{ mixBlendMode: "color-dodge" }}
-              />
-            ))}
-            {segmentCenters.map(({ x, y }, index) => (
-              <g key={index} clipPath={`url(#stone-clip-${index})`}>
+    <DragRotate
+      onChange={(angle: number) => {
+        dispatch({
+          type: "changeStone",
+          value: Math.round(withoutSkew(angle) * 10),
+        });
+      }}
+    >
+      {({ bind, rotation }) => (
+        <div className={styles.container}>
+          <div {...bind()} className={styles.drag}>
+            <UiCircle rotation={rotation} showIndicator>
+              <svg
+                viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
+                className={styles.haloSegmentSvg}
+              >
                 <circle
-                  cx={x}
-                  cy={y}
-                  r={300}
-                  filter={`url(#stone-segment-${index})`}
-                  style={{
-                    transform: "scale(0.15)",
-                    transformBox: "fill-box",
-                    transformOrigin: "center",
-                  }}
+                  cy="500"
+                  cx="500"
+                  r="475"
+                  stroke="#D9D4AD"
+                  strokeWidth="16"
+                  fill="none"
+                  opacity="0.7"
+                  style={{ mixBlendMode: "color-dodge" }}
                 />
+                {segments.map((d, index) => (
+                  <g key={`${index}`}>
+                    <clipPath id={`stone-clip-${index}`}>
+                      <path d={d} />
+                    </clipPath>
+                    <g clipPath={`url(#stone-clip-${index})`}>
+                      <StoneFilter
+                        seed={state.tokenId}
+                        stone={stoneList[index]}
+                        filterUniqueId={`stone-segment-${index}`}
+                      />
+                    </g>
+                  </g>
+                ))}
+                {fillers.map((d, index) => (
+                  <path
+                    key={index}
+                    d={d}
+                    fill="#D9D4AD"
+                    opacity="0.7"
+                    style={{ mixBlendMode: "color-dodge" }}
+                  />
+                ))}
+                {segmentCenters.map(({ x, y }, index) => (
+                  <g key={index} clipPath={`url(#stone-clip-${index})`}>
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={300}
+                      filter={`url(#stone-segment-${index})`}
+                      style={{
+                        transform: "scale(0.15)",
+                        transformBox: "fill-box",
+                        transformOrigin: "center",
+                      }}
+                    />
 
-                <path d={segments[index]} fill="rgba(200,200,200,0.4)" />
-              </g>
-            ))}
-          </svg>
-        </UiCircle>
-      </div>
-      <div className={styles.stone}>
-        <StoneViewer
-          seed={state.tokenId}
-          stone={interpolateStone(Math.round(withoutSkew(rotation) * 10))}
-        />
-        <StoneGlass />
-      </div>
-      <div className={styles.icon}>
-        <IconButton icon="PickerStone" shadow />
-      </div>
-    </div>
+                    <path d={segments[index]} fill="rgba(200,200,200,0.4)" />
+                  </g>
+                ))}
+              </svg>
+            </UiCircle>
+          </div>
+          <div className={styles.stone}>
+            <StoneViewer
+              seed={state.tokenId}
+              stone={interpolateStone(withoutSkew(rotation) * 10)}
+            />
+            <StoneGlass />
+          </div>
+          <div className={styles.icon}>
+            <IconButton icon="PickerStone" shadow />
+          </div>
+        </div>
+      )}
+    </DragRotate>
   );
 };
 
