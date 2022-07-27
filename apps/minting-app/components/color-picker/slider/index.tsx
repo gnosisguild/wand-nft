@@ -3,73 +3,52 @@ import Gradient from "./Gradient";
 import DragRotate from "../../DragRotate";
 
 const SIZE = 1000;
-const WIDE_MARGIN = 0.1;
-const NARROW_MARGIN = 0.5;
-
-const CONFIG = {
-  WIDE: {
-    size: SIZE,
-    radius: (SIZE * (1 - WIDE_MARGIN)) / 2,
-    center: { x: SIZE / 2, y: SIZE / 2 },
-    d: arc(SIZE, WIDE_MARGIN),
-  },
-  NARROW: {
-    size: SIZE,
-    radius: (SIZE * (1 - NARROW_MARGIN)) / 2,
-    center: { x: SIZE / 2, y: SIZE / 2 },
-    d: arc(SIZE, NARROW_MARGIN),
-  },
-};
+const HUE_MARGIN = 0.1;
+const LIGHTNESS_MARGIN = 0.5;
 
 interface Props {
-  wide: boolean;
   value: number;
   onChange: (nextValue: number) => void;
 }
 
-interface Props2 {
-  onChange: (nextValue: number) => void;
-}
+export const HueArc = ({ value, onChange }: Props) => (
+  <DragRotate value={value} onDragEnd={onChange}>
+    {({ bind, rotation }) => (
+      <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
+        <Gradient wide={true} />
+        <path
+          {...bind()}
+          fill="none"
+          stroke={"rgba(0,0,0,0)"}
+          strokeWidth={60}
+          d={HUE_ARC_D}
+          style={{ touchAction: "none" }}
+        />
+      </g>
+    )}
+  </DragRotate>
+);
 
-export const HueArc = ({ onChange }: Props2) => {
-  return (
-    <DragRotate onChange={onChange}>
-      {({ ref, bind, rotation }) => {
-        return (
-          <g ref={ref} transform={`rotate(${rotation}, 500, 500)`}>
-            <Gradient wide={true} />
-            <path
-              {...bind()}
-              fill="none"
-              stroke={"rgba(0,0,0,0)"}
-              strokeWidth={60}
-              d={CONFIG.WIDE.d}
-            />
-          </g>
-        );
-      }}
-    </DragRotate>
-  );
-};
+export const LightnessArc = ({ value, onChange }: Props) => (
+  <DragRotate value={value} onDragEnd={onChange}>
+    {({ bind, rotation }) => (
+      <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
+        <Gradient wide={false} />
+        <path
+          {...bind()}
+          fill="none"
+          stroke={"url(#gray-gradient)"}
+          strokeWidth={43}
+          d={LIGHTNESS_ARC_D}
+          style={{ touchAction: "none" }}
+        />
+      </g>
+    )}
+  </DragRotate>
+);
 
-export const BackgroundArc = ({ onChange }: Props2) => {
-  return (
-    <DragRotate onChange={onChange}>
-      {({ ref, bind, rotation }) => (
-        <g ref={ref} transform={`rotate(${rotation}, 500, 500)`}>
-          <Gradient wide={false} />
-          <path
-            {...bind()}
-            fill="none"
-            stroke={"url(#gray-gradient)"}
-            strokeWidth={43}
-            d={CONFIG.NARROW.d}
-          />
-        </g>
-      )}
-    </DragRotate>
-  );
-};
+const HUE_ARC_D = arc(SIZE, HUE_MARGIN);
+const LIGHTNESS_ARC_D = arc(SIZE, LIGHTNESS_MARGIN);
 
 function arc(size: number, margin: number) {
   const radius = (size * (1 - margin)) / 2;
