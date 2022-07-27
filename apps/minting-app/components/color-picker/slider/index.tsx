@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { useDrag } from "@use-gesture/react";
 
-import Knob from "./Knob";
 import Gradient from "./Gradient";
 import {
   findClosestInCircumference,
@@ -69,16 +68,13 @@ const Slider = ({ wide, value, onChange }: Props) => {
         ref={arcRef}
         fill="none"
         stroke={wide ? "rgba(0,0,0,0)" : "url(#gray-gradient)"}
-        strokeWidth={wide ? 60 : 25}
+        strokeWidth={wide ? 60 : 43}
         d={d}
         onClick={(event: React.MouseEvent<SVGPathElement>) => {
           event.preventDefault();
           moveTo({ x: event.clientX, y: event.clientY });
         }}
       />
-      <g {...bind()}>
-        <Knob x={x} y={y} />
-      </g>
     </>
   );
 };
