@@ -58,8 +58,8 @@ const StonePicker: React.FC = () => {
         })
       }
     >
-      {({ bind, rotation }) => (
-        <div className={styles.container}>
+      {({ ref, bind, rotation }) => (
+        <div ref={ref} className={styles.container}>
           <div {...bind()} className={styles.drag}>
             <UiCircle rotation={rotation} showIndicator>
               <svg
