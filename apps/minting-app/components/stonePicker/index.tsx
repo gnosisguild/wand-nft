@@ -49,7 +49,7 @@ const StonePicker: React.FC = () => {
       if (last) {
         dispatch({
           type: "changeStone",
-          value: 0, //interpolateStoneParams(withoutSkew(pin + delta)),
+          value: toStoneId(withoutSkew(pin + delta)),
         });
       }
     }
