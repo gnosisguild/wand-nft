@@ -7,6 +7,7 @@ import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
 import { Background } from "../../types";
+import uiCirclebg from "../uiCircle/uiCirclebg.jpg";
 
 interface ButtonBgProps {
   className: string;
@@ -61,6 +62,17 @@ const ColorPicker: React.FC = () => {
     <div>
       <UiCircle>
         <svg viewBox={`0 0 1000 1000`} className={styles.svg}>
+          <image width="1000" height="1000" href={uiCirclebg.src} />
+          <circle
+            cy="500"
+            cx="500"
+            r="475"
+            stroke="#D9D4AD"
+            strokeWidth="16"
+            fill="none"
+            opacity="0.7"
+            style={{ mixBlendMode: "color-dodge" }}
+          />
           <Slider
             wide={true}
             value={fromHue(background.color.hue)}
