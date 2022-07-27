@@ -1,14 +1,6 @@
-import React, { useRef } from "react";
-import { useDrag } from "@use-gesture/react";
-
+import React from "react";
 import Gradient from "./Gradient";
-import {
-  findClosestInCircumference,
-  toAngle,
-  toPosition,
-  dimensions,
-  Point,
-} from "../../trigonometry";
+import DragRotate from "../../DragRotate";
 
 const SIZE = 1000;
 const WIDE_MARGIN = 0.1;
@@ -35,51 +27,47 @@ interface Props {
   onChange: (nextValue: number) => void;
 }
 
-const Slider = ({ wide, value, onChange }: Props) => {
-  const arcRef = useRef<SVGPathElement | null>(null);
+interface Props2 {
+  onChange: (nextValue: number) => void;
+}
 
-  // virtual coordinates, SVG modeling unscaled virtual coordinates
-  const { center, radius, d } = wide ? CONFIG.WIDE : CONFIG.NARROW;
-
-  function moveTo(point: Point) {
-    // real coordinates, coming from the DOM
-    const { center, width } = dimensions(
-      arcRef.current?.getBoundingClientRect() as DOMRect
-    );
-
-    const radius = width / 2;
-
-    onChange(
-      toAngle(center, findClosestInCircumference(center, radius, point))
-    );
-  }
-
-  const bind = useDrag(({ xy: [x, y] }) => {
-    moveTo({ x, y });
-  });
-
-  // virtual coordinates, SVG modeling unscaled virtual coordinates
-  const { x, y } = toPosition(center, radius, value);
-
+export const HueArc = ({ onChange }: Props2) => {
   return (
-    <>
-      <Gradient wide={wide} />
-      <path
-        ref={arcRef}
-        fill="none"
-        stroke={wide ? "rgba(0,0,0,0)" : "url(#gray-gradient)"}
-        strokeWidth={wide ? 60 : 43}
-        d={d}
-        onClick={(event: React.MouseEvent<SVGPathElement>) => {
-          event.preventDefault();
-          moveTo({ x: event.clientX, y: event.clientY });
-        }}
-      />
-    </>
+    <DragRotate onChange={onChange}>
+      {({ bind, rotation }) => (
+        <g transform={`rotate(${rotation}, 500, 500)`}>
+          <Gradient wide={true} />
+          <path
+            {...bind()}
+            fill="none"
+            stroke={"rgba(0,0,0,0)"}
+            strokeWidth={60}
+            d={CONFIG.WIDE.d}
+          />
+        </g>
+      )}
+    </DragRotate>
   );
 };
 
-export default Slider;
+export const BackgroundArc = ({ onChange }: Props2) => {
+  return (
+    <DragRotate onChange={onChange}>
+      {({ bind, rotation }) => (
+        <g transform={`rotate(${rotation}, 500, 500)`}>
+          <Gradient wide={false} />
+          <path
+            {...bind()}
+            fill="none"
+            stroke={"url(#gray-gradient)"}
+            strokeWidth={43}
+            d={CONFIG.NARROW.d}
+          />
+        </g>
+      )}
+    </DragRotate>
+  );
+};
 
 function arc(size: number, margin: number) {
   const radius = (size * (1 - margin)) / 2;
