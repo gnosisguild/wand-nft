@@ -70,7 +70,6 @@ const ColorPicker: React.FC = () => {
           />
           <HueArc
             onChange={(nextValue: number) => {
-              console.log(nextValue);
               handleChange({
                 ...background,
                 color: {
@@ -82,8 +81,6 @@ const ColorPicker: React.FC = () => {
           />
           <BackgroundArc
             onChange={(nextValue: number) => {
-              //setInnerSlider(nextValue);
-              console.log(nextValue);
               handleChange({
                 ...background,
                 color: {
