@@ -33,20 +33,23 @@ const DragRotate: React.FC<Props> = ({ children, onChange }) => {
         toAngle(center, { x, y })
       );
 
+      const nextRotation = (pin + delta) % 360;
+
       if (first) {
         setPin(rotation);
       } else {
-        setRotation(pin + delta);
+        setRotation(nextRotation);
       }
 
       if (last) {
-        onChange(pin + delta);
+        onChange(nextRotation);
       }
     }
   );
 
   return children({
-    bind: () => ({ ...bind(), ref: container }),
+    bind: bind,
+    ref: container,
     rotation,
   });
 };

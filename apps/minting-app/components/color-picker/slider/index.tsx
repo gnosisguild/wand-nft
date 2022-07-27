@@ -34,18 +34,20 @@ interface Props2 {
 export const HueArc = ({ onChange }: Props2) => {
   return (
     <DragRotate onChange={onChange}>
-      {({ bind, rotation }) => (
-        <g transform={`rotate(${rotation}, 500, 500)`}>
-          <Gradient wide={true} />
-          <path
-            {...bind()}
-            fill="none"
-            stroke={"rgba(0,0,0,0)"}
-            strokeWidth={60}
-            d={CONFIG.WIDE.d}
-          />
-        </g>
-      )}
+      {({ ref, bind, rotation }) => {
+        return (
+          <g ref={ref} transform={`rotate(${rotation}, 500, 500)`}>
+            <Gradient wide={true} />
+            <path
+              {...bind()}
+              fill="none"
+              stroke={"rgba(0,0,0,0)"}
+              strokeWidth={60}
+              d={CONFIG.WIDE.d}
+            />
+          </g>
+        );
+      }}
     </DragRotate>
   );
 };
@@ -53,8 +55,8 @@ export const HueArc = ({ onChange }: Props2) => {
 export const BackgroundArc = ({ onChange }: Props2) => {
   return (
     <DragRotate onChange={onChange}>
-      {({ bind, rotation }) => (
-        <g transform={`rotate(${rotation}, 500, 500)`}>
+      {({ ref, bind, rotation }) => (
+        <g ref={ref} transform={`rotate(${rotation}, 500, 500)`}>
           <Gradient wide={false} />
           <path
             {...bind()}
