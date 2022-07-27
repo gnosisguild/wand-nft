@@ -16,7 +16,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   event WandBuilt(
     uint256 indexed tokenId,
-    uint8 stone,
+    uint32 stone,
     uint8 handle,
     uint16 halo,
     Template.Background background,
@@ -36,7 +36,7 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
 
   function build(
     uint256 tokenId,
-    uint8 stone,
+    uint32 stone,
     uint8 handle,
     uint16 halo,
     Template.Background memory background,
