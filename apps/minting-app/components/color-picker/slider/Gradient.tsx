@@ -680,7 +680,11 @@ const Gradient: React.FC<Props> = ({ wide }) =>
           <stop offset="100%" stopColor="hsl(1048,100%,50%)"></stop>
         </linearGradient>
       </defs>
-      <g fill="none" strokeWidth="8" transform="translate(100,100)">
+      <g
+        fill="none"
+        strokeWidth="10"
+        transform="translate(100,100) scale(0.954)"
+      >
         <path
           d="M 0.000,-100.000 A 100,100 0 0,1 30.003,-95.393"
           stroke="url(#wheelseg1)"
