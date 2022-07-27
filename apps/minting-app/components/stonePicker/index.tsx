@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDrag } from "@use-gesture/react";
 import StoneViewer from "./StoneViewer";
 import { stoneList } from "../../template";
@@ -48,13 +48,16 @@ const fillers = describeFillers(stoneList.length, CONFIG.filler);
 const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
 
 const StonePicker: React.FC = () => {
+  const container = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useAppContext();
   const [pin, setPin] = useState<number>(stoneIndexToAngle(state.stone));
   const [rotation, setRotation] = useState<number>(0);
 
   const bind = useDrag(
-    ({ first, last, initial: [initialX, initialY], xy: [x, y], target }) => {
-      const { center } = dimensions(target.getBoundingClientRect());
+    ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
+      const { center } = dimensions(
+        container.current?.getBoundingClientRect() as DOMRect
+      );
 
       const delta = clockwiseDelta(
         //drag start angle
@@ -79,7 +82,7 @@ const StonePicker: React.FC = () => {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={container}>
       <div {...bind()} className={styles.drag}>
         <UiCircle rotation={rotation} showIndicator>
           <svg
