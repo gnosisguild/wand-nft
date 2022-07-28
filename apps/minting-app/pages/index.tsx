@@ -26,6 +26,7 @@ import ColorPicker from "../components/color-picker";
 import MintButton from "../components/MintButton";
 import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
+import IconButton from "../components/IconButton";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -58,6 +59,11 @@ const Home: NextPage = () => {
           <div className={styles.haloPicker}>
             <HaloPicker />
           </div>
+        </div>
+
+        <div className={styles.downloadButtons}>
+          <IconButton icon="FullDownload" />
+          <IconButton icon="PfpDownload" />
         </div>
       </main>
     </div>

@@ -65,3 +65,12 @@
 .iconTest {
   display: flex;
 }
+.downloadButtons {
+  position: absolute;
+  bottom: 2.1vw;
+  left: 2.7vw;
+  display: flex;
+  width: 6.5%;
+  column-gap: 8%;
+  max-width: 190px;
+}
