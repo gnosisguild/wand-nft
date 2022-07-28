@@ -21,19 +21,18 @@ contract Forge is Ownable, IForge {
   function forgePortal(uint256 _id, uint256 _amount) public {
     require(wand.ownerOf(_id) == msg.sender);
     Character memory temp = characters[msg.sender];
+    uint256 availableXP = temp.XP - temp.XPAssigned;
     // ensure that this account has XP left to assign
-    require((temp.XP - temp.XPAssigned) > 0);
-    require((temp.XP - temp.XPAssigned) >= _amount);
+    require(availableXP > 0);
+    require(availableXP >= _amount);
     characters[msg.sender].XPAssigned += _amount;
 
-    if(temp.XP > 1000) {
-      iLvl[_id] = 1;
-    } else if(temp.XP > 5000) {
-      iLvl[_id] = 2;
-    } else if (temp.XP > 10000) {
-      iLvl[_id] = 3;
-    } else {
-      iLvl[_id] = 0;
+    if(_amount > 1000) {
+      iLvl[_id] += 1;
+    } else if(_amount > 5000) {
+      iLvl[_id] += 2;
+    } else if (_amount > 10000) {
+      iLvl[_id] += 3;
     }
   }
 
