@@ -476,9 +476,7 @@ export function interpolateStone(stoneId: number): Stone {
   return {
     turbFreqX: interpolate(fromStone.turbFreqX, toStone.turbFreqX, progress),
     turbFreqY: interpolate(fromStone.turbFreqY, toStone.turbFreqY, progress),
-    turbOct: Math.round(
-      interpolate(fromStone.turbOct, toStone.turbOct, progress)
-    ),
+    turbOct: interpolate(fromStone.turbOct, toStone.turbOct, progress),
     redAmp: interpolate(fromStone.redAmp, toStone.redAmp, progress),
     redExp: interpolate(fromStone.redExp, toStone.redExp, progress),
     redOff: interpolate(fromStone.redOff, toStone.redOff, progress),
