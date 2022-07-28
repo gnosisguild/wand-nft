@@ -26,7 +26,7 @@ const StonePicker: React.FC = () => {
 
   return (
     <DragRotate value={0} onDragEnd={onChange}>
-      {({ bind, rotation, dragging }) => (
+      {({ bind, rotation, hovering, dragging }) => (
         <div className={styles.container}>
           <div {...bind()} className={styles.drag}>
             <UiCircle rotation={rotation} showIndicator>
