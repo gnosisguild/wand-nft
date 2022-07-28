@@ -237,12 +237,13 @@ const throttle = <T extends (...args: any) => void>(
   };
 };
 
-const rootEl =
-  typeof document !== "undefined" &&
-  (document.querySelector(":root") as HTMLElement);
 const imperativelyUpdateSvg = (background: Background): void => {
-  if (!rootEl) return;
-  rootEl.style.setProperty("--bg-hue", `${background.color.hue}`);
-  rootEl.style.setProperty("--bg-sat", `${background.color.saturation}%`);
-  rootEl.style.setProperty("--bg-lit", `${background.color.lightness}%`);
+  // for dark radial
+  const gradp = document.getElementById("gradp");
+  const stop0 = document.getElementById("grad0")?.children[0] as SVGElement;
+  const stop1 = document.getElementById("grad0")?.children[1] as SVGElement;
+  if (!gradp || !stop0 || !stop1) throw new Error("invariant violation");
+  gradp.style.fill = `hsl(${background.color.hue}, 30%, 7%)`;
+  stop0.style.stopColor = `hsl(${background.color.hue}, ${background.color.saturation}%, ${background.color.lightness}%)`;
+  stop1.style.stopColor = `hsla(${background.color.hue}, ${background.color.saturation}%, ${background.color.lightness}%, 0)`;
 };

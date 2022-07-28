@@ -58,7 +58,6 @@ const Slider = ({ wide, value, onChange, onRelease }: Props) => {
     const angle = calculateAngle({ x, y });
     onChange(angle);
     if (!pressed) {
-      console.log("released");
       onRelease(angle);
     }
   });
