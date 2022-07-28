@@ -16,20 +16,21 @@
   inset: 0.5vw;
   width: 99vw;
   height: 99vh;
+  padding: 2% 0 0%;
 }
 
 .centerContainer {
   position: relative;
   display: block;
-  width: 47%;
+  max-width: 61%;
   margin: 0 auto;
-  max-width: 1000px;
-  padding: 2% 0 2%;
+  max-height: 82vh;
+  aspect-ratio: 1 / 0.9502813647;
 }
 
 .svgPreview {
   position: absolute;
-  top: 16%;
+  top: 13%;
   left: 0;
   width: 100%;
 }
@@ -45,22 +46,31 @@
 
 .colorPicker {
   position: absolute;
-  left: 3.2%;
-  top: 65.7%;
+  left: 3%;
+  top: 50.8%;
 }
 
 .haloPicker {
   position: absolute;
   left: 37.5%;
-  top: 71.9%;
+  top: 69.6%;
 }
 
 .stonePicker {
   position: absolute;
-  left: 71.8%;
-  top: 65.5%;
+  left: 72.1%;
+  top: 50.8%;
 }
 
 .iconTest {
   display: flex;
+}
+.downloadButtons {
+  position: absolute;
+  bottom: 2.1vw;
+  left: 2.7vw;
+  display: flex;
+  width: 6.5%;
+  column-gap: 8%;
+  max-width: 190px;
 }

@@ -1,0 +1,21 @@
+.labels svg {
+  width: 9%;
+}
+
+.auraLabel {
+  position: absolute;
+  top: 46.5%;
+  left: 11%;
+}
+
+.haloLabel {
+  position: absolute;
+  top: 65.4%;
+  left: 45.6%;
+}
+
+.stoneLabel {
+  position: absolute;
+  top: 46.5%;
+  right: 11%;
+}

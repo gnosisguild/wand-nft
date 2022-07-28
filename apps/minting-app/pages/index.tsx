@@ -18,13 +18,15 @@ import {
   generateSparkles,
   scaleAspects,
   scalePlanets,
-  stoneList,
+  interpolateStone,
   xp,
 } from "../template";
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
 import MintButton from "../components/MintButton";
 import bgImage from "../public/test-bg-small.jpg";
+import PickerLabels from "../components/PickerLabels";
+import IconButton from "../components/IconButton";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -74,7 +76,7 @@ const Home: NextPage = () => {
       filterLayers,
       sparkles,
       seed: state.tokenId,
-      stone: stoneList[state.stone],
+      stone: interpolateStone(state.stone),
       xp,
       handle: generateHandle(state.handle),
     }),
@@ -106,6 +108,7 @@ const Home: NextPage = () => {
         <div className={styles.centerContainer}>
           <CenterGilding />
           <MintButton />
+          <PickerLabels />
           <div className={styles.svgPreview}>
             <SvgTemplate input={input} />
           </div>
@@ -118,6 +121,11 @@ const Home: NextPage = () => {
           <div className={styles.haloPicker}>
             <HaloPicker />
           </div>
+        </div>
+
+        <div className={styles.downloadButtons}>
+          <IconButton icon="FullDownload" />
+          <IconButton icon="PfpDownload" />
         </div>
       </main>
     </div>

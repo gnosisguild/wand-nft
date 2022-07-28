@@ -2,10 +2,22 @@ import { ReactNode } from "react";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 
-const UiCircle: React.FC<{ children: ReactNode }> = ({ children }) => {
+type Props = {
+  rotation?: number;
+  showIndicator?: boolean;
+};
+
+const UiCircle: React.FC<Props> = ({
+  children,
+  rotation = 0,
+  showIndicator = false,
+}) => {
   return (
     <div className={styles.containerCircle}>
       <svg
+        style={{
+          transform: `rotate(${rotation}deg)`,
+        }}
         viewBox="0 0 120 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -59,6 +71,17 @@ const UiCircle: React.FC<{ children: ReactNode }> = ({ children }) => {
             fill="none"
           />
         </g>
+        {showIndicator && (
+          <g style={{ mixBlendMode: "color-dodge" }}>
+            <path
+              d="M83.2818 103.153C76.0924 107.142 68.0007 109.222 59.7787 109.196C51.5568 109.169 43.4788 107.036 36.3154 103"
+              stroke="#B3AC79"
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
+            <circle cx="60" cy="11" r="2.5" fill="#B2AC79" />
+          </g>
+        )}
         <defs>
           <pattern
             id="pattern0"

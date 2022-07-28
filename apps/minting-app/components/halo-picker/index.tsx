@@ -2,28 +2,47 @@ import classNames from "classnames";
 import styles from "./HaloPicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
-import {
-  VIEWBOX_SIZE,
-  SEGMENTS_WIDE,
-  SEGMENTS_NARROW,
-  FILLERS_NARROW,
-  FILLERS_WIDE,
-} from "./rhythm";
+import { describeSegments, describeFillers } from "../rhythm";
 import { Halo } from "../../types";
 import { isWideShape } from "../../template";
 import IconButton from "../IconButton";
+
+const VIEWBOX_SIZE = 1000;
+const CONFIG = {
+  SEGMENT: {
+    percBorder: 0.041,
+    percThickness: 0.048,
+    percSkew: 0.5,
+    gapInDegrees: 2,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+  FILLER: {
+    percBorder: 0.031,
+    percThickness: 0.07,
+    percSkew: 0.5,
+    spanInDegrees: 2,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+};
+
+const WIDE = [
+  describeSegments(12, CONFIG.SEGMENT),
+  describeFillers(12, CONFIG.FILLER),
+];
+const NARROW = [
+  describeSegments(24, CONFIG.SEGMENT),
+  describeFillers(24, CONFIG.FILLER),
+];
 
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { halo } = state;
   const isWide = isWideShape(halo.shape);
-  const [segments, fillers] = isWide
-    ? [SEGMENTS_WIDE, FILLERS_WIDE]
-    : [SEGMENTS_NARROW, FILLERS_NARROW];
+  const [segments, fillers] = isWide ? WIDE : NARROW;
 
   return (
-    <div>
+    <>
       <UiCircle>
         <svg
           viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
@@ -91,7 +110,7 @@ const HaloPicker: React.FC = () => {
       <div className={styles.icon}>
         <IconButton icon="PickerHalo" shadow />
       </div>
-    </div>
+    </>
   );
 };
 

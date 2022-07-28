@@ -21,7 +21,7 @@ interface IWands is IERC721 {
 
   struct Wand {
     bool built;
-    uint8 stone;
+    uint32 stone;
     uint8 handle;
     uint16 halo;
     uint32 evolution;
@@ -33,7 +33,7 @@ interface IWands is IERC721 {
 
   function build(
     uint256 tokenId,
-    uint8 stone,
+    uint32 stone,
     uint8 handle,
     uint16 halo,
     Template.Background memory background,

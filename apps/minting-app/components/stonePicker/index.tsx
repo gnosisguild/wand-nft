@@ -1,125 +1,128 @@
-import { useRef, useState } from "react";
-import Draggable from "react-draggable";
+import { useState, useRef } from "react";
+import { useDrag } from "@use-gesture/react";
 import StoneViewer from "./StoneViewer";
-import { stoneList } from "../../template";
+import {
+  interpolateStone,
+  stoneList,
+  stoneCount,
+  packStoneId,
+} from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
-
-import uiCirclebg from "../uiCircle/uiCirclebg.jpg";
-
-const DraggableNoType: any = Draggable;
-
-const randomStonePosision = () => {
-  const stoneWidth = 18;
-  const angle = Math.random() * Math.PI * 2;
-  const r = 41 * Math.sqrt(Math.random());
-  const x = 41 + r * Math.cos(angle);
-  const y = 41 + r * Math.sin(angle);
-
-  return { top: `${y}%`, left: `${x}%` };
-};
+import StoneGlass from "./StoneGlass";
+import { clockwiseDelta, dimensions, toAngle } from "../trigonometry";
+import {
+  describeFillers,
+  describeSegments,
+  findSegmentCenters,
+} from "../rhythm";
+import StoneFilter from "./StoneFilter";
+import assert from "assert";
 
 const StonePicker: React.FC = () => {
+  const container = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useAppContext();
-  const [stonesWithPosition, setStonesWithPosition] = useState(
-    stoneList.map((stone, id) => {
-      return { id, position: randomStonePosision() };
-    })
+  const [rotation, setRotation] = useState<number>(0);
+  const [pin, setPin] = useState<number>(0);
+
+  const bind = useDrag(
+    ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
+      const { center } = dimensions(
+        container.current?.getBoundingClientRect() as DOMRect
+      );
+
+      const delta = clockwiseDelta(
+        //drag start angle
+        toAngle(center, { x: initialX, y: initialY }),
+        //drag current angle
+        toAngle(center, { x, y })
+      );
+
+      if (first) {
+        setPin(rotation);
+      } else {
+        setRotation(pin + delta);
+      }
+
+      if (last) {
+        dispatch({
+          type: "changeStone",
+          value: toStoneId(withoutSkew(pin + delta)),
+        });
+      }
+    }
   );
-  const nodeRef = useRef(null);
 
   return (
-    <div className={styles.stoneBag}>
-      <UiCircle>
-        <svg
-          viewBox="0 0 120 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={styles.bgCircle}
-        >
-          <defs>
-            <linearGradient
-              id="bg_grad"
-              x1="60"
-              y1="3.28491"
-              x2="60"
-              y2="118.027"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#EFEBCE" stopOpacity="0.5" />
-              <stop offset="1" stopColor="#EFEBCE" />
-            </linearGradient>
-            <pattern
-              id="pattern0"
-              patternContentUnits="objectBoundingBox"
-              width="1"
-              height="1"
-            >
-              <use
-                xlinkHref="#image0_616_1329"
-                transform="translate(-0.0166667) scale(0.00123457)"
-              />
-            </pattern>
-            <image
-              id="image0_616_1329"
-              width="837"
-              height="810"
-              href={uiCirclebg.src}
+    <div className={styles.container} ref={container}>
+      <div {...bind()} className={styles.drag}>
+        <UiCircle rotation={rotation} showIndicator>
+          <svg
+            viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
+            className={styles.haloSegmentSvg}
+          >
+            <circle
+              cy="500"
+              cx="500"
+              r="475"
+              stroke="#D9D4AD"
+              strokeWidth="16"
+              fill="none"
+              opacity="0.7"
+              style={{ mixBlendMode: "color-dodge" }}
             />
-          </defs>
-          <circle
-            cx="60"
-            cy="60"
-            r="58"
-            fill="url(#pattern0)"
-            fillOpacity="0.8"
-          />
-          <circle
-            cx="60"
-            cy="60"
-            r="52"
-            stroke="url(#bg_grad)"
-            strokeWidth="5"
-            opacity="0.4"
-            style={{ mixBlendMode: "color-dodge" }}
-          />
-          <circle
-            cx="60"
-            cy="60"
-            r="57"
-            stroke="url(#bg_grad)"
-            strokeWidth="2"
-            opacity="0.4"
-            style={{ mixBlendMode: "color-dodge" }}
-          />
-        </svg>
-        <div className={styles.stoneContainer}>
-          <ul>
-            {stonesWithPosition.map(({ id, position }) => (
-              <DraggableNoType key={id} bounds="parent" nodeRef={nodeRef}>
-                <li
-                  ref={nodeRef}
-                  onClick={(e) => {
-                    switch (e.detail) {
-                      case 2:
-                        // double click
-                        dispatch({ type: "changeStone", value: id });
-                        break;
-                      default:
-                        return;
-                    }
-                  }}
-                  style={position}
-                >
-                  <StoneViewer seed={state.tokenId} id={id} />
-                </li>
-              </DraggableNoType>
+            {segments.map((d, index) => (
+              <g key={`${index}`}>
+                <clipPath id={`stone-clip-${index}`}>
+                  <path d={d} />
+                </clipPath>
+                <g clipPath={`url(#stone-clip-${index})`}>
+                  <StoneFilter
+                    seed={state.tokenId}
+                    stone={stoneList[index]}
+                    filterUniqueId={`stone-segment-${index}`}
+                  />
+                </g>
+              </g>
             ))}
-          </ul>
-        </div>
-      </UiCircle>
+            {fillers.map((d, index) => (
+              <path
+                key={index}
+                d={d}
+                fill="#D9D4AD"
+                opacity="0.7"
+                style={{ mixBlendMode: "color-dodge" }}
+              />
+            ))}
+            {segmentCenters.map(({ x, y }, index) => (
+              <g key={index} clipPath={`url(#stone-clip-${index})`}>
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={300}
+                  filter={`url(#stone-segment-${index})`}
+                  style={{
+                    transform: "scale(0.15)",
+                    transformBox: "fill-box",
+                    transformOrigin: "center",
+                  }}
+                />
+
+                <path d={segments[index]} fill="rgba(200,200,200,0.4)" />
+              </g>
+            ))}
+          </svg>
+        </UiCircle>
+      </div>
+      <div className={styles.stone}>
+        <StoneViewer
+          seed={state.tokenId}
+          stone={interpolateStone(toStoneId(withoutSkew(rotation)))}
+        />
+        <StoneGlass />
+      </div>
       <div className={styles.icon}>
         <IconButton icon="PickerStone" shadow />
       </div>
@@ -128,3 +131,64 @@ const StonePicker: React.FC = () => {
 };
 
 export default StonePicker;
+
+const VIEWBOX_SIZE = 1000;
+
+const CONFIG = {
+  segment: {
+    percBorder: 0.041,
+    percThickness: 0.048,
+    percSkew: 0.5,
+    gapInDegrees: 2,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+  filler: {
+    percBorder: 0.031,
+    percThickness: 0.07,
+    percSkew: 0.5,
+    spanInDegrees: 1,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+  pointer: {
+    percBorder: 0.037,
+    percThickness: 0.054,
+    viewBoxSize: VIEWBOX_SIZE,
+  },
+};
+
+const segments = describeSegments(stoneCount, CONFIG.segment);
+const fillers = describeFillers(stoneCount, CONFIG.filler);
+const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
+
+function withoutSkew(angle: number) {
+  const step = 360 / stoneCount;
+  return Math.round(angle + step * CONFIG.segment.percSkew) % 360;
+}
+
+function withSkew(angle: number) {
+  const step = 360 / stoneCount;
+  const result = angle - step * CONFIG.segment.percSkew;
+  assert(result >= 0);
+  return result;
+}
+
+export function toStoneId(angle: number) {
+  const prevStone = (index: number) => (index > 0 ? index - 1 : stoneCount - 1);
+  const nextStone = (index: number) => (index + 1) % stoneCount;
+
+  const step = 360 / stoneCount;
+  const from = Math.floor(angle / step);
+  const midway = step * from + step / 2;
+
+  if (angle < midway) {
+    // going left
+    const to = prevStone(from);
+    const progress = Math.round(((midway - angle) / step) * 100);
+    return packStoneId(from, to, progress);
+  } else {
+    // going right
+    const to = nextStone(from);
+    const progress = Math.round(((angle - midway) / step) * 100);
+    return packStoneId(from, to, progress);
+  }
+}
