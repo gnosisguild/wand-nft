@@ -1,5 +1,5 @@
 import { useState, useRef, ReactNode } from "react";
-import { useDrag } from "@use-gesture/react";
+import { useGesture } from "@use-gesture/react";
 import { clockwiseDelta, dimensions, toAngle } from "./trigonometry";
 import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
 
@@ -11,6 +11,7 @@ type Props = {
 
 type ChildrenProps = {
   bind: (...args: any[]) => ReactDOMAttributes;
+  hovering: boolean;
   dragging: boolean;
   rotation: number;
 };
@@ -21,10 +22,18 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const [pin, setPin] = useState<number>(0);
   const [rotation, setRotation] = useState<number>(value);
+  const [hovering, setHovering] = useState<boolean>(false);
   const [dragging, setDragging] = useState<boolean>(false);
 
-  const bind = useDrag(
-    ({ dragging, first, last, initial: [initialX, initialY], xy: [x, y] }) => {
+  const bind = useGesture({
+    onHover: ({ hovering }) => setHovering(hovering as boolean),
+    onDrag: ({
+      dragging,
+      first,
+      last,
+      initial: [initialX, initialY],
+      xy: [x, y],
+    }) => {
       const { center } = dimensions(
         container.current?.getBoundingClientRect() as DOMRect
       );
@@ -38,7 +47,7 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
 
       const nextRotation = (pin + delta) % 360;
 
-      setDragging(!!dragging);
+      setDragging(dragging as boolean);
       if (first) {
         setPin(rotation);
       } else {
@@ -48,11 +57,12 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
       if (last) {
         onDragEnd(nextRotation);
       }
-    }
-  );
+    },
+  });
 
   return children({
     bind: () => ({ ...bind(), ref: container }),
+    hovering,
     dragging,
     rotation,
   });
@@ -62,16 +72,21 @@ export default DragRotate;
 
 export const useDragRotate = (value: number = 0) => {
   const container = useRef<HTMLDivElement | null>(null);
+  const [pin, setPin] = useState<number>(0);
+  const [last, setLast] = useState<boolean>(false);
+  const [dragging, setDragging] = useState<boolean>(false);
+  const [hovering, setHovering] = useState<boolean>(false);
+  const [rotation, setRotation] = useState<number>(value);
 
-  const [{ isFirst, isLast, pin, rotation }, set] = useState<{
-    isFirst: boolean;
-    isLast: boolean;
-    pin: number;
-    rotation: number;
-  }>({ isFirst: false, isLast: false, pin: 0, rotation: value });
-
-  const bind = useDrag(
-    ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
+  const bind = useGesture({
+    onHover: ({ hovering }) => setHovering(hovering as boolean),
+    onDrag: ({
+      dragging,
+      first,
+      last,
+      initial: [initialX, initialY],
+      xy: [x, y],
+    }) => {
       const { center } = dimensions(
         container.current?.getBoundingClientRect() as DOMRect
       );
@@ -83,19 +98,23 @@ export const useDragRotate = (value: number = 0) => {
         toAngle(center, { x, y })
       );
 
-      set({
-        isFirst: first,
-        isLast: last,
-        pin: first ? rotation : pin,
-        rotation: first ? rotation : (pin + delta) % 360,
-      });
-    }
-  );
+      const nextRotation = (pin + delta) % 360;
+
+      setLast(last);
+      setDragging(dragging as boolean);
+      if (first) {
+        setPin(rotation);
+      } else {
+        setRotation(nextRotation);
+      }
+    },
+  });
 
   return {
     bind: () => ({ ...bind(), ref: container }),
-    isFirst,
-    isLast,
+    last,
+    dragging,
+    hovering,
     rotation,
   };
 };
