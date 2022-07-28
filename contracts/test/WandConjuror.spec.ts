@@ -54,7 +54,7 @@ describe("WandConjuror", async () => {
   });
 
   describe("interpolateStone", () => {
-    it.only("compares interpolated stone in Solidity vs JavaScript", async () => {
+    it("compares interpolated stone in Solidity vs JavaScript", async () => {
       const { wandConjurorExposer } = await baseSetup();
 
       const checkIt = async (from: number, to: number, progress: number) => {
@@ -102,7 +102,7 @@ describe("WandConjuror", async () => {
       checkIt(7, 7, 5);
     });
 
-    it.only("compares stoneId extraction in Solidity vs JavaScript", async () => {
+    it("compares stoneId extraction in Solidity vs JavaScript", async () => {
       const { wandConjurorExposer } = await baseSetup();
 
       const checkIt = async (from: number, to: number, progress: number) => {

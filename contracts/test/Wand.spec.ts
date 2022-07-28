@@ -67,7 +67,7 @@ describe("GuildWand", async () => {
   });
 
   describe("SVG generation", () => {
-    it("it render the template with the same results as JavaScript", async () => {
+    it.only("it render the template with the same results as JavaScript", async () => {
       const { wand } = await baseSetup();
 
       const tokenId = 0;
