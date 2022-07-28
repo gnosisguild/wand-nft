@@ -34,7 +34,7 @@ interface Props {
   wide: boolean;
   value: number;
   onChange(nextValue: number): void;
-  onRelease(): void;
+  onRelease(nextValue: number): void;
 }
 
 const Slider = ({ wide, value, onChange, onRelease }: Props) => {
@@ -43,7 +43,7 @@ const Slider = ({ wide, value, onChange, onRelease }: Props) => {
   // virtual coordinates, SVG modeling unscaled virtual coordinates
   const { center, radius, d } = wide ? CONFIG.WIDE : CONFIG.NARROW;
 
-  function moveTo(point: Point) {
+  function calculateAngle(point: Point) {
     // real coordinates, coming from the DOM
     const { center, width } = dimensions(
       arcRef.current?.getBoundingClientRect() as DOMRect
@@ -51,15 +51,15 @@ const Slider = ({ wide, value, onChange, onRelease }: Props) => {
 
     const radius = width / 2;
 
-    onChange(
-      toAngle(center, findClosestInCircumference(center, radius, point))
-    );
+    return toAngle(center, findClosestInCircumference(center, radius, point));
   }
 
   const bind = useDrag(({ pressed, xy: [x, y] }) => {
-    moveTo({ x, y });
+    const angle = calculateAngle({ x, y });
+    onChange(angle);
     if (!pressed) {
-      onRelease();
+      console.log("released");
+      onRelease(angle);
     }
   });
 
@@ -77,7 +77,9 @@ const Slider = ({ wide, value, onChange, onRelease }: Props) => {
         d={d}
         onClick={(event: React.MouseEvent<SVGPathElement>) => {
           event.preventDefault();
-          moveTo({ x: event.clientX, y: event.clientY });
+          const angle = calculateAngle({ x: event.clientX, y: event.clientY });
+          onChange(angle);
+          onRelease(angle);
         }}
       />
       <g {...bind()}>

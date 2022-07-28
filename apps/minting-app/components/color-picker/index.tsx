@@ -51,12 +51,17 @@ const ColorPicker: React.FC = () => {
 
   const [background, setBackground] = useState(state.background);
 
-  const handleChange = (value: Background) => {
+  const updateGlobalState = (value: Background) => {
     setBackground(value);
     dispatch({
       type: "changeBackground",
       value,
     });
+  };
+
+  const updateFast = (value: Background) => {
+    setBackground(value);
+    imperativelyUpdateSvg(value);
   };
 
   return (
@@ -67,7 +72,7 @@ const ColorPicker: React.FC = () => {
             wide={true}
             value={fromHue(background.color.hue)}
             onChange={(nextValue: number) =>
-              handleChange({
+              updateFast({
                 ...background,
                 color: {
                   ...background.color,
@@ -75,8 +80,8 @@ const ColorPicker: React.FC = () => {
                 },
               })
             }
-            onRelease={() =>
-              handleChange({
+            onRelease={(nextValue: number) =>
+              updateGlobalState({
                 ...background,
                 color: {
                   ...background.color,
@@ -90,9 +95,16 @@ const ColorPicker: React.FC = () => {
             value={innerSlider}
             onChange={(nextValue: number) => {
               setInnerSlider(nextValue);
+              updateFast({
+                ...background,
+                color: {
+                  ...background.color,
+                  lightness: toLightness(innerSlider),
+                },
+              });
             }}
             onRelease={() => {
-              handleChange({
+              updateGlobalState({
                 ...background,
                 color: {
                   ...background.color,
@@ -115,7 +127,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Dark"
               active={background.dark}
-              onClick={() => handleChange({ ...background, dark: true })}
+              onClick={() => updateGlobalState({ ...background, dark: true })}
             />
           </div>
           <div
@@ -128,7 +140,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Light"
               active={!background.dark}
-              onClick={() => handleChange({ ...background, dark: false })}
+              onClick={() => updateGlobalState({ ...background, dark: false })}
             />
           </div>
           <div
@@ -141,7 +153,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Radial"
               active={background.radial}
-              onClick={() => handleChange({ ...background, radial: true })}
+              onClick={() => updateGlobalState({ ...background, radial: true })}
             />
           </div>
           <div
@@ -154,7 +166,9 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Linear"
               active={!background.radial}
-              onClick={() => handleChange({ ...background, radial: false })}
+              onClick={() =>
+                updateGlobalState({ ...background, radial: false })
+              }
             />
           </div>
         </div>
@@ -221,4 +235,14 @@ const throttle = <T extends (...args: any) => void>(
     }
     pendingArgs = args;
   };
+};
+
+const rootEl =
+  typeof document !== "undefined" &&
+  (document.querySelector(":root") as HTMLElement);
+const imperativelyUpdateSvg = (background: Background): void => {
+  if (!rootEl) return;
+  rootEl.style.setProperty("--bg-hue", `${background.color.hue}`);
+  rootEl.style.setProperty("--bg-sat", `${background.color.saturation}%`);
+  rootEl.style.setProperty("--bg-lit", `${background.color.lightness}%`);
 };

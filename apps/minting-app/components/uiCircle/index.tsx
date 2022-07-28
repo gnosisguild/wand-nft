@@ -3,6 +3,7 @@ import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 
 type Props = {
+  children: ReactNode;
   rotation?: number;
   showIndicator?: boolean;
 };
