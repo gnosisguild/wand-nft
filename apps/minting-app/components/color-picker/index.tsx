@@ -49,18 +49,11 @@ const ColorPicker: React.FC = () => {
     fromLightness(state.background.color.lightness)
   );
 
-  const [isPending, startTransition] = useTransition();
   const [background, setBackground] = useState(state.background);
-
-  const throttledDispatch = useMemo(
-    () =>
-      throttle((action: Action) => startTransition(() => dispatch(action)), 50),
-    [startTransition, dispatch]
-  );
 
   const handleChange = (value: Background) => {
     setBackground(value);
-    throttledDispatch({
+    dispatch({
       type: "changeBackground",
       value,
     });
@@ -82,17 +75,28 @@ const ColorPicker: React.FC = () => {
                 },
               })
             }
+            onRelease={() =>
+              handleChange({
+                ...background,
+                color: {
+                  ...background.color,
+                  hue: toHue(nextValue),
+                },
+              })
+            }
           />
           <Slider
             wide={false}
             value={innerSlider}
             onChange={(nextValue: number) => {
               setInnerSlider(nextValue);
+            }}
+            onRelease={() => {
               handleChange({
                 ...background,
                 color: {
                   ...background.color,
-                  lightness: toLightness(nextValue),
+                  lightness: toLightness(innerSlider),
                 },
               });
             }}

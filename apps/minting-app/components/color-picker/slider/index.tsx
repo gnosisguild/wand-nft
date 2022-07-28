@@ -33,10 +33,11 @@ const CONFIG = {
 interface Props {
   wide: boolean;
   value: number;
-  onChange: (nextValue: number) => void;
+  onChange(nextValue: number): void;
+  onRelease(): void;
 }
 
-const Slider = ({ wide, value, onChange }: Props) => {
+const Slider = ({ wide, value, onChange, onRelease }: Props) => {
   const arcRef = useRef<SVGPathElement | null>(null);
 
   // virtual coordinates, SVG modeling unscaled virtual coordinates
@@ -55,8 +56,11 @@ const Slider = ({ wide, value, onChange }: Props) => {
     );
   }
 
-  const bind = useDrag(({ xy: [x, y] }) => {
+  const bind = useDrag(({ pressed, xy: [x, y] }) => {
     moveTo({ x, y });
+    if (!pressed) {
+      onRelease();
+    }
   });
 
   // virtual coordinates, SVG modeling unscaled virtual coordinates
