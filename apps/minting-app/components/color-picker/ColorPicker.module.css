@@ -49,6 +49,10 @@
   top: 43%;
   left: 30.1%;
 }
-.hueSliderSvg path {
-  cursor: pointer;
+.grabbableArc {
+  touch-action: none;
+  cursor: grab;
+}
+.grabbableArc.active {
+  cursor: grabbing;
 }

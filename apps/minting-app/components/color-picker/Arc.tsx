@@ -1,9 +1,11 @@
 import React from "react";
+import classNames from "classnames";
 import { HueGradient, LightnessGradient } from "./Gradient";
 import DragRotate from "../DragRotate";
+import styles from "./ColorPicker.module.css";
 
 const SIZE = 1000;
-const HUE_MARGIN = 0.1;
+const HUE_MARGIN = 0.124;
 const LIGHTNESS_MARGIN = 0.5;
 
 interface Props {
@@ -20,9 +22,11 @@ export const HueArc = ({ value, onChange }: Props) => (
           {...bind()}
           fill="none"
           stroke={"rgba(0,0,0,0)"}
-          strokeWidth={60}
+          strokeWidth={90}
           d={HUE_D}
-          style={{ touchAction: "none" }}
+          className={classNames(styles.grabbableArc, {
+            [styles.active]: dragging,
+          })}
         />
       </g>
     )}
@@ -35,12 +39,26 @@ export const LightnessArc = ({ value, onChange }: Props) => (
       <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
         <LightnessGradient />
         <path
-          {...bind()}
           fill="none"
           stroke={"url(#lightness-arc-gray-gradient)"}
-          strokeWidth={43}
+          strokeWidth={40}
           d={LIGHTNESS_D}
-          style={{ touchAction: "none" }}
+          className={classNames(styles.grabbableArc)}
+        />
+        <path
+          {...bind()}
+          fill="none"
+          stroke={"rgba(0,0,0,0)"}
+          strokeWidth={85}
+          d={LIGHTNESS_D}
+          className={classNames(styles.grabbableArc, {
+            [styles.active]: dragging,
+          })}
+          style={{
+            transform: "scale(1)",
+            transformBox: "fill-box",
+            transformOrigin: "center",
+          }}
         />
       </g>
     )}
