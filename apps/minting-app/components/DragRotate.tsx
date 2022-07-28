@@ -11,6 +11,7 @@ type Props = {
 
 type ChildrenProps = {
   bind: (...args: any[]) => ReactDOMAttributes;
+  dragging: boolean;
   rotation: number;
 };
 
@@ -20,6 +21,7 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const [pin, setPin] = useState<number>(0);
   const [rotation, setRotation] = useState<number>(value);
+  const [dragging, setDragging] = useState<boolean>(false);
 
   const bind = useDrag(
     ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
@@ -37,12 +39,14 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
       const nextRotation = (pin + delta) % 360;
 
       if (first) {
+        setDragging(true);
         setPin(rotation);
       } else {
         setRotation(nextRotation);
       }
 
       if (last) {
+        setDragging(false);
         onDragEnd(nextRotation);
       }
     }
@@ -50,6 +54,7 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
 
   return children({
     bind: () => ({ ...bind(), ref: container }),
+    dragging,
     rotation,
   });
 };
