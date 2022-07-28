@@ -24,7 +24,7 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
   const [dragging, setDragging] = useState<boolean>(false);
 
   const bind = useDrag(
-    ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
+    ({ dragging, first, last, initial: [initialX, initialY], xy: [x, y] }) => {
       const { center } = dimensions(
         container.current?.getBoundingClientRect() as DOMRect
       );
@@ -38,15 +38,14 @@ const DragRotate: React.FC<Props> = ({ children, value = 0, onDragEnd }) => {
 
       const nextRotation = (pin + delta) % 360;
 
+      setDragging(!!dragging);
       if (first) {
-        setDragging(true);
         setPin(rotation);
       } else {
         setRotation(nextRotation);
       }
 
       if (last) {
-        setDragging(false);
         onDragEnd(nextRotation);
       }
     }
