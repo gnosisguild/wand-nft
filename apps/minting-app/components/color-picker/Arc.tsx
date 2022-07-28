@@ -16,7 +16,12 @@ interface Props {
 export const HueArc = ({ value, onChange }: Props) => (
   <DragRotate value={value} onDragEnd={onChange}>
     {({ bind, rotation, hovering, dragging }) => (
-      <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
+      <g
+        transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
+        className={classNames(styles.dragGroup, {
+          [styles.hovering]: hovering,
+        })}
+      >
         <HueGradient />
         <path
           {...bind()}
@@ -28,6 +33,15 @@ export const HueArc = ({ value, onChange }: Props) => (
             [styles.active]: dragging,
           })}
         />
+        <circle
+          cx="500"
+          cy="500"
+          r="434"
+          fill="none"
+          strokeWidth="65"
+          strokeDasharray="7 7"
+          className={styles.hueKnurl}
+        />
       </g>
     )}
   </DragRotate>
@@ -36,7 +50,12 @@ export const HueArc = ({ value, onChange }: Props) => (
 export const LightnessArc = ({ value, onChange }: Props) => (
   <DragRotate value={value} onDragEnd={onChange}>
     {({ bind, rotation, hovering, dragging }) => (
-      <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
+      <g
+        transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
+        className={classNames(styles.dragGroup, {
+          [styles.hovering]: hovering,
+        })}
+      >
         <LightnessGradient />
         <path
           fill="none"
@@ -59,6 +78,15 @@ export const LightnessArc = ({ value, onChange }: Props) => (
             transformBox: "fill-box",
             transformOrigin: "center",
           }}
+        />
+        <circle
+          cx="500"
+          cy="500"
+          r="250"
+          fill="none"
+          strokeWidth="40"
+          strokeDasharray="5 5"
+          className={styles.lightnessKnurl}
         />
       </g>
     )}
