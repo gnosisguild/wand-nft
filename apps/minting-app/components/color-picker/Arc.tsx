@@ -13,7 +13,7 @@ interface Props {
 
 export const HueArc = ({ value, onChange }: Props) => (
   <DragRotate value={value} onDragEnd={onChange}>
-    {({ bind, rotation }) => (
+    {({ bind, rotation, dragging }) => (
       <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
         <HueGradient />
         <path
@@ -31,7 +31,7 @@ export const HueArc = ({ value, onChange }: Props) => (
 
 export const LightnessArc = ({ value, onChange }: Props) => (
   <DragRotate value={value} onDragEnd={onChange}>
-    {({ bind, rotation }) => (
+    {({ bind, rotation, dragging }) => (
       <g transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}>
         <LightnessGradient />
         <path
