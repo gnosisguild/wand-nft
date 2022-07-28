@@ -10,7 +10,7 @@ export const LightnessGradient: React.FC = () => (
     y2="100%"
   >
     <stop offset={"0%"} stopColor="hsl(0, 0%, 90%)" />
-    <stop offset={"80%"} stopColor="hsl(0, 0%, 10%)" />
+    <stop offset={"80%"} stopColor="hsl(0, 0%, 00%)" />
   </linearGradient>
 );
 
@@ -683,7 +683,7 @@ export const HueGradient: React.FC = () => (
         <stop offset="100%" stopColor="hsl(1048,100%,50%)"></stop>
       </linearGradient>
     </defs>
-    <g fill="none" strokeWidth="10" transform="translate(100,100) scale(0.954)">
+    <g fill="none" strokeWidth="15" transform="translate(100,100) scale(0.956)">
       <path
         d="M 0.000,-100.000 A 100,100 0 0,1 30.003,-95.393"
         stroke="url(#wheelseg1)"

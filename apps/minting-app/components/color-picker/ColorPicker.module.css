@@ -56,3 +56,26 @@
 .grabbableArc.active {
   cursor: grabbing;
 }
+.dragGroup {
+  opacity: 0.9;
+  /* transition: opacity 0.05s ease; */
+}
+.dragGroup.hovering {
+  opacity: 1;
+}
+
+.hueKnurl {
+  touch-action: none;
+  pointer-events: none;
+  mix-blend-mode: hard-light;
+  stroke: white;
+  opacity: 0.5;
+}
+
+.lightnessKnurl {
+  touch-action: none;
+  pointer-events: none;
+  mix-blend-mode: hard-light;
+  stroke: white;
+  opacity: 0.2;
+}
