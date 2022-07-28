@@ -1,4 +1,4 @@
-import { useState, useRef, ReactNode } from "react";
+import { useState, useRef } from "react";
 import { useDrag } from "@use-gesture/react";
 import { clockwiseDelta, dimensions, toAngle } from "./trigonometry";
 
@@ -28,7 +28,6 @@ const useDragRotate = (value: number = 0) => {
       } else {
         setRotation(nextRotation);
       }
-
       setIsLast(last);
     }
   );
