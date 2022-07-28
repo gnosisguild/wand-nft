@@ -3,14 +3,11 @@ import React from "react";
 import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  ConnectButton,
-} from "@rainbow-me/rainbowkit";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 
+import ConnectAccount from "../components/ConnectButton";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
@@ -89,7 +86,7 @@ const Home: NextPage = () => {
               </div>
             </div>
             <div className={styles.AccountConnect}>
-              <ConnectButton />
+              <ConnectAccount />
             </div>
 
             <div className={styles.downloadButtons}>
