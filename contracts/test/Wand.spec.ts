@@ -14,7 +14,7 @@ import {
   generateSparkles,
   generateHandle,
   xp,
-  stoneList,
+  interpolateStone,
 } from "../../apps/minting-app/template";
 
 import renderSvgTemplate from "./renderSvgTemplate";
@@ -67,7 +67,7 @@ describe("GuildWand", async () => {
   });
 
   describe("SVG generation", () => {
-    it.only("it render the template with the same results as JavaScript", async () => {
+    it("it render the template with the same results as JavaScript", async () => {
       const { wand } = await baseSetup();
 
       const tokenId = 0;
@@ -151,7 +151,7 @@ describe("GuildWand", async () => {
         filterLayers,
         sparkles: generateSparkles(tokenId),
         seed: tokenId,
-        stone: stoneList[stone],
+        stone: interpolateStone(stone),
         xp,
         handle: generateHandle(handle),
       });
