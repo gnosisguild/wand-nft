@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import makeBlockie from "ethereum-blockies-base64";
+import ConnectBackground from "./ConnectBackground";
 import styles from "./ConnectButton.module.css";
 
 const ConnectAccount = () => {
@@ -25,11 +26,12 @@ const ConnectAccount = () => {
             })}
             className={styles.connectContainer}
           >
+            <ConnectBackground />
             {(() => {
               if (!mounted || !account || !chain) {
                 return (
                   <button onClick={openConnectModal} type="button">
-                    Connect Wallet
+                    CONNECT WALLET
                   </button>
                 );
               }
@@ -37,7 +39,7 @@ const ConnectAccount = () => {
               if (chain.unsupported) {
                 return (
                   <button onClick={openChainModal} type="button">
-                    Wrong network
+                    WRONG NETWORK
                   </button>
                 );
               }
