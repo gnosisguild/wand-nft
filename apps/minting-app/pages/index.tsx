@@ -7,7 +7,6 @@ import StonePicker from "../components/stonePicker";
 import styles from "../styles/Home.module.css";
 import CornerGilding from "../components/Gilding/Corners";
 import CenterGilding from "../components/Gilding/Center";
-import { AppState, TemplateInput } from "../types";
 import {
   calculateAspects,
   calculatePlanets,

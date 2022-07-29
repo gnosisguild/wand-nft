@@ -6,15 +6,12 @@ const template = require("../../../contracts/contracts/svg/template.svg.hbs");
 interface Props {
   input: TemplateInput;
 }
-const SvgTemplate: React.FC<Props> = (props) => {
-  return (
-    <div
-      dangerouslySetInnerHTML={{
-        __html: template(props.input),
-      }}
-      className={classes.container}
-    />
-  );
-};
-
+const SvgTemplate: React.FC<Props> = (props) => (
+  <div
+    dangerouslySetInnerHTML={{
+      __html: template(props.input),
+    }}
+    className={classes.container}
+  />
+);
 export default React.memo(SvgTemplate);

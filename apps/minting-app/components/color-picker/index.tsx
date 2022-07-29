@@ -1,9 +1,9 @@
-import { useMemo, useState, useTransition } from "react";
+import { useState } from "react";
 
 import classNames from "classnames";
 import UiCircle from "../uiCircle";
 import Slider from "./slider";
-import { Action, useAppContext } from "../../state";
+import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import styles from "./ColorPicker.module.css";
 import { Background } from "../../types";
@@ -51,17 +51,12 @@ const ColorPicker: React.FC = () => {
 
   const [background, setBackground] = useState(state.background);
 
-  const updateGlobalState = (value: Background) => {
+  const onChange = (value: Background) => {
     setBackground(value);
     dispatch({
       type: "changeBackground",
       value,
     });
-  };
-
-  const updateFast = (value: Background) => {
-    setBackground(value);
-    imperativelyUpdateSvg(value);
   };
 
   return (
@@ -72,7 +67,7 @@ const ColorPicker: React.FC = () => {
             wide={true}
             value={fromHue(background.color.hue)}
             onChange={(nextValue: number) =>
-              updateFast({
+              setBackground({
                 ...background,
                 color: {
                   ...background.color,
@@ -81,7 +76,7 @@ const ColorPicker: React.FC = () => {
               })
             }
             onRelease={(nextValue: number) =>
-              updateGlobalState({
+              onChange({
                 ...background,
                 color: {
                   ...background.color,
@@ -95,7 +90,7 @@ const ColorPicker: React.FC = () => {
             value={innerSlider}
             onChange={(nextValue: number) => {
               setInnerSlider(nextValue);
-              updateFast({
+              setBackground({
                 ...background,
                 color: {
                   ...background.color,
@@ -104,7 +99,7 @@ const ColorPicker: React.FC = () => {
               });
             }}
             onRelease={() => {
-              updateGlobalState({
+              onChange({
                 ...background,
                 color: {
                   ...background.color,
@@ -127,7 +122,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Dark"
               active={background.dark}
-              onClick={() => updateGlobalState({ ...background, dark: true })}
+              onClick={() => onChange({ ...background, dark: true })}
             />
           </div>
           <div
@@ -140,7 +135,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Light"
               active={!background.dark}
-              onClick={() => updateGlobalState({ ...background, dark: false })}
+              onClick={() => onChange({ ...background, dark: false })}
             />
           </div>
           <div
@@ -153,7 +148,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Radial"
               active={background.radial}
-              onClick={() => updateGlobalState({ ...background, radial: true })}
+              onClick={() => onChange({ ...background, radial: true })}
             />
           </div>
           <div
@@ -166,9 +161,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Linear"
               active={!background.radial}
-              onClick={() =>
-                updateGlobalState({ ...background, radial: false })
-              }
+              onClick={() => onChange({ ...background, radial: false })}
             />
           </div>
         </div>
@@ -212,38 +205,3 @@ function fromLightness(value: number): number {
 
   return progress * 180;
 }
-
-type ThrottledFunction<T extends (...args: any) => void> = (
-  ...args: Parameters<T>
-) => void;
-const throttle = <T extends (...args: any) => void>(
-  func: T,
-  interval: number
-): ThrottledFunction<T> => {
-  let pendingArgs: Parameters<T> | undefined;
-  return (...args: Parameters<T>): void => {
-    if (!pendingArgs) {
-      setTimeout(
-        () =>
-          requestIdleCallback(() => {
-            if (!pendingArgs) throw new Error("invariant violation");
-            func(...pendingArgs);
-            pendingArgs = undefined;
-          }),
-        interval
-      );
-    }
-    pendingArgs = args;
-  };
-};
-
-const imperativelyUpdateSvg = (background: Background): void => {
-  // for dark radial
-  const gradp = document.getElementById("gradp");
-  const stop0 = document.getElementById("grad0")?.children[0] as SVGElement;
-  const stop1 = document.getElementById("grad0")?.children[1] as SVGElement;
-  if (!gradp || !stop0 || !stop1) throw new Error("invariant violation");
-  gradp.style.fill = `hsl(${background.color.hue}, 30%, 7%)`;
-  stop0.style.stopColor = `hsl(${background.color.hue}, ${background.color.saturation}%, ${background.color.lightness}%)`;
-  stop1.style.stopColor = `hsla(${background.color.hue}, ${background.color.saturation}%, ${background.color.lightness}%, 0)`;
-};
