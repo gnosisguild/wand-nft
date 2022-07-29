@@ -1,6 +1,6 @@
 {{#if radial}}
   {{#if dark}}
-      <path id="gradp" style="fill:hsl({{uint16 color.hue}}, 30%, 7%)" d="M0 0h2000v3000H0z"/>
+      <path style="fill:hsl({{uint16 color.hue}}, 30%, 7%)" d="M0 0h2000v3000H0z"/>
       <radialGradient id="grad0">
         <stop offset="0" style="stop-color: hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)"/>
         <stop offset="1" style="stop-color: hsla({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%, 0)"/>
@@ -9,7 +9,7 @@
       <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/>
   {{/if}}
   {{#unless dark}}
-      <path id="gradp" style="fill:hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)" d="M0 0h2000v3000H0z"/>
+      <path style="fill:hsl({{uint16 color.hue}}, {{uint8 color.saturation}}%, {{uint8 color.lightness}}%)" d="M0 0h2000v3000H0z"/>
       <radialGradient id="grad0">
         <stop offset="0" style="stop-color:hsl({{uint16 color.hue}}, 100%, 95%)"/>
         <stop offset="1" style="stop-color:hsla(55, 66%, 83%, 0)"/>
