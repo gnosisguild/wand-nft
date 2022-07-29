@@ -51,7 +51,7 @@ const ColorPicker: React.FC = () => {
 
   const [background, setBackground] = useState(state.background);
 
-  const onChange = (value: Background) => {
+  const handleChange = (value: Background) => {
     setBackground(value);
     dispatch({
       type: "changeBackground",
@@ -76,7 +76,7 @@ const ColorPicker: React.FC = () => {
               })
             }
             onRelease={(nextValue: number) =>
-              onChange({
+              handleChange({
                 ...background,
                 color: {
                   ...background.color,
@@ -99,7 +99,7 @@ const ColorPicker: React.FC = () => {
               });
             }}
             onRelease={() => {
-              onChange({
+              handleChange({
                 ...background,
                 color: {
                   ...background.color,
@@ -122,7 +122,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Dark"
               active={background.dark}
-              onClick={() => onChange({ ...background, dark: true })}
+              onClick={() => handleChange({ ...background, dark: true })}
             />
           </div>
           <div
@@ -135,7 +135,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Light"
               active={!background.dark}
-              onClick={() => onChange({ ...background, dark: false })}
+              onClick={() => handleChange({ ...background, dark: false })}
             />
           </div>
           <div
@@ -148,7 +148,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Radial"
               active={background.radial}
-              onClick={() => onChange({ ...background, radial: true })}
+              onClick={() => handleChange({ ...background, radial: true })}
             />
           </div>
           <div
@@ -161,7 +161,7 @@ const ColorPicker: React.FC = () => {
               thickBorder
               icon="Linear"
               active={!background.radial}
-              onClick={() => onChange({ ...background, radial: false })}
+              onClick={() => handleChange({ ...background, radial: false })}
             />
           </div>
         </div>
