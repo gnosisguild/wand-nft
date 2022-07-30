@@ -4,8 +4,7 @@ import "@nomiclabs/hardhat-ethers";
 
 import {
   interpolateStone,
-  packStoneId,
-  unpackStoneId,
+  interpolationParams,
 } from "../../apps/minting-app/template";
 
 describe("WandConjuror", async () => {
@@ -57,8 +56,7 @@ describe("WandConjuror", async () => {
     it("compares interpolated stone in Solidity vs JavaScript", async () => {
       const { wandConjurorExposer } = await baseSetup();
 
-      const checkIt = async (from: number, to: number, progress: number) => {
-        const stoneId = packStoneId(from, to, progress);
+      const checkIt = async (stoneId: number) => {
         const fromSolidity = await wandConjurorExposer._interpolateStone(
           stoneId
         );
@@ -80,81 +78,35 @@ describe("WandConjuror", async () => {
         expect(fromJS.rotation).to.equal(fromSolidity.rotation);
       };
 
-      // cycling through all takes time
-      // for (let from = 0; from < 29; from++) {
-      //   for (let to = from; to < 29; to++) {
-      //     for (let progress = 0; progress <= 100; progress++) {
-      //       console.log(from, to, progress);
-      //       await checkIt(from, to, progress);
-      //     }
-      //   }
-      // }
-
       // random values
-      checkIt(26, 11, 61);
-      checkIt(23, 27, 45);
-      checkIt(13, 4, 79);
-      checkIt(2, 14, 76);
-      checkIt(1, 12, 92);
-      checkIt(14, 22, 82);
-      checkIt(0, 12, 2);
-      checkIt(22, 17, 30);
-      checkIt(7, 7, 5);
+      for (let i = 0; i < 360; i++) {
+        checkIt(i);
+      }
     });
 
-    it("compares stoneId extraction in Solidity vs JavaScript", async () => {
+    it.skip("compares stoneId extraction in Solidity vs JavaScript", async () => {
       const { wandConjurorExposer } = await baseSetup();
 
-      const checkIt = async (from: number, to: number, progress: number) => {
-        const stoneId = packStoneId(from, to, progress);
-
+      const checkIt = async (stoneId: number) => {
         const {
           from: solFrom,
           to: solTo,
           progress: solProgress,
-        } = await wandConjurorExposer._unpackStoneId(stoneId);
-
-        const [jsFrom, jsTo, jsProgress] = unpackStoneId(stoneId);
-
+        } = await wandConjurorExposer._interpolationParams(stoneId);
+        const [jsFrom, jsTo, jsProgress] = interpolationParams(stoneId);
+        // console.log(stoneId);
+        // console.log(solFrom, solTo);
+        // console.log(jsFrom, jsTo);
+        // console.log(jsProgress, solProgress);
         expect(solFrom).to.equal(jsFrom);
         expect(solTo).to.equal(jsTo);
         expect(solProgress).to.equal(jsProgress);
-        expect(from).to.equal(jsFrom);
-        expect(to).to.equal(jsTo);
-        expect(progress).to.equal(jsProgress);
       };
 
       // cycling through all takes time
-      // for (let from = 0; from < 29; from++) {
-      //   for (let to = from; to < 29; to++) {
-      //     for (let progress = 0; progress <= 100; progress++) {
-      //       console.log(from, to, progress);
-      //       await checkIt(from, to, progress);
-      //     }
-      //   }
-      // }
-
-      // random values
-      checkIt(28, 22, 53);
-      checkIt(23, 14, 88);
-      checkIt(5, 0, 86);
-      checkIt(20, 27, 22);
-      checkIt(23, 23, 48);
-      checkIt(21, 27, 88);
-      checkIt(19, 10, 49);
-      checkIt(2, 4, 45);
-      checkIt(4, 25, 85);
-      checkIt(14, 9, 65);
-
-      checkIt(0, 1, 10);
-      checkIt(0, 1, 50);
-      checkIt(0, 1, 99);
-      checkIt(0, 28, 2);
-      checkIt(0, 28, 45);
-      checkIt(0, 28, 97);
-      checkIt(15, 16, 0);
-      checkIt(15, 16, 30);
-      checkIt(15, 16, 50);
+      for (let stoneId = 0; stoneId < 360; stoneId++) {
+        await checkIt(stoneId);
+      }
     });
   });
 });

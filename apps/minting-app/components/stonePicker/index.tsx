@@ -1,12 +1,7 @@
 import { useState, useRef } from "react";
 import { useDrag } from "@use-gesture/react";
 import StoneViewer from "./StoneViewer";
-import {
-  interpolateStone,
-  stoneList,
-  stoneCount,
-  packStoneId,
-} from "../../template";
+import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
@@ -49,7 +44,7 @@ const StonePicker: React.FC = () => {
       if (last) {
         dispatch({
           type: "changeStone",
-          value: toStoneId(withoutSkew(pin + delta)),
+          value: withoutSkew(Math.floor(pin + delta)),
         });
       }
     }
@@ -119,7 +114,7 @@ const StonePicker: React.FC = () => {
       <div className={styles.stone}>
         <StoneViewer
           seed={state.tokenId}
-          stone={interpolateStone(toStoneId(withoutSkew(rotation)))}
+          stone={interpolateStone(withoutSkew(Math.floor(rotation)))}
         />
         <StoneGlass />
       </div>
@@ -170,25 +165,4 @@ function withSkew(angle: number) {
   const result = angle - step * CONFIG.segment.percSkew;
   assert(result >= 0);
   return result;
-}
-
-export function toStoneId(angle: number) {
-  const prevStone = (index: number) => (index > 0 ? index - 1 : stoneCount - 1);
-  const nextStone = (index: number) => (index + 1) % stoneCount;
-
-  const step = 360 / stoneCount;
-  const from = Math.floor(angle / step);
-  const midway = step * from + step / 2;
-
-  if (angle < midway) {
-    // going left
-    const to = prevStone(from);
-    const progress = Math.round(((midway - angle) / step) * 100);
-    return packStoneId(from, to, progress);
-  } else {
-    // going right
-    const to = nextStone(from);
-    const progress = Math.round(((angle - midway) / step) * 100);
-    return packStoneId(from, to, progress);
-  }
 }

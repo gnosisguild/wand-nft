@@ -469,7 +469,7 @@ export const stoneList: Stone[] = [
 ];
 
 export function interpolateStone(stoneId: number): Stone {
-  const [from, to, progress] = unpackStoneId(stoneId);
+  const [from, to, progress] = interpolationParams(stoneId);
   const fromStone = stoneList[from];
   const toStone = stoneList[to];
 
@@ -491,31 +491,40 @@ export function interpolateStone(stoneId: number): Stone {
   };
 }
 
+export const stoneCount = stoneList.length;
+const prevStone = (index: number) => (index > 0 ? index - 1 : stoneCount - 1);
+const nextStone = (index: number) => (index + 1) % stoneCount;
+const step = 360 / stoneCount;
+
+export function interpolationParams(angle: number) {
+  // 360 / stoneCount rounded(3)
+  const step = 12.414;
+  const from = Math.floor(angle / step);
+  const midway = step * from + step / 2;
+
+  // console.log("JS:  angle %s", angle);
+  // console.log("JS:  step %s", step);
+  // console.log("JS:  midway %s", midway);
+
+  if (angle < midway) {
+    // console.log("JS:  res %s", ((midway - angle) * 100) / step);
+    // going left
+    const to = prevStone(from);
+    const progress = Math.round(((midway - angle) * 100) / step);
+    return [from, to, progress];
+  } else {
+    // console.log("JS:  res %s", ((angle - midway) * 100) / step);
+    // going right
+    const to = nextStone(from);
+    const progress = Math.round(((angle - midway) * 100) / step);
+    return [from, to, progress];
+  }
+}
+
 function interpolate(from: number, to: number, progress: number) {
   if (from > to) {
     return from - Math.floor(((from - to) * progress) / 100);
   } else {
     return from + Math.floor(((to - from) * progress) / 100);
   }
-}
-
-export const stoneCount = stoneList.length;
-
-export function packStoneId(
-  from: number,
-  to: number,
-  progress: number
-): number {
-  assert(from >= 0 && from < stoneCount);
-  assert(to >= 0 && to < stoneCount);
-  assert(progress >= 0 && progress <= 100);
-  assert(Number.isInteger(from));
-  assert(Number.isInteger(to));
-  assert(Number.isInteger(progress));
-
-  return (from << 12) | (to << 7) | progress;
-}
-
-export function unpackStoneId(stoneId: number) {
-  return [stoneId >> 12, (stoneId & 0xf80) >> 7, stoneId & 0x7f];
 }
