@@ -264,62 +264,62 @@ contract WandConjuror {
         turbFreqX: interpolateUInt8Value(
           fromStone.turbFreqX,
           toStone.turbFreqX,
-          int256(int8(progress))
+          progress
         ),
         turbFreqY: interpolateUInt8Value(
           fromStone.turbFreqY,
           toStone.turbFreqY,
-          int256(int8(progress))
+          progress
         ),
         turbOct: interpolateUInt8Value(
           fromStone.turbOct,
           toStone.turbOct,
-          int256(int8(progress))
+          progress
         ),
         redAmp: interpolateInt8Value(
           fromStone.redAmp,
           toStone.redAmp,
-          int256(int8(progress))
+          progress
         ),
         redExp: interpolateInt8Value(
           fromStone.redExp,
           toStone.redExp,
-          int256(int8(progress))
+          progress
         ),
         redOff: interpolateInt8Value(
           fromStone.redOff,
           toStone.redOff,
-          int256(int8(progress))
+          progress
         ),
         greenAmp: interpolateInt8Value(
           fromStone.greenAmp,
           toStone.greenAmp,
-          int256(int8(progress))
+          progress
         ),
         greenExp: interpolateInt8Value(
           fromStone.greenExp,
           toStone.greenExp,
-          int256(int8(progress))
+          progress
         ),
         greenOff: interpolateInt8Value(
           fromStone.greenOff,
           toStone.greenOff,
-          int256(int8(progress))
+          progress
         ),
         blueAmp: interpolateInt8Value(
           fromStone.blueAmp,
           toStone.blueAmp,
-          int256(int8(progress))
+          progress
         ),
         blueExp: interpolateInt8Value(
           fromStone.blueExp,
           toStone.blueExp,
-          int256(int8(progress))
+          progress
         ),
         blueOff: interpolateInt8Value(
           fromStone.blueOff,
           toStone.blueOff,
-          int256(int8(progress))
+          progress
         ),
         fractalNoise: progress < 50
           ? fromStone.fractalNoise
@@ -327,7 +327,7 @@ contract WandConjuror {
         rotation: interpolateUInt16Value(
           fromStone.rotation,
           toStone.rotation,
-          int256(int8(progress))
+          progress
         )
       });
   }
@@ -341,20 +341,19 @@ contract WandConjuror {
       uint8 progress
     )
   {
-    // 12.413793103448276
-    uint256 angle = uint256(stone) * 10000;
-    uint256 step = 1241379;
-    from = uint8(uint256(angle / step));
+    uint256 angle = uint256(stone) * 1000;
+    uint256 step = 3600 * 1000 / stoneList().length;
+    from = uint8(angle / step);
     uint256 midway = step * from + step / 2;
 
     if (angle < midway) {
       // going left
       to = prevStone(from);
-      progress = uint8(round((((midway - angle) * 10000) / step), 2));
+      progress = uint8(round1(((midway - angle) * 1000) / step));
     } else {
       // going right
       to = nextStone(from);
-      progress = uint8(round((((angle - midway) * 10000) / step), 2));
+      progress = uint8(round1(((angle - midway) * 1000) / step));
     }
   }
 
@@ -366,43 +365,34 @@ contract WandConjuror {
     return (index + 1) % uint8(stoneList().length);
   }
 
-  function round(uint256 number, uint8 decimals)
-    internal
-    pure
-    returns (uint256)
-  {
-    uint256 digits;
-    for (uint8 d = 0; d < decimals; d++) {
-      uint256 digit = (number / (10**d)) % 10;
-      digits += uint256(digit * (10**d));
-    }
-
-    bool up = digits >= (10**decimals) / 2;
-    return uint256(number / 10**decimals + (up ? 1 : 0));
+  function round1(uint256 number) internal pure returns (uint256) {
+    return number / 10 + ((number % 10) >= 5 ? 1 : 0);
   }
 
   function interpolateUInt8Value(
     uint8 from,
     uint8 to,
-    int256 progress
+    uint8 progress
   ) internal pure returns (uint8) {
-    return uint8(uint256(interpolateValue(int8(from), int8(to), progress)));
+    return
+      uint8(uint256(interpolateValue(int8(from), int8(to), int8(progress))));
   }
 
   function interpolateUInt16Value(
     uint16 from,
     uint16 to,
-    int256 progress
+    uint8 progress
   ) internal pure returns (uint16) {
-    return uint16(uint256(interpolateValue(int16(from), int16(to), progress)));
+    return
+      uint16(uint256(interpolateValue(int16(from), int16(to), int8(progress))));
   }
 
   function interpolateInt8Value(
     int8 from,
     int8 to,
-    int256 progress
+    uint8 progress
   ) internal pure returns (int8) {
-    return int8(interpolateValue(from, to, progress));
+    return int8(interpolateValue(from, to, int8(progress)));
   }
 
   function interpolateValue(

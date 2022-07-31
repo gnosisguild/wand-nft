@@ -494,11 +494,12 @@ export function interpolateStone(stoneId: number): Stone {
 export const stoneCount = stoneList.length;
 const prevStone = (index: number) => (index > 0 ? index - 1 : stoneCount - 1);
 const nextStone = (index: number) => (index + 1) % stoneCount;
-const step = 360 / stoneCount;
+
+// in order for this to exactly match onChain calculation
+// this must be a 3 decimals floored number
+const step = Math.floor((3600 / stoneCount) * 1000) / 1000;
 
 export function interpolationParams(angle: number) {
-  // 360 / stoneCount rounded(3)
-  const step = 124.1379;
   const from = Math.floor(angle / step);
   const midway = step * from + step / 2;
 

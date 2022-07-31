@@ -84,6 +84,7 @@ describe("WandConjuror", async () => {
       //   await checkIt(stoneId);
       // }
 
+      //random values
       await checkIt(3210);
       await checkIt(3014);
       await checkIt(2794);
@@ -96,7 +97,7 @@ describe("WandConjuror", async () => {
       await checkIt(2930);
     });
 
-    it("compares interpolation param calculation in Solidity vs JavaScript", async () => {
+    it("compares param for interpolation calculation in Solidity vs JavaScript", async () => {
       const { wandConjurorExposer } = await baseSetup();
 
       const checkIt = async (stoneId: number) => {
