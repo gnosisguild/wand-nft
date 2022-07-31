@@ -44,7 +44,7 @@ const StonePicker: React.FC = () => {
       if (last) {
         dispatch({
           type: "changeStone",
-          value: withoutSkew(Math.floor(pin + delta)),
+          value: Math.round(withoutSkew(pin + delta) * 10),
         });
       }
     }
@@ -114,7 +114,7 @@ const StonePicker: React.FC = () => {
       <div className={styles.stone}>
         <StoneViewer
           seed={state.tokenId}
-          stone={interpolateStone(withoutSkew(Math.floor(rotation)))}
+          stone={interpolateStone(Math.round(withoutSkew(rotation) * 10))}
         />
         <StoneGlass />
       </div>
@@ -157,7 +157,7 @@ const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
 
 function withoutSkew(angle: number) {
   const step = 360 / stoneCount;
-  return Math.round(angle + step * CONFIG.segment.percSkew) % 360;
+  return (angle + step * CONFIG.segment.percSkew) % 360;
 }
 
 function withSkew(angle: number) {

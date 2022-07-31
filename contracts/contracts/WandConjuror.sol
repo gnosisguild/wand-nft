@@ -341,9 +341,9 @@ contract WandConjuror {
       uint8 progress
     )
   {
-    // 12.413793103448276 7 decimals
-    uint256 angle = uint256(stone) * 1000;
-    uint256 step = 12414;
+    // 12.413793103448276
+    uint256 angle = uint256(stone) * 10000;
+    uint256 step = 1241379;
     from = uint8(uint256(angle / step));
     uint256 midway = step * from + step / 2;
 

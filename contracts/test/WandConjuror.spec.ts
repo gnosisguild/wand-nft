@@ -78,13 +78,25 @@ describe("WandConjuror", async () => {
         expect(fromJS.rotation).to.equal(fromSolidity.rotation);
       };
 
-      // random values
-      for (let i = 0; i < 360; i++) {
-        checkIt(i);
-      }
+      // cycling through all takes time
+      // for (let stoneId = 0; stoneId < 3600; stoneId++) {
+      //   console.log(stoneId);
+      //   await checkIt(stoneId);
+      // }
+
+      await checkIt(3210);
+      await checkIt(3014);
+      await checkIt(2794);
+      await checkIt(1242);
+      await checkIt(355);
+      await checkIt(297);
+      await checkIt(2765);
+      await checkIt(104);
+      await checkIt(826);
+      await checkIt(2930);
     });
 
-    it.skip("compares stoneId extraction in Solidity vs JavaScript", async () => {
+    it("compares interpolation param calculation in Solidity vs JavaScript", async () => {
       const { wandConjurorExposer } = await baseSetup();
 
       const checkIt = async (stoneId: number) => {
@@ -103,10 +115,23 @@ describe("WandConjuror", async () => {
         expect(solProgress).to.equal(jsProgress);
       };
 
-      // cycling through all takes time
-      for (let stoneId = 0; stoneId < 360; stoneId++) {
-        await checkIt(stoneId);
-      }
+      // // cycling through all takes time
+      // for (let stoneId = 0; stoneId < 3600; stoneId++) {
+      //   console.log(stoneId);
+      //   await checkIt(stoneId);
+      // }
+
+      // random values
+      await checkIt(1251);
+      await checkIt(1318);
+      await checkIt(1137);
+      await checkIt(3016);
+      await checkIt(1813);
+      await checkIt(3058);
+      await checkIt(216);
+      await checkIt(1550);
+      await checkIt(2820);
+      await checkIt(2569);
     });
   });
 });

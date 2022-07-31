@@ -498,23 +498,15 @@ const step = 360 / stoneCount;
 
 export function interpolationParams(angle: number) {
   // 360 / stoneCount rounded(3)
-  const step = 12.414;
+  const step = 124.1379;
   const from = Math.floor(angle / step);
   const midway = step * from + step / 2;
 
-  // console.log("JS:  angle %s", angle);
-  // console.log("JS:  step %s", step);
-  // console.log("JS:  midway %s", midway);
-
   if (angle < midway) {
-    // console.log("JS:  res %s", ((midway - angle) * 100) / step);
-    // going left
     const to = prevStone(from);
     const progress = Math.round(((midway - angle) * 100) / step);
     return [from, to, progress];
   } else {
-    // console.log("JS:  res %s", ((angle - midway) * 100) / step);
-    // going right
     const to = nextStone(from);
     const progress = Math.round(((angle - midway) * 100) / step);
     return [from, to, progress];
