@@ -6,6 +6,7 @@ import { describeSegments, describeFillers } from "../rhythm";
 import { Halo } from "../../types";
 import { isWideShape } from "../../template";
 import IconButton from "../IconButton";
+import randomInteger from "../randomInteger";
 
 const VIEWBOX_SIZE = 1000;
 const CONFIG = {
@@ -108,7 +109,16 @@ const HaloPicker: React.FC = () => {
         </div>
       </UiCircle>
       <div className={styles.icon}>
-        <IconButton icon="PickerHalo" shadow />
+        <IconButton
+          icon="PickerHalo"
+          shadow
+          onClick={() => {
+            dispatch({
+              type: "changeHalo",
+              value: randomize(),
+            });
+          }}
+        />
       </div>
     </>
   );
@@ -136,6 +146,15 @@ function teflonIndex(halo: Halo, index: number) {
 
   const skew = Math.max(0, index - midway);
   return (skew > 0 ? midway - skew : index) * multiplier;
+}
+
+function randomize(): Halo {
+  return {
+    shape: randomInteger(5) as 0 | 1 | 2 | 3 | 4 | 5,
+    rhythm: new Array(13)
+      .fill(null)
+      .map(() => (randomInteger(1) === 1 ? true : false)),
+  };
 }
 
 export default HaloPicker;
