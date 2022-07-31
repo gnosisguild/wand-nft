@@ -13,6 +13,7 @@ import {
 } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 import useDragRotate from "../useDragRotate";
+import randomInteger from "../randomInteger";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
@@ -95,7 +96,16 @@ const StonePicker: React.FC = () => {
         <StoneGlass />
       </div>
       <div className={styles.icon}>
-        <IconButton icon="PickerStone" shadow />
+        <IconButton
+          icon="PickerStone"
+          shadow
+          onClick={() => {
+            dispatch({
+              type: "changeStone",
+              value: randomInteger(3600),
+            });
+          }}
+        />
       </div>
     </div>
   );
