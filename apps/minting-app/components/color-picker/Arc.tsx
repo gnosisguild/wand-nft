@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import { HueGradient, LightnessGradient } from "./Gradient";
-import DragRotate from "../DragRotate";
 import useDragRotate from "../useDragRotate";
 import styles from "./ColorPicker.module.css";
 

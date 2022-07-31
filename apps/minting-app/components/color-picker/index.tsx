@@ -10,6 +10,7 @@ import IconButton from "../IconButton";
 import { HueArc, LightnessArc } from "./Arc";
 import ButtonBackground from "./ButtonBackground";
 import styles from "./ColorPicker.module.css";
+import randomInteger from "../randomInteger";
 
 const ColorPicker: React.FC = () => {
   const {
@@ -145,7 +146,20 @@ const ColorPicker: React.FC = () => {
         </div>
       </UiCircle>
       <div className={styles.icon}>
-        <IconButton icon="PickerAura" shadow />
+        <IconButton
+          icon="PickerAura"
+          shadow
+          onClick={() => {
+            handleChange({
+              ...background,
+              color: {
+                ...background.color,
+                hue: toHue(randomInteger(360)),
+                lightness: toLightness(randomInteger(360)),
+              },
+            });
+          }}
+        />
       </div>
     </div>
   );

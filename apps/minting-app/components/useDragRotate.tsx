@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGesture } from "@use-gesture/react";
 import { clockwiseDelta, dimensions, toAngle } from "./trigonometry";
 
@@ -11,6 +11,10 @@ function useDragRotate<T>(
   const [dragging, setDragging] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
   const [rotation, setRotation] = useState<number>(value);
+
+  useEffect(() => {
+    setRotation(value);
+  }, [setRotation, value]);
 
   const bind = useGesture({
     onHover: ({ hovering }) => setHovering(hovering as boolean),
