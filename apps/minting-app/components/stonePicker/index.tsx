@@ -18,11 +18,11 @@ const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
-    0,
-    (nextAngle: number) =>
+    fromStoneId(state.stone),
+    (nextRotation: number) =>
       dispatch({
         type: "changeStone",
-        value: toStoneId(nextAngle),
+        value: toStoneId(nextRotation),
       })
   );
 

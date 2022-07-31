@@ -1,4 +1,4 @@
-import { useState, useRef, DOMElement } from "react";
+import { useState, useRef } from "react";
 import { useGesture } from "@use-gesture/react";
 import { clockwiseDelta, dimensions, toAngle } from "./trigonometry";
 

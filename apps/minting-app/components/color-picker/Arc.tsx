@@ -14,39 +14,41 @@ interface Props {
   onChange: (nextValue: number) => void;
 }
 
-export const HueArc = ({ value, onChange }: Props) => (
-  <DragRotate value={value} onDragEnd={onChange}>
-    {({ bind, rotation, hovering, dragging }) => (
-      <g
-        transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
-        className={classNames(styles.dragGroup, {
-          [styles.hovering]: hovering,
+export const HueArc = ({ value, onChange }: Props) => {
+  const { bind, rotation, hovering, dragging } = useDragRotate<SVGPathElement>(
+    value,
+    onChange
+  );
+  return (
+    <g
+      transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
+      className={classNames(styles.dragGroup, {
+        [styles.hovering]: hovering,
+      })}
+    >
+      <HueGradient />
+      <path
+        {...bind()}
+        fill="none"
+        stroke={"rgba(0,0,0,0)"}
+        strokeWidth={90}
+        d={HUE_D}
+        className={classNames(styles.grabbableArc, {
+          [styles.active]: dragging,
         })}
-      >
-        <HueGradient />
-        <path
-          {...bind()}
-          fill="none"
-          stroke={"rgba(0,0,0,0)"}
-          strokeWidth={90}
-          d={HUE_D}
-          className={classNames(styles.grabbableArc, {
-            [styles.active]: dragging,
-          })}
-        />
-        <circle
-          cx="500"
-          cy="500"
-          r="434"
-          fill="none"
-          strokeWidth="65"
-          strokeDasharray="7 7"
-          className={styles.hueKnurl}
-        />
-      </g>
-    )}
-  </DragRotate>
-);
+      />
+      <circle
+        cx="500"
+        cy="500"
+        r="434"
+        fill="none"
+        strokeWidth="65"
+        strokeDasharray="7 7"
+        className={styles.hueKnurl}
+      />
+    </g>
+  );
+};
 
 export const LightnessArc = ({ value, onChange }: Props) => {
   const { bind, rotation, hovering, dragging } = useDragRotate<SVGPathElement>(
