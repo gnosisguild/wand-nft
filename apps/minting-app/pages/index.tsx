@@ -7,7 +7,10 @@ import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 
-import ConnectAccount from "../components/ConnectButton";
+import ConnectAccount, {
+  customTheme,
+  BlockieAvatar,
+} from "../components/ConnectButton";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
@@ -56,7 +59,11 @@ const Home: NextPage = () => {
 
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider
+        chains={chains}
+        theme={customTheme}
+        avatar={BlockieAvatar}
+      >
         <div
           className={styles.container}
           style={{ backgroundImage: `url(${bgImage.src})` }}

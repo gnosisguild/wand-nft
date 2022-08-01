@@ -19,12 +19,12 @@ const ConnectBackground: React.FC = () => {
         <path
           d="M3.71924 13.5938H0.602051L13.8364 0.367188L14.9536 2.35938L3.71924 13.5938Z"
           fill="#D9D9D9"
-          fill-opacity="0.6"
+          fillOpacity="0.6"
         />
         <path
           d="M158.891 13.5938H162.008L148.774 0.367188L147.657 2.35938L158.891 13.5938Z"
           fill="#D9D9D9"
-          fill-opacity="0.8"
+          fillOpacity="0.8"
         />
         <path
           d="M147.657 2.35938L148.774 0.367188H13.8364L14.9536 2.35938H147.657Z"
@@ -35,12 +35,12 @@ const ConnectBackground: React.FC = () => {
         <path
           d="M3.71924 13.5972H0.602051L13.8364 26.8237L14.9536 24.8315L3.71924 13.5972Z"
           fill="#D9D9D9"
-          fill-opacity="0.6"
+          fillOpacity="0.6"
         />
         <path
           d="M158.891 13.5972H162.008L148.774 26.8237L147.657 24.8315L158.891 13.5972Z"
           fill="#D9D9D9"
-          fill-opacity="0.8"
+          fillOpacity="0.8"
         />
         <path
           d="M147.657 24.8315L148.774 26.8237H13.8364L14.9536 24.8315H147.657Z"
