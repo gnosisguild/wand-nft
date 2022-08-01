@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring, animated, easings } from "@react-spring/web";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 import { delta } from "../trigonometry";
@@ -28,6 +28,7 @@ const UiCircle: React.FC<Props> = ({
     immediate,
     config: {
       duration: delta(from, to) * 5,
+      easing: easings.easeInOutQuart,
     },
   });
 

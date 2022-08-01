@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring, animated, easings } from "@react-spring/web";
 
 import { HueGradient, LightnessGradient } from "./Gradient";
 import useDragRotate from "../useDragRotate";
@@ -30,7 +30,7 @@ export const HueArc = ({ value, onChange }: Props) => {
     to: { transform: `rotate(${rotation}deg)` },
     immediate: dragging || delta(prevRotation, rotation) < 1,
     config: {
-      duration: delta(prevRotation, rotation) * 5,
+      easing: easings.easeInOutQuart,
     },
   });
 
