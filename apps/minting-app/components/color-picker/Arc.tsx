@@ -7,7 +7,7 @@ import styles from "./ColorPicker.module.css";
 
 const SIZE = 1000;
 const HUE_MARGIN = 0.124;
-const LIGHTNESS_MARGIN = 0.5;
+const LIGHTNESS_MARGIN = 0.48;
 
 interface Props {
   value: number;
@@ -64,7 +64,7 @@ export const LightnessArc = ({ value, onChange }: Props) => {
       <path
         fill="none"
         stroke={"url(#lightness-arc-gray-gradient)"}
-        strokeWidth={40}
+        strokeWidth={70}
         d={LIGHTNESS_D}
         className={classNames(styles.grabbableArc)}
       />
@@ -86,9 +86,9 @@ export const LightnessArc = ({ value, onChange }: Props) => {
       <circle
         cx="500"
         cy="500"
-        r="250"
+        r="260"
         fill="none"
-        strokeWidth="40"
+        strokeWidth="70"
         strokeDasharray="5 5"
         className={styles.lightnessKnurl}
       />

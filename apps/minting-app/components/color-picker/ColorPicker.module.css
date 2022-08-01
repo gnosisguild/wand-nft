@@ -78,3 +78,13 @@
   stroke: white;
   opacity: 0.2;
 }
+.viewfinderPath {
+  stroke: #aaa582;
+  stroke-width: 10;
+}
+.viewFinderRect {
+  transform: rotate(45deg);
+  transform-origin: center;
+  transform-box: fill-box;
+  filter: drop-shadow(0px 1px 13px rgba(0, 0, 0, 0.7));
+}

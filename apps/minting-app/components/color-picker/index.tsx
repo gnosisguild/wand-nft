@@ -62,6 +62,30 @@ const ColorPicker: React.FC = () => {
               });
             }}
           />
+          <g style={{ pointerEvents: "none" }}>
+            <rect
+              className={classNames(
+                styles.viewfinderPath,
+                styles.viewFinderRect
+              )}
+              width="70"
+              height="70"
+              x="470"
+              y="30"
+              fill={`hsl(${background.color.hue}, 100%, 50%)`}
+            />
+            <rect
+              className={classNames(
+                styles.viewfinderPath,
+                styles.viewFinderRect
+              )}
+              width="70"
+              height="70"
+              x="470"
+              y="210"
+              fill={`hsl(0, 0%, ${background.color.lightness}%)`}
+            />
+          </g>
         </svg>
         <div className={styles.buttonContainer}>
           <ButtonBackground className={styles.realmBackground} />
