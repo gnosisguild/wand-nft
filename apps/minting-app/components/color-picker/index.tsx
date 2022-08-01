@@ -1,54 +1,22 @@
-import { useState } from "react";
-
+import React from "react";
 import classNames from "classnames";
-import UiCircle from "../uiCircle";
-import Slider from "./slider";
-import { useAppContext } from "../../state";
-import IconButton from "../IconButton";
-import styles from "./ColorPicker.module.css";
+
 import { Background } from "../../types";
+import { useAppContext } from "../../state";
 
-interface ButtonBgProps {
-  className: string;
-}
+import UiCircle from "../uiCircle";
+import IconButton from "../IconButton";
 
-const ButtonBackground: React.FC<ButtonBgProps> = ({ className }) => {
-  return (
-    <svg
-      viewBox="0 0 41 39"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={classNames(styles.buttonBackground, className)}
-    >
-      <g style={{ mixBlendMode: "color-dodge" }} opacity="0.2">
-        <path
-          d="M4.84389 20.645C-0.978571 15.9522 -0.424258 9.26499 3.23448 4.70766C6.79698 0.270156 14.6286 -0.766953 19.3595 4.23887C24.7345 9.92625 20.9798 14.3196 23.5001 16.4419C26.162 18.6836 29.3252 14.8711 35.4502 18.6836C41.1326 22.2206 41.7501 29.8638 38.1564 34.5825C33.8751 39.9575 26.0678 40.2478 21.9689 35.9106C16.1604 29.7645 20.0134 24.8708 17.5157 23.0982C14.8518 21.2077 10.0782 24.8638 4.84389 20.645Z"
-          fill="url(#paint0_linear_909_5381)"
-        />
-      </g>
-      <defs>
-        <linearGradient
-          id="paint0_linear_909_5381"
-          x1="20.4334"
-          y1="0.909668"
-          x2="20.4334"
-          y2="38.914"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#EFEBCE" stopOpacity="0.5" />
-          <stop offset="1" stopColor="#EFEBCE" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-};
+import { HueArc, LightnessArc } from "./Arc";
+import ButtonBackground from "./ButtonBackground";
+import styles from "./ColorPicker.module.css";
+import randomInteger from "../randomInteger";
 
 const ColorPicker: React.FC = () => {
-  const { state, dispatch } = useAppContext();
-  const [innerSlider, setInnerSlider] = useState(
-    fromLightness(state.background.color.lightness)
-  );
-  const { background } = state;
+  const {
+    state: { background },
+    dispatch,
+  } = useAppContext();
 
   const handleChange = (value: Background) => {
     dispatch({
@@ -61,24 +29,31 @@ const ColorPicker: React.FC = () => {
     <div>
       <UiCircle>
         <svg viewBox={`0 0 1000 1000`} className={styles.svg}>
-          <Slider
-            wide={true}
+          <circle
+            cy="500"
+            cx="500"
+            r="475"
+            stroke="#D9D4AD"
+            strokeWidth="16"
+            fill="none"
+            opacity="0.7"
+            style={{ mixBlendMode: "color-dodge" }}
+          />
+          <HueArc
             value={fromHue(background.color.hue)}
-            onChange={(nextValue: number) =>
+            onChange={(nextValue: number) => {
               handleChange({
                 ...background,
                 color: {
                   ...background.color,
                   hue: toHue(nextValue),
                 },
-              })
-            }
+              });
+            }}
           />
-          <Slider
-            wide={false}
-            value={innerSlider}
+          <LightnessArc
+            value={fromLightness(background.color.lightness)}
             onChange={(nextValue: number) => {
-              setInnerSlider(nextValue);
               handleChange({
                 ...background,
                 color: {
@@ -88,6 +63,30 @@ const ColorPicker: React.FC = () => {
               });
             }}
           />
+          <g style={{ pointerEvents: "none" }}>
+            <rect
+              className={classNames(
+                styles.viewfinderPath,
+                styles.viewFinderRect
+              )}
+              width="70"
+              height="70"
+              x="470"
+              y="30"
+              fill={`hsl(${background.color.hue}, 100%, 50%)`}
+            />
+            <rect
+              className={classNames(
+                styles.viewfinderPath,
+                styles.viewFinderRect
+              )}
+              width="70"
+              height="70"
+              x="470"
+              y="210"
+              fill={`hsl(0, 0%, ${background.color.lightness}%)`}
+            />
+          </g>
         </svg>
         <div className={styles.buttonContainer}>
           <ButtonBackground className={styles.realmBackground} />
@@ -147,7 +146,22 @@ const ColorPicker: React.FC = () => {
         </div>
       </UiCircle>
       <div className={styles.icon}>
-        <IconButton icon="PickerAura" shadow />
+        <IconButton
+          icon="PickerAura"
+          shadow
+          onClick={() => {
+            handleChange({
+              ...background,
+              radial: randomInteger(1) === 1,
+              dark: randomInteger(1) === 1,
+              color: {
+                ...background.color,
+                hue: toHue(randomInteger(359)),
+                lightness: toLightness(randomInteger(359)),
+              },
+            });
+          }}
+        />
       </div>
     </div>
   );
@@ -156,32 +170,32 @@ const ColorPicker: React.FC = () => {
 export default ColorPicker;
 
 function toHue(value: number): number {
-  return Math.round(value);
+  return Math.round(360 - value) % 360;
 }
 
 function fromHue(value: number): number {
-  return value;
+  return 360 - value;
 }
 
 const LIGHTNESS_BOUNDS = [20, 70];
 
 function toLightness(value: number): number {
   const [left, right] = LIGHTNESS_BOUNDS;
-  const stretch = right - left;
+  const spectrum = right - left;
 
   const mirrored = value < 180 ? value : 360 - value;
   // inverted progress
   const progress = 1 - mirrored / 180;
 
-  return Math.round(left + progress * stretch);
+  return Math.round(left + progress * spectrum);
 }
 
 function fromLightness(value: number): number {
   const [left, right] = LIGHTNESS_BOUNDS;
-  const stretch = right - left;
+  const spectrum = right - left;
 
   // inverted progress
-  const progress = 1 - (value - left) / stretch;
+  const progress = 1 - (value - left) / spectrum;
 
   return progress * 180;
 }

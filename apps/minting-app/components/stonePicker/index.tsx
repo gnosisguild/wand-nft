@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import { useDrag } from "@use-gesture/react";
+import React from "react";
 import StoneViewer from "./StoneViewer";
 import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
@@ -7,53 +6,42 @@ import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import StoneGlass from "./StoneGlass";
-import { clockwiseDelta, dimensions, toAngle } from "../trigonometry";
 import {
   describeFillers,
   describeSegments,
   findSegmentCenters,
 } from "../rhythm";
 import StoneFilter from "./StoneFilter";
-import assert from "assert";
+import useDragRotate from "../useDragRotate";
+import randomInteger from "../randomInteger";
+import { usePrevious } from "../usePrevious";
+import { delta } from "../trigonometry";
 
 const StonePicker: React.FC = () => {
-  const container = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useAppContext();
-  const [rotation, setRotation] = useState<number>(0);
-  const [pin, setPin] = useState<number>(0);
 
-  const bind = useDrag(
-    ({ first, last, initial: [initialX, initialY], xy: [x, y] }) => {
-      const { center } = dimensions(
-        container.current?.getBoundingClientRect() as DOMRect
-      );
-
-      const delta = clockwiseDelta(
-        //drag start angle
-        toAngle(center, { x: initialX, y: initialY }),
-        //drag current angle
-        toAngle(center, { x, y })
-      );
-
-      if (first) {
-        setPin(rotation);
-      } else {
-        setRotation(pin + delta);
-      }
-
-      if (last) {
-        dispatch({
-          type: "changeStone",
-          value: toStoneId(rotation),
-        });
-      }
-    }
+  const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
+    fromStoneId(state.stone),
+    (nextRotation: number) =>
+      dispatch({
+        type: "changeStone",
+        value: toStoneId(nextRotation),
+      })
   );
 
+  const prevRotation = usePrevious(rotation);
+
   return (
-    <div className={styles.container} ref={container}>
+    <div className={styles.container}>
       <div {...bind()} className={styles.drag}>
-        <UiCircle rotation={rotation} showIndicator>
+        <UiCircle
+          showIndicator
+          rotation={{
+            immediate: dragging || delta(prevRotation, rotation) < 1,
+            from: prevRotation,
+            to: rotation,
+          }}
+        >
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
@@ -119,7 +107,16 @@ const StonePicker: React.FC = () => {
         <StoneGlass />
       </div>
       <div className={styles.icon}>
-        <IconButton icon="PickerStone" shadow />
+        <IconButton
+          icon="PickerStone"
+          shadow
+          onClick={() => {
+            dispatch({
+              type: "changeStone",
+              value: randomInteger(3600 - 1),
+            });
+          }}
+        />
       </div>
     </div>
   );
@@ -163,6 +160,6 @@ function fromStoneId(stoneId: number) {
 }
 
 function toStoneId(angle: number) {
-  const withoutSkew = (angle + skew) % 360;
-  return (Math.round(withoutSkew) % 360) * 10;
+  const withoutSkew = angle + skew;
+  return Math.round(withoutSkew * 10) % 3600;
 }
