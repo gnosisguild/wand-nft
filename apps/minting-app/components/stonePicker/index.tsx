@@ -1,11 +1,6 @@
 import React from "react";
 import StoneViewer from "./StoneViewer";
-import {
-  interpolateStone,
-  stoneList,
-  stoneCount,
-  packStoneId,
-} from "../../template";
+import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../uiCircle";
 import { useAppContext } from "../../state";
@@ -28,7 +23,11 @@ const StonePicker: React.FC = () => {
     (nextAngle: number) =>
       dispatch({
         type: "changeStone",
+<<<<<<< HEAD
         value: toStoneId(withoutSkew(nextAngle)),
+=======
+        value: Math.round(withoutSkew(nextAngle) * 10),
+>>>>>>> 9beafe2039b1522bacf7638bba090aff48039e25
       })
   );
 
@@ -94,7 +93,10 @@ const StonePicker: React.FC = () => {
         </UiCircle>
       </div>
       <div className={styles.stone}>
-        <StoneViewer seed={state.tokenId} stone={interpolateStone(rotation)} />
+        <StoneViewer
+          seed={state.tokenId}
+          stone={interpolateStone(Math.round(withoutSkew(rotation) * 10))}
+        />
         <StoneGlass />
       </div>
       <div className={styles.icon}>
@@ -136,7 +138,7 @@ const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
 
 function withoutSkew(angle: number) {
   const step = 360 / stoneCount;
-  return Math.round(angle + step * CONFIG.segment.percSkew) % 360;
+  return (angle + step * CONFIG.segment.percSkew) % 360;
 }
 
 function withSkew(angle: number) {
@@ -144,25 +146,4 @@ function withSkew(angle: number) {
   const result = angle - step * CONFIG.segment.percSkew;
   assert(result >= 0);
   return result;
-}
-
-export function toStoneId(angle: number) {
-  const prevStone = (index: number) => (index > 0 ? index - 1 : stoneCount - 1);
-  const nextStone = (index: number) => (index + 1) % stoneCount;
-
-  const step = 360 / stoneCount;
-  const from = Math.floor(angle / step);
-  const midway = step * from + step / 2;
-
-  if (angle < midway) {
-    // going left
-    const to = prevStone(from);
-    const progress = Math.round(((midway - angle) / step) * 100);
-    return packStoneId(from, to, progress);
-  } else {
-    // going right
-    const to = nextStone(from);
-    const progress = Math.round(((angle - midway) / step) * 100);
-    return packStoneId(from, to, progress);
-  }
 }

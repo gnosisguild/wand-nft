@@ -469,7 +469,7 @@ export const stoneList: Stone[] = [
 ];
 
 export function interpolateStone(stoneId: number): Stone {
-  const [from, to, progress] = unpackStoneId(stoneId);
+  const [from, to, progress] = interpolationParams(stoneId);
   const fromStone = stoneList[from];
   const toStone = stoneList[to];
 
@@ -491,31 +491,33 @@ export function interpolateStone(stoneId: number): Stone {
   };
 }
 
+export const stoneCount = stoneList.length;
+const prevStone = (index: number) => (index > 0 ? index - 1 : stoneCount - 1);
+const nextStone = (index: number) => (index + 1) % stoneCount;
+
+// in order for this to exactly match onChain calculation
+// this must be a 3 decimals floored number
+const step = Math.floor((3600 / stoneCount) * 1000) / 1000;
+
+export function interpolationParams(angle: number) {
+  const from = Math.floor(angle / step);
+  const midway = step * from + step / 2;
+
+  if (angle < midway) {
+    const to = prevStone(from);
+    const progress = Math.round(((midway - angle) * 100) / step);
+    return [from, to, progress];
+  } else {
+    const to = nextStone(from);
+    const progress = Math.round(((angle - midway) * 100) / step);
+    return [from, to, progress];
+  }
+}
+
 function interpolate(from: number, to: number, progress: number) {
   if (from > to) {
     return from - Math.floor(((from - to) * progress) / 100);
   } else {
     return from + Math.floor(((to - from) * progress) / 100);
   }
-}
-
-export const stoneCount = stoneList.length;
-
-export function packStoneId(
-  from: number,
-  to: number,
-  progress: number
-): number {
-  assert(from >= 0 && from < stoneCount);
-  assert(to >= 0 && to < stoneCount);
-  assert(progress >= 0 && progress <= 100);
-  assert(Number.isInteger(from));
-  assert(Number.isInteger(to));
-  assert(Number.isInteger(progress));
-
-  return (from << 12) | (to << 7) | progress;
-}
-
-export function unpackStoneId(stoneId: number) {
-  return [stoneId >> 12, (stoneId & 0xf80) >> 7, stoneId & 0x7f];
 }
