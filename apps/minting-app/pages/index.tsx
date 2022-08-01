@@ -1,6 +1,16 @@
 import type { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
+import "@rainbow-me/rainbowkit/styles.css";
+
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+
+import ConnectAccount, {
+  customTheme,
+  BlockieAvatar,
+} from "../components/ConnectButton";
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
@@ -28,45 +38,72 @@ import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
 
+const { chains, provider } = configureChains(
+  [chain.mainnet],
+  [publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: "Zodiac NFT",
+  chains,
+});
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider,
+});
+
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
 
   return (
-    <div
-      className={styles.container}
-      style={{ backgroundImage: `url(${bgImage.src})` }}
-    >
-      <Head>
-        <title>Minting App</title>
-        <meta name="description" content="Minting app for Zodiac NFT" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        <CornerGilding />
-        <div className={styles.centerContainer}>
-          <CenterGilding />
-          <MintButton />
-          <PickerLabels />
-          <div className={styles.svgPreview}>
-            <SvgTemplate input={deriveTemplateInput(state)} />
-          </div>
-          <div className={styles.colorPicker}>
-            <ColorPicker />
-          </div>
-          <div className={styles.stonePicker}>
-            <StonePicker />
-          </div>
-          <div className={styles.haloPicker}>
-            <HaloPicker />
-          </div>
-        </div>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider
+        chains={chains}
+        theme={customTheme}
+        avatar={BlockieAvatar}
+      >
+        <div
+          className={styles.container}
+          style={{ backgroundImage: `url(${bgImage.src})` }}
+        >
+          <Head>
+            <title>Minting App</title>
+            <meta name="description" content="Minting app for Zodiac NFT" />
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <main className={styles.main}>
+            <CornerGilding />
+            <div className={styles.centerContainer}>
+              <CenterGilding />
+              <MintButton />
+              <PickerLabels />
+              <div className={styles.svgPreview}>
+                <SvgTemplate input={deriveTemplateInput(state)} />
+              </div>
+              <div className={styles.colorPicker}>
+                <ColorPicker />
+              </div>
+              <div className={styles.stonePicker}>
+                <StonePicker />
+              </div>
+              <div className={styles.haloPicker}>
+                <HaloPicker />
+              </div>
+            </div>
+            <div className={styles.AccountConnect}>
+              <ConnectAccount />
+            </div>
 
-        <div className={styles.downloadButtons}>
-          <IconButton icon="FullDownload" />
-          <IconButton icon="PfpDownload" />
+            <div className={styles.downloadButtons}>
+              <IconButton icon="FullDownload" />
+              <IconButton icon="PfpDownload" />
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 };
 
