@@ -251,26 +251,12 @@ contract WandConjuror {
     }
   }
 
-  function unpackStoneId(uint32 stoneId)
-    internal
-    pure
-    returns (
-      uint8 from,
-      uint8 to,
-      int256 progress
-    )
-  {
-    from = uint8(stoneId >> 12);
-    to = uint8((stoneId & 0xf80) >> 7);
-    progress = int256(int32(stoneId & 0x7f));
-  }
-
-  function interpolateStone(uint32 stoneId)
+  function interpolateStone(uint16 stoneId)
     internal
     pure
     returns (Template.Stone memory)
   {
-    (uint16 from, uint16 to, int256 progress) = unpackStoneId(stoneId);
+    (uint8 from, uint8 to, uint8 progress) = interpolationParams(stoneId);
     Template.Stone memory fromStone = stoneList()[from];
     Template.Stone memory toStone = stoneList()[to];
     return
@@ -346,28 +332,67 @@ contract WandConjuror {
       });
   }
 
+  function interpolationParams(uint16 stone)
+    internal
+    pure
+    returns (
+      uint8 from,
+      uint8 to,
+      uint8 progress
+    )
+  {
+    uint256 angle = uint256(stone) * 1000;
+    uint256 step = 3600 * 1000 / stoneList().length;
+    from = uint8(angle / step);
+    uint256 midway = step * from + step / 2;
+
+    if (angle < midway) {
+      // going left
+      to = prevStone(from);
+      progress = uint8(round1(((midway - angle) * 1000) / step));
+    } else {
+      // going right
+      to = nextStone(from);
+      progress = uint8(round1(((angle - midway) * 1000) / step));
+    }
+  }
+
+  function prevStone(uint8 index) private pure returns (uint8) {
+    return (index > 0 ? index - 1 : uint8(stoneList().length - 1));
+  }
+
+  function nextStone(uint8 index) private pure returns (uint8) {
+    return (index + 1) % uint8(stoneList().length);
+  }
+
+  function round1(uint256 number) internal pure returns (uint256) {
+    return number / 10 + ((number % 10) >= 5 ? 1 : 0);
+  }
+
   function interpolateUInt8Value(
     uint8 from,
     uint8 to,
-    int256 progress
+    uint8 progress
   ) internal pure returns (uint8) {
-    return uint8(uint256(interpolateValue(int8(from), int8(to), progress)));
+    return
+      uint8(uint256(interpolateValue(int8(from), int8(to), int8(progress))));
   }
 
   function interpolateUInt16Value(
     uint16 from,
     uint16 to,
-    int256 progress
+    uint8 progress
   ) internal pure returns (uint16) {
-    return uint16(uint256(interpolateValue(int16(from), int16(to), progress)));
+    return
+      uint16(uint256(interpolateValue(int16(from), int16(to), int8(progress))));
   }
 
   function interpolateInt8Value(
     int8 from,
     int8 to,
-    int256 progress
+    uint8 progress
   ) internal pure returns (int8) {
-    return int8(interpolateValue(from, to, progress));
+    return int8(interpolateValue(from, to, int8(progress)));
   }
 
   function interpolateValue(

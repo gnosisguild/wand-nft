@@ -6,7 +6,7 @@ import "../WandConjuror.sol";
 contract WandConjurorExposer is WandConjuror {
   // contract makes internal functions public for test setup
 
-  function _interpolateStone(uint32 stoneId)
+  function _interpolateStone(uint16 stoneId)
     public
     pure
     returns (Template.Stone memory)
@@ -14,7 +14,7 @@ contract WandConjurorExposer is WandConjuror {
     return interpolateStone(stoneId);
   }
 
-  function _unpackStoneId(uint32 stoneId)
+  function _interpolationParams(uint16 stoneId)
     public
     pure
     returns (
@@ -23,9 +23,6 @@ contract WandConjurorExposer is WandConjuror {
       uint8 progress
     )
   {
-    int256 p;
-    (from, to, p) = unpackStoneId(stoneId);
-
-    progress = uint8(uint256(p));
+    return interpolationParams(stoneId);
   }
 }
