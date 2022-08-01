@@ -152,6 +152,8 @@ const ColorPicker: React.FC = () => {
           onClick={() => {
             handleChange({
               ...background,
+              radial: randomInteger(1) === 1,
+              dark: randomInteger(1) === 1,
               color: {
                 ...background.color,
                 hue: toHue(randomInteger(360)),
