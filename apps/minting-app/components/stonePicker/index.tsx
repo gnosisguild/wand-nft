@@ -14,6 +14,8 @@ import {
 import StoneFilter from "./StoneFilter";
 import useDragRotate from "../useDragRotate";
 import randomInteger from "../randomInteger";
+import { usePrevious } from "../usePrevious";
+import { delta } from "../trigonometry";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
@@ -27,10 +29,19 @@ const StonePicker: React.FC = () => {
       })
   );
 
+  const prevRotation = usePrevious(rotation);
+
   return (
     <div className={styles.container}>
       <div {...bind()} className={styles.drag}>
-        <UiCircle rotation={rotation} showIndicator>
+        <UiCircle
+          showIndicator
+          rotation={{
+            animate: !dragging && delta(prevRotation, rotation) > 1,
+            from: prevRotation,
+            to: rotation,
+          }}
+        >
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
