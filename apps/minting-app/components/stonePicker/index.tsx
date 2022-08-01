@@ -23,11 +23,7 @@ const StonePicker: React.FC = () => {
     (nextAngle: number) =>
       dispatch({
         type: "changeStone",
-<<<<<<< HEAD
-        value: toStoneId(withoutSkew(nextAngle)),
-=======
         value: Math.round(withoutSkew(nextAngle) * 10),
->>>>>>> 9beafe2039b1522bacf7638bba090aff48039e25
       })
   );
 
