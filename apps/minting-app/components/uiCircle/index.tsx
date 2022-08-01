@@ -27,7 +27,6 @@ const UiCircle: React.FC<Props> = ({
     to: { transform: `rotate(${to}deg)` },
     immediate,
     config: {
-      duration: delta(from, to) * 5,
       easing: easings.easeInOutQuart,
     },
   });

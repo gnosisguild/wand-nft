@@ -80,7 +80,7 @@ export const LightnessArc = ({ value, onChange }: Props) => {
     to: { transform: `rotate(${rotation}deg)` },
     immediate: dragging || delta(prevRotation, rotation) < 1,
     config: {
-      duration: delta(prevRotation, rotation) * 5,
+      easing: easings.easeInOutQuart,
     },
   });
 
