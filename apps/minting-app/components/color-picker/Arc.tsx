@@ -24,10 +24,14 @@ export const HueArc = ({ value, onChange }: Props) => {
   );
 
   const prevRotation = usePrevious(rotation);
+
   const { transform } = useSpring({
     from: { transform: `rotate(${prevRotation}deg)` },
     to: { transform: `rotate(${rotation}deg)` },
     immediate: dragging || delta(prevRotation, rotation) < 1,
+    config: {
+      duration: delta(prevRotation, rotation) * 5,
+    },
   });
 
   return (
@@ -75,6 +79,9 @@ export const LightnessArc = ({ value, onChange }: Props) => {
     from: { transform: `rotate(${prevRotation}deg)` },
     to: { transform: `rotate(${rotation}deg)` },
     immediate: dragging || delta(prevRotation, rotation) < 1,
+    config: {
+      duration: delta(prevRotation, rotation) * 5,
+    },
   });
 
   return (
@@ -122,6 +129,8 @@ export const LightnessArc = ({ value, onChange }: Props) => {
     </animated.g>
   );
 };
+
+function duration() {}
 
 const HUE_D = arc(SIZE, HUE_MARGIN);
 const LIGHTNESS_D = arc(SIZE, LIGHTNESS_MARGIN);

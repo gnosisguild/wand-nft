@@ -37,7 +37,7 @@ const StonePicker: React.FC = () => {
         <UiCircle
           showIndicator
           rotation={{
-            animate: !dragging && delta(prevRotation, rotation) > 1,
+            immediate: dragging || delta(prevRotation, rotation) < 1,
             from: prevRotation,
             to: rotation,
           }}

@@ -2,12 +2,13 @@ import { ReactNode } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
+import { delta } from "../trigonometry";
 
 type Props = {
   showIndicator?: boolean;
   rotation?:
     | {
-        animate: boolean;
+        immediate: boolean;
         from: number;
         to: number;
       }
@@ -19,12 +20,15 @@ const UiCircle: React.FC<Props> = ({
   showIndicator = false,
   rotation,
 }) => {
-  const { animate, from, to } = unpack(rotation);
+  const { immediate, from, to } = unpack(rotation);
 
   const { transform } = useSpring({
     from: { transform: `rotate(${from}deg)` },
     to: { transform: `rotate(${to}deg)` },
-    // @sam tune animation here
+    immediate,
+    config: {
+      duration: delta(from, to) * 5,
+    },
   });
 
   return (
@@ -37,7 +41,7 @@ const UiCircle: React.FC<Props> = ({
       >
         <animated.g
           style={{
-            transform: animate ? transform : `rotate(${to}deg)`,
+            transform,
             transformOrigin: "center",
           }}
         >
@@ -151,22 +155,22 @@ const UiCircle: React.FC<Props> = ({
 function unpack(
   rotation?:
     | {
-        animate: boolean;
+        immediate: boolean;
         from: number;
         to: number;
       }
     | number
 ) {
   if (!rotation) {
-    return { animate: false, from: 0, to: 0 };
+    return { immediate: true, from: 0, to: 0 };
   }
 
   if (typeof rotation === "number") {
-    return { animate: false, from: 0, to: rotation };
+    return { immediate: true, from: 0, to: rotation };
   }
 
   return {
-    animate: !!rotation.animate,
+    immediate: !!rotation.immediate,
     from: rotation.from | 0,
     to: rotation.to | 0,
   };
