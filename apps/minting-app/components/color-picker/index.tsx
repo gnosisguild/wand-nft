@@ -156,8 +156,8 @@ const ColorPicker: React.FC = () => {
               dark: randomInteger(1) === 1,
               color: {
                 ...background.color,
-                hue: toHue(randomInteger(360)),
-                lightness: toLightness(randomInteger(360)),
+                hue: toHue(randomInteger(359)),
+                lightness: toLightness(randomInteger(359)),
               },
             });
           }}
@@ -170,7 +170,7 @@ const ColorPicker: React.FC = () => {
 export default ColorPicker;
 
 function toHue(value: number): number {
-  return Math.round(360 - value);
+  return Math.round(360 - value) % 360;
 }
 
 function fromHue(value: number): number {
