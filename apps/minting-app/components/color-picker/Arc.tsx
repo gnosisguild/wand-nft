@@ -1,8 +1,12 @@
 import React from "react";
 import classNames from "classnames";
+import { useSpring, animated } from "@react-spring/web";
+
 import { HueGradient, LightnessGradient } from "./Gradient";
 import useDragRotate from "../useDragRotate";
 import styles from "./ColorPicker.module.css";
+import { usePrevious } from "../usePrevious";
+import { delta } from "../trigonometry";
 
 const SIZE = 1000;
 const HUE_MARGIN = 0.124;
@@ -18,9 +22,20 @@ export const HueArc = ({ value, onChange }: Props) => {
     value,
     onChange
   );
+
+  const prevRotation = usePrevious(rotation);
+  const { transform } = useSpring({
+    from: { transform: `rotate(${prevRotation}deg)` },
+    to: { transform: `rotate(${rotation}deg)` },
+    immediate: dragging || delta(prevRotation, rotation) < 1,
+  });
+
   return (
-    <g
-      transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
+    <animated.g
+      style={{
+        transform,
+        transformOrigin: "center",
+      }}
       className={classNames(styles.dragGroup, {
         [styles.hovering]: hovering,
       })}
@@ -45,7 +60,7 @@ export const HueArc = ({ value, onChange }: Props) => {
         strokeDasharray="7 7"
         className={styles.hueKnurl}
       />
-    </g>
+    </animated.g>
   );
 };
 
@@ -54,9 +69,20 @@ export const LightnessArc = ({ value, onChange }: Props) => {
     value,
     onChange
   );
+
+  const prevRotation = usePrevious(rotation);
+  const { transform } = useSpring({
+    from: { transform: `rotate(${prevRotation}deg)` },
+    to: { transform: `rotate(${rotation}deg)` },
+    immediate: dragging || delta(prevRotation, rotation) < 1,
+  });
+
   return (
-    <g
-      transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
+    <animated.g
+      style={{
+        transform,
+        transformOrigin: "center",
+      }}
       className={classNames(styles.dragGroup, {
         [styles.hovering]: hovering,
       })}
@@ -93,7 +119,7 @@ export const LightnessArc = ({ value, onChange }: Props) => {
         strokeDasharray="5 5"
         className={styles.lightnessKnurl}
       />
-    </g>
+    </animated.g>
   );
 };
 
