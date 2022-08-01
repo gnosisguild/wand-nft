@@ -1,9 +1,12 @@
 import React from "react";
 import classNames from "classnames";
+import { useSpring, animated, easings } from "@react-spring/web";
+
 import { HueGradient, LightnessGradient } from "./Gradient";
-import DragRotate from "../DragRotate";
 import useDragRotate from "../useDragRotate";
 import styles from "./ColorPicker.module.css";
+import { usePrevious } from "../usePrevious";
+import { delta } from "../trigonometry";
 
 const SIZE = 1000;
 const HUE_MARGIN = 0.124;
@@ -14,48 +17,79 @@ interface Props {
   onChange: (nextValue: number) => void;
 }
 
-export const HueArc = ({ value, onChange }: Props) => (
-  <DragRotate value={value} onDragEnd={onChange}>
-    {({ bind, rotation, hovering, dragging }) => (
-      <g
-        transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
-        className={classNames(styles.dragGroup, {
-          [styles.hovering]: hovering,
+export const HueArc = ({ value, onChange }: Props) => {
+  const { bind, rotation, hovering, dragging } = useDragRotate<SVGPathElement>(
+    value,
+    onChange
+  );
+
+  const prevRotation = usePrevious(rotation);
+
+  const { transform } = useSpring({
+    from: { transform: `rotate(${prevRotation}deg)` },
+    to: { transform: `rotate(${rotation}deg)` },
+    immediate: dragging || delta(prevRotation, rotation) < 1,
+    config: {
+      easing: easings.easeInOutQuart,
+    },
+  });
+
+  return (
+    <animated.g
+      style={{
+        transform,
+        transformOrigin: "center",
+      }}
+      className={classNames(styles.dragGroup, {
+        [styles.hovering]: hovering,
+      })}
+    >
+      <HueGradient />
+      <path
+        {...bind()}
+        fill="none"
+        stroke={"rgba(0,0,0,0)"}
+        strokeWidth={90}
+        d={HUE_D}
+        className={classNames(styles.grabbableArc, {
+          [styles.active]: dragging,
         })}
-      >
-        <HueGradient />
-        <path
-          {...bind()}
-          fill="none"
-          stroke={"rgba(0,0,0,0)"}
-          strokeWidth={90}
-          d={HUE_D}
-          className={classNames(styles.grabbableArc, {
-            [styles.active]: dragging,
-          })}
-        />
-        <circle
-          cx="500"
-          cy="500"
-          r="434"
-          fill="none"
-          strokeWidth="65"
-          strokeDasharray="7 7"
-          className={styles.hueKnurl}
-        />
-      </g>
-    )}
-  </DragRotate>
-);
+      />
+      <circle
+        cx="500"
+        cy="500"
+        r="434"
+        fill="none"
+        strokeWidth="65"
+        strokeDasharray="7 7"
+        className={styles.hueKnurl}
+      />
+    </animated.g>
+  );
+};
 
 export const LightnessArc = ({ value, onChange }: Props) => {
   const { bind, rotation, hovering, dragging } = useDragRotate<SVGPathElement>(
     value,
     onChange
   );
+
+  const prevRotation = usePrevious(rotation);
+  const { transform } = useSpring({
+    from: { transform: `rotate(${prevRotation}deg)` },
+    to: { transform: `rotate(${rotation}deg)` },
+    immediate: dragging || delta(prevRotation, rotation) < 1,
+    config: {
+      duration: delta(prevRotation, rotation) * 5,
+    },
+  });
+
   return (
-    <g
-      transform={`rotate(${rotation}, ${SIZE / 2}, ${SIZE / 2})`}
+    <animated.g
+      style={{
+        transform,
+        transformOrigin: "center",
+      }}
       className={classNames(styles.dragGroup, {
         [styles.hovering]: hovering,
       })}
@@ -92,9 +126,11 @@ export const LightnessArc = ({ value, onChange }: Props) => {
         strokeDasharray="5 5"
         className={styles.lightnessKnurl}
       />
-    </g>
+    </animated.g>
   );
 };
+
+function duration() {}
 
 const HUE_D = arc(SIZE, HUE_MARGIN);
 const LIGHTNESS_D = arc(SIZE, LIGHTNESS_MARGIN);

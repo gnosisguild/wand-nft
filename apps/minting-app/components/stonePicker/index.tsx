@@ -13,23 +13,35 @@ import {
 } from "../rhythm";
 import StoneFilter from "./StoneFilter";
 import useDragRotate from "../useDragRotate";
+import randomInteger from "../randomInteger";
+import { usePrevious } from "../usePrevious";
+import { delta } from "../trigonometry";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
   const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
-    0,
-    (nextAngle: number) =>
+    fromStoneId(state.stone),
+    (nextRotation: number) =>
       dispatch({
         type: "changeStone",
-        value: toStoneId(nextAngle),
+        value: toStoneId(nextRotation),
       })
   );
+
+  const prevRotation = usePrevious(rotation);
 
   return (
     <div className={styles.container}>
       <div {...bind()} className={styles.drag}>
-        <UiCircle rotation={rotation} showIndicator>
+        <UiCircle
+          showIndicator
+          rotation={{
+            immediate: dragging || delta(prevRotation, rotation) < 1,
+            from: prevRotation,
+            to: rotation,
+          }}
+        >
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
@@ -95,7 +107,16 @@ const StonePicker: React.FC = () => {
         <StoneGlass />
       </div>
       <div className={styles.icon}>
-        <IconButton icon="PickerStone" shadow />
+        <IconButton
+          icon="PickerStone"
+          shadow
+          onClick={() => {
+            dispatch({
+              type: "changeStone",
+              value: randomInteger(3600 - 1),
+            });
+          }}
+        />
       </div>
     </div>
   );
@@ -139,6 +160,6 @@ function fromStoneId(stoneId: number) {
 }
 
 function toStoneId(angle: number) {
-  const withoutSkew = (angle + skew) % 360;
-  return (Math.round(withoutSkew) % 360) * 10;
+  const withoutSkew = angle + skew;
+  return Math.round(withoutSkew * 10) % 3600;
 }
