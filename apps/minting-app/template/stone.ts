@@ -469,6 +469,8 @@ export const stoneList: Stone[] = [
 ];
 
 export function interpolateStone(stoneId: number): Stone {
+  assert(stoneId >= 0 && stoneId < 3600);
+
   const [from, to, progress] = interpolationParams(stoneId);
   const fromStone = stoneList[from];
   const toStone = stoneList[to];
