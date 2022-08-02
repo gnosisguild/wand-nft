@@ -2,7 +2,7 @@
 pragma solidity ^0.8.6;
 
 import "./interfaces/IWands.sol";
-import "./svg/Template.sol";
+import "./Template.sol";
 import "./WandName.sol";
 import "base64-sol/base64.sol";
 

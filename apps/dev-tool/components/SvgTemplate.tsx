@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./SvgTemplate.module.css";
-import template from "../../../contracts/contracts/svg/template.svg.hbs";
+import template from "../../../svg/template.svg.hbs";
 
 export interface Planet {
   x: number;
