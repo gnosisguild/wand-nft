@@ -27,16 +27,16 @@ contract Forge is Ownable, IForge {
     require(availableXP >= _amount);
     characters[msg.sender].XPAssigned += _amount;
 
-    if(_amount > 1000) {
+    if (_amount > 1000) {
       iLvl[_id] += 1;
-    } else if(_amount > 5000) {
+    } else if (_amount > 5000) {
       iLvl[_id] += 2;
     } else if (_amount > 10000) {
       iLvl[_id] += 3;
     }
   }
 
-  function getILvl(uint256 _id) external view override returns(uint8) {
+  function getILvl(uint256 _id) external view override returns (uint8) {
     return iLvl[_id];
   }
 
@@ -44,12 +44,15 @@ contract Forge is Ownable, IForge {
     characters[_id].XP = _xp;
   }
 
-  function adjustXPBatch(address[] memory _ids, uint256[] memory _xps) external onlyOwner {
+  function adjustXPBatch(address[] memory _ids, uint256[] memory _xps)
+    external
+    onlyOwner
+  {
     require(_ids.length == _xps.length);
 
-    for(uint256 i=0; i<= _ids.length;  i++) {
+    for (uint256 i = 0; i <= _ids.length; i++) {
       characters[_ids[i]].XP = _xps[i];
-    }  
+    }
   }
 
   function setMaxLevel(uint256 _maxLevel) public onlyOwner {

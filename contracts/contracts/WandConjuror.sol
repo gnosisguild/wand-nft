@@ -342,7 +342,7 @@ contract WandConjuror {
     )
   {
     uint256 angle = uint256(stone) * 1000;
-    uint256 step = 3600 * 1000 / stoneList().length;
+    uint256 step = (3600 * 1000) / stoneList().length;
     from = uint8(angle / step);
     uint256 midway = step * from + step / 2;
 
