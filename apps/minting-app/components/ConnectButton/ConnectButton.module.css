@@ -32,6 +32,8 @@
   letter-spacing: 0.1em;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   column-gap: 0.5vw;
   padding: 0;
 }
@@ -46,6 +48,7 @@
 .connectedContainer {
   display: flex;
   justify-content: center;
+  width: 100%;
   column-gap: 0.25vw;
 }
 .networkContainer {
