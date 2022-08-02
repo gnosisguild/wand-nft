@@ -2,7 +2,7 @@ import React from "react";
 import { useDebounce } from "usehooks-ts";
 import { TemplateInput } from "../types";
 import classes from "./SvgTemplate.module.css";
-const template = require("../../../contracts/contracts/svg/template.svg.hbs");
+const template = require("../../../svg/template.svg.hbs");
 
 interface Props {
   input: TemplateInput;
