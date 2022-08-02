@@ -108,7 +108,10 @@ const StonePicker: React.FC = () => {
         <IconButton
           icon="PickerStone"
           shadow
-          onClick={() => rotateTo(randomInteger(3600 - 1) / 10)}
+          onClick={() => {
+            console.log("hello");
+            rotateTo(randomInteger(3600 - 1) / 10);
+          }}
         />
       </div>
     </div>

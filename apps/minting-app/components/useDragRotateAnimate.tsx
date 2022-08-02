@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSpring, easings } from "@react-spring/web";
 
 import useDragRotate from "./useDragRotate";
@@ -28,21 +28,31 @@ function useDragRotateAnimate<T>(
     rotation: draggedRotation,
     hovering,
     dragging,
-  } = useDragRotate<T>(value, (next: number) => setRotation(next));
+  } = useDragRotate<T>(value, (next: number, velocity: number) => {
+    setRotation({ rotation: next, velocity });
+  });
   // animatedRotation
   const [animatedRotation, setAnimatedRotation] = useState<number>(value);
   // rotation
-  const [rotation, setRotation] = useState<number>(value);
+  const [{ rotation, velocity }, setRotation] = useState<{
+    rotation: number;
+    velocity: number;
+  }>({ rotation: value, velocity: 0 });
+
+  useEffect(() => {
+    setRotation({ rotation: value, velocity: 0 });
+  }, [setRotation, value]);
 
   const to = dragging ? draggedRotation : rotation;
   const from = usePrevious(to);
 
   const { transform } = useSpring({
-    from: { transform: `rotate(${from}deg)` },
-    to: { transform: `rotate(${to}deg)` },
+    from: { transform: from },
+    to: { transform: to },
     immediate: dragging, //|| //delta(from, to) < 1,
     config: {
-      easing: easings.easeInOutQuart,
+      decay: velocity !== 0,
+      velocity,
     },
     onChange: (spring) => {
       const next = extractRotation(spring.value.transform);
@@ -64,14 +74,15 @@ function useDragRotateAnimate<T>(
 
   return {
     bind,
-    rotateTo: (nextRotation: number) => {
-      setRotation(nextRotation);
+    rotateTo: (next: number) => {
+      console.log("set", next);
+      setRotation({ rotation: next, velocity: 0 });
     },
     dragging,
     hovering,
     rotation: {
       value: animatedRotation,
-      transform,
+      transform: transform.to((rotation) => `rotate(${rotation}deg)`),
     },
   };
 }
