@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSpring, easings } from "@react-spring/web";
 import StoneViewer from "./StoneViewer";
 import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
@@ -12,36 +13,33 @@ import {
   findSegmentCenters,
 } from "../rhythm";
 import StoneFilter from "./StoneFilter";
-import useDragRotate from "../useDragRotate";
 import randomInteger from "../randomInteger";
-import { usePrevious } from "../usePrevious";
-import { delta } from "../trigonometry";
+import assert from "assert";
+import useDragRotateAnimate from "../useDragRotateAnimate";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
-  const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
+  const {
+    bind,
+    rotateTo,
+    hovering,
+    dragging,
+    rotation: { transform, value: rotation },
+  } = useDragRotateAnimate<HTMLDivElement>(
     fromStoneId(state.stone),
-    (nextRotation: number) =>
+    (nextRotation) => {
       dispatch({
         type: "changeStone",
         value: toStoneId(nextRotation),
-      })
+      });
+    }
   );
-
-  const prevRotation = usePrevious(rotation);
 
   return (
     <div className={styles.container}>
       <div {...bind()} className={styles.drag}>
-        <UiCircle
-          showIndicator
-          rotation={{
-            immediate: dragging || delta(prevRotation, rotation) < 1,
-            from: prevRotation,
-            to: rotation,
-          }}
-        >
+        <UiCircle showIndicator rotation={transform}>
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
             className={styles.haloSegmentSvg}
@@ -110,12 +108,7 @@ const StonePicker: React.FC = () => {
         <IconButton
           icon="PickerStone"
           shadow
-          onClick={() => {
-            dispatch({
-              type: "changeStone",
-              value: randomInteger(3600 - 1),
-            });
-          }}
+          onClick={() => rotateTo(randomInteger(3600 - 1) / 10)}
         />
       </div>
     </div>
