@@ -8,10 +8,10 @@ import "./interfaces/IWands.sol";
 import "./interfaces/IForge.sol";
 
 contract Wand is ERC721, IWands, Ownable {
-  uint256 private nextTokenId;
   IForge public forge;
-  IWandConjuror public immutable wandConjuror;
+  IWandConjuror public immutable conjuror;
 
+  uint256 private nextTokenId;
   mapping(uint256 => Wand) private _wands;
 
   event WandBuilt(
@@ -24,8 +24,9 @@ contract Wand is ERC721, IWands, Ownable {
     IWands.Aspect[8] aspects
   );
 
-  constructor(IWandConjuror _wandConjuror) ERC721("GuildWand", "WAND") {
-    wandConjuror = _wandConjuror;
+  constructor(IForge _forge, IWandConjuror _conjuror) ERC721("GuildWand", "WAND") {
+    forge = _forge;
+    conjuror = _conjuror;
   }
 
   function mintWand() public {
@@ -89,7 +90,11 @@ contract Wand is ERC721, IWands, Ownable {
     }
   }
 
-  function setForge(IForge _newForge) public onlyOwner {
-    forge = _newForge;
+  function setForge(IForge _forge) external onlyOwner {
+    forge = _forge;
+  }
+
+  function setConjuror(IWandConjuror _conjuror) external onlyOwner {
+    conjuror = _conjuror;
   }
 }
