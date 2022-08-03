@@ -47,8 +47,6 @@ describe("WandConjuror", async () => {
     const Wand = await hre.ethers.getContractFactory("Wand");
     const wand = await Wand.deploy(wandConjuror.address);
 
-    await wand.mintWand();
-
     return { wand, wandConjuror, wandConjurorExposer };
   });
 
