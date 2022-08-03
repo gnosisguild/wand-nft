@@ -3,17 +3,15 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "./interfaces/IWandConjuror.sol";
 import "./interfaces/IWands.sol";
 import "./interfaces/IForge.sol";
 
 contract Wand is ERC721, IWands, Ownable {
-  using Counters for Counters.Counter;
-  Counters.Counter private _tokenIds;
-
+  uint256 private nextTokenId;
   IForge public forge;
   IWandConjuror public immutable wandConjuror;
+
   mapping(uint256 => Wand) private _wands;
 
   event WandBuilt(
@@ -30,14 +28,9 @@ contract Wand is ERC721, IWands, Ownable {
     wandConjuror = _wandConjuror;
   }
 
-  function setForge(IForge _newForge) public onlyOwner {
-    forge = _newForge;
-  }
-
   function mintWand() public {
-    uint256 newWand = _tokenIds.current();
-    _safeMint(msg.sender, newWand);
-    _tokenIds.increment();
+    _safeMint(msg.sender, nextTokenId);
+    nextTokenId = nextTokenId + 1;
   }
 
   function build(
@@ -132,5 +125,9 @@ contract Wand is ERC721, IWands, Ownable {
       _wands[tokenId].evolution = 0;
       _wands[tokenId].birth = uint64(block.timestamp);
     }
+  }
+
+  function setForge(IForge _newForge) public onlyOwner {
+    forge = _newForge;
   }
 }
