@@ -47,9 +47,9 @@ contract Conjuror is IConjuror {
       string(
         abi.encodePacked(
           '{"trait_type": "Level", "value": ',
-          SolidMustacheHelpers.uintToString(0, 0), // TODO
+          SolidMustacheHelpers.uintToString(wand.level, 0),
           '},{"trait_type": "Evolution", "value": ',
-          SolidMustacheHelpers.uintToString(0, 0),
+          SolidMustacheHelpers.uintToString(wand.xp, 0),
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
           "}"
