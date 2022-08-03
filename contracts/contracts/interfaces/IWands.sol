@@ -20,7 +20,6 @@ interface IWands is IERC721 {
   }
 
   struct Wand {
-    bool built;
     uint16 stone;
     uint8 handle;
     uint16 halo;
@@ -31,13 +30,12 @@ interface IWands is IERC721 {
     Aspect[8] aspects;
   }
 
-  function build(
-    uint256 tokenId,
+  function mint(
     uint16 stone,
     uint8 handle,
     uint16 halo,
     Template.Background memory background,
     Planet[8] memory planets,
     Aspect[8] memory aspects
-  ) external;
+  ) external returns (uint256);
 }

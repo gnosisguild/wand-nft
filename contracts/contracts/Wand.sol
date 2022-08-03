@@ -9,10 +9,10 @@ import "./interfaces/IForge.sol";
 
 contract Wand is ERC721, IWands, Ownable {
   IForge public forge;
-  IWandConjuror public immutable conjuror;
+  IWandConjuror public conjuror;
 
   uint256 private nextTokenId;
-  mapping(uint256 => Wand) private _wands;
+  mapping(uint256 => Wand) private wands;
 
   event WandBuilt(
     uint256 indexed tokenId,
@@ -24,34 +24,56 @@ contract Wand is ERC721, IWands, Ownable {
     IWands.Aspect[8] aspects
   );
 
-  constructor(IForge _forge, IWandConjuror _conjuror) ERC721("GuildWand", "WAND") {
+  constructor(IForge _forge, IWandConjuror _conjuror)
+    ERC721("GuildWand", "WAND")
+  {
     forge = _forge;
     conjuror = _conjuror;
   }
 
-  function mintWand() public {
-    _safeMint(msg.sender, nextTokenId);
-    nextTokenId = nextTokenId + 1;
-  }
-
-  function build(
-    uint256 tokenId,
+  function mint(
     uint16 stone,
     uint8 handle,
     uint16 halo,
     Template.Background memory background,
     IWands.Planet[8] memory planets,
     IWands.Aspect[8] memory aspects
-  ) external override {
-    require(
-      msg.sender == ERC721.ownerOf(tokenId),
-      "Wands: only owner can build wand"
-    );
+  ) external override returns (uint256) {
+    uint256 tokenId = nextTokenId++;
+    _safeMint(msg.sender, tokenId);
 
-    // TODO: check tokenID is not already built?
-    // Construct Wand
-    Wand storage wand = _wands[tokenId];
-    wand.built = true;
+    wands[tokenId] = concoct(
+      wands[tokenId],
+      stone,
+      handle,
+      halo,
+      background,
+      planets,
+      aspects
+    );
+    emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
+    return tokenId;
+  }
+
+  function tokenURI(uint256 tokenId)
+    public
+    view
+    override
+    returns (string memory)
+  {
+    require(ERC721._exists(tokenId), "Wands: URI query for nonexistent token");
+    return conjuror.generateWandURI(wands[tokenId], tokenId);
+  }
+
+  function concoct(
+    Wand storage wand,
+    uint16 stone,
+    uint8 handle,
+    uint16 halo,
+    Template.Background memory background,
+    IWands.Planet[8] memory planets,
+    IWands.Aspect[8] memory aspects
+  ) internal returns (Wand storage) {
     wand.stone = stone;
     wand.handle = handle;
     wand.halo = halo;
@@ -71,23 +93,7 @@ contract Wand is ERC721, IWands, Ownable {
         y2: aspects[i].y2
       });
     }
-    emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
-  }
-
-  function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-  {
-    require(_exists(tokenId), "Wands: URI query for nonexistent token");
-    Wand storage wand = _wands[tokenId];
-
-    if (!wand.built) {
-      //return wandConjuror.generateWandBadgeURI(calculateWandBadge(tokenId));
-    } else {
-      return wandConjuror.generateWandURI(wand, tokenId);
-    }
+    return wand;
   }
 
   function setForge(IForge _forge) external onlyOwner {
