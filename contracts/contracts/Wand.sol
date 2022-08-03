@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./interfaces/IWandConjuror.sol";
 import "./interfaces/IWands.sol";
 import "./interfaces/IForge.sol";
 
-contract Wand is ERC721URIStorage, IWands, Ownable {
+contract Wand is ERC721, IWands, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
@@ -83,11 +83,11 @@ contract Wand is ERC721URIStorage, IWands, Ownable {
   function tokenURI(uint256 tokenId)
     public
     view
-    override(ERC721URIStorage)
+    override
     returns (string memory)
   {
     require(_exists(tokenId), "Wands: URI query for nonexistent token");
-    Wand memory wand = _wands[tokenId];
+    Wand storage wand = _wands[tokenId];
 
     if (!wand.built) {
       //return wandConjuror.generateWandBadgeURI(calculateWandBadge(tokenId));
