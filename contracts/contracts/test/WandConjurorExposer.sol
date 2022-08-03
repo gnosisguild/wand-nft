@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import "../WandConjuror.sol";
+import "../Conjuror.sol";
 
-contract WandConjurorExposer is WandConjuror {
+contract WandConjurorExposer is Conjuror {
   // contract makes internal functions public for test setup
 
   function _interpolateStone(uint16 stoneId)

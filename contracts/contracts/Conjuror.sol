@@ -1,20 +1,22 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import "./interfaces/IWands.sol";
+import "./interfaces/Types.sol";
+import "./interfaces/IConjuror.sol";
 import "./Template.sol";
 import "./WandName.sol";
 import "base64-sol/base64.sol";
 
-contract WandConjuror {
-  constructor() {}
+// TODO is this a library?
+contract Conjuror is IConjuror {
 
-  function generateWandURI(IWands.Wand memory wand, uint256 tokenId)
+  function generateWandURI(Wand memory wand, uint256 tokenId)
     external
+    override
     pure
     returns (string memory)
   {
-    string memory name = WandName.generateWandName(tokenId);
+    string memory name = WandName.generate(tokenId);
 
     return
       string(
@@ -37,7 +39,7 @@ contract WandConjuror {
       );
   }
 
-  function generateAttributes(IWands.Wand memory wand)
+  function generateAttributes(Wand memory wand)
     internal
     pure
     returns (string memory)
@@ -57,10 +59,11 @@ contract WandConjuror {
   }
 
   function generateSVG(
-    IWands.Wand memory wand,
+    Wand memory wand,
     uint256 tokenId,
     string memory name
   ) internal pure returns (string memory svg) {
+    // TODO should xpCap be pulled from the forge?
     uint32 xpCap = 10000;
     return
       Template.render(
@@ -85,7 +88,7 @@ contract WandConjuror {
       );
   }
 
-  function decodeStone(IWands.Wand memory wand)
+  function decodeStone(Wand memory wand)
     internal
     pure
     returns (Template.Stone memory)
@@ -93,7 +96,7 @@ contract WandConjuror {
     return interpolateStone(wand.stone);
   }
 
-  function decodeHalo(IWands.Wand memory wand)
+  function decodeHalo(Wand memory wand)
     internal
     pure
     returns (Template.Halo memory)
@@ -222,7 +225,7 @@ contract WandConjuror {
     return result;
   }
 
-  function scalePlanets(IWands.Planet[8] memory planets)
+  function scalePlanets(Planet[8] memory planets)
     internal
     pure
     returns (Template.Planet[8] memory result)
@@ -234,7 +237,7 @@ contract WandConjuror {
     }
   }
 
-  function scaleAspects(IWands.Aspect[8] memory aspects)
+  function scaleAspects(Aspect[8] memory aspects)
     internal
     pure
     returns (Template.Aspect[8] memory result)
