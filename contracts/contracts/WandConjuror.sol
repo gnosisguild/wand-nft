@@ -48,7 +48,7 @@ contract WandConjuror {
           '{"trait_type": "Level", "value": ',
           SolidMustacheHelpers.uintToString(0, 0), // TODO
           '},{"trait_type": "Evolution", "value": ',
-          SolidMustacheHelpers.uintToString(wand.evolution, 0),
+          SolidMustacheHelpers.uintToString(0, 0),
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
           "}"
@@ -75,14 +75,10 @@ contract WandConjuror {
             handle2: wand.handle == 2,
             handle3: wand.handle == 3
           }),
-          xp: Template.Xp({
-            cap: xpCap,
-            amount: wand.evolution,
-            crown: wand.evolution >= xpCap
-          }),
+          xp: Template.Xp({cap: xpCap, amount: 0, crown: 0 >= xpCap}),
           stone: decodeStone(wand),
           halo: decodeHalo(wand),
-          frame: generateFrame(wand, name),
+          frame: generateFrame(name),
           sparkles: generateSparkles(tokenId),
           filterLayers: generateFilterLayers()
         })
@@ -123,18 +119,18 @@ contract WandConjuror {
       });
   }
 
-  function generateFrame(IWands.Wand memory wand, string memory name)
+  function generateFrame(string memory name)
     internal
     pure
     returns (Template.Frame memory)
   {
     return
       Template.Frame({
-        level1: wand.evolution == 0,
-        level2: wand.evolution == 1,
-        level3: wand.evolution == 2,
-        level4: wand.evolution == 3,
-        level5: wand.evolution == 4,
+        level1: true,
+        level2: false,
+        level3: false,
+        level4: false,
+        level5: false,
         title: name
       });
   }

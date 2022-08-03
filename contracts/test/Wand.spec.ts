@@ -54,21 +54,10 @@ describe("GuildWand", async () => {
     return { wand };
   });
 
-  const [user1] = waffle.provider.getWallets();
-
-  describe.skip("while not yet built", () => {
-    it("TODO", async () => {
-      const { wand } = await baseSetup();
-      const uri = await wand.tokenURI(0);
-      console.log(uri);
-    });
-  });
-
   describe("SVG generation", () => {
     it("it render the template with the same results as JavaScript", async () => {
       const { wand } = await baseSetup();
 
-      const tokenId = 0;
       const stone = 1;
       const handle = 2;
 
@@ -115,7 +104,7 @@ describe("GuildWand", async () => {
         false,
       ];
 
-      await wand.mint(
+      const tx = await wand.mint(
         stone,
         handle,
         encodeHalo(haloShape, haloRhythm),
@@ -123,7 +112,11 @@ describe("GuildWand", async () => {
         planets,
         aspects
       );
-      const tokenUri = await wand.tokenURI(0);
+
+      await tx.wait();
+
+      const tokenId = 0;
+      const tokenUri = await wand.tokenURI(tokenId);
       const tokenUriJson = JSON.parse(
         atob(
           // remove the prefix
@@ -149,7 +142,11 @@ describe("GuildWand", async () => {
         sparkles: generateSparkles(tokenId),
         seed: tokenId,
         stone: interpolateStone(stone),
-        xp,
+        xp: {
+          amount: 0,
+          cap: 10000,
+          crown: false,
+        },
         handle: generateHandle(handle),
       });
 
