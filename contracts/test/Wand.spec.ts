@@ -43,20 +43,20 @@ describe("GuildWand", async () => {
     });
     const template = await Template.deploy();
 
-    const WandConjuror = await hre.ethers.getContractFactory("WandConjuror", {
+    const WandConjuror = await hre.ethers.getContractFactory("Conjuror", {
       libraries: { Template: template.address, WandName: wandName.address },
     });
     const wandConjuror = await WandConjuror.deploy();
 
-    const Wand = await hre.ethers.getContractFactory("Wand");
-    const wand = await Wand.deploy(wandConjuror.address);
+    const ZodiacWands = await hre.ethers.getContractFactory("ZodiacWands");
+    const zodiacWands = await ZodiacWands.deploy(wandConjuror.address);
 
-    return { wand };
+    return { zodiacWands };
   });
 
   describe("SVG generation", () => {
     it("it render the template with the same results as JavaScript", async () => {
-      const { wand } = await baseSetup();
+      const { zodiacWands } = await baseSetup();
 
       const stone = 1;
       const handle = 2;
@@ -104,7 +104,7 @@ describe("GuildWand", async () => {
         false,
       ];
 
-      const tx = await wand.mint(
+      const tx = await zodiacWands.mint(
         stone,
         handle,
         encodeHalo(haloShape, haloRhythm),
@@ -116,7 +116,7 @@ describe("GuildWand", async () => {
       await tx.wait();
 
       const tokenId = 0;
-      const tokenUri = await wand.tokenURI(tokenId);
+      const tokenUri = await zodiacWands.tokenURI(tokenId);
       const tokenUriJson = JSON.parse(
         atob(
           // remove the prefix

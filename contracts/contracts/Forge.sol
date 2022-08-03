@@ -2,16 +2,20 @@
 pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../interfaces/IWands.sol";
-import "../interfaces/IForge.sol";
+import "./interfaces/IForge.sol";
 
-contract Forge is Ownable, IForge {
+interface IOwnerOf {
+  function ownerOf(uint256 tokenId) external returns (address);
+}
+
+contract Forge is  IForge, Ownable {
   mapping(address => Character) public characters; // account {XP, XP_Spent}
   mapping(uint256 => uint256) public iLvl; // portal to iLvl
   uint256 public maxLevel;
-  IWands public wand;
 
-  constructor(IWands _wand) {
+  IOwnerOf public immutable wand;
+
+  constructor(IOwnerOf _wand) {
     wand = _wand;
   }
 

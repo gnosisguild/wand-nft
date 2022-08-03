@@ -31,10 +31,10 @@ describe("WandConjuror", async () => {
     });
     const template = await Template.deploy();
 
-    const WandConjuror = await hre.ethers.getContractFactory("WandConjuror", {
+    const Conjuror = await hre.ethers.getContractFactory("Conjuror", {
       libraries: { Template: template.address, WandName: wandName.address },
     });
-    const wandConjuror = await WandConjuror.deploy();
+    const conjuror = await Conjuror.deploy();
 
     const WandConjurorExposer = await hre.ethers.getContractFactory(
       "WandConjurorExposer",
@@ -44,10 +44,10 @@ describe("WandConjuror", async () => {
     );
     const wandConjurorExposer = await WandConjurorExposer.deploy();
 
-    const Wand = await hre.ethers.getContractFactory("Wand");
-    const wand = await Wand.deploy(wandConjuror.address);
+    const ZodiacWands = await hre.ethers.getContractFactory("ZodiacWands");
+    const zodiacWands = await ZodiacWands.deploy(conjuror.address);
 
-    return { wand, wandConjuror, wandConjurorExposer };
+    return { zodiacWands, conjuror, wandConjurorExposer };
   });
 
   describe("interpolateStone", () => {

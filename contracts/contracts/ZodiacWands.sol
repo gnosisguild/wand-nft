@@ -3,13 +3,13 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IWandConjuror.sol";
-import "./interfaces/IWands.sol";
+import "./interfaces/IZodiacWands.sol";
 import "./interfaces/IForge.sol";
+import "./interfaces/IConjuror.sol";
 
-contract Wand is ERC721, IWands, Ownable {
+contract ZodiacWands is IZodiacWands, ERC721, Ownable {
   IForge public forge;
-  IWandConjuror public conjuror;
+  IConjuror public conjuror;
 
   uint256 internal nextTokenId;
   mapping(uint256 => PackedWand) internal wands;
@@ -20,11 +20,11 @@ contract Wand is ERC721, IWands, Ownable {
     uint8 handle,
     uint16 halo,
     Template.Background background,
-    IWands.Planet[8] planets,
-    IWands.Aspect[8] aspects
+    Planet[8] planets,
+    Aspect[8] aspects
   );
 
-  constructor(IWandConjuror _conjuror) ERC721("GuildWand", "WAND") {
+  constructor(IConjuror _conjuror) ERC721("ZodiacWands", "WAND") {
     conjuror = _conjuror;
   }
 
@@ -33,8 +33,8 @@ contract Wand is ERC721, IWands, Ownable {
     uint8 handle,
     uint16 halo,
     Template.Background memory background,
-    IWands.Planet[8] memory planets,
-    IWands.Aspect[8] memory aspects
+    Planet[8] memory planets,
+    Aspect[8] memory aspects
   ) external override returns (uint256) {
     uint256 tokenId = nextTokenId++;
     _safeMint(msg.sender, tokenId);
@@ -66,7 +66,7 @@ contract Wand is ERC721, IWands, Ownable {
     forge = _forge;
   }
 
-  function setConjuror(IWandConjuror _conjuror) external onlyOwner {
+  function setConjuror(IConjuror _conjuror) external onlyOwner {
     conjuror = _conjuror;
   }
 
@@ -76,8 +76,8 @@ contract Wand is ERC721, IWands, Ownable {
     uint16 halo,
     uint64 birth,
     Template.Background memory background,
-    IWands.Planet[8] memory planets,
-    IWands.Aspect[8] memory aspects
+    Planet[8] memory planets,
+    Aspect[8] memory aspects
   ) internal pure returns (PackedWand memory) {
     (uint128 packedPlanets, uint8 visibility) = packPlanets(planets);
     uint256 packedAspects = packAspects(aspects);
@@ -113,7 +113,7 @@ contract Wand is ERC721, IWands, Ownable {
       });
   }
 
-  function packPlanets(IWands.Planet[8] memory planets)
+  function packPlanets(Planet[8] memory planets)
     internal
     pure
     returns (uint128 packedPlanets, uint8 packedVisibility)
@@ -130,7 +130,7 @@ contract Wand is ERC721, IWands, Ownable {
   function unpackPlanets(uint128 packedPlanets, uint8 packedVisibility)
     internal
     pure
-    returns (IWands.Planet[8] memory planets)
+    returns (Planet[8] memory planets)
   {
     for (uint256 i = 0; i < 8; i++) {
       uint256 chunk = packedPlanets >> (16 * i);
@@ -138,11 +138,11 @@ contract Wand is ERC721, IWands, Ownable {
       int8 y = int8(uint8(chunk >> 8));
       bool visible = packedVisibility & (1 << i) != 0;
 
-      planets[i] = IWands.Planet({x: x, y: y, visible: visible});
+      planets[i] = Planet({x: x, y: y, visible: visible});
     }
   }
 
-  function packAspects(IWands.Aspect[8] memory aspects)
+  function packAspects(Aspect[8] memory aspects)
     internal
     pure
     returns (uint256 packedAspects)
@@ -160,7 +160,7 @@ contract Wand is ERC721, IWands, Ownable {
   function unpackAspects(uint256 packedAspects)
     internal
     pure
-    returns (IWands.Aspect[8] memory aspects)
+    returns (Aspect[8] memory aspects)
   {
     for (uint256 i = 0; i < 8; i++) {
       uint256 chunk = packedAspects >> (i * 32);
@@ -168,7 +168,7 @@ contract Wand is ERC721, IWands, Ownable {
       int8 y1 = int8(uint8(chunk >> 8));
       int8 x2 = int8(uint8(chunk >> 16));
       int8 y2 = int8(uint8(chunk >> 24));
-      aspects[i] = IWands.Aspect({x1: x1, y1: y1, x2: x2, y2: y2});
+      aspects[i] = Aspect({x1: x1, y1: y1, x2: x2, y2: y2});
     }
   }
 

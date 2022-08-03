@@ -2,11 +2,7 @@
 pragma solidity ^0.8.6;
 
 library WandName {
-  function generateWandName(uint256 seed)
-    public
-    pure
-    returns (string memory wandName)
-  {
+  function generate(uint256 seed) public pure returns (string memory) {
     string[83] memory actionAdjectives = [
       "ADRIFT",
       "ADVANCING",
@@ -307,10 +303,7 @@ library WandName {
     string memory noun = nouns[seed % nouns.length];
     string memory space = " ";
 
-    wandName = string(
-      abi.encodePacked(actionAdjective, space, adjective, space, noun)
-    );
-
-    return wandName;
+    return
+      string(abi.encodePacked(actionAdjective, space, adjective, space, noun));
   }
 }
