@@ -40,13 +40,4 @@ interface IWands is IERC721 {
     Planet[8] memory planets,
     Aspect[8] memory aspects
   ) external;
-
-  function wands(uint256 tokenId)
-    external
-    view
-    returns (
-      uint16 halo,
-      uint32 evolution,
-      uint64 birth
-    );
 }
