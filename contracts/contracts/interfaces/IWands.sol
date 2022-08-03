@@ -21,13 +21,25 @@ interface IWands is IERC721 {
 
   struct Wand {
     uint16 stone;
-    uint8 handle;
     uint16 halo;
-    uint32 evolution;
     uint64 birth;
+    uint8 handle;
     Template.Background background;
     Planet[8] planets;
     Aspect[8] aspects;
+  }
+
+  struct PackedWand {
+    // order matters !!
+    uint64 background;
+    uint64 birth;
+    uint128 planets;
+    uint256 aspects;
+    // background
+    uint16 stone;
+    uint16 halo;
+    uint8 visibility;
+    uint8 handle;
   }
 
   function mint(

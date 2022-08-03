@@ -7,7 +7,7 @@ import "../interfaces/IForge.sol";
 
 contract Forge is Ownable, IForge {
   mapping(address => Character) public characters; // account {XP, XP_Spent}
-  mapping(uint256 => uint8) public iLvl; // portal to iLvl
+  mapping(uint256 => uint256) public iLvl; // portal to iLvl
   uint256 public maxLevel;
   IWands public wand;
 
@@ -36,8 +36,12 @@ contract Forge is Ownable, IForge {
     }
   }
 
-  function getILvl(uint256 _id) external view override returns (uint8) {
-    return iLvl[_id];
+  function level(uint256 tokenId) external view override returns (uint256) {
+    return iLvl[tokenId];
+  }
+
+  function xp(address avatar) external view override returns (uint256) {
+    return characters[avatar].XP;
   }
 
   function adjustXP(address _id, uint256 _xp) public onlyOwner {

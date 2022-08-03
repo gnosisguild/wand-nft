@@ -7,5 +7,6 @@ interface IForge {
     uint256 XPAssigned;
   }
 
-  function getILvl(uint256 tokenId) external view returns (uint8);
+  function level(uint256 tokenId) external view returns (uint256);
+  function xp(address avatar) external view returns (uint256);
 }
