@@ -51,8 +51,6 @@ describe("GuildWand", async () => {
     const Wand = await hre.ethers.getContractFactory("Wand");
     const wand = await Wand.deploy(wandConjuror.address);
 
-    await wand.mintWand();
-
     return { wand };
   });
 
@@ -117,8 +115,7 @@ describe("GuildWand", async () => {
         false,
       ];
 
-      await wand.build(
-        tokenId,
+      await wand.mint(
         stone,
         handle,
         encodeHalo(haloShape, haloRhythm),
