@@ -89,44 +89,6 @@ contract Wand is ERC721, IWands, Ownable {
     }
   }
 
-  function wands(uint256 tokenId)
-    external
-    view
-    override
-    returns (
-      uint16 halo,
-      uint32 evolution,
-      uint64 birth
-    )
-  {
-    require(_exists(tokenId), "Wand: tokenID does not exist");
-    Wand memory wand = _wands[tokenId];
-    return (wand.halo, wand.evolution, wand.birth);
-  }
-
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal virtual override {
-    super._beforeTokenTransfer(from, to, tokenId);
-
-    if (from == address(0)) {
-      // we are minting
-    }
-
-    if (to == address(0)) {
-      // we are burning
-    }
-
-    if (to != address(0) && from != address(0)) {
-      // we are transfering
-      // reset evolutions and age?
-      _wands[tokenId].evolution = 0;
-      _wands[tokenId].birth = uint64(block.timestamp);
-    }
-  }
-
   function setForge(IForge _newForge) public onlyOwner {
     forge = _newForge;
   }
