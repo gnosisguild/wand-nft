@@ -8,7 +8,7 @@ interface IOwnerOf {
   function ownerOf(uint256 tokenId) external returns (address);
 }
 
-contract Forge is  IForge, Ownable {
+contract Forge is IForge, Ownable {
   mapping(address => Character) public characters; // account {XP, XP_Spent}
   mapping(uint256 => uint256) public iLvl; // portal to iLvl
   uint256 public maxLevel;
@@ -40,12 +40,12 @@ contract Forge is  IForge, Ownable {
     }
   }
 
-  function level(uint256 tokenId) external view override returns (uint256) {
-    return iLvl[tokenId];
+  function level(uint256 tokenId) external view override returns (uint32) {
+    return uint32(iLvl[tokenId]);
   }
 
-  function xp(address avatar) external view override returns (uint256) {
-    return characters[avatar].XP;
+  function xp(address avatar) external view override returns (uint32) {
+    return uint32(characters[avatar].XP);
   }
 
   function adjustXP(address _id, uint256 _xp) public onlyOwner {
