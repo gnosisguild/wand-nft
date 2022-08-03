@@ -6,14 +6,14 @@ import Handlebars from "handlebars";
 import { TemplateInput } from "../../apps/minting-app/types";
 
 const partialFiles = readdirSync(
-  path.join(__dirname, "..", "contracts", "svg", "partials"),
+  path.join(__dirname, "..", "..", "svg", "partials"),
   {
     withFileTypes: true,
   }
 );
 partialFiles.forEach((file) => {
   const partialText = readFileSync(
-    path.join(__dirname, "..", "contracts", "svg", "partials", file.name),
+    path.join(__dirname, "..", "..", "svg", "partials", file.name),
     {
       encoding: "utf8",
       flag: "r",
@@ -26,7 +26,7 @@ partialFiles.forEach((file) => {
 });
 
 const templateText = readFileSync(
-  path.join(__dirname, "..", "contracts", "svg", "template.svg.hbs"),
+  path.join(__dirname, "..", "..", "svg", "template.svg.hbs"),
   {
     encoding: "utf8",
     flag: "r",
