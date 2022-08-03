@@ -11,8 +11,8 @@ contract Wand is ERC721, IWands, Ownable {
   IForge public forge;
   IWandConjuror public conjuror;
 
-  uint256 private nextTokenId;
-  mapping(uint256 => Wand) private wands;
+  uint256 internal nextTokenId;
+  mapping(uint256 => Wand) internal wands;
 
   event WandBuilt(
     uint256 indexed tokenId,
@@ -24,10 +24,9 @@ contract Wand is ERC721, IWands, Ownable {
     IWands.Aspect[8] aspects
   );
 
-  constructor(IForge _forge, IWandConjuror _conjuror)
+  constructor(IWandConjuror _conjuror)
     ERC721("GuildWand", "WAND")
   {
-    forge = _forge;
     conjuror = _conjuror;
   }
 
