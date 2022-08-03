@@ -59,7 +59,7 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     returns (string memory)
   {
     require(ERC721._exists(tokenId), "Wands: URI query for nonexistent token");
-    return conjuror.generateWandURI(unpack(wands[tokenId]), tokenId);
+    return conjuror.generateWandURI(unpack(tokenId, wands[tokenId]));
   }
 
   function setForge(IForge _forge) external onlyOwner {
@@ -96,20 +96,25 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
       });
   }
 
-  function unpack(PackedWand memory packedWand)
+  function unpack(uint256 tokenId, PackedWand memory packedWand)
     internal
-    pure
+    view
     returns (Wand memory)
   {
     return
       Wand({
+        tokenId: tokenId,
         stone: packedWand.stone,
         halo: packedWand.halo,
         birth: packedWand.birth,
         handle: packedWand.handle,
         background: unpackBackground(packedWand.background),
         planets: unpackPlanets(packedWand.planets, packedWand.visibility),
-        aspects: unpackAspects(packedWand.aspects)
+        aspects: unpackAspects(packedWand.aspects),
+        xp: address(forge) != address(0)
+          ? forge.xp(ERC721.ownerOf(tokenId))
+          : 0,
+        level: address(forge) != address(0) ? forge.level(tokenId) : 0
       });
   }
 

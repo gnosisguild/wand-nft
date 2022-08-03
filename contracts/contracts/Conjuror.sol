@@ -9,14 +9,13 @@ import "base64-sol/base64.sol";
 
 // TODO is this a library?
 contract Conjuror is IConjuror {
-
-  function generateWandURI(Wand memory wand, uint256 tokenId)
+  function generateWandURI(Wand memory wand)
     external
-    override
     pure
+    override
     returns (string memory)
   {
-    string memory name = WandName.generate(tokenId);
+    string memory name = WandName.generate(wand.tokenId);
 
     return
       string(
@@ -28,7 +27,7 @@ contract Conjuror is IConjuror {
                 '{"name": "',
                 name,
                 '", "description":"A unique Wand, designed and built on-chain", "image": "data:image/svg+xml;base64,', // TODO: edit description
-                Base64.encode(bytes(generateSVG(wand, tokenId, name))),
+                Base64.encode(bytes(generateSVG(wand, name))),
                 '", "attributes": [',
                 generateAttributes(wand),
                 "]}"
@@ -58,18 +57,18 @@ contract Conjuror is IConjuror {
       );
   }
 
-  function generateSVG(
-    Wand memory wand,
-    uint256 tokenId,
-    string memory name
-  ) internal pure returns (string memory svg) {
+  function generateSVG(Wand memory wand, string memory name)
+    internal
+    pure
+    returns (string memory svg)
+  {
     // TODO should xpCap be pulled from the forge?
     uint32 xpCap = 10000;
     return
       Template.render(
         Template.__Input({
           background: wand.background,
-          seed: tokenId,
+          seed: wand.tokenId,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
           handle: Template.Handle({
@@ -78,11 +77,15 @@ contract Conjuror is IConjuror {
             handle2: wand.handle == 2,
             handle3: wand.handle == 3
           }),
-          xp: Template.Xp({cap: xpCap, amount: 0, crown: 0 >= xpCap}),
+          xp: Template.Xp({
+            cap: xpCap,
+            amount: wand.xp,
+            crown: wand.xp >= xpCap
+          }),
           stone: decodeStone(wand),
           halo: decodeHalo(wand),
-          frame: generateFrame(name),
-          sparkles: generateSparkles(tokenId),
+          frame: generateFrame(wand, name),
+          sparkles: generateSparkles(wand.tokenId),
           filterLayers: generateFilterLayers()
         })
       );
@@ -122,18 +125,18 @@ contract Conjuror is IConjuror {
       });
   }
 
-  function generateFrame(string memory name)
+  function generateFrame(Wand memory wand, string memory name)
     internal
     pure
     returns (Template.Frame memory)
   {
     return
       Template.Frame({
-        level1: true,
-        level2: false,
-        level3: false,
-        level4: false,
-        level5: false,
+        level1: wand.level == 0,
+        level2: wand.level == 1,
+        level3: wand.level == 2,
+        level4: wand.level == 3,
+        level5: wand.level == 4,
         title: name
       });
   }

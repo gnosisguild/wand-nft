@@ -17,6 +17,7 @@ struct Planet {
 }
 
 struct Wand {
+  uint256 tokenId;
   uint16 stone;
   uint16 halo;
   uint64 birth;
@@ -24,6 +25,8 @@ struct Wand {
   Template.Background background;
   Planet[8] planets;
   Aspect[8] aspects;
+  uint32 xp;
+  uint32 level;
 }
 
 struct PackedWand {
