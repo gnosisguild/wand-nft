@@ -1,3 +1,3 @@
-export const generateHandle = (handle: 0 | 1 | 2 | 3 | 4 | 5) => ({
+export const generateHandle = (handle: 0 | 1 | 2 | 3) => ({
   [`handle${handle}`]: true,
 });

@@ -10,19 +10,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-spring/web": "9.5.2",
     "@rainbow-me/rainbowkit": "^0.4.4",
+    "@react-spring/web": "9.5.2",
     "@types/react-copy-to-clipboard": "^5.0.2",
+    "@types/suncalc": "^1.8.1",
     "@use-gesture/react": "10.2.17",
     "astronomy-engine": "2.1.2",
     "classnames": "^2.3.1",
     "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.6.9",
     "handlebars": "^4.7.7",
-    "next": "12.1.0",
+    "next": "^12.2.3",
     "react": "17.0.2",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "17.0.2",
+    "suncalc": "^1.9.0",
     "usehooks-ts": "^2.6.0",
     "wagmi": "^0.6.0"
   },

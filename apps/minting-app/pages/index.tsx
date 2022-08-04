@@ -14,6 +14,7 @@ import ConnectAccount, {
 import { useAppContext } from "../state";
 import { SvgTemplate } from "../components";
 import StonePicker from "../components/stonePicker";
+import HandleClock from "../components/HandleClock";
 import styles from "../styles/Home.module.css";
 import CornerGilding from "../components/Gilding/Corners";
 import CenterGilding from "../components/Gilding/Center";
@@ -102,6 +103,7 @@ const Home: NextPage = () => {
             </div>
           </main>
         </div>
+        <HandleClock />
       </RainbowKitProvider>
     </WagmiConfig>
   );

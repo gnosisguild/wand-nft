@@ -1,9 +1,5 @@
 import { AppState, Background, Stone, Halo } from "../types";
 
-// TODO: these are coordinates of Berlin, replace them with the coordinates of user's IP location
-const latitude = 52.5422;
-const longitude = 13.3495;
-
 export const initialState: AppState = {
   background: {
     radial: true,
@@ -35,8 +31,8 @@ export const initialState: AppState = {
   handle: 0,
   stone: 5,
   tokenId: 123,
-  latitude,
-  longitude,
+  latitude: 0,
+  longitude: 0,
 };
 
 export interface ChangeBackgroundAction {
@@ -54,10 +50,16 @@ export interface ChangeStoneAction {
   value: number;
 }
 
+export interface ChangeHandleAction {
+  type: "changeHandle";
+  value: 0 | 1 | 2 | 3;
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
-  | ChangeStoneAction;
+  | ChangeStoneAction
+  | ChangeHandleAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -77,6 +79,12 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         stone: action.value,
+      };
+    }
+    case "changeHandle": {
+      return {
+        ...state,
+        handle: action.value,
       };
     }
   }
