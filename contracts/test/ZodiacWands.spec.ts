@@ -13,13 +13,12 @@ import {
   filterLayers,
   generateSparkles,
   generateHandle,
-  xp,
   interpolateStone,
 } from "../../apps/minting-app/template";
 
 import renderSvgTemplate from "./renderSvgTemplate";
 
-describe("GuildWand", async () => {
+describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import hre, { deployments } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
 
-describe.only("WandName", async () => {
+describe("WandName", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 

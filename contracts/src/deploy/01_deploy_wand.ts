@@ -33,7 +33,10 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
   });
 
-  console.log("Connecting Wands to deployed Forge");
+  if (hre.network.name !== "hardhat") {
+    console.log("Connecting Wands to deployed Forge");
+  }
+
   const zodiacWands = await hre.ethers.getContractAt(
     "ZodiacWands",
     txZodiacWands.address,

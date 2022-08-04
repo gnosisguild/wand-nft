@@ -7,7 +7,7 @@ import {
   interpolationParams,
 } from "../../apps/minting-app/template";
 
-describe("WandConjuror", async () => {
+describe("Conjuror", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 

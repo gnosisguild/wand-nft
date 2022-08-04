@@ -6,9 +6,12 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
   const { deploy } = deployments;
 
-  console.log("*****************************************************");
-  console.log(`Deployer: ${deployer}*`);
-  console.log("*****************************************************");
+  if (hre.network.name !== "hardhat") {
+    console.log("*****************************************************");
+    console.log(`Deployer: ${deployer}*`);
+    console.log("*****************************************************");
+  }
+
   const txHandleLayer = await deploy("HandleLayer", {
     from: deployer,
     args: [],
