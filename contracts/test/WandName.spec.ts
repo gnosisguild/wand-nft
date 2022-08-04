@@ -19,11 +19,11 @@ describe.only("WandName", async () => {
       const set = new Set<string>();
       const checkIt = async (stoneId: number) => {
         const name = await wandName.generate(stoneId);
+        console.log(`${stoneId} ${name}`);
         expect(set.has(name)).to.equal(false);
         set.add(name);
       };
-      for (let stoneId = 0; stoneId < 2000000; stoneId++) {
-        console.log(stoneId);
+      for (let stoneId = 0; stoneId < 1000000; stoneId++) {
         await checkIt(stoneId);
       }
     });

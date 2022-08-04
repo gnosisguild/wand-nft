@@ -7,7 +7,7 @@ import "hardhat-contract-sizer";
 import dotenv from "dotenv";
 import type { HttpNetworkUserConfig } from "hardhat/types";
 import yargs from "yargs";
-import "./src/tasks/setup";
+
 import "./src/tasks/encodeRhythms";
 
 const argv = yargs
@@ -20,7 +20,8 @@ const argv = yargs
 
 // Load environment variables.
 dotenv.config();
-const { INFURA_KEY, MNEMONIC, ETHERSCAN_API_KEY, PK } = process.env;
+const { INFURA_KEY, MNEMONIC, ETHERSCAN_API_KEY, DEPLOYER_INDEX, PK } =
+  process.env;
 
 const DEFAULT_MNEMONIC =
   "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
@@ -31,6 +32,7 @@ if (PK) {
 } else {
   sharedNetworkConfig.accounts = {
     mnemonic: MNEMONIC || DEFAULT_MNEMONIC,
+    initialIndex: parseIntFromEnv(DEPLOYER_INDEX),
   };
 }
 
@@ -44,7 +46,7 @@ export default {
   paths: {
     artifacts: "build/artifacts",
     cache: "build/cache",
-    //deploy: "src/deploy",
+    deploy: "src/deploy",
     sources: "contracts",
   },
   solidity: {
@@ -87,3 +89,8 @@ export default {
     apiKey: ETHERSCAN_API_KEY,
   },
 };
+
+function parseIntFromEnv(env: string | undefined) {
+  const parsed = parseInt(env || "");
+  return isNaN(parsed) ? 0 : parsed;
+}
