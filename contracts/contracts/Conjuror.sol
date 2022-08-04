@@ -7,7 +7,6 @@ import "./Template.sol";
 import "./WandName.sol";
 import "base64-sol/base64.sol";
 
-// TODO is this a library?
 contract Conjuror is IConjuror {
   function generateWandURI(Wand memory wand)
     external
