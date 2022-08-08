@@ -1,87 +1,52 @@
-import { useState } from "react";
-import { useSpring, easings } from "@react-spring/web";
+import { useEffect, useState } from "react";
 
 import useDragRotate from "./useDragRotate";
-import { usePrevious } from "./usePrevious";
-import assert from "assert";
-import { delta } from "./trigonometry";
+import useRotateAnimate from "./useRotateAnimate";
 
 function useDragRotateAnimate<T>(
   value: number = 0,
   onChange: (angle: number) => void
 ) {
-  /*
-   * This hook expands on useDragRotate, by adding animation
-   * We keep track of three rotations:
-   * - draggedRotation > mouse down drag
-   * - animatedRotation > real time angle while rotation
-   * - rotation > the final value, once everything settles
-   *
-   * We pipe everything though the spring animation pipeline and rely
-   * on `immediate` and `onRest` to make this work (onRest is called
-   * spring's movement comes to a halt)
-   */
+  useEffect(() => {
+    setIsAnimating(false);
+  }, [value]);
 
-  // draggedRotation
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const {
     bind,
-    rotation: draggedRotation,
     hovering,
     dragging,
-  } = useDragRotate<T>(value, (next: number) => setRotation(next));
-  // animatedRotation
-  const [animatedRotation, setAnimatedRotation] = useState<number>(value);
-  // rotation
-  const [rotation, setRotation] = useState<number>(value);
+    rotation: draggedRotation,
+  } = useDragRotate<HTMLDivElement>(value, (nextRotation) => {
+    onChange(nextRotation);
+  });
 
-  const to = dragging ? draggedRotation : rotation;
-  const from = usePrevious(to);
-
-  const { transform } = useSpring({
-    from: { transform: `rotate(${from}deg)` },
-    to: { transform: `rotate(${to}deg)` },
-    immediate: dragging, //|| //delta(from, to) < 1,
-    config: {
-      easing: easings.easeInOutQuart,
+  const {
+    animateTo,
+    rotation: { transform: animatedTransform, value: animatedRotation },
+  } = useRotateAnimate({
+    onStart: () => {
+      setIsAnimating(true);
     },
-    onChange: (spring) => {
-      const next = extractRotation(spring.value.transform);
-      setAnimatedRotation(next);
-    },
-    onRest: (spring) => {
-      if (!dragging) {
-        const next = extractRotation(spring.value.transform);
-        onChange(next);
-      }
+    onRest: (nextRotation: number) => {
+      onChange(nextRotation);
     },
   });
 
-  /*
-   * Note:
-   * when `immediate: true` spring skips animation and just updates,
-   * however onChange and onRest still called.
-   */
+  const rotation = isAnimating ? animatedRotation : draggedRotation;
+  const transform = isAnimating ? animatedTransform : `rotate(${rotation}deg)`;
 
   return {
-    bind,
-    rotateTo: (nextRotation: number) => {
-      setRotation(nextRotation);
-    },
-    dragging,
+    bind: isAnimating ? () => ({}) : bind,
     hovering,
+    dragging,
     rotation: {
-      value: animatedRotation,
       transform,
+      value: rotation,
     },
+    animateTo,
   };
 }
 
 export default useDragRotateAnimate;
-
-const DECIMAL = /[-]?\d+(\.\d+)?/;
-
-function extractRotation(text: string) {
-  assert(DECIMAL.test(text));
-
-  return Number((DECIMAL.exec(text) as string[])[0]);
-}

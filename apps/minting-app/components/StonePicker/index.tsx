@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import StoneViewer from "./StoneViewer";
 import { interpolateStone, stoneList, stoneCount } from "../../template";
@@ -23,10 +23,10 @@ const StonePicker: React.FC = () => {
 
   const {
     bind,
-    rotateTo,
     hovering,
     dragging,
     rotation: { transform, value: rotation },
+    animateTo,
   } = useDragRotateAnimate<HTMLDivElement>(
     fromStoneId(state.stone),
     (nextRotation) => {
@@ -117,7 +117,11 @@ const StonePicker: React.FC = () => {
         <IconButton
           icon="PickerStone"
           shadow
-          onClick={() => rotateTo(randomInteger(3600 - 1) / 10)}
+          onClick={() => {
+            const from = rotation;
+            const to = randomInteger(3600 - 1) / 10;
+            animateTo(from, to);
+          }}
         />
       </div>
     </div>
