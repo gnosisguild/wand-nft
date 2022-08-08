@@ -92,11 +92,11 @@ const deriveTemplateInput = (state: AppState): TemplateInput => ({
   ),
   frame: {
     level1: true,
-    title: generateName(state.tokenId),
+    title: "",
   },
   background: state.background,
   filterLayers,
-  sparkles: generateSparkles(state.tokenId),
+  sparkles: [],
   seed: state.tokenId,
   stone: interpolateStone(state.stone),
   xp,

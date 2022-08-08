@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import StoneViewer from "./StoneViewer";
 import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
@@ -32,7 +33,9 @@ const StonePicker: React.FC = () => {
   const prevRotation = usePrevious(rotation);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={classNames(styles.container, { [styles.grabbing]: dragging })}
+    >
       <div {...bind()} className={styles.drag}>
         <UiCircle
           showIndicator
@@ -41,6 +44,9 @@ const StonePicker: React.FC = () => {
             from: prevRotation,
             to: rotation,
           }}
+          dialClass={classNames(styles.dimDial, {
+            [styles.hovering]: hovering,
+          })}
         >
           <svg
             viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}

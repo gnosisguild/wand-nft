@@ -3,6 +3,7 @@ import { useSpring, animated, easings } from "@react-spring/web";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 import { delta } from "../trigonometry";
+import classNames from "classnames";
 
 type Props = {
   showIndicator?: boolean;
@@ -13,12 +14,14 @@ type Props = {
         to: number;
       }
     | number;
+  dialClass?: string;
 };
 
 const UiCircle: React.FC<Props> = ({
   children,
   showIndicator = false,
   rotation,
+  dialClass = "",
 }) => {
   const { immediate, from, to } = unpack(rotation);
 
@@ -37,7 +40,7 @@ const UiCircle: React.FC<Props> = ({
         viewBox="0 0 120 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={styles.uiCircle}
+        className={classNames(styles.uiCircle, { [dialClass]: dialClass })}
       >
         <animated.g
           style={{

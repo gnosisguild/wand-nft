@@ -2,6 +2,18 @@
   cursor: grab;
 }
 
+.grabbing {
+  cursor: grabbing;
+}
+
+.dimDial {
+  opacity: 0.8;
+}
+
+.hovering {
+  opacity: 1;
+}
+
 .drag {
   touch-action: none;
 }
