@@ -11,30 +11,8 @@ describe("Conjuror", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const WandName = await hre.ethers.getContractFactory("WandName");
-    const wandName = await WandName.deploy();
-
-    const BackgroundLayer = await hre.ethers.getContractFactory(
-      "BackgroundLayer"
-    );
-    const backgroundLayer = await BackgroundLayer.deploy();
-    const FrameLayer = await hre.ethers.getContractFactory("FrameLayer");
-    const frameLayer = await FrameLayer.deploy();
-    const HandleLayer = await hre.ethers.getContractFactory("HandleLayer");
-    const handleLayer = await HandleLayer.deploy();
-    const Template = await hre.ethers.getContractFactory("Template", {
-      libraries: {
-        BackgroundLayer: backgroundLayer.address,
-        FrameLayer: frameLayer.address,
-        HandleLayer: handleLayer.address,
-      },
-    });
-    const template = await Template.deploy();
-
-    const Conjuror = await hre.ethers.getContractFactory("Conjuror", {
-      libraries: { Template: template.address, WandName: wandName.address },
-    });
-    const conjuror = await Conjuror.deploy();
+    const template = await deployments.get("Template");
+    const wandName = await deployments.get("WandName");
 
     const WandConjurorExposer = await hre.ethers.getContractFactory(
       "WandConjurorExposer",
@@ -44,10 +22,7 @@ describe("Conjuror", async () => {
     );
     const wandConjurorExposer = await WandConjurorExposer.deploy();
 
-    const ZodiacWands = await hre.ethers.getContractFactory("ZodiacWands");
-    const zodiacWands = await ZodiacWands.deploy(conjuror.address);
-
-    return { zodiacWands, conjuror, wandConjurorExposer };
+    return { wandConjurorExposer };
   });
 
   describe("interpolateStone", () => {

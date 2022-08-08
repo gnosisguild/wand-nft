@@ -9,7 +9,7 @@
   "scripts": {
     "compile:template": "solid-mustache ../svg/template.svg.hbs -o ./contracts/Template.sol --condense --dedupeThreshold=128",
     "compile": "hardhat compile",
-    "test": "hardhat test",
+    "test": "hardhat test --deploy-fixture",
     "deploy": "hardhat deploy --network",
     "coverage": "hardhat coverage",
     "verify": "hardhat run src/scripts/verify.ts --network",

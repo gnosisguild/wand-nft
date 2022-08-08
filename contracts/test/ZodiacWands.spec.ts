@@ -17,38 +17,20 @@ import {
 } from "../../apps/minting-app/template";
 
 import renderSvgTemplate from "./renderSvgTemplate";
+import { Contract } from "ethers";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const WandName = await hre.ethers.getContractFactory("WandName");
-    const wandName = await WandName.deploy();
+    const [signer] = await hre.ethers.getSigners();
 
-    const BackgroundLayer = await hre.ethers.getContractFactory(
-      "BackgroundLayer"
+    const deployment = await deployments.get("ZodiacWands");
+    const zodiacWands = new Contract(
+      deployment.address,
+      deployment.abi,
+      signer
     );
-    const backgroundLayer = await BackgroundLayer.deploy();
-    const FrameLayer = await hre.ethers.getContractFactory("FrameLayer");
-    const frameLayer = await FrameLayer.deploy();
-    const HandleLayer = await hre.ethers.getContractFactory("HandleLayer");
-    const handleLayer = await HandleLayer.deploy();
-    const Template = await hre.ethers.getContractFactory("Template", {
-      libraries: {
-        BackgroundLayer: backgroundLayer.address,
-        FrameLayer: frameLayer.address,
-        HandleLayer: handleLayer.address,
-      },
-    });
-    const template = await Template.deploy();
-
-    const WandConjuror = await hre.ethers.getContractFactory("Conjuror", {
-      libraries: { Template: template.address, WandName: wandName.address },
-    });
-    const wandConjuror = await WandConjuror.deploy();
-
-    const ZodiacWands = await hre.ethers.getContractFactory("ZodiacWands");
-    const zodiacWands = await ZodiacWands.deploy(wandConjuror.address);
 
     return { zodiacWands };
   });

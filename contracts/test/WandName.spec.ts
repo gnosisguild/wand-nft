@@ -1,13 +1,15 @@
 import { expect } from "chai";
 import hre, { deployments } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
+import { Contract } from "ethers";
 
 describe("WandName", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const WandName = await hre.ethers.getContractFactory("WandName");
-    const wandName = await WandName.deploy();
+    const deployment = await deployments.get("WandName");
+
+    const wandName = new Contract(deployment.address, deployment.abi);
 
     return { wandName };
   });
