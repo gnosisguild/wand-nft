@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 import { Background } from "../../types";
@@ -11,6 +11,7 @@ import { HueArc, LightnessArc } from "./Arc";
 import ButtonBackground from "./ButtonBackground";
 import styles from "./ColorPicker.module.css";
 import randomInteger from "../randomInteger";
+import useDragRotateAnimate from "../useDragRotateAnimate";
 
 const ColorPicker: React.FC = () => {
   const {
@@ -24,6 +25,46 @@ const ColorPicker: React.FC = () => {
       value,
     });
   };
+
+  const [randomized, setRandomized] = useState<Background | null>(null);
+
+  const hueProps = useDragRotateAnimate<SVGPathElement>(
+    fromHue(background.color.hue),
+    (nextRotation: number) => {
+      if (randomized) {
+        handleChange(randomized);
+      } else {
+        handleChange({
+          ...background,
+          color: {
+            ...background.color,
+            hue: toHue(nextRotation),
+          },
+        });
+      }
+    }
+  );
+
+  const lightnessProps = useDragRotateAnimate<SVGPathElement>(
+    ensureAngle(background.color.lightness - 180),
+    (nextRotation: number) => {
+      if (randomized) {
+        handleChange(randomized);
+      } else {
+        handleChange({
+          ...background,
+          color: {
+            ...background.color,
+            lightness: ensureAngle(nextRotation + 180),
+          },
+        });
+      }
+    }
+  );
+
+  useEffect(() => {
+    setRandomized(null);
+  }, [background]);
 
   return (
     <div>
@@ -39,30 +80,8 @@ const ColorPicker: React.FC = () => {
             opacity="0.7"
             style={{ mixBlendMode: "color-dodge" }}
           />
-          <HueArc
-            value={fromHue(background.color.hue)}
-            onChange={(nextValue: number) => {
-              handleChange({
-                ...background,
-                color: {
-                  ...background.color,
-                  hue: toHue(nextValue),
-                },
-              });
-            }}
-          />
-          <LightnessArc
-            value={normalize(background.color.lightness - 180)}
-            onChange={(nextValue: number) => {
-              handleChange({
-                ...background,
-                color: {
-                  ...background.color,
-                  lightness: normalize(nextValue + 180),
-                },
-              });
-            }}
-          />
+          <HueArc {...hueProps} />
+          <LightnessArc {...lightnessProps} />
           <g style={{ pointerEvents: "none" }}>
             <rect
               className={classNames(
@@ -150,16 +169,23 @@ const ColorPicker: React.FC = () => {
           icon="PickerAura"
           shadow
           onClick={() => {
-            handleChange({
+            const hueFrom = hueProps.rotation.value;
+            const hueTo = randomInteger(3599) / 10;
+            const lightnessFrom = lightnessProps.rotation.value;
+            const lightnessTo = randomInteger(3599) / 10;
+
+            setRandomized({
               ...background,
-              radial: randomInteger(1) === 1,
-              dark: randomInteger(1) === 1,
+              dark: randomInteger(1) == 1,
+              radial: randomInteger(1) == 1,
               color: {
                 ...background.color,
-                hue: toHue(randomInteger(359)),
-                lightness: randomInteger(359),
+                hue: toHue(hueTo),
+                lightness: lightnessTo,
               },
             });
+            hueProps.animateTo(hueFrom, hueTo);
+            lightnessProps.animateTo(lightnessFrom, lightnessTo);
           }}
         />
       </div>
@@ -177,6 +203,6 @@ function fromHue(value: number): number {
   return 360 - value;
 }
 
-function normalize(value: number) {
+function ensureAngle(value: number) {
   return (value + 360) % 360;
 }

@@ -1,39 +1,22 @@
 import React from "react";
 import classNames from "classnames";
-import { useSpring, animated, easings } from "@react-spring/web";
+import { animated } from "@react-spring/web";
 
 import { HueGradient, LightnessGradient } from "./Gradient";
-import useDragRotate from "../useDragRotate";
+
 import styles from "./ColorPicker.module.css";
-import { usePrevious } from "../usePrevious";
-import { delta } from "../trigonometry";
+import { DragRotateAnimateReturn } from "../useDragRotateAnimate";
 
 const SIZE = 1000;
 const HUE_MARGIN = 0.124;
 const LIGHTNESS_MARGIN = 0.48;
 
-interface Props {
-  value: number;
-  onChange: (nextValue: number) => void;
-}
-
-export const HueArc = ({ value, onChange }: Props) => {
-  const { bind, rotation, hovering, dragging } = useDragRotate<SVGPathElement>(
-    value,
-    onChange
-  );
-
-  const prevRotation = usePrevious(rotation);
-
-  const { transform } = useSpring({
-    from: { transform: `rotate(${prevRotation}deg)` },
-    to: { transform: `rotate(${rotation}deg)` },
-    immediate: dragging || delta(prevRotation, rotation) < 1,
-    config: {
-      easing: easings.easeInOutQuart,
-    },
-  });
-
+export const HueArc = ({
+  bind,
+  rotation: { transform },
+  hovering,
+  dragging,
+}: DragRotateAnimateReturn) => {
   return (
     <animated.g
       style={{
@@ -68,22 +51,12 @@ export const HueArc = ({ value, onChange }: Props) => {
   );
 };
 
-export const LightnessArc = ({ value, onChange }: Props) => {
-  const { bind, rotation, hovering, dragging } = useDragRotate<SVGPathElement>(
-    value,
-    onChange
-  );
-
-  const prevRotation = usePrevious(rotation);
-  const { transform } = useSpring({
-    from: { transform: `rotate(${prevRotation}deg)` },
-    to: { transform: `rotate(${rotation}deg)` },
-    immediate: dragging || delta(prevRotation, rotation) < 1,
-    config: {
-      easing: easings.easeInOutQuart,
-    },
-  });
-
+export const LightnessArc = ({
+  bind,
+  rotation: { transform },
+  hovering,
+  dragging,
+}: DragRotateAnimateReturn) => {
   return (
     <animated.g
       style={{
@@ -129,8 +102,6 @@ export const LightnessArc = ({ value, onChange }: Props) => {
     </animated.g>
   );
 };
-
-function duration() {}
 
 const HUE_D = arc(SIZE, HUE_MARGIN);
 const LIGHTNESS_D = arc(SIZE, LIGHTNESS_MARGIN);
