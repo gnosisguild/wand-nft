@@ -2,7 +2,12 @@ import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useAppContext } from "../../state";
-import { calculateAspects, calculatePlanets, encodeHalo } from "../../template";
+import {
+  calculateAspects,
+  calculatePlanets,
+  generateHalo,
+  generateHandle,
+} from "../../template";
 import { AppState } from "../../types";
 import styles from "./MintButton.module.css";
 
@@ -12,12 +17,12 @@ interface Props {
 }
 
 const WANDS = {
-  address: getAddress("0xeDDCA997eFBfC061fE497C8cb5644EfF6DE8C9dD"),
+  address: getAddress("0xf61812a9afe6992Ac91575830333355355092D9e"),
   abi: [
-    "function mint(uint16 stone, uint8 handle, uint16 halo, tuple(bool radial, bool dark, tuple(uint8 saturation, uint8 lightness, uint16 hue) color) background, tuple(bool visible, int8 x, int8 y)[8] planets, tuple(int8 x1, int8 y1, int8 x2, int8 y2)[8] aspects) returns (uint256)",
+    "function mint(uint16 stone, tuple(bool handle0, bool handle1, bool handle2, bool handle3) handle, tuple(bool halo0, bool halo1, bool halo2, bool halo3, bool halo4, bool halo5, uint16 hue, bool[24] rhythm) halo, tuple(bool radial, bool dark, tuple(uint8 saturation, uint8 lightness, uint16 hue) color) background, tuple(bool visible, int8 x, int8 y)[8] planets, tuple(int8 x1, int8 y1, int8 x2, int8 y2)[8] aspects) returns (uint256)",
   ],
   iface: new ethers.utils.Interface([
-    "function mint(uint16 stone, uint8 handle, uint16 halo, tuple(bool radial, bool dark, tuple(uint8 saturation, uint8 lightness, uint16 hue) color) background, tuple(bool visible, int8 x, int8 y)[8] planets, tuple(int8 x1, int8 y1, int8 x2, int8 y2)[8] aspects) returns (uint256)",
+    "function mint(uint16 stone, tuple(bool handle0, bool handle1, bool handle2, bool handle3) handle, tuple(bool halo0, bool halo1, bool halo2, bool halo3, bool halo4, bool halo5, uint16 hue, bool[24] rhythm) halo, tuple(bool radial, bool dark, tuple(uint8 saturation, uint8 lightness, uint16 hue) color) background, tuple(bool visible, int8 x, int8 y)[8] planets, tuple(int8 x1, int8 y1, int8 x2, int8 y2)[8] aspects) returns (uint256)",
   ]),
 };
 
@@ -48,8 +53,12 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
 function writeArgs(state: AppState) {
   return [
     state.stone,
-    state.handle,
-    encodeHalo(state.halo.shape, state.halo.rhythm),
+    generateHandle(state.handle),
+    generateHalo(
+      state.halo.shape,
+      state.halo.rhythm,
+      state.background.color.hue
+    ),
     state.background,
     calculatePlanets(
       state.latitude,

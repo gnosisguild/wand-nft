@@ -1,46 +1,44 @@
-                                                                                                                                                  
-//      ****           *                 **                                       ***** *    **   ***                                 **              
-//     *  *************                   **     *                             ******  *  *****    ***                                 **             
-//    *     **********                    **    ***                           **   *  *     *****   ***                                **             
-//    *             *                     **     *                           *    *  **     * **      **                               **             
-//     **          *        ****          **                                     *  ***     *         **                               **      ****   
+//      ****           *                 **                                       ***** *    **   ***                                 **
+//     *  *************                   **     *                             ******  *  *****    ***                                 **
+//    *     **********                    **    ***                           **   *  *     *****   ***                                **
+//    *             *                     **     *                           *    *  **     * **      **                               **
+//     **          *        ****          **                                     *  ***     *         **                               **      ****
 //                *        * ***  *   *** **   ***        ****       ****       **   **     *         **    ****    ***  ****      *** **     * **** *
-//               *        *   ****   *********  ***      * ***  *   * ***  *    **   **     *         **   * ***  *  **** **** *  *********  **  **** 
-//              *        **    **   **   ****    **     *   ****   *   ****     **   **     *         **  *   ****    **   ****  **   ****  ****      
-//             *         **    **   **    **     **    **    **   **            **   **     *         ** **    **     **    **   **    **     ***     
-//            *          **    **   **    **     **    **    **   **            **   **     *         ** **    **     **    **   **    **       ***   
-//           *           **    **   **    **     **    **    **   **             **  **     *         ** **    **     **    **   **    **         *** 
-//          *            **    **   **    **     **    **    **   **              ** *      *         *  **    **     **    **   **    **    ****  ** 
-//      ****           *  ******    **    **     **    **    **   ***     *        ***      ***      *   **    **     **    **   **    **   * **** *  
-//     *  *************    ****      *****       *** *  ***** **   *******          ******** ********     ***** **    ***   ***   *****        ****   
-//    *     **********                ***         ***    ***   **   *****             ****     ****        ***   **    ***   ***   ***    
-// 
-// 
-//                              ...             ...                         
-//                             .*%&*..       .,*&&*.                        
-//                            .*%&&&&&/*,,,*/%&&%&&*.                       
-//               ,         ..,%%&&%%&#/*,.,*/%&&%&&&(,..                    
-//                ,%&%////%%/,,,*/%&%*.     .*&%%/*,,,(%%////#&%,           
-//                .*%&%&&&(,. .   .,%.,     ,.#,.   . .*#&&%%&&*.           
+//               *        *   ****   *********  ***      * ***  *   * ***  *    **   **     *         **   * ***  *  **** **** *  *********  **  ****
+//              *        **    **   **   ****    **     *   ****   *   ****     **   **     *         **  *   ****    **   ****  **   ****  ****
+//             *         **    **   **    **     **    **    **   **            **   **     *         ** **    **     **    **   **    **     ***
+//            *          **    **   **    **     **    **    **   **            **   **     *         ** **    **     **    **   **    **       ***
+//           *           **    **   **    **     **    **    **   **             **  **     *         ** **    **     **    **   **    **         ***
+//          *            **    **   **    **     **    **    **   **              ** *      *         *  **    **     **    **   **    **    ****  **
+//      ****           *  ******    **    **     **    **    **   ***     *        ***      ***      *   **    **     **    **   **    **   * **** *
+//     *  *************    ****      *****       *** *  ***** **   *******          ******** ********     ***** **    ***   ***   *****        ****
+//    *     **********                ***         ***    ***   **   *****             ****     ****        ***   **    ***   ***   ***
+//
+//
+//                              ...             ...
+//                             .*%&*..       .,*&&*.
+//                            .*%&&&&&/*,,,*/%&&%&&*.
+//               ,         ..,%%&&%%&#/*,.,*/%&&%&&&(,..
+//                ,%&%////%%/,,,*/%&%*.     .*&%%/*,,,(%%////#&%,
+//                .*%&%&&&(,. .   .,%.,     ,.#,.   . .*#&&%%&&*.
 //                .*%&&&&&%,.                         .,%&%&&&&*.                       ‘O most honored Greening Force, You who roots in the Sun;
 //               .,##***,**#.     .    .*%,.    ..    ,%**,,**&(,                        You who lights up, in shining serenity, within a wheel
 //             .,*&*.            ,.,.,,*//**,.,..            ..*%*,.                     that earthly excellence fails to comprehend.
-//        .,*/%&&&#/,   ,   .  .*,/((###%%%#####/,,.      .   ./&&&%(**,.            
+//        .,*/%&&&#/,   ,   .  .*,/((###%%%#####/,,.      .   ./&&&%(**,.
 //        .,/%&%&#%&#*..     .,,//((#%&&&&&%%%%%###,,.     ,.*%&&&%&%&*,.                You are enfolded
 //          .,(%&%(*,,..    ,,**//(((##%&&&&&%%%%###,/,    ..,,*(#%&(,.                  in the weaving of divine mysteries.
-//           .,%/,.     ,  ,,,**///((####%%&&%&%%%###,,         .,#%,       
+//           .,%/,.     ,  ,,,**///((####%%&&%&%%%###,,         .,#%,
 //            ,%*.         ,,,(((///(((#####%%%%%##%#,,          ,/#,                    You redden like the dawn
 //           ,/&%(*,..,  .  ,.**(/////@((((((#####&#*.,     ...,*#&%*,                   and you burn: flame of the Sun.”
-//         .*&&%&#%&&(,.     ,.*////////&/(/((((#%%*.,     .,%%%&&%&&#*.    
+//         .*&&%&#%&&(,.     ,.*////////&/(/((((#%%*.,     .,%%%&&%&&#*.
 //       /((%%&&&&&/,         .,.*(((((///(((#(#(*.,,        .*/%&&&&&%##,               –  Hildegard von Bingen, Causae et Curae
-//            .,*%%*.,.          ,,.,*(((((((*,.,,          . .*&#*..       
-//               .*%*,.....*.        ,,*/%#*,    ,    .......,*%*.          
-//                .*&%&%%(,.         .,*,(/(,,         .,%&&&&%*.           
-//                .*&&&*,           ..,*(#//, .    .     .,/#%%,.           
-//                .#/,.       .       .**#/*.       .       .,%*.           
-//                                    .**#/,.              .                
-//                                    .,./*,,                                       
-
+//            .,*%%*.,.          ,,.,*(((((((*,.,,          . .*&#*..
+//               .*%*,.....*.        ,,*/%#*,    ,    .......,*%*.
+//                .*&%&%%(,.         .,*,(/(,,         .,%&&&&%*.
+//                .*&&&*,           ..,*(#//, .    .     .,/#%%,.
+//                .#/,.       .       .**#/*.       .       .,%*.
+//                                    .**#/,.              .
+//                                    .,./*,,
 
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
@@ -61,8 +59,8 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
   event WandBuilt(
     uint256 indexed tokenId,
     uint16 stone,
-    uint8 handle,
-    uint16 halo,
+    Template.Handle handle,
+    Template.Halo halo,
     Template.Background background,
     Planet[8] planets,
     Aspect[8] aspects
@@ -74,8 +72,8 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
 
   function mint(
     uint16 stone,
-    uint8 handle,
-    uint16 halo,
+    Template.Handle memory handle,
+    Template.Halo memory halo,
     Template.Background memory background,
     Planet[8] memory planets,
     Aspect[8] memory aspects
@@ -84,10 +82,10 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     _safeMint(msg.sender, tokenId);
 
     wands[tokenId] = pack(
+      uint64(block.timestamp),
       stone,
       handle,
       halo,
-      uint64(block.timestamp),
       background,
       planets,
       aspects
@@ -115,17 +113,19 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
   }
 
   function pack(
-    uint16 stone,
-    uint8 handle,
-    uint16 halo,
     uint64 birth,
+    uint16 stone,
+    Template.Handle memory handle,
+    Template.Halo memory halo,
     Template.Background memory background,
     Planet[8] memory planets,
     Aspect[8] memory aspects
   ) internal pure returns (PackedWand memory) {
-    (uint128 packedPlanets, uint8 visibility) = packPlanets(planets);
+    (uint128 packedPlanets, uint8 packedVisibility) = packPlanets(planets);
     uint256 packedAspects = packAspects(aspects);
     uint64 packedBackground = packBackground(background);
+    uint16 packedHalo = packHalo(halo);
+    uint8 packedHandle = packHandle(handle);
 
     return
       PackedWand({
@@ -134,9 +134,9 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
         planets: packedPlanets,
         aspects: packedAspects,
         stone: stone,
-        halo: halo,
-        visibility: visibility,
-        handle: handle
+        halo: packedHalo,
+        visibility: packedVisibility,
+        handle: packedHandle
       });
   }
 
@@ -145,14 +145,20 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     view
     returns (Wand memory)
   {
+    Template.Background memory background = unpackBackground(
+      packedWand.background
+    );
+    Template.Halo memory halo = unpackHalo(packedWand.halo);
+    halo.hue = (background.color.hue + 180) % 360;
+
     return
       Wand({
         tokenId: tokenId,
         stone: packedWand.stone,
-        halo: packedWand.halo,
+        halo: halo,
         birth: packedWand.birth,
-        handle: packedWand.handle,
-        background: unpackBackground(packedWand.background),
+        handle: unpackHandle(packedWand.handle),
+        background: background,
         planets: unpackPlanets(packedWand.planets, packedWand.visibility),
         aspects: unpackAspects(packedWand.aspects),
         xp: address(forge) != address(0)
@@ -248,5 +254,87 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     background.color.saturation = uint8(packedBackground >> 2);
     background.color.lightness = uint8(packedBackground >> 10);
     background.color.hue = uint16(packedBackground >> 18);
+  }
+
+  function packHalo(Template.Halo memory halo)
+    internal
+    pure
+    returns (uint16 packedHalo)
+  {
+    uint8 shape;
+    if (halo.halo0) {
+      shape = 0;
+    } else if (halo.halo1) {
+      shape = 1;
+    } else if (halo.halo2) {
+      shape = 2;
+    } else if (halo.halo3) {
+      shape = 3;
+    } else if (halo.halo4) {
+      shape = 4;
+    } else if (halo.halo5) {
+      shape = 5;
+    }
+    uint16 rhythm;
+    for (uint256 i = 0; i < 13; i++) {
+      rhythm |= uint16((halo.rhythm[i] ? 1 : 0)) << uint16(i);
+    }
+
+    return (rhythm << 3) | shape;
+  }
+
+  function unpackHalo(uint16 packedHalo)
+    internal
+    pure
+    returns (Template.Halo memory halo)
+  {
+    bool[24] memory rhythm;
+    for (uint256 i = 0; i < 24; i++) {
+      uint256 bit = i > 12 ? 24 - i : i;
+      rhythm[i] = ((1 << bit) & (packedHalo >> 3)) != 0;
+    }
+    uint8 shape = uint8(packedHalo) & 0x07;
+
+    return
+      Template.Halo({
+        halo0: shape == 0,
+        halo1: shape == 1,
+        halo2: shape == 2,
+        halo3: shape == 3,
+        halo4: shape == 4,
+        halo5: shape == 5,
+        hue: 0, //(wand.background.color.hue + 180) % 360,
+        rhythm: rhythm
+      });
+  }
+
+  function packHandle(Template.Handle memory handle)
+    internal
+    pure
+    returns (uint8 packedHandle)
+  {
+    if (handle.handle0) {
+      packedHandle = uint8(0);
+    } else if (handle.handle1) {
+      packedHandle = uint8(1);
+    } else if (handle.handle2) {
+      packedHandle = uint8(2);
+    } else if (handle.handle3) {
+      packedHandle = uint8(3);
+    }
+  }
+
+  function unpackHandle(uint8 packedHandle)
+    internal
+    pure
+    returns (Template.Handle memory handle)
+  {
+    return
+      Template.Handle({
+        handle0: packedHandle == 0,
+        handle1: packedHandle == 1,
+        handle2: packedHandle == 2,
+        handle3: packedHandle == 3
+      });
   }
 }
