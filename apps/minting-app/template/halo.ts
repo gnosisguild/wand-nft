@@ -24,18 +24,3 @@ const mirrorRhythm = (rhythm: boolean[], isWide: boolean) => {
 };
 
 export const isWideShape = (shape: ShapeId) => ![1, 5].includes(shape);
-
-export const encodeHalo = (shapeId: ShapeId, rhythm: boolean[]) => {
-  if (rhythm.length !== 13) throw new Error("Rhythm must have length 13");
-  const isWide = isWideShape(shapeId);
-  return parseInt(
-    rhythm
-      .map((x, index) => {
-        const oddIndex = index % 2 === 0;
-        return x && !(isWide && oddIndex) ? "1" : "0";
-      })
-      .reverse()
-      .join("") + shapeId.toString(2).padStart(3, "0"),
-    2
-  );
-};

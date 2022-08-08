@@ -18,10 +18,10 @@ struct Planet {
 
 struct Wand {
   uint256 tokenId;
-  uint16 stone;
-  uint16 halo;
   uint64 birth;
-  uint8 handle;
+  uint16 stone;
+  Template.Halo halo;
+  Template.Handle handle;
   Template.Background background;
   Planet[8] planets;
   Aspect[8] aspects;

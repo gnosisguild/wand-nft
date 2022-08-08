@@ -3,7 +3,6 @@ import hre, { deployments, waffle } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
 
 import {
-  encodeHalo,
   calculatePlanets,
   calculateAspects,
   scalePlanets,
@@ -87,8 +86,8 @@ describe("ZodiacWands", async () => {
 
       const tx = await zodiacWands.mint(
         stone,
-        handle,
-        encodeHalo(haloShape, haloRhythm),
+        generateHandle(handle),
+        generateHalo(haloShape, haloRhythm, background.color.hue),
         background,
         planets,
         aspects

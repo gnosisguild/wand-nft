@@ -70,58 +70,19 @@ contract Conjuror is IConjuror {
           seed: wand.tokenId,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
-          handle: Template.Handle({
-            handle0: wand.handle == 0,
-            handle1: wand.handle == 1,
-            handle2: wand.handle == 2,
-            handle3: wand.handle == 3
-          }),
+          handle: wand.handle,
           xp: Template.Xp({
             cap: xpCap,
             amount: wand.xp,
             crown: wand.xp >= xpCap
           }),
-          stone: decodeStone(wand),
-          halo: decodeHalo(wand),
+          stone: interpolateStone(wand.stone),
+          halo: wand.halo,
           frame: generateFrame(wand, name),
           sparkles: generateSparkles(wand.tokenId),
           filterLayers: generateFilterLayers()
         })
       );
-  }
-
-  function decodeStone(Wand memory wand)
-    internal
-    pure
-    returns (Template.Stone memory)
-  {
-    return interpolateStone(wand.stone);
-  }
-
-  function decodeHalo(Wand memory wand)
-    internal
-    pure
-    returns (Template.Halo memory)
-  {
-    uint256 rhythmBits = wand.halo >> 3; // first 13 bits give the rhythm
-    uint256 shape = wand.halo % rhythmBits; // remaining 3 bits are the halo shape index
-    bool[24] memory rhythm;
-    for (uint256 i = 0; i < 24; i++) {
-      uint256 bit = i > 12 ? 24 - i : i; // rhythm repeats backwards after 13 beats
-      rhythm[i] = (1 << bit) & rhythmBits > 0;
-    }
-
-    return
-      Template.Halo({
-        halo0: shape == 0,
-        halo1: shape == 1,
-        halo2: shape == 2,
-        halo3: shape == 3,
-        halo4: shape == 4,
-        halo5: shape == 5,
-        hue: (wand.background.color.hue + 180) % 360,
-        rhythm: rhythm
-      });
   }
 
   function generateFrame(Wand memory wand, string memory name)
