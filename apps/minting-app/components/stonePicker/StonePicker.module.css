@@ -7,11 +7,11 @@
 }
 
 .dimDial {
-  opacity: 0.8;
+  filter: brightness(1);
 }
 
 .hovering {
-  opacity: 1;
+  filter: brightness(1.2);
 }
 
 .drag {
