@@ -137,28 +137,4 @@ const UiCircle: React.FC<Props> = ({
   );
 };
 
-function unpack(
-  rotation?:
-    | {
-        immediate: boolean;
-        from: number;
-        to: number;
-      }
-    | number
-) {
-  if (!rotation) {
-    return { immediate: true, from: 0, to: 0 };
-  }
-
-  if (typeof rotation === "number") {
-    return { immediate: true, from: 0, to: rotation };
-  }
-
-  return {
-    immediate: !!rotation.immediate,
-    from: rotation.from | 0,
-    to: rotation.to | 0,
-  };
-}
-
 export default UiCircle;
