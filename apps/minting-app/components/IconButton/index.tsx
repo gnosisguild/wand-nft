@@ -107,7 +107,7 @@ const IconButton: React.FC<Props> = ({
         <g
           style={{ mixBlendMode: "color-dodge" }}
           opacity="0.6"
-          className={styles.hoverIndicator}
+          className={styles.activeIndicator}
         >
           <circle
             cx="16.5"

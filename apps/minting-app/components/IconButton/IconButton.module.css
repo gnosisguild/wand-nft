@@ -17,16 +17,17 @@
   display: block;
 }
 
-.iconButtonSvg .hoverIndicator {
+.iconButtonSvg .activeIndicator {
   opacity: 0;
   transition: opacity 0.1s ease;
 }
 
-.iconButtonSvg:hover .hoverIndicator {
-  opacity: 0.6;
+.active,
+.iconButton:hover {
+  filter: brightness(1.4);
 }
 
-.active .iconButtonSvg .hoverIndicator {
+.active .iconButtonSvg .activeIndicator {
   opacity: 0.6;
 }
 
