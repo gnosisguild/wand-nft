@@ -17,9 +17,16 @@ import useDragRotate from "../useDragRotate";
 import randomInteger from "../randomInteger";
 import { usePrevious } from "../usePrevious";
 import { delta } from "../trigonometry";
+import { useAccount } from "wagmi";
+import { BigNumber } from "ethers";
+
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
+
+  const { address = ZERO_ADDRESS } = useAccount();
+  const seed = BigNumber.from(address).toString();
 
   const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
     fromStoneId(state.stone),
@@ -69,7 +76,7 @@ const StonePicker: React.FC = () => {
                 </clipPath>
                 <g clipPath={`url(#stone-clip-${index})`}>
                   <StoneFilter
-                    seed={state.tokenId}
+                    seed={seed}
                     stone={stoneList[index]}
                     filterUniqueId={`stone-segment-${index}`}
                   />
@@ -107,7 +114,7 @@ const StonePicker: React.FC = () => {
       </div>
       <div className={styles.stone}>
         <StoneViewer
-          seed={state.tokenId}
+          seed={seed}
           stone={interpolateStone(toStoneId(rotation))}
         />
         <StoneGlass />

@@ -1,7 +1,7 @@
 import { Stone } from "../../types";
 
 const StoneFilter: React.FC<{
-  seed: number;
+  seed: string;
   stone: Stone;
   filterUniqueId?: string;
 }> = ({ seed, stone, filterUniqueId = "picker_s" }) => {

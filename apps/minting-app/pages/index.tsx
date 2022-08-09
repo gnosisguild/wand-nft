@@ -30,9 +30,14 @@ import MintButton from "../components/mint-button";
 import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
+import { useAccount } from "wagmi";
+import { BigNumber } from "ethers";
+
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const Home: NextPage = () => {
   const { state } = useAppContext();
+  const { address = ZERO_ADDRESS } = useAccount();
 
   return (
     <div
@@ -51,7 +56,7 @@ const Home: NextPage = () => {
           <MintButton />
           <PickerLabels />
           <div className={styles.svgPreview}>
-            <SvgTemplate input={deriveTemplateInput(state)} />
+            <SvgTemplate input={deriveTemplateInput(state, address)} />
           </div>
           <div className={styles.colorPicker}>
             <ColorPicker />
@@ -78,7 +83,10 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const deriveTemplateInput = (state: AppState): TemplateInput => ({
+const deriveTemplateInput = (
+  state: AppState,
+  address: string
+): TemplateInput => ({
   planets: scalePlanets(
     calculatePlanets(state.latitude, state.longitude, 0, new Date())
   ),
@@ -97,7 +105,7 @@ const deriveTemplateInput = (state: AppState): TemplateInput => ({
   background: state.background,
   filterLayers,
   sparkles: [],
-  seed: state.tokenId,
+  seed: BigNumber.from(address).toString(),
   stone: interpolateStone(state.stone),
   xp,
   handle: generateHandle(state.handle),

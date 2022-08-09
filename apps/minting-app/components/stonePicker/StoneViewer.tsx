@@ -4,7 +4,7 @@ import styles from "./StonePicker.module.css";
 import StoneFilter from "./StoneFilter";
 
 const StoneViewer: React.FC<{
-  seed: number;
+  seed: string;
   stone: Stone;
 }> = ({ seed, stone }) => (
   <svg
