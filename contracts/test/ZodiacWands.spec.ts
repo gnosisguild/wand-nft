@@ -15,6 +15,8 @@ import {
   interpolateStone,
 } from "../../apps/minting-app/template";
 
+import { pack as packMintArgs } from "../../apps/minting-app/components/mint-button/packing";
+
 import renderSvgTemplate from "./renderSvgTemplate";
 import { Contract } from "ethers";
 
@@ -60,13 +62,13 @@ describe("ZodiacWands", async () => {
         0,
         new Date("2022-07-12")
       );
+
       const aspects = calculateAspects(
         latBerlin,
         lngBerlin,
         0,
         new Date("2022-07-12")
       );
-
       const haloShape = 1;
       const haloRhythm = [
         true,
@@ -84,13 +86,27 @@ describe("ZodiacWands", async () => {
         false,
       ];
 
+      const {
+        packedHalo,
+        packedBackground,
+        packedPlanets,
+        packedAspects,
+        packedVisibility,
+      } = packMintArgs({
+        halo: { shape: haloShape, rhythm: haloRhythm },
+        background: background,
+        planets,
+        aspects,
+      });
+
       const tx = await zodiacWands.mint(
         stone,
-        generateHandle(handle),
-        generateHalo(haloShape, haloRhythm, background.color.hue),
-        background,
-        planets,
-        aspects
+        packedHalo,
+        handle,
+        packedBackground,
+        packedPlanets,
+        packedAspects,
+        packedVisibility
       );
 
       await tx.wait();

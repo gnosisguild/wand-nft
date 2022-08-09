@@ -13,6 +13,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [],
     log: true,
   });
+
   const txConjuror = await deploy("Conjuror", {
     from: deployer,
     args: [],

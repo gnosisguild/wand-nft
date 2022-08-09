@@ -48,7 +48,7 @@ async function verify(): Promise<void> {
     await hre.run("verify:verify", {
       address: HandleLayer,
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`HandleLayer already verified`);
     } else {
@@ -60,7 +60,7 @@ async function verify(): Promise<void> {
     await hre.run("verify:verify", {
       address: FrameLayer,
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`FrameLayer already verified`);
     } else {
@@ -72,7 +72,7 @@ async function verify(): Promise<void> {
     await hre.run("verify:verify", {
       address: BackgroundLayer,
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`BackgroundLayer already verified`);
     } else {
@@ -89,7 +89,7 @@ async function verify(): Promise<void> {
         BackgroundLayer,
       },
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`Template already verified`);
     } else {
@@ -101,7 +101,7 @@ async function verify(): Promise<void> {
     await hre.run("verify:verify", {
       address: WandName,
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`WandName already verified`);
     } else {
@@ -117,7 +117,7 @@ async function verify(): Promise<void> {
         WandName,
       },
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`Conjuror already verified`);
     } else {
@@ -125,12 +125,13 @@ async function verify(): Promise<void> {
     }
   }
 
+  // Note WandUnpacker gets inlined
   try {
     await hre.run("verify:verify", {
       address: ZodiacWands,
       constructorArguments: [Conjuror],
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`ZodiacWands already verified`);
     } else {
@@ -143,7 +144,7 @@ async function verify(): Promise<void> {
       address: Forge,
       constructorArguments: [ZodiacWands],
     });
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`Forge already verified`);
     } else {

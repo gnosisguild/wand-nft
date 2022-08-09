@@ -1,15 +1,12 @@
 import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
+import { template } from "handlebars";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useAppContext } from "../../state";
-import {
-  calculateAspects,
-  calculatePlanets,
-  generateHalo,
-  generateHandle,
-} from "../../template";
+import { calculateAspects, calculatePlanets } from "../../template";
 import { AppState } from "../../types";
 import styles from "./MintButton.module.css";
+import { pack } from "./packing";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -17,12 +14,12 @@ interface Props {
 }
 
 const WANDS = {
-  address: getAddress("0xf61812a9afe6992Ac91575830333355355092D9e"),
+  address: getAddress("0x0E173662ADA3c098A01262bE770203525E7aB81a"),
   abi: [
-    "function mint(uint16 stone, tuple(bool handle0, bool handle1, bool handle2, bool handle3) handle, tuple(bool halo0, bool halo1, bool halo2, bool halo3, bool halo4, bool halo5, uint16 hue, bool[24] rhythm) halo, tuple(bool radial, bool dark, tuple(uint8 saturation, uint8 lightness, uint16 hue) color) background, tuple(bool visible, int8 x, int8 y)[8] planets, tuple(int8 x1, int8 y1, int8 x2, int8 y2)[8] aspects) returns (uint256)",
+    "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility) returns (uint256)",
   ],
   iface: new ethers.utils.Interface([
-    "function mint(uint16 stone, tuple(bool handle0, bool handle1, bool handle2, bool handle3) handle, tuple(bool halo0, bool halo1, bool halo2, bool halo3, bool halo4, bool halo5, uint16 hue, bool[24] rhythm) halo, tuple(bool radial, bool dark, tuple(uint8 saturation, uint8 lightness, uint16 hue) color) background, tuple(bool visible, int8 x, int8 y)[8] planets, tuple(int8 x1, int8 y1, int8 x2, int8 y2)[8] aspects) returns (uint256)",
+    "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility) returns (uint256)",
   ]),
 };
 
@@ -51,27 +48,27 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
 };
 
 function writeArgs(state: AppState) {
+  const {
+    packedHalo,
+    packedBackground,
+    packedPlanets,
+    packedAspects,
+    packedVisibility,
+  } = pack({
+    halo: state.halo,
+    background: state.background,
+    planets: calculatePlanets(state.latitude, state.longitude, 0, new Date()),
+    aspects: calculateAspects(state.latitude, state.longitude, 0, new Date()),
+  });
+
   return [
     state.stone,
-    generateHandle(state.handle),
-    generateHalo(
-      state.halo.shape,
-      state.halo.rhythm,
-      state.background.color.hue
-    ),
-    state.background,
-    calculatePlanets(
-      state.latitude,
-      state.longitude,
-      0,
-      new Date("2022-07-12")
-    ),
-    calculateAspects(
-      state.latitude,
-      state.longitude,
-      0,
-      new Date("2022-07-12")
-    ),
+    packedHalo,
+    state.handle,
+    packedBackground,
+    packedPlanets,
+    packedAspects,
+    packedVisibility,
   ];
 }
 

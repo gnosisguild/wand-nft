@@ -7,10 +7,11 @@ import "./Types.sol";
 interface IZodiacWands is IERC721 {
   function mint(
     uint16 stone,
-    Template.Handle memory handle,
-    Template.Halo memory halo,
-    Template.Background memory background,
-    Planet[8] memory planets,
-    Aspect[8] memory aspects
+    uint16 halo,
+    uint8 handle,
+    uint64 background,
+    uint128 planets,
+    uint256 aspects,
+    uint8 visibility
   ) external returns (uint256);
 }

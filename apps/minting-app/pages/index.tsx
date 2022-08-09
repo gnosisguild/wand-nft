@@ -26,7 +26,7 @@ import {
 } from "../template";
 import HaloPicker from "../components/halo-picker";
 import ColorPicker from "../components/color-picker";
-import MintButton from "../components/MintButton";
+import MintButton from "../components/mint-button";
 import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
