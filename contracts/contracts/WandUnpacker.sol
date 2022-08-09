@@ -4,6 +4,9 @@ pragma solidity ^0.8.6;
 import "./Template.sol";
 import "./interfaces/Types.sol";
 
+ // Note this library gets inlined because all methods are internal.
+ // changing any of the methods from internal will require tooling adjustments
+
 library WandUnpacker {
   function unpack(uint256 tokenId, PackedWand memory packedWand)
     internal
