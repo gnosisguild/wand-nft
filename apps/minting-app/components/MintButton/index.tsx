@@ -9,6 +9,7 @@ import {
   transformBackground,
 } from "../../template";
 import { AppState, Aspect, Planet } from "../../types";
+import wandContract from "../../utils/contract";
 import styles from "./MintButton.module.css";
 import { pack } from "./packing";
 
@@ -16,16 +17,6 @@ interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
   inactive?: boolean;
 }
-
-const WANDS = {
-  address: getAddress("0x7809b71FC3521eD81C1071E8DE98d5D37FaB1497"),
-  abi: [
-    "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility) returns (uint256)",
-  ],
-  iface: new ethers.utils.Interface([
-    "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility) returns (uint256)",
-  ]),
-};
 
 const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { state } = useAppContext();
@@ -41,8 +32,8 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   );
 
   const { config } = usePrepareContractWrite({
-    addressOrName: WANDS.address,
-    contractInterface: WANDS.abi,
+    addressOrName: wandContract.address,
+    contractInterface: wandContract.abi,
     functionName: "mint",
     args: writeArgs(state, planets, aspects),
   });
@@ -87,7 +78,7 @@ function writeArgs(state: AppState, planets: Planet[], aspects: Aspect[]) {
 }
 
 // function encodeCalldata(state: AppState) {
-//   return WANDS.iface.encodeFunctionData("mint", [
+//   return wandContract.iface.encodeFunctionData("mint", [
 //     state.stone,
 //     state.handle,
 //     encodeHalo(state.halo.shape, state.halo.rhythm),

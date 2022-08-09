@@ -10,8 +10,8 @@ import { publicProvider } from "wagmi/providers/public";
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.rinkeby],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_KEY }), publicProvider()]
+  [chain.rinkeby, chain.mainnet],
+  [publicProvider(), alchemyProvider({ apiKey: process.env.ALCHEMY_KEY })]
 );
 
 const { connectors } = getDefaultWallets({
@@ -33,6 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           chains={chains}
           theme={customTheme}
           avatar={BlockieAvatar}
+          initialChain={4}
         >
           <Component {...pageProps} />
         </RainbowKitProvider>
