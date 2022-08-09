@@ -1,15 +1,12 @@
 import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
+import { template } from "handlebars";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useAppContext } from "../../state";
-import {
-  calculateAspects,
-  calculatePlanets,
-  generateHalo,
-  generateHandle,
-} from "../../template";
+import { calculateAspects, calculatePlanets } from "../../template";
 import { AppState } from "../../types";
 import styles from "./MintButton.module.css";
+import { pack } from "./packing";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -51,27 +48,27 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
 };
 
 function writeArgs(state: AppState) {
+  const {
+    packedHalo,
+    packedBackground,
+    packedPlanets,
+    packedAspects,
+    packedVisibility,
+  } = pack({
+    halo: state.halo,
+    background: state.background,
+    planets: calculatePlanets(state.latitude, state.longitude, 0, new Date()),
+    aspects: calculateAspects(state.latitude, state.longitude, 0, new Date()),
+  });
+
   return [
     state.stone,
-    generateHandle(state.handle),
-    generateHalo(
-      state.halo.shape,
-      state.halo.rhythm,
-      state.background.color.hue
-    ),
-    state.background,
-    calculatePlanets(
-      state.latitude,
-      state.longitude,
-      0,
-      new Date("2022-07-12")
-    ),
-    calculateAspects(
-      state.latitude,
-      state.longitude,
-      0,
-      new Date("2022-07-12")
-    ),
+    packedHalo,
+    state.handle,
+    packedBackground,
+    packedPlanets,
+    packedAspects,
+    packedVisibility,
   ];
 }
 

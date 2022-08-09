@@ -13,6 +13,11 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [],
     log: true,
   });
+  const txWandUnpacker = await deploy("WandUnpacker", {
+    from: deployer,
+    args: [],
+    log: true,
+  });
   const txConjuror = await deploy("Conjuror", {
     from: deployer,
     args: [],
@@ -26,6 +31,9 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [txConjuror.address],
     log: true,
+    libraries: {
+      WandUnpacker: txWandUnpacker.address,
+    },
   });
   const txForge = await deploy("Forge", {
     from: deployer,

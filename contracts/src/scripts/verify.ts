@@ -42,6 +42,7 @@ async function verify(): Promise<void> {
   const HandleLayer = readDeploymentAddress("HandleLayer");
   const Template = readDeploymentAddress("Template");
   const WandName = readDeploymentAddress("WandName");
+  const WandUnpacker = readDeploymentAddress("WandUnpacker");
   const ZodiacWands = readDeploymentAddress("ZodiacWands");
 
   try {
@@ -120,6 +121,22 @@ async function verify(): Promise<void> {
   } catch (e) {
     if (e.message === alreadyVerifiedError) {
       console.warn(`Conjuror already verified`);
+    } else {
+      throw e;
+    }
+  }
+
+  try {
+    await hre.run("verify:verify", {
+      address: WandUnpacker,
+      libraries: {
+        Template,
+        WandName,
+      },
+    });
+  } catch (e) {
+    if (e.message === alreadyVerifiedError) {
+      console.warn(`WandUnpacker already verified`);
     } else {
       throw e;
     }
