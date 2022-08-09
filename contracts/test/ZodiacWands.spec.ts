@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { BigNumber, Contract } from "ethers";
 import hre, { deployments } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
 
@@ -18,7 +19,6 @@ import {
 import { pack as packMintArgs } from "../../apps/minting-app/components/mint-button/packing";
 
 import renderSvgTemplate from "./renderSvgTemplate";
-import { Contract } from "ethers";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -124,6 +124,8 @@ describe("ZodiacWands", async () => {
         tokenUriJson.image.substring("data:image/svg+xml;base64,".length)
       );
 
+      const [signer] = await hre.ethers.getSigners();
+
       // generate SVG via handlebars.js
       const svgFromHandlebars = renderSvgTemplate({
         planets: scalePlanets(planets),
@@ -136,7 +138,7 @@ describe("ZodiacWands", async () => {
         background,
         filterLayers,
         sparkles: generateSparkles(tokenId),
-        seed: tokenId,
+        seed: BigNumber.from(signer.address).toString(),
         stone: interpolateStone(stone),
         xp: {
           amount: 0,

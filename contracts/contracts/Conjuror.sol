@@ -8,7 +8,7 @@ import "./WandName.sol";
 import "base64-sol/base64.sol";
 
 contract Conjuror is IConjuror {
-  function generateWandURI(Wand memory wand)
+  function generateWandURI(Wand memory wand, address owner)
     external
     pure
     override
@@ -26,7 +26,7 @@ contract Conjuror is IConjuror {
                 '{"name": "',
                 name,
                 '", "description":"A unique Wand, designed and built on-chain", "image": "data:image/svg+xml;base64,', // TODO: edit description
-                Base64.encode(bytes(generateSVG(wand, name))),
+                Base64.encode(bytes(generateSVG(wand, name, owner))),
                 '", "attributes": [',
                 generateAttributes(wand),
                 "]}"
@@ -56,7 +56,7 @@ contract Conjuror is IConjuror {
       );
   }
 
-  function generateSVG(Wand memory wand, string memory name)
+  function generateSVG(Wand memory wand, string memory name, address owner)
     internal
     pure
     returns (string memory svg)
@@ -67,7 +67,7 @@ contract Conjuror is IConjuror {
       Template.render(
         Template.__Input({
           background: wand.background,
-          seed: wand.tokenId,
+          seed: uint256(uint160(owner)),
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
           handle: wand.handle,

@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from "fs";
 import path from "path";
 
+import { BigNumber, FixedNumber } from "ethers";
 import Handlebars from "handlebars";
 
 import { TemplateInput } from "../../apps/minting-app/types";
@@ -33,9 +34,17 @@ const templateText = readFileSync(
   }
 );
 
+const toFixed = (value: BigNumber, decimals: number) => {
+  if (decimals === 0) return value.toString();
+
+  const fixedNumber = FixedNumber.fromValue(value, decimals).toString();
+  const [integral, fractional] = fixedNumber.split(".");
+  return `${integral}.${fractional.padEnd(decimals, "0")}`;
+};
+
 const intHelper = (arg: any, { hash }: any) => {
   const { decimals = 0 } = hash;
-  return (arg / Math.pow(10, decimals)).toFixed(decimals);
+  return toFixed(BigNumber.from(arg), decimals);
 };
 Handlebars.registerHelper("int", intHelper);
 Handlebars.registerHelper("uint", intHelper);

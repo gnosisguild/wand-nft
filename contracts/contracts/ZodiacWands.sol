@@ -109,7 +109,7 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
   }
 
   function unpack(uint256 tokenId) internal view returns (Wand memory) {
-    Wand memory wand = WandUnpacker.unpack(tokenId, wands[tokenId]);
+    Wand memory wand = WandUnpacker.unpack(tokenId, wands[tokenId], ownerOf(tokenId));
     wand.xp = address(forge) != address(0)
       ? forge.xp(ERC721.ownerOf(tokenId))
       : 0;

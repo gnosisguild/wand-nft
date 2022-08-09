@@ -115,7 +115,7 @@ export interface TemplateInput {
   sparkles: Sparkle[];
   filterLayers: FilterLayer[];
   stone: Stone;
-  seed: number;
+  seed: string;
   xp: {
     cap: number;
     amount: number;
