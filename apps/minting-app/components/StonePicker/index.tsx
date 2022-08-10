@@ -121,6 +121,10 @@ const StonePicker: React.FC = () => {
             const from = rotation;
             const to = randomInteger(3600 - 1) / 10;
             animateTo(from, to);
+            dispatch({
+              type: "changeStone",
+              value: toStoneId(to),
+            });
           }}
         />
       </div>

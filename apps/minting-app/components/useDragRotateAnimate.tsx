@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Interpolation } from "@react-spring/web";
 import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
 
@@ -20,42 +19,25 @@ function useDragRotateAnimate<T>(
   value: number = 0,
   onChange: (angle: number) => void
 ): DragRotateAnimateReturn {
-  useEffect(() => {
-    setIsAnimating(false);
-  }, [value]);
-
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const {
-    bind,
-    hovering,
-    dragging,
-    rotation: draggedRotation,
-  } = useDragRotate<T>(value, (nextRotation) => {
-    onChange(nextRotation);
-  });
-
-  const {
-    animateTo,
-    rotation: { transform: animatedTransform, value: animatedRotation },
-  } = useRotateAnimate({
-    onStart: () => {
-      setIsAnimating(true);
-    },
-    onRest: (nextRotation: number) => {
+  const { bind, hovering, dragging, rotation } = useDragRotate<T>(
+    value,
+    (nextRotation) => {
       onChange(nextRotation);
-    },
-  });
+    }
+  );
 
-  const rotation = isAnimating ? animatedRotation : draggedRotation;
-  const transform = isAnimating ? animatedTransform : `rotate(${rotation}deg)`;
+  const {
+    isAnimating,
+    rotation: { transform },
+    animateTo,
+  } = useRotateAnimate();
 
   return {
     bind: isAnimating ? () => ({}) : bind,
     hovering,
     dragging,
     rotation: {
-      transform,
+      transform: isAnimating ? transform : `rotate(${rotation}deg)`,
       value: rotation,
     },
     animateTo,

@@ -26,45 +26,31 @@ const ColorPicker: React.FC = () => {
     });
   };
 
-  const [randomized, setRandomized] = useState<Background | null>(null);
-
   const hueProps = useDragRotateAnimate<SVGPathElement>(
     fromHue(background.color.hue),
     (nextRotation: number) => {
-      if (randomized) {
-        handleChange(randomized);
-      } else {
-        handleChange({
-          ...background,
-          color: {
-            ...background.color,
-            hue: toHue(nextRotation),
-          },
-        });
-      }
+      handleChange({
+        ...background,
+        color: {
+          ...background.color,
+          hue: toHue(nextRotation),
+        },
+      });
     }
   );
 
   const lightnessProps = useDragRotateAnimate<SVGPathElement>(
-    ensureAngle(background.color.lightness),
+    background.color.lightness,
     (nextRotation: number) => {
-      if (randomized) {
-        handleChange(randomized);
-      } else {
-        handleChange({
-          ...background,
-          color: {
-            ...background.color,
-            lightness: ensureAngle(nextRotation),
-          },
-        });
-      }
+      handleChange({
+        ...background,
+        color: {
+          ...background.color,
+          lightness: nextRotation,
+        },
+      });
     }
   );
-
-  useEffect(() => {
-    setRandomized(null);
-  }, [background]);
 
   return (
     <div>
@@ -176,7 +162,7 @@ const ColorPicker: React.FC = () => {
             const lightnessFrom = lightnessProps.rotation.value;
             const lightnessTo = randomInteger(3599) / 10;
 
-            setRandomized({
+            handleChange({
               ...background,
               dark: randomInteger(1) == 1,
               radial: randomInteger(1) == 1,
@@ -203,8 +189,4 @@ function toHue(value: number): number {
 
 function fromHue(value: number): number {
   return 360 - value;
-}
-
-function ensureAngle(value: number) {
-  return (value + 360) % 360;
 }
