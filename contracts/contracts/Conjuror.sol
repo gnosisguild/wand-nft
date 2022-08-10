@@ -67,7 +67,7 @@ contract Conjuror is IConjuror {
       Template.render(
         Template.__Input({
           background: wand.background,
-          seed: uint256(uint160(owner)),
+          seed: uint16(uint256(keccak256(abi.encodePacked(owner)))), // use a 16-bit hash of the owner address,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
           handle: wand.handle,

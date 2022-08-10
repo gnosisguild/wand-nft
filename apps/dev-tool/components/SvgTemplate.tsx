@@ -100,7 +100,7 @@ interface Props {
   sparkles: Sparkle[];
   filterLayers: FilterLayer[];
   stone: Stone;
-  string: number;
+  seed: number;
   xp: {
     cap: number;
     amount: number;

@@ -32,6 +32,7 @@ import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
 import { useAccount } from "wagmi";
 import { BigNumber } from "ethers";
+import { keccak256 } from "ethers/lib/utils";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -105,7 +106,7 @@ const deriveTemplateInput = (
   background: state.background,
   filterLayers,
   sparkles: [],
-  seed: BigNumber.from(address).toString(),
+  seed: parseInt(keccak256(address).slice(-4), 16),
   stone: interpolateStone(state.stone),
   xp,
   handle: generateHandle(state.handle),
