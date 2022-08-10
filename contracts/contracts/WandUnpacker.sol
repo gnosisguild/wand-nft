@@ -4,8 +4,8 @@ pragma solidity ^0.8.6;
 import "./Template.sol";
 import "./interfaces/Types.sol";
 
- // Note this library gets inlined because all methods are internal.
- // changing any of the methods from internal will require tooling adjustments
+// Note this library gets inlined because all methods are internal.
+// changing any of the methods from internal will require tooling adjustments
 
 library WandUnpacker {
   function unpack(uint256 tokenId, PackedWand memory packedWand)
@@ -29,7 +29,7 @@ library WandUnpacker {
         background: background,
         planets: unpackPlanets(packedWand.planets, packedWand.visibility),
         aspects: unpackAspects(packedWand.aspects),
-        xp:0,
+        xp: 0,
         level: 0
       });
   }
