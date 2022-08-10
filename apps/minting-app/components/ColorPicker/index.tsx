@@ -46,7 +46,7 @@ const ColorPicker: React.FC = () => {
   );
 
   const lightnessProps = useDragRotateAnimate<SVGPathElement>(
-    ensureAngle(background.color.lightness - 180),
+    ensureAngle(background.color.lightness),
     (nextRotation: number) => {
       if (randomized) {
         handleChange(randomized);
@@ -55,7 +55,7 @@ const ColorPicker: React.FC = () => {
           ...background,
           color: {
             ...background.color,
-            lightness: ensureAngle(nextRotation + 180),
+            lightness: ensureAngle(nextRotation),
           },
         });
       }
@@ -103,7 +103,9 @@ const ColorPicker: React.FC = () => {
               height="70"
               x="470"
               y="210"
-              fill={`hsl(0, 0%, ${background.color.lightness}%)`}
+              fill={`hsl(0, 0%, ${
+                (Math.abs(background.color.lightness - 180) / 180) * 100
+              }%)`}
             />
           </g>
         </svg>
