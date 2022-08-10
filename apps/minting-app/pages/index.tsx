@@ -17,8 +17,6 @@ import {
   filterLayers,
   generateHalo,
   generateHandle,
-  generateName,
-  generateSparkles,
   scaleAspects,
   scalePlanets,
   interpolateStone,
@@ -31,14 +29,12 @@ import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
 import { useAccount } from "wagmi";
-import { BigNumber } from "ethers";
+import { constants } from "ethers";
 import { keccak256 } from "ethers/lib/utils";
-
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const Home: NextPage = () => {
   const { state } = useAppContext();
-  const { address = ZERO_ADDRESS } = useAccount();
+  const { address = constants.AddressZero } = useAccount();
 
   return (
     <div
