@@ -1,7 +1,4 @@
-import { constants } from "ethers";
-import { keccak256 } from "ethers/lib/utils";
 import React, { useMemo } from "react";
-import { useAccount } from "wagmi";
 import { useAppContext } from "../state";
 import {
   calculateAspects,
@@ -14,17 +11,13 @@ import {
   scalePlanets,
   xp,
 } from "../template";
-import { TemplateInput } from "../types";
 import classes from "./SvgTemplate.module.css";
+import useSeed from "./useSeed";
 const template = require("../../../svg/template.svg.hbs");
 
-interface Props {
-  input: TemplateInput;
-}
-
-const SvgTemplate: React.FC<Props> = (props) => {
+const SvgTemplate: React.FC<{}> = () => {
   const { state } = useAppContext();
-  const { address = constants.AddressZero } = useAccount();
+  const seed = useSeed();
 
   const planets = useMemo(
     () =>
@@ -59,7 +52,7 @@ const SvgTemplate: React.FC<Props> = (props) => {
           background: state.background,
           filterLayers,
           sparkles: [],
-          seed: parseInt(keccak256(address).slice(-4), 16),
+          seed,
           stone: interpolateStone(state.stone),
           xp,
           handle: generateHandle(state.handle),

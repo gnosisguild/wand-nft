@@ -17,14 +17,11 @@ import useDragRotate from "../useDragRotate";
 import randomInteger from "../randomInteger";
 import { usePrevious } from "../usePrevious";
 import { delta } from "../trigonometry";
-import { useAccount } from "wagmi";
-import { constants } from "ethers";
-import { keccak256 } from "ethers/lib/utils";
+import useSeed from "../useSeed";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const { address = constants.AddressZero } = useAccount();
-  const seed = parseInt(keccak256(address).slice(-4), 16);
+  const seed = useSeed();
 
   const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
     fromStoneId(state.stone),
