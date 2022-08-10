@@ -12,7 +12,7 @@ import {
   packAspects,
   packBackground,
   packPlanets,
-} from "../../apps/minting-app/components/mint-button/packing";
+} from "../../apps/minting-app/components/MintButton/packing";
 import { BigNumber } from "ethers";
 
 describe("Packing", async () => {
