@@ -56,11 +56,11 @@ contract Conjuror is IConjuror {
       );
   }
 
-  function generateSVG(Wand memory wand, string memory name, address owner)
-    internal
-    pure
-    returns (string memory svg)
-  {
+  function generateSVG(
+    Wand memory wand,
+    string memory name,
+    address owner
+  ) internal pure returns (string memory svg) {
     // TODO should xpCap be pulled from the forge?
     uint32 xpCap = 10000;
     return
