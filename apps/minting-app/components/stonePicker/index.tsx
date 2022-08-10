@@ -18,14 +18,12 @@ import randomInteger from "../randomInteger";
 import { usePrevious } from "../usePrevious";
 import { delta } from "../trigonometry";
 import { useAccount } from "wagmi";
-import { BigNumber } from "ethers";
+import { constants } from "ethers";
 import { keccak256 } from "ethers/lib/utils";
-
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
-  const { address = ZERO_ADDRESS } = useAccount();
+  const { address = constants.AddressZero } = useAccount();
   const seed = parseInt(keccak256(address).slice(-4), 16);
 
   const { bind, rotation, hovering, dragging } = useDragRotate<HTMLDivElement>(
