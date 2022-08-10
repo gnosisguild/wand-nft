@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 interface Props {
   stone: Stone;
-  seed: string;
+  seed: number;
 }
 const StoneViewer = ({ stone, seed }: Props) => {
   return (

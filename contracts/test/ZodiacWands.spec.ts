@@ -19,6 +19,7 @@ import {
 import { pack as packMintArgs } from "../../apps/minting-app/components/mint-button/packing";
 
 import renderSvgTemplate from "./renderSvgTemplate";
+import { keccak256 } from "ethers/lib/utils";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -138,7 +139,7 @@ describe("ZodiacWands", async () => {
         background,
         filterLayers,
         sparkles: generateSparkles(tokenId),
-        seed: BigNumber.from(signer.address).toString(),
+        seed: parseInt(keccak256(signer.address).slice(-4), 16),
         stone: interpolateStone(stone),
         xp: {
           amount: 0,
