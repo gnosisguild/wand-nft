@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSpring, easings } from "@react-spring/web";
+import { useSpring } from "@react-spring/web";
 
 function useRotateAnimate() {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -11,9 +11,6 @@ function useRotateAnimate() {
   const { transform } = useSpring({
     from: { transform: from },
     to: { transform: to },
-    config: {
-      easing: easings.easeInOutQuart,
-    },
     onStart: () => {
       setIsAnimating(true);
     },
