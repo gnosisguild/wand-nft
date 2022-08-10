@@ -3,16 +3,16 @@ import React from "react";
 import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 
-import ConnectAccount from "../components/ConnectButton";
-import { SvgTemplate } from "../components";
-import StonePicker from "../components/stonePicker";
+import ConnectButton from "../components/ConnectButton";
+import SvgTemplate from "../components/SvgTemplate";
+import StonePicker from "../components/StonePicker";
 import styles from "../styles/Home.module.css";
 import CornerGilding from "../components/Gilding/Corners";
 import CenterGilding from "../components/Gilding/Center";
 
-import HaloPicker from "../components/halo-picker";
-import ColorPicker from "../components/color-picker";
-import MintButton from "../components/mint-button";
+import HaloPicker from "../components/HaloPicker";
+import ColorPicker from "../components/ColorPicker";
+import MintButton from "../components/MintButton";
 import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
@@ -48,7 +48,7 @@ const Home: NextPage = () => {
           </div>
         </div>
         <div className={styles.AccountConnect}>
-          <ConnectAccount />
+          <ConnectButton />
         </div>
 
         <div className={styles.downloadButtons}>
