@@ -16,9 +16,6 @@ import MintButton from "../components/mint-button";
 import bgImage from "../public/test-bg-small.jpg";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
-import { useAccount } from "wagmi";
-import { constants } from "ethers";
-import { keccak256 } from "ethers/lib/utils";
 
 const Home: NextPage = () => {
   return (
