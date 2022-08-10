@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 import { useContractInfiniteReads, paginatedIndexesConfig } from "wagmi";
@@ -33,9 +33,12 @@ const WandsPage: NextPage = () => {
     },
   });
 
+  // temp workaround for SRR hydration issue
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    fetchNextPage({ pageParam: 1 });
+    setMounted(true);
   }, []);
+
   return (
     <div
       className={styles.container}
@@ -49,6 +52,17 @@ const WandsPage: NextPage = () => {
       <main className={styles.main}>
         <CornerGilding />
         wands -___-
+        {mounted &&
+          data?.pages.map((tokenUris, i) => (
+            <Fragment key={i}>
+              {tokenUris.map(
+                (tokenUri, j) =>
+                  tokenUri && (
+                    <img src={getImageUri(tokenUri)} key={j} height={150} />
+                  )
+              )}
+            </Fragment>
+          ))}
         <div className={styles.AccountConnect}>
           <ConnectAccount />
         </div>
@@ -58,3 +72,10 @@ const WandsPage: NextPage = () => {
 };
 
 export default WandsPage;
+
+const getImageUri = (tokenUri: string) => {
+  const json = atob(tokenUri.slice("data:application/json;base64,".length));
+  if (!json) return "";
+  const obj = JSON.parse(json);
+  return obj.image;
+};
