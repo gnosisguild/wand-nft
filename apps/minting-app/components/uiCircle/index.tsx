@@ -2,10 +2,10 @@ import { ReactNode } from "react";
 import { useSpring, animated, easings } from "@react-spring/web";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
-import { delta } from "../trigonometry";
 import classNames from "classnames";
 
 type Props = {
+  children: ReactNode;
   showIndicator?: boolean;
   rotation?:
     | {
