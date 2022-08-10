@@ -14,7 +14,7 @@ interface Props {
 }
 
 const WANDS = {
-  address: getAddress("0x0E173662ADA3c098A01262bE770203525E7aB81a"),
+  address: getAddress("0x7809b71FC3521eD81C1071E8DE98d5D37FaB1497"),
   abi: [
     "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility) returns (uint256)",
   ],
