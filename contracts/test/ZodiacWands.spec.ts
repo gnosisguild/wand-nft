@@ -14,6 +14,7 @@ import {
   generateSparkles,
   generateHandle,
   interpolateStone,
+  transformBackground,
 } from "../../apps/minting-app/template";
 
 import { pack as packMintArgs } from "../../apps/minting-app/components/MintButton/packing";
@@ -95,7 +96,7 @@ describe("ZodiacWands", async () => {
         packedVisibility,
       } = packMintArgs({
         halo: { shape: haloShape, rhythm: haloRhythm },
-        background: background,
+        background: transformBackground(background),
         planets,
         aspects,
       });
@@ -136,7 +137,7 @@ describe("ZodiacWands", async () => {
           level1: true,
           title: generateName(tokenId),
         },
-        background,
+        background: transformBackground(background),
         filterLayers,
         sparkles: generateSparkles(tokenId),
         seed: parseInt(keccak256(signer.address).slice(-4), 16),

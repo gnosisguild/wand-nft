@@ -52,13 +52,13 @@ const ColorPicker: React.FC = () => {
             }}
           />
           <LightnessArc
-            value={fromLightness(background.color.lightness)}
+            value={normalize(background.color.lightness - 180)}
             onChange={(nextValue: number) => {
               handleChange({
                 ...background,
                 color: {
                   ...background.color,
-                  lightness: toLightness(nextValue),
+                  lightness: normalize(nextValue + 180),
                 },
               });
             }}
@@ -157,7 +157,7 @@ const ColorPicker: React.FC = () => {
               color: {
                 ...background.color,
                 hue: toHue(randomInteger(359)),
-                lightness: toLightness(randomInteger(359)),
+                lightness: randomInteger(359),
               },
             });
           }}
@@ -177,25 +177,6 @@ function fromHue(value: number): number {
   return 360 - value;
 }
 
-const LIGHTNESS_BOUNDS = [20, 70];
-
-function toLightness(value: number): number {
-  const [left, right] = LIGHTNESS_BOUNDS;
-  const spectrum = right - left;
-
-  const mirrored = value < 180 ? value : 360 - value;
-  // inverted progress
-  const progress = 1 - mirrored / 180;
-
-  return Math.round(left + progress * spectrum);
-}
-
-function fromLightness(value: number): number {
-  const [left, right] = LIGHTNESS_BOUNDS;
-  const spectrum = right - left;
-
-  // inverted progress
-  const progress = 1 - (value - left) / spectrum;
-
-  return progress * 180;
+function normalize(value: number) {
+  return (value + 360) % 360;
 }

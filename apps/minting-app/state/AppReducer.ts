@@ -11,7 +11,7 @@ export const initialState: AppState = {
     color: {
       hue: 281,
       saturation: 33,
-      lightness: 41,
+      lightness: 0,
     },
   },
   halo: {
