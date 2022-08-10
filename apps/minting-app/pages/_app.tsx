@@ -10,8 +10,8 @@ import { publicProvider } from "wagmi/providers/public";
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
 
 const { chains, provider } = configureChains(
-  [chain.rinkeby, chain.mainnet],
-  [publicProvider(), alchemyProvider({ apiKey: process.env.ALCHEMY_KEY })]
+  [chain.rinkeby],
+  [publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
