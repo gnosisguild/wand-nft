@@ -105,11 +105,11 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     returns (string memory)
   {
     require(ERC721._exists(tokenId), "Wands: URI query for nonexistent token");
-    return conjuror.generateWandURI(unpack(tokenId));
+    return conjuror.generateWandURI(unpack(tokenId), ownerOf(tokenId));
   }
 
   function unpack(uint256 tokenId) internal view returns (Wand memory) {
-    Wand memory wand = WandUnpacker.unpack(tokenId, wands[tokenId], ownerOf(tokenId));
+    Wand memory wand = WandUnpacker.unpack(tokenId, wands[tokenId]);
     wand.xp = address(forge) != address(0)
       ? forge.xp(ERC721.ownerOf(tokenId))
       : 0;
