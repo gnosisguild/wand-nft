@@ -156,21 +156,18 @@ const ColorPicker: React.FC = () => {
         <IconButton
           icon="PickerAura"
           shadow
-          onClick={() => {
-            const hueTo = randomInteger(3599) / 10;
-            const lightnessTo = randomInteger(3599) / 10;
-
+          onClick={() =>
             handleChange({
               ...background,
               dark: randomInteger(1) == 1,
               radial: randomInteger(1) == 1,
               color: {
                 ...background.color,
-                hue: toHue(hueTo),
-                lightness: lightnessTo,
+                hue: toHue(randomInteger(3599) / 10),
+                lightness: randomInteger(3599) / 10,
               },
-            });
-          }}
+            })
+          }
         />
       </div>
     </div>
