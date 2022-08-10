@@ -1,5 +1,4 @@
-import { easings, useSpring, SpringValue } from "@react-spring/web";
-import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
+import { useSpring } from "@react-spring/web";
 
 import useDragRotate from "./useDragRotate";
 import { usePrevious } from "./usePrevious";
@@ -20,9 +19,6 @@ function useDragRotateAnimate<T>(
   const { transform } = useSpring({
     from: { transform: `rotate(${prevRotation}deg)` },
     to: { transform: `rotate(${rotation}deg)` },
-    config: {
-      easing: easings.easeInOutQuart,
-    },
     immediate: dragging,
   });
 
