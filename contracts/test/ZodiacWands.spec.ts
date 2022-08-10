@@ -16,7 +16,7 @@ import {
   interpolateStone,
 } from "../../apps/minting-app/template";
 
-import { pack as packMintArgs } from "../../apps/minting-app/components/mint-button/packing";
+import { pack as packMintArgs } from "../../apps/minting-app/components/MintButton/packing";
 
 import renderSvgTemplate from "./renderSvgTemplate";
 import { keccak256 } from "ethers/lib/utils";
