@@ -2,7 +2,11 @@ import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useAppContext } from "../../state";
-import { calculateAspects, calculatePlanets } from "../../template";
+import {
+  calculateAspects,
+  calculatePlanets,
+  transformBackground,
+} from "../../template";
 import { AppState } from "../../types";
 import styles from "./MintButton.module.css";
 import { pack } from "./packing";
@@ -55,7 +59,7 @@ function writeArgs(state: AppState) {
     packedVisibility,
   } = pack({
     halo: state.halo,
-    background: state.background,
+    background: transformBackground(state.background),
     planets: calculatePlanets(state.latitude, state.longitude, 0, new Date()),
     aspects: calculateAspects(state.latitude, state.longitude, 0, new Date()),
   });

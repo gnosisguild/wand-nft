@@ -10,7 +10,9 @@ import {
   scaleAspects,
   scalePlanets,
   xp,
+  transformBackground,
 } from "../template";
+
 import classes from "./SvgTemplate.module.css";
 import useSeed from "./useSeed";
 const template = require("../../../svg/template.svg.hbs");
@@ -49,7 +51,7 @@ const SvgTemplate: React.FC<{}> = () => {
             level1: true,
             title: "",
           },
-          background: state.background,
+          background: transformBackground(state.background),
           filterLayers,
           sparkles: [],
           seed,

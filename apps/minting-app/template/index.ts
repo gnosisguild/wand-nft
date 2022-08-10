@@ -1,4 +1,5 @@
 export * from "./birthchart";
+export * from "./background";
 export * from "./halo";
 export * from "./handle";
 export * from "./name";
