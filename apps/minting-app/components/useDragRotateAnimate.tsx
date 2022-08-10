@@ -1,24 +1,13 @@
-import { Interpolation } from "@react-spring/web";
+import { easings, useSpring, SpringValue } from "@react-spring/web";
 import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
 
 import useDragRotate from "./useDragRotate";
-import useRotateAnimate from "./useRotateAnimate";
-
-export type DragRotateAnimateReturn = {
-  bind: () => ReactDOMAttributes;
-  hovering: boolean;
-  dragging: boolean;
-  rotation: {
-    transform: string | Interpolation<number, string>;
-    value: number;
-  };
-  animateTo: (from: number, to: number) => void;
-};
+import { usePrevious } from "./usePrevious";
 
 function useDragRotateAnimate<T>(
   value: number = 0,
   onChange: (angle: number) => void
-): DragRotateAnimateReturn {
+) {
   const { bind, hovering, dragging, rotation } = useDragRotate<T>(
     value,
     (nextRotation) => {
@@ -26,21 +15,25 @@ function useDragRotateAnimate<T>(
     }
   );
 
-  const {
-    isAnimating,
-    rotation: { transform },
-    animateTo,
-  } = useRotateAnimate();
+  const prevRotation = usePrevious(rotation);
+
+  const { transform } = useSpring({
+    from: { transform: `rotate(${prevRotation}deg)` },
+    to: { transform: `rotate(${rotation}deg)` },
+    config: {
+      easing: easings.easeInOutQuart,
+    },
+    immediate: dragging,
+  });
 
   return {
-    bind: isAnimating ? () => ({}) : bind,
+    bind,
     hovering,
     dragging,
     rotation: {
-      transform: isAnimating ? transform : `rotate(${rotation}deg)`,
+      transform,
       value: rotation,
     },
-    animateTo,
   };
 }
 

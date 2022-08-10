@@ -26,7 +26,6 @@ const StonePicker: React.FC = () => {
     hovering,
     dragging,
     rotation: { transform, value: rotation },
-    animateTo,
   } = useDragRotateAnimate<HTMLDivElement>(
     fromStoneId(state.stone),
     (nextRotation) => {
@@ -117,15 +116,12 @@ const StonePicker: React.FC = () => {
         <IconButton
           icon="PickerStone"
           shadow
-          onClick={() => {
-            const from = rotation;
-            const to = randomInteger(3600 - 1) / 10;
-            animateTo(from, to);
+          onClick={() =>
             dispatch({
               type: "changeStone",
-              value: toStoneId(to),
-            });
-          }}
+              value: toStoneId(randomInteger(3600 - 1) / 10),
+            })
+          }
         />
       </div>
     </div>

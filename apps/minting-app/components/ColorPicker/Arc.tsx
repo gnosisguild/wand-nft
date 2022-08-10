@@ -1,22 +1,32 @@
 import React from "react";
 import classNames from "classnames";
 import { animated } from "@react-spring/web";
+import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
 
 import { HueGradient, LightnessGradient } from "./Gradient";
 
 import styles from "./ColorPicker.module.css";
-import { DragRotateAnimateReturn } from "../useDragRotateAnimate";
 
 const SIZE = 1000;
 const HUE_MARGIN = 0.124;
 const LIGHTNESS_MARGIN = 0.48;
+
+export type Props = {
+  bind: () => ReactDOMAttributes;
+  hovering: boolean;
+  dragging: boolean;
+  rotation: {
+    transform: SpringValue<string>;
+    value: number;
+  };
+};
 
 export const HueArc = ({
   bind,
   rotation: { transform },
   hovering,
   dragging,
-}: DragRotateAnimateReturn) => {
+}: Props) => {
   return (
     <animated.g
       style={{
@@ -56,7 +66,7 @@ export const LightnessArc = ({
   rotation: { transform },
   hovering,
   dragging,
-}: DragRotateAnimateReturn) => {
+}: Props) => {
   return (
     <animated.g
       style={{

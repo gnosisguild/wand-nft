@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
 import { Background } from "../../types";
@@ -157,9 +157,7 @@ const ColorPicker: React.FC = () => {
           icon="PickerAura"
           shadow
           onClick={() => {
-            const hueFrom = hueProps.rotation.value;
             const hueTo = randomInteger(3599) / 10;
-            const lightnessFrom = lightnessProps.rotation.value;
             const lightnessTo = randomInteger(3599) / 10;
 
             handleChange({
@@ -172,8 +170,6 @@ const ColorPicker: React.FC = () => {
                 lightness: lightnessTo,
               },
             });
-            hueProps.animateTo(hueFrom, hueTo);
-            lightnessProps.animateTo(lightnessFrom, lightnessTo);
           }}
         />
       </div>

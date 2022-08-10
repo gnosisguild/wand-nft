@@ -1,4 +1,5 @@
-import { animated, Interpolation, SpringValue } from "@react-spring/web";
+import { ReactNode } from "react";
+import { animated, SpringValue } from "@react-spring/web";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 import classNames from "classnames";
@@ -6,7 +7,7 @@ import classNames from "classnames";
 type Props = {
   children: ReactNode;
   showIndicator?: boolean;
-  rotation?: string | Interpolation<number, string>;
+  rotation?: SpringValue<string>;
   dialClass?: string;
 };
 
