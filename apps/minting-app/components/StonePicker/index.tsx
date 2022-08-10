@@ -3,7 +3,7 @@ import classNames from "classnames";
 import StoneViewer from "./StoneViewer";
 import { interpolateStone, stoneList, stoneCount } from "../../template";
 import styles from "./StonePicker.module.css";
-import UiCircle from "../uiCircle";
+import UiCircle from "../UiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import StoneGlass from "./StoneGlass";

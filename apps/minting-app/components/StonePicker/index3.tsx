@@ -4,7 +4,7 @@ import { useDrag } from "react-use-gesture";
 import StoneViewer from "./StoneViewer";
 import { stoneList } from "../../template";
 import styles from "./StonePicker.module.css";
-import UiCircle from "../uiCircle";
+import UiCircle from "../UiCircle";
 import { useAppContext } from "../../state";
 import IconButton from "../IconButton";
 import useInertia from "./useInertia";

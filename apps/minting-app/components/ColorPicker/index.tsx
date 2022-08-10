@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { Background } from "../../types";
 import { useAppContext } from "../../state";
 
-import UiCircle from "../uiCircle";
+import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
 import { HueArc, LightnessArc } from "./Arc";

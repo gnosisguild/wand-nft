@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import styles from "./HaloPicker.module.css";
-import UiCircle from "../uiCircle";
+import UiCircle from "../UiCircle";
 import { useAppContext } from "../../state";
 import { describeSegments, describeFillers } from "../rhythm";
 import { Halo } from "../../types";

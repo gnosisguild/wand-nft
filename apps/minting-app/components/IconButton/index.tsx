@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from "react";
 import classnames from "classnames";
-import uiCircleBg from "../uiCircle/uiCirclebg.jpg";
+import uiCircleBg from "../UiCircle/uiCirclebg.jpg";
 import styles from "./IconButton.module.css";
 import {
   Light,
