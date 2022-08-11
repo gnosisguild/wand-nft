@@ -4,7 +4,6 @@ pragma solidity ^0.8.6;
 import "./interfaces/Types.sol";
 import "./Cauldron.sol";
 
-
 // Note this library gets inlined because all methods are internal.
 // changing any of the methods from internal will require tooling adjustments
 
