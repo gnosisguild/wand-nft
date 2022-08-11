@@ -40,7 +40,7 @@ async function verify(): Promise<void> {
   const Forge = readDeploymentAddress("Forge");
   const FrameLayer = readDeploymentAddress("FrameLayer");
   const HandleLayer = readDeploymentAddress("HandleLayer");
-  const Template = readDeploymentAddress("Template");
+  const Cauldron = readDeploymentAddress("Cauldron");
   const WandName = readDeploymentAddress("WandName");
   const ZodiacWands = readDeploymentAddress("ZodiacWands");
 
@@ -82,7 +82,7 @@ async function verify(): Promise<void> {
 
   try {
     await hre.run("verify:verify", {
-      address: Template,
+      address: Cauldron,
       libraries: {
         HandleLayer,
         FrameLayer,
@@ -91,7 +91,7 @@ async function verify(): Promise<void> {
     });
   } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
-      console.warn(`Template already verified`);
+      console.warn(`Cauldron already verified`);
     } else {
       throw e;
     }
@@ -113,7 +113,7 @@ async function verify(): Promise<void> {
     await hre.run("verify:verify", {
       address: Conjuror,
       libraries: {
-        Template,
+        Cauldron,
         WandName,
       },
     });

@@ -19,7 +19,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [],
     log: true,
     libraries: {
-      Template: allDeployments.Template.address,
+      Cauldron: allDeployments.Cauldron.address,
       WandName: txWandName.address,
     },
   });

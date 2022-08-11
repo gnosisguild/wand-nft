@@ -3,7 +3,7 @@ pragma solidity ^0.8.6;
 
 string constant __constant0 = '%, 0)"/> </radialGradient> <circle style="fill:url(#grad0)" cx="1000" cy="1925" r="1133"/> <circle style="fill:url(#grad0)" cx="1000" cy="372" r="1133"/> ';
 
-library Template {
+library Cauldron {
   struct __Input {
     Handle handle;
     Background background;
@@ -368,7 +368,7 @@ library Template {
 }
 
 library BackgroundLayer {
-  function filter(Template.__Input memory __input)
+  function filter(Cauldron.__Input memory __input)
     external
     pure
     returns (string memory __result)
@@ -545,7 +545,7 @@ library BackgroundLayer {
     );
   }
 
-  function background(Template.Background memory __input)
+  function background(Cauldron.Background memory __input)
     external
     pure
     returns (string memory __result)
@@ -638,7 +638,7 @@ library BackgroundLayer {
     );
   }
 
-  function xpBar(Template.Xp memory __input)
+  function xpBar(Cauldron.Xp memory __input)
     external
     pure
     returns (string memory __result)
@@ -658,7 +658,7 @@ library BackgroundLayer {
     );
   }
 
-  function stars(Template.__Input memory __input)
+  function stars(Cauldron.__Input memory __input)
     external
     pure
     returns (string memory __result)
@@ -675,7 +675,7 @@ library BackgroundLayer {
 }
 
 library FrameLayer {
-  function frame(Template.Frame memory __input)
+  function frame(Cauldron.Frame memory __input)
     external
     pure
     returns (string memory __result)
@@ -708,7 +708,7 @@ library FrameLayer {
 }
 
 library HandleLayer {
-  function handles(Template.Handle memory __input)
+  function handles(Cauldron.Handle memory __input)
     external
     pure
     returns (string memory __result)

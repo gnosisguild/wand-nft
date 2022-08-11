@@ -11,13 +11,13 @@ describe("Conjuror", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const template = await deployments.get("Template");
+    const cauldron = await deployments.get("Cauldron");
     const wandName = await deployments.get("WandName");
 
     const WandConjurorExposer = await hre.ethers.getContractFactory(
       "WandConjurorExposer",
       {
-        libraries: { Template: template.address, WandName: wandName.address },
+        libraries: { Cauldron: cauldron.address, WandName: wandName.address },
       }
     );
     const wandConjurorExposer = await WandConjurorExposer.deploy();

@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import "./Template.sol";
 import "./interfaces/Types.sol";
+import "./Cauldron.sol";
+
 
 // Note this library gets inlined because all methods are internal.
 // changing any of the methods from internal will require tooling adjustments
@@ -13,10 +14,10 @@ library WandUnpacker {
     pure
     returns (Wand memory)
   {
-    Template.Background memory background = unpackBackground(
+    Cauldron.Background memory background = unpackBackground(
       packedWand.background
     );
-    Template.Halo memory halo = unpackHalo(packedWand.halo);
+    Cauldron.Halo memory halo = unpackHalo(packedWand.halo);
     halo.hue = (background.color.hue + 180) % 360;
 
     return
@@ -67,7 +68,7 @@ library WandUnpacker {
   function unpackBackground(uint64 packedBackground)
     internal
     pure
-    returns (Template.Background memory background)
+    returns (Cauldron.Background memory background)
   {
     background.radial = (packedBackground & 0x0001) != 0;
     background.dark = (packedBackground & 0x0002) != 0;
@@ -79,7 +80,7 @@ library WandUnpacker {
   function unpackHalo(uint16 packedHalo)
     internal
     pure
-    returns (Template.Halo memory halo)
+    returns (Cauldron.Halo memory halo)
   {
     bool[24] memory rhythm;
     for (uint256 i = 0; i < 24; i++) {
@@ -89,7 +90,7 @@ library WandUnpacker {
     uint8 shape = uint8(packedHalo) & 0x07;
 
     return
-      Template.Halo({
+      Cauldron.Halo({
         halo0: shape == 0,
         halo1: shape == 1,
         halo2: shape == 2,
@@ -104,10 +105,10 @@ library WandUnpacker {
   function unpackHandle(uint8 packedHandle)
     internal
     pure
-    returns (Template.Handle memory handle)
+    returns (Cauldron.Handle memory handle)
   {
     return
-      Template.Handle({
+      Cauldron.Handle({
         handle0: packedHandle == 0,
         handle1: packedHandle == 1,
         handle2: packedHandle == 2,
