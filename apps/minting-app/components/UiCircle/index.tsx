@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useSpring, animated, easings } from "@react-spring/web";
+import { animated, SpringValue } from "@react-spring/web";
 import styles from "./UiCircle.module.css";
 import uiCirclebg from "./uiCirclebg.jpg";
 import classNames from "classnames";
@@ -7,13 +7,7 @@ import classNames from "classnames";
 type Props = {
   children: ReactNode;
   showIndicator?: boolean;
-  rotation?:
-    | {
-        immediate: boolean;
-        from: number;
-        to: number;
-      }
-    | number;
+  rotation?: SpringValue<string>;
   dialClass?: string;
 };
 
@@ -23,17 +17,6 @@ const UiCircle: React.FC<Props> = ({
   rotation,
   dialClass = "",
 }) => {
-  const { immediate, from, to } = unpack(rotation);
-
-  const { transform } = useSpring({
-    from: { transform: `rotate(${from}deg)` },
-    to: { transform: `rotate(${to}deg)` },
-    immediate,
-    config: {
-      easing: easings.easeInOutQuart,
-    },
-  });
-
   return (
     <div className={styles.containerCircle}>
       <svg
@@ -44,7 +27,7 @@ const UiCircle: React.FC<Props> = ({
       >
         <animated.g
           style={{
-            transform,
+            transform: rotation,
             transformOrigin: "center",
           }}
         >
@@ -154,29 +137,5 @@ const UiCircle: React.FC<Props> = ({
     </div>
   );
 };
-
-function unpack(
-  rotation?:
-    | {
-        immediate: boolean;
-        from: number;
-        to: number;
-      }
-    | number
-) {
-  if (!rotation) {
-    return { immediate: true, from: 0, to: 0 };
-  }
-
-  if (typeof rotation === "number") {
-    return { immediate: true, from: 0, to: rotation };
-  }
-
-  return {
-    immediate: !!rotation.immediate,
-    from: rotation.from | 0,
-    to: rotation.to | 0,
-  };
-}
 
 export default UiCircle;

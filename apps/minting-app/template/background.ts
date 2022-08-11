@@ -12,13 +12,8 @@ export function transformBackground(background: Background): Background {
 
 const LIGHTNESS_BOUNDS = [20, 70];
 
-function toLightness(value: number): number {
+// map an angle between (0deg: white, 180deg: black, 360deg: white) to a lightness between 20% and 70%
+function toLightness(angle: number): number {
   const [left, right] = LIGHTNESS_BOUNDS;
-  const spectrum = right - left;
-
-  const mirrored = value < 180 ? value : 360 - value;
-  // inverted progress
-  const progress = 1 - mirrored / 180;
-
-  return Math.round(left + progress * spectrum);
+  return Math.round(left + ((right - left) * Math.abs(angle - 180)) / 180);
 }

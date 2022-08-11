@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
+import { useMemo } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useAppContext } from "../../state";
 import {
@@ -7,7 +8,7 @@ import {
   calculatePlanets,
   transformBackground,
 } from "../../template";
-import { AppState } from "../../types";
+import { AppState, Aspect, Planet } from "../../types";
 import styles from "./MintButton.module.css";
 import { pack } from "./packing";
 
@@ -29,11 +30,21 @@ const WANDS = {
 const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { state } = useAppContext();
 
+  const planets = useMemo(
+    () => calculatePlanets(state.latitude, state.longitude, 0, new Date()),
+    [state.latitude, state.longitude]
+  );
+  const aspects = useMemo(
+    () => calculateAspects(state.latitude, state.longitude, 0, new Date()),
+
+    [state.latitude, state.longitude]
+  );
+
   const { config } = usePrepareContractWrite({
     addressOrName: WANDS.address,
     contractInterface: WANDS.abi,
     functionName: "mint",
-    args: writeArgs(state),
+    args: writeArgs(state, planets, aspects),
   });
 
   const { write } = useContractWrite(config);
@@ -50,7 +61,7 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   );
 };
 
-function writeArgs(state: AppState) {
+function writeArgs(state: AppState, planets: Planet[], aspects: Aspect[]) {
   const {
     packedHalo,
     packedBackground,
@@ -60,8 +71,8 @@ function writeArgs(state: AppState) {
   } = pack({
     halo: state.halo,
     background: transformBackground(state.background),
-    planets: calculatePlanets(state.latitude, state.longitude, 0, new Date()),
-    aspects: calculateAspects(state.latitude, state.longitude, 0, new Date()),
+    planets,
+    aspects,
   });
 
   return [

@@ -11,6 +11,7 @@ import { HueArc, LightnessArc } from "./Arc";
 import ButtonBackground from "./ButtonBackground";
 import styles from "./ColorPicker.module.css";
 import randomInteger from "../randomInteger";
+import useDragRotateAnimate from "../useDragRotateAnimate";
 
 const ColorPicker: React.FC = () => {
   const {
@@ -24,6 +25,32 @@ const ColorPicker: React.FC = () => {
       value,
     });
   };
+
+  const hueProps = useDragRotateAnimate<SVGPathElement>(
+    fromHue(background.color.hue),
+    (nextRotation: number) => {
+      handleChange({
+        ...background,
+        color: {
+          ...background.color,
+          hue: toHue(nextRotation),
+        },
+      });
+    }
+  );
+
+  const lightnessProps = useDragRotateAnimate<SVGPathElement>(
+    background.color.lightness,
+    (nextRotation: number) => {
+      handleChange({
+        ...background,
+        color: {
+          ...background.color,
+          lightness: nextRotation,
+        },
+      });
+    }
+  );
 
   return (
     <div>
@@ -39,30 +66,8 @@ const ColorPicker: React.FC = () => {
             opacity="0.7"
             style={{ mixBlendMode: "color-dodge" }}
           />
-          <HueArc
-            value={fromHue(background.color.hue)}
-            onChange={(nextValue: number) => {
-              handleChange({
-                ...background,
-                color: {
-                  ...background.color,
-                  hue: toHue(nextValue),
-                },
-              });
-            }}
-          />
-          <LightnessArc
-            value={normalize(background.color.lightness - 180)}
-            onChange={(nextValue: number) => {
-              handleChange({
-                ...background,
-                color: {
-                  ...background.color,
-                  lightness: normalize(nextValue + 180),
-                },
-              });
-            }}
-          />
+          <HueArc {...hueProps} />
+          <LightnessArc {...lightnessProps} />
           <g style={{ pointerEvents: "none" }}>
             <rect
               className={classNames(
@@ -84,7 +89,9 @@ const ColorPicker: React.FC = () => {
               height="70"
               x="470"
               y="210"
-              fill={`hsl(0, 0%, ${background.color.lightness}%)`}
+              fill={`hsl(0, 0%, ${
+                (Math.abs(background.color.lightness - 180) / 180) * 100
+              }%)`}
             />
           </g>
         </svg>
@@ -149,18 +156,18 @@ const ColorPicker: React.FC = () => {
         <IconButton
           icon="PickerAura"
           shadow
-          onClick={() => {
+          onClick={() =>
             handleChange({
               ...background,
-              radial: randomInteger(1) === 1,
-              dark: randomInteger(1) === 1,
+              dark: randomInteger(1) == 1,
+              radial: randomInteger(1) == 1,
               color: {
                 ...background.color,
-                hue: toHue(randomInteger(359)),
-                lightness: randomInteger(359),
+                hue: toHue(randomInteger(3599) / 10),
+                lightness: randomInteger(3599) / 10,
               },
-            });
-          }}
+            })
+          }
         />
       </div>
     </div>
@@ -175,8 +182,4 @@ function toHue(value: number): number {
 
 function fromHue(value: number): number {
   return 360 - value;
-}
-
-function normalize(value: number) {
-  return (value + 360) % 360;
 }
