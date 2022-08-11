@@ -8,7 +8,7 @@ import "./Cauldron.sol";
 // Note this library gets inlined because all methods are internal.
 // changing any of the methods from internal will require tooling adjustments
 
-library WandUnpacker {
+library Decanter {
   function unpack(uint256 tokenId, PackedWand memory packedWand)
     internal
     pure

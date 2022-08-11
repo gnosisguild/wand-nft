@@ -125,7 +125,7 @@ async function verify(): Promise<void> {
     }
   }
 
-  // Note WandUnpacker gets inlined
+  // Note Decanter gets inlined
   try {
     await hre.run("verify:verify", {
       address: ZodiacWands,

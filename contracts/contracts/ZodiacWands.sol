@@ -48,7 +48,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IZodiacWands.sol";
 import "./interfaces/IForge.sol";
 import "./interfaces/IConjuror.sol";
-import "./WandUnpacker.sol";
+import "./Decanter.sol";
 
 contract ZodiacWands is IZodiacWands, ERC721, Ownable {
   IForge public forge;
@@ -109,7 +109,7 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
   }
 
   function unpack(uint256 tokenId) internal view returns (Wand memory) {
-    Wand memory wand = WandUnpacker.unpack(tokenId, wands[tokenId]);
+    Wand memory wand = Decanter.unpack(tokenId, wands[tokenId]);
     wand.xp = address(forge) != address(0)
       ? forge.xp(ERC721.ownerOf(tokenId))
       : 0;
