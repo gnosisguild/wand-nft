@@ -41,7 +41,7 @@ async function verify(): Promise<void> {
   const FrameLayer = readDeploymentAddress("FrameLayer");
   const HandleLayer = readDeploymentAddress("HandleLayer");
   const Cauldron = readDeploymentAddress("Cauldron");
-  const WandName = readDeploymentAddress("WandName");
+  const Incantation = readDeploymentAddress("Incantation");
   const ZodiacWands = readDeploymentAddress("ZodiacWands");
 
   try {
@@ -99,11 +99,11 @@ async function verify(): Promise<void> {
 
   try {
     await hre.run("verify:verify", {
-      address: WandName,
+      address: Incantation,
     });
   } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
-      console.warn(`WandName already verified`);
+      console.warn(`Incantation already verified`);
     } else {
       throw e;
     }
@@ -114,7 +114,7 @@ async function verify(): Promise<void> {
       address: Conjuror,
       libraries: {
         Cauldron,
-        WandName,
+        Incantation,
       },
     });
   } catch (e: any) {

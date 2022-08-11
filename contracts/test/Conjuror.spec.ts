@@ -12,12 +12,15 @@ describe("Conjuror", async () => {
     await deployments.fixture();
 
     const cauldron = await deployments.get("Cauldron");
-    const wandName = await deployments.get("WandName");
+    const incantation = await deployments.get("Incantation");
 
     const WandConjurorExposer = await hre.ethers.getContractFactory(
       "WandConjurorExposer",
       {
-        libraries: { Cauldron: cauldron.address, WandName: wandName.address },
+        libraries: {
+          Cauldron: cauldron.address,
+          Incantation: incantation.address,
+        },
       }
     );
     const wandConjurorExposer = await WandConjurorExposer.deploy();

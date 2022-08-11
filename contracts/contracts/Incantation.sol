@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
-library WandName {
+library Incantation {
   function generate(uint256 seed) public pure returns (string memory) {
     string[83] memory actions = [
       "ANIMATE",

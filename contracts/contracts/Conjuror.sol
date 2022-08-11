@@ -4,7 +4,7 @@ pragma solidity ^0.8.6;
 import "./interfaces/Types.sol";
 import "./interfaces/IConjuror.sol";
 import "./Cauldron.sol";
-import "./WandName.sol";
+import "./Incantation.sol";
 import "base64-sol/base64.sol";
 
 contract Conjuror is IConjuror {
@@ -14,7 +14,7 @@ contract Conjuror is IConjuror {
     override
     returns (string memory)
   {
-    string memory name = WandName.generate(wand.tokenId);
+    string memory name = Incantation.generate(wand.tokenId);
 
     return
       string(
