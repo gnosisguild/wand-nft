@@ -1,14 +1,12 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { Fragment, useEffect, useState } from "react";
-import Head from "next/head";
+import React, { useEffect, useState } from "react";
 import "@rainbow-me/rainbowkit/styles.css";
 import { useContractRead } from "wagmi";
-import ConnectAccount from "../../components/ConnectButton";
+import Layout from "../../components/Layout";
 import styles from "../../styles/Home.module.css";
-import CornerGilding from "../../components/Gilding/Corners";
+
 import wandContract from "../../utils/contract";
-import bgImage from "../../public/test-bg-small.jpg";
 
 const WandsPage: NextPage = () => {
   const router = useRouter();
@@ -18,6 +16,12 @@ const WandsPage: NextPage = () => {
     contractInterface: wandContract.iface,
     functionName: "tokenURI",
     args: tokenId,
+    onError(error) {
+      console.log("Error", error);
+    },
+    onSuccess(data) {
+      console.log("Success", data);
+    },
   });
 
   // temp workaround for SRR hydration issue
@@ -27,25 +31,11 @@ const WandsPage: NextPage = () => {
   }, []);
 
   return (
-    <div
-      className={styles.container}
-      style={{ backgroundImage: `url(${bgImage.src})` }}
-    >
-      <Head>
-        <title>Zodiac Wands</title>
-        <meta name="description" content="Minting app for Zodiac NFT" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        <CornerGilding />
-        <div className={styles.centerContainer}>
-          <h1>{tokenId}</h1>
-        </div>
-        <div className={styles.AccountConnect}>
-          <ConnectAccount />
-        </div>
-      </main>
-    </div>
+    <Layout description="Zodiac Wands Minting App">
+      <div className={styles.centerContainer}>
+        <h1>{tokenId}</h1>
+      </div>
+    </Layout>
   );
 };
 

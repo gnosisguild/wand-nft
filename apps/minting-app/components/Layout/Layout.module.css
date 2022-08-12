@@ -1,0 +1,20 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background: #1d1d25;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  position: fixed;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.main {
+  position: absolute;
+  inset: 0.5vw;
+  width: 99vw;
+  height: 99vh;
+  padding: 2% 0 0%;
+}

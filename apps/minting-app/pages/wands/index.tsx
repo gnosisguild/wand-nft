@@ -1,14 +1,12 @@
 import type { NextPage } from "next";
 import React, { Fragment, useEffect, useState } from "react";
-import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 import { useContractInfiniteReads, paginatedIndexesConfig } from "wagmi";
-import ConnectAccount from "../../components/ConnectButton";
+import Layout from "../../components/Layout";
 import WandGrid from "../../components/WandGrid";
 import styles from "../../styles/Home.module.css";
-import CornerGilding from "../../components/Gilding/Corners";
+
 import wandContract from "../../utils/contract";
-import bgImage from "../../public/test-bg-small.jpg";
 
 const WandsPage: NextPage = () => {
   const { data, fetchNextPage } = useContractInfiniteReads({
@@ -40,21 +38,11 @@ const WandsPage: NextPage = () => {
   }, []);
 
   return (
-    <div
-      className={styles.container}
-      style={{ backgroundImage: `url(${bgImage.src})` }}
-    >
-      <Head>
-        <title>Zodiac Wands</title>
-        <meta name="description" content="Minting app for Zodiac NFT" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        <CornerGilding />
-        <div className={styles.centerContainer}>
-          {mounted && <WandGrid wands={data?.pages} />}
-        </div>
-        {/* {mounted &&
+    <Layout description="Zodiac Wands Minting App">
+      <div className={styles.centerContainer}>
+        {mounted && <WandGrid wands={data?.pages} />}
+      </div>
+      {/* {mounted &&
           data?.pages.map((tokenUris, i) => (
             <Fragment key={i}>
               {tokenUris.map(
@@ -65,11 +53,7 @@ const WandsPage: NextPage = () => {
               )}
             </Fragment>
           ))} */}
-        <div className={styles.AccountConnect}>
-          <ConnectAccount />
-        </div>
-      </main>
-    </div>
+    </Layout>
   );
 };
 
