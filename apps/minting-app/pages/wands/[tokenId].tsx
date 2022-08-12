@@ -1,36 +1,23 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
-import { useContractInfiniteReads, paginatedIndexesConfig } from "wagmi";
+import { useContractRead } from "wagmi";
 import ConnectAccount from "../../components/ConnectButton";
-import WandGrid from "../../components/WandGrid";
 import styles from "../../styles/Home.module.css";
 import CornerGilding from "../../components/Gilding/Corners";
 import wandContract from "../../utils/contract";
 import bgImage from "../../public/test-bg-small.jpg";
 
 const WandsPage: NextPage = () => {
-  const { data, fetchNextPage } = useContractInfiniteReads({
-    cacheKey: "mintedWands",
-    ...paginatedIndexesConfig(
-      (index = 0) => ({
-        addressOrName: wandContract.address,
-        contractInterface: wandContract.iface,
-        functionName: "tokenURI",
-        args: [index],
-      }),
-      { start: 0, perPage: 1, direction: "increment" }
-    ),
-    onSettled(data) {
-      console.log("Settled", data);
-    },
-    onSuccess(data) {
-      console.log("Success", data);
-    },
-    onError(error) {
-      console.log("error", error);
-    },
+  const router = useRouter();
+  const { tokenId } = router.query;
+  const { data, isError, isLoading } = useContractRead({
+    addressOrName: wandContract.address,
+    contractInterface: wandContract.iface,
+    functionName: "tokenURI",
+    args: tokenId,
   });
 
   // temp workaround for SRR hydration issue
@@ -52,19 +39,8 @@ const WandsPage: NextPage = () => {
       <main className={styles.main}>
         <CornerGilding />
         <div className={styles.centerContainer}>
-          {mounted && <WandGrid wands={data?.pages} />}
+          <h1>{tokenId}</h1>
         </div>
-        {/* {mounted &&
-          data?.pages.map((tokenUris, i) => (
-            <Fragment key={i}>
-              {tokenUris.map(
-                (tokenUri, j) =>
-                  tokenUri && (
-                    <img src={getImageUri(tokenUri)} key={j} height={150} />
-                  )
-              )}
-            </Fragment>
-          ))} */}
         <div className={styles.AccountConnect}>
           <ConnectAccount />
         </div>
