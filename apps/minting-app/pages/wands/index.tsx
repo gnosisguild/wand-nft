@@ -20,9 +20,6 @@ const WandsPage: NextPage = () => {
       }),
       { start: 0, perPage: 20, direction: "increment" }
     ),
-    onSettled(data) {
-      console.log("Settled", data);
-    },
     onSuccess(data) {
       console.log("Success", data);
     },
@@ -58,10 +55,3 @@ const WandsPage: NextPage = () => {
 };
 
 export default WandsPage;
-
-const getImageUri = (tokenUri: string) => {
-  const json = atob(tokenUri.slice("data:application/json;base64,".length));
-  if (!json) return "";
-  const obj = JSON.parse(json);
-  return obj.image;
-};
