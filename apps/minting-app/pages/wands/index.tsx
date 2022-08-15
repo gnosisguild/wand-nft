@@ -18,7 +18,7 @@ const WandsPage: NextPage = () => {
         functionName: "tokenURI",
         args: [index],
       }),
-      { start: 0, perPage: 1, direction: "increment" }
+      { start: 0, perPage: 20, direction: "increment" }
     ),
     onSettled(data) {
       console.log("Settled", data);
@@ -40,7 +40,7 @@ const WandsPage: NextPage = () => {
   return (
     <Layout description="Zodiac Wands Minting App">
       <div className={styles.centerContainer}>
-        {mounted && <WandGrid wands={data?.pages} />}
+        {mounted && <WandGrid wands={data?.pages[0]} />}
       </div>
       {/* {mounted &&
           data?.pages.map((tokenUris, i) => (
