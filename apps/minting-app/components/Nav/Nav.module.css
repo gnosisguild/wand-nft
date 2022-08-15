@@ -1,9 +1,4 @@
 .nav {
-  position: fixed;
-  width: 99vw;
-  height: 99vh;
-  mix-blend-mode: color-dodge;
-  z-index: 20;
 }
 
 .nav li a {
@@ -28,17 +23,19 @@
 }
 
 .nav li {
-  position: absolute;
-  top: 0.95vw;
-  width: 8.3vw;
+  position: fixed;
+  top: 3.42vw;
+  width: 8.5vw;
+  max-width: 190px;
   height: 2vw;
   cursor: pointer;
+  mix-blend-mode: color-dodge;
 }
 .aboutLink {
-  left: 10.8vw;
+  left: 11.27vw;
 }
 .wandsLink {
-  left: 21vw;
+  left: 21.36vw;
 }
 .buttonBackground {
   position: absolute;
@@ -50,8 +47,4 @@
 }
 .buttonBackground:hover {
   opacity: 1;
-}
-.aboutBackground {
-}
-.wandsBackground {
 }

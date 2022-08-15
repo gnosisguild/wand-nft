@@ -18,7 +18,6 @@ const Home: NextPage = () => (
   <Layout description="Zodiac Wands Minting App">
     <div className={styles.centerContainer}>
       <CenterGilding />
-      <MintButton />
       <PickerLabels />
       <div className={styles.svgPreview}>
         <SvgTemplate />

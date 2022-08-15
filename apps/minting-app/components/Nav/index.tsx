@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ButtonBackground from "./ButtonBackground";
 import ConnectButton from "../ConnectButton";
+import MintButton from "../MintButton";
 import styles from "./Nav.module.css";
 
 const Nav: React.FC = () => (
@@ -15,7 +16,7 @@ const Nav: React.FC = () => (
         <ButtonBackground className={styles.wandsBackground} />
       </li>
     </ul>
-
+    <MintButton />
     <div className={styles.AccountConnect}>
       <ConnectButton />
     </div>

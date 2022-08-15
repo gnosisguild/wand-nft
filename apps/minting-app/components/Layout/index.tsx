@@ -24,8 +24,8 @@ const Layout: React.FC<Props> = ({ children, description }) => (
     </Head>
     <main className={styles.main}>
       <CornerGilding />
-      <Nav />
       {children}
+      <Nav />
     </main>
   </div>
 );

@@ -6,6 +6,7 @@
   width: 13%;
   display: flex;
   justify-content: center;
+  mix-blend-mode: hard-light;
 }
 
 .connectBackground {
