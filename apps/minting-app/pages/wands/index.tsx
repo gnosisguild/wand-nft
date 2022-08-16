@@ -14,7 +14,7 @@ const WandsPage: NextPage = () => {
     ...paginatedIndexesConfig(
       (index = 0) => ({
         addressOrName: wandContract.address,
-        contractInterface: wandContract.iface,
+        contractInterface: wandContract.abi,
         functionName: "tokenURI",
         args: [index],
       }),

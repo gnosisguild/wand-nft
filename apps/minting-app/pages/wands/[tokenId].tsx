@@ -12,10 +12,9 @@ const WandsPage: NextPage = () => {
   const router = useRouter();
   const { tokenId } = router.query;
 
-  console.log(wandContract.iface.encodeFunctionData);
   const { data, isError, isLoading } = useContractRead({
     addressOrName: wandContract.address,
-    contractInterface: wandContract.iface,
+    contractInterface: wandContract.abi,
     functionName: "tokenURI",
     args: tokenId,
     enabled: !!tokenId,
