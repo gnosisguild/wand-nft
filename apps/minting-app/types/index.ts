@@ -84,6 +84,7 @@ export interface HaloInput {
 }
 
 export interface AppState {
+  minting: boolean;
   latitude: number;
   longitude: number;
   background: Background;

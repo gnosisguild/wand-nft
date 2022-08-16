@@ -1,16 +1,30 @@
 .buttonContainer {
-  position: absolute;
-  top: -0.1%;
+  position: fixed;
+  top: 3%;
   left: 0;
-  width: 100%;
+  right: 0;
+  margin: auto;
+  width: 20vw;
+  max-width: 350px;
   z-index: 11;
+}
+
+.navMode {
+  top: 4%;
+  width: 12vw;
+}
+
+.disabled {
+  pointer-events: none;
 }
 
 .buttonContainer svg {
   cursor: pointer;
   display: block;
   margin: 0 auto;
-  width: 32%;
+  width: 100%;
+  position: relative;
+  z-index: 22;
 }
 
 .border {

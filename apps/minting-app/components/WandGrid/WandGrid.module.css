@@ -1,0 +1,17 @@
+.wandContainer {
+  aspect-ratio: 2/3;
+  width: 100%;
+  background-color: green;
+  cursor: pointer;
+}
+
+.wandContainer:hover {
+  filter: brightness(1.2);
+}
+
+.wandGrid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  padding-top: 7vw;
+}

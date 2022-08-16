@@ -5,6 +5,7 @@ const latitude = 52.5422;
 const longitude = 13.3495;
 
 export const initialState: AppState = {
+  minting: false,
   background: {
     radial: true,
     dark: true,
@@ -54,10 +55,16 @@ export interface ChangeStoneAction {
   value: number;
 }
 
+export interface ChangeMintingStateAction {
+  type: "changeMintingState";
+  value: boolean;
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
-  | ChangeStoneAction;
+  | ChangeStoneAction
+  | ChangeMintingStateAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -77,6 +84,12 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         stone: action.value,
+      };
+    }
+    case "changeMintingState": {
+      return {
+        ...state,
+        minting: action.value,
       };
     }
   }
