@@ -6,7 +6,7 @@ const abi = [
 ];
 
 const wandContract = {
-  address: getAddress("0x7809b71FC3521eD81C1071E8DE98d5D37FaB1497"),
+  address: getAddress("0xd72343835E3CE2d0aEda2F6da4825BfD76E4Ab69"),
   abi: new Interface(abi).format("json"),
 };
 
