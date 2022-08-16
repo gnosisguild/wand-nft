@@ -40,8 +40,8 @@ async function verify(): Promise<void> {
   const Forge = readDeploymentAddress("Forge");
   const FrameLayer = readDeploymentAddress("FrameLayer");
   const HandleLayer = readDeploymentAddress("HandleLayer");
-  const Template = readDeploymentAddress("Template");
-  const WandName = readDeploymentAddress("WandName");
+  const Cauldron = readDeploymentAddress("Cauldron");
+  const Incantation = readDeploymentAddress("Incantation");
   const ZodiacWands = readDeploymentAddress("ZodiacWands");
 
   try {
@@ -82,7 +82,7 @@ async function verify(): Promise<void> {
 
   try {
     await hre.run("verify:verify", {
-      address: Template,
+      address: Cauldron,
       libraries: {
         HandleLayer,
         FrameLayer,
@@ -91,7 +91,7 @@ async function verify(): Promise<void> {
     });
   } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
-      console.warn(`Template already verified`);
+      console.warn(`Cauldron already verified`);
     } else {
       throw e;
     }
@@ -99,11 +99,11 @@ async function verify(): Promise<void> {
 
   try {
     await hre.run("verify:verify", {
-      address: WandName,
+      address: Incantation,
     });
   } catch (e: any) {
     if (e.message === alreadyVerifiedError) {
-      console.warn(`WandName already verified`);
+      console.warn(`Incantation already verified`);
     } else {
       throw e;
     }
@@ -113,8 +113,8 @@ async function verify(): Promise<void> {
     await hre.run("verify:verify", {
       address: Conjuror,
       libraries: {
-        Template,
-        WandName,
+        Cauldron,
+        Incantation,
       },
     });
   } catch (e: any) {
@@ -125,7 +125,7 @@ async function verify(): Promise<void> {
     }
   }
 
-  // Note WandUnpacker gets inlined
+  // Note Decanter gets inlined
   try {
     await hre.run("verify:verify", {
       address: ZodiacWands,

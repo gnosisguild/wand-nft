@@ -3,8 +3,8 @@ pragma solidity ^0.8.6;
 
 import "./interfaces/Types.sol";
 import "./interfaces/IConjuror.sol";
-import "./Template.sol";
-import "./WandName.sol";
+import "./Cauldron.sol";
+import "./Incantation.sol";
 import "base64-sol/base64.sol";
 
 contract Conjuror is IConjuror {
@@ -14,7 +14,7 @@ contract Conjuror is IConjuror {
     override
     returns (string memory)
   {
-    string memory name = WandName.generate(wand.tokenId);
+    string memory name = Incantation.generate(wand.tokenId);
 
     return
       string(
@@ -64,14 +64,14 @@ contract Conjuror is IConjuror {
     // TODO should xpCap be pulled from the forge?
     uint32 xpCap = 10000;
     return
-      Template.render(
-        Template.__Input({
+      Cauldron.render(
+        Cauldron.__Input({
           background: wand.background,
           seed: uint16(uint256(keccak256(abi.encodePacked(owner)))), // use a 16-bit hash of the owner address,
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
           handle: wand.handle,
-          xp: Template.Xp({
+          xp: Cauldron.Xp({
             cap: xpCap,
             amount: wand.xp,
             crown: wand.xp >= xpCap
@@ -88,10 +88,10 @@ contract Conjuror is IConjuror {
   function generateFrame(Wand memory wand, string memory name)
     internal
     pure
-    returns (Template.Frame memory)
+    returns (Cauldron.Frame memory)
   {
     return
-      Template.Frame({
+      Cauldron.Frame({
         level1: wand.level == 0,
         level2: wand.level == 1,
         level3: wand.level == 2,
@@ -104,14 +104,14 @@ contract Conjuror is IConjuror {
   function generateFilterLayers()
     internal
     pure
-    returns (Template.FilterLayer[3] memory)
+    returns (Cauldron.FilterLayer[3] memory)
   {
     return [
-      Template.FilterLayer({
+      Cauldron.FilterLayer({
         blurX: 19,
         blurY: 17,
         dispScale: 77,
-        lightColor: Template.Color({hue: 0, saturation: 0, lightness: 100}),
+        lightColor: Cauldron.Color({hue: 0, saturation: 0, lightness: 100}),
         opacity: 20,
         pointX: -493,
         pointY: 514,
@@ -125,11 +125,11 @@ contract Conjuror is IConjuror {
         turbOct: 1,
         fractalNoise: true
       }),
-      Template.FilterLayer({
+      Cauldron.FilterLayer({
         blurX: 19,
         blurY: 17,
         dispScale: 90,
-        lightColor: Template.Color({hue: 0, saturation: 0, lightness: 100}),
+        lightColor: Cauldron.Color({hue: 0, saturation: 0, lightness: 100}),
         opacity: 25,
         pointX: -139,
         pointY: 514,
@@ -143,11 +143,11 @@ contract Conjuror is IConjuror {
         turbOct: 1,
         fractalNoise: true
       }),
-      Template.FilterLayer({
+      Cauldron.FilterLayer({
         blurX: 19,
         blurY: 17,
         dispScale: 88,
-        lightColor: Template.Color({hue: 58, saturation: 100, lightness: 94}),
+        lightColor: Cauldron.Color({hue: 58, saturation: 100, lightness: 94}),
         opacity: 34,
         pointX: -493,
         pointY: 514,
@@ -167,13 +167,13 @@ contract Conjuror is IConjuror {
   function generateSparkles(uint256 tokenId)
     internal
     pure
-    returns (Template.Sparkle[] memory result)
+    returns (Cauldron.Sparkle[] memory result)
   {
     uint256 seed = uint256(keccak256(abi.encodePacked(tokenId)));
     uint256 sparkleCount = 4 + (seed % 4);
-    result = new Template.Sparkle[](sparkleCount);
+    result = new Cauldron.Sparkle[](sparkleCount);
     for (uint256 i = 0; i < sparkleCount; i++) {
-      result[i] = Template.Sparkle({
+      result[i] = Cauldron.Sparkle({
         tx: uint16(
           1820 - (uint256(keccak256(abi.encodePacked(seed + 3 * i + 0))) % 1640)
         ),
@@ -191,7 +191,7 @@ contract Conjuror is IConjuror {
   function scalePlanets(Planet[8] memory planets)
     internal
     pure
-    returns (Template.Planet[8] memory result)
+    returns (Cauldron.Planet[8] memory result)
   {
     for (uint256 i = 0; i < 8; i++) {
       result[i].visible = planets[i].visible;
@@ -203,7 +203,7 @@ contract Conjuror is IConjuror {
   function scaleAspects(Aspect[8] memory aspects)
     internal
     pure
-    returns (Template.Aspect[8] memory result)
+    returns (Cauldron.Aspect[8] memory result)
   {
     for (uint256 i = 0; i < 8; i++) {
       result[i].x1 = int16((int256(aspects[i].x1) * 260) / 127);
@@ -216,13 +216,13 @@ contract Conjuror is IConjuror {
   function interpolateStone(uint16 stoneId)
     internal
     pure
-    returns (Template.Stone memory)
+    returns (Cauldron.Stone memory)
   {
     (uint8 from, uint8 to, uint8 progress) = interpolationParams(stoneId);
-    Template.Stone memory fromStone = stoneList()[from];
-    Template.Stone memory toStone = stoneList()[to];
+    Cauldron.Stone memory fromStone = stoneList()[from];
+    Cauldron.Stone memory toStone = stoneList()[to];
     return
-      Template.Stone({
+      Cauldron.Stone({
         turbFreqX: interpolateUInt8Value(
           fromStone.turbFreqX,
           toStone.turbFreqX,
@@ -369,9 +369,9 @@ contract Conjuror is IConjuror {
     }
   }
 
-  function stoneList() internal pure returns (Template.Stone[29] memory) {
+  function stoneList() internal pure returns (Cauldron.Stone[29] memory) {
     return [
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 2,
         turbFreqY: 1,
@@ -387,7 +387,7 @@ contract Conjuror is IConjuror {
         blueOff: -16,
         rotation: 218
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 2,
         turbFreqY: 2,
@@ -403,7 +403,7 @@ contract Conjuror is IConjuror {
         blueOff: 76,
         rotation: 216
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 2,
         turbFreqY: 4,
@@ -419,7 +419,7 @@ contract Conjuror is IConjuror {
         blueOff: -6,
         rotation: 21
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 8,
         turbFreqY: 7,
@@ -435,7 +435,7 @@ contract Conjuror is IConjuror {
         blueOff: 46,
         rotation: 43
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 6,
         turbFreqY: 3,
@@ -451,7 +451,7 @@ contract Conjuror is IConjuror {
         blueOff: 12,
         rotation: 43
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 6,
         turbFreqY: 3,
@@ -467,7 +467,7 @@ contract Conjuror is IConjuror {
         blueOff: -63,
         rotation: 310
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 2,
         turbFreqY: 2,
@@ -483,7 +483,7 @@ contract Conjuror is IConjuror {
         blueOff: 76,
         rotation: 114
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 0,
         turbFreqY: 4,
@@ -499,7 +499,7 @@ contract Conjuror is IConjuror {
         blueOff: -79,
         rotation: 56
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 5,
         turbFreqY: 3,
@@ -515,7 +515,7 @@ contract Conjuror is IConjuror {
         blueOff: 14,
         rotation: 86
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 2,
         turbFreqY: 2,
@@ -531,7 +531,7 @@ contract Conjuror is IConjuror {
         blueOff: 82,
         rotation: 43
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 7,
         turbFreqY: 2,
@@ -547,7 +547,7 @@ contract Conjuror is IConjuror {
         blueOff: 17,
         rotation: 69
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 3,
         turbFreqY: 3,
@@ -563,7 +563,7 @@ contract Conjuror is IConjuror {
         blueOff: -89,
         rotation: 43
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 1,
         turbFreqY: 4,
@@ -579,7 +579,7 @@ contract Conjuror is IConjuror {
         blueOff: -81,
         rotation: 244
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 3,
         turbFreqY: 9,
@@ -595,7 +595,7 @@ contract Conjuror is IConjuror {
         blueOff: -100,
         rotation: 43
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 4,
         turbFreqY: 7,
@@ -611,7 +611,7 @@ contract Conjuror is IConjuror {
         blueOff: -15,
         rotation: 306
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 16,
         turbFreqY: 9,
@@ -627,7 +627,7 @@ contract Conjuror is IConjuror {
         blueOff: -4,
         rotation: 329
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 7,
         turbFreqY: 6,
@@ -643,7 +643,7 @@ contract Conjuror is IConjuror {
         blueOff: -80,
         rotation: 31
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 4,
         turbFreqY: 0,
@@ -659,7 +659,7 @@ contract Conjuror is IConjuror {
         blueOff: -70,
         rotation: 56
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: false,
         turbFreqX: 1,
         turbFreqY: 4,
@@ -675,7 +675,7 @@ contract Conjuror is IConjuror {
         blueOff: -6,
         rotation: 48
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 34,
         turbFreqY: 6,
@@ -691,7 +691,7 @@ contract Conjuror is IConjuror {
         blueOff: -36,
         rotation: 75
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 8,
         turbFreqY: 2,
@@ -707,7 +707,7 @@ contract Conjuror is IConjuror {
         blueOff: -80,
         rotation: 295
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 6,
         turbFreqY: 2,
@@ -723,7 +723,7 @@ contract Conjuror is IConjuror {
         blueOff: -26,
         rotation: 304
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 3,
         turbFreqY: 5,
@@ -739,7 +739,7 @@ contract Conjuror is IConjuror {
         blueOff: 67,
         rotation: 37
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 2,
         turbFreqY: 6,
@@ -755,7 +755,7 @@ contract Conjuror is IConjuror {
         blueOff: 36,
         rotation: 147
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 7,
         turbFreqY: 5,
@@ -771,7 +771,7 @@ contract Conjuror is IConjuror {
         blueOff: -16,
         rotation: 35
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 5,
         turbFreqY: 4,
@@ -787,7 +787,7 @@ contract Conjuror is IConjuror {
         blueOff: 76,
         rotation: 242
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 17,
         turbFreqY: 9,
@@ -803,7 +803,7 @@ contract Conjuror is IConjuror {
         blueOff: 1,
         rotation: 190
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 4,
         turbFreqY: 4,
@@ -819,7 +819,7 @@ contract Conjuror is IConjuror {
         blueOff: 48,
         rotation: 2
       }),
-      Template.Stone({
+      Cauldron.Stone({
         fractalNoise: true,
         turbFreqX: 4,
         turbFreqY: 9,

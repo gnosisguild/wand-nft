@@ -2,7 +2,7 @@
 pragma solidity ^0.8.6;
 
 import "../interfaces/Types.sol";
-import "../Template.sol";
+import "../Cauldron.sol";
 
 contract TestPacker {
   function packPlanets(Planet[8] memory planets)
@@ -34,7 +34,7 @@ contract TestPacker {
     }
   }
 
-  function packBackground(Template.Background memory background)
+  function packBackground(Cauldron.Background memory background)
     public
     pure
     returns (uint64 packedBackground)
@@ -51,7 +51,7 @@ contract TestPacker {
     packedBackground |= uint64(background.color.hue) << 18;
   }
 
-  function packHalo(Template.Halo memory halo)
+  function packHalo(Cauldron.Halo memory halo)
     public
     pure
     returns (uint16 packedHalo)
@@ -78,7 +78,7 @@ contract TestPacker {
     return (rhythm << 3) | shape;
   }
 
-  function packHandle(Template.Handle memory handle)
+  function packHandle(Cauldron.Handle memory handle)
     public
     pure
     returns (uint8 packedHandle)

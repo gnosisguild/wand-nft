@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.6;
 
-import "../Template.sol";
+import "../Cauldron.sol";
 
 struct Aspect {
   int8 x1;
@@ -20,9 +20,9 @@ struct Wand {
   uint256 tokenId;
   uint64 birth;
   uint16 stone;
-  Template.Halo halo;
-  Template.Handle handle;
-  Template.Background background;
+  Cauldron.Halo halo;
+  Cauldron.Handle handle;
+  Cauldron.Background background;
   Planet[8] planets;
   Aspect[8] aspects;
   uint32 xp;

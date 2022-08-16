@@ -8,7 +8,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const allDeployments = await deployments.all();
 
-  const txWandName = await deploy("WandName", {
+  const txIncantation = await deploy("Incantation", {
     from: deployer,
     args: [],
     log: true,
@@ -19,8 +19,8 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [],
     log: true,
     libraries: {
-      Template: allDeployments.Template.address,
-      WandName: txWandName.address,
+      Cauldron: allDeployments.Cauldron.address,
+      Incantation: txIncantation.address,
     },
   });
   const txZodiacWands = await deploy("ZodiacWands", {

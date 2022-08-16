@@ -5,22 +5,16 @@ import "@nomiclabs/hardhat-ethers";
 import {
   calculateAspects,
   calculatePlanets,
-  interpolateStone,
-  interpolationParams,
 } from "../../apps/minting-app/template";
 import {
   packAspects,
   packBackground,
   packPlanets,
 } from "../../apps/minting-app/components/MintButton/packing";
-import { BigNumber } from "ethers";
 
 describe("Packing", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
-
-    const template = await deployments.get("Template");
-    const wandName = await deployments.get("WandName");
 
     const TestPacker = await hre.ethers.getContractFactory("TestPacker");
     const testPacker = await TestPacker.deploy();

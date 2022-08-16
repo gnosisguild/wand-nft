@@ -9,7 +9,7 @@ contract WandConjurorExposer is Conjuror {
   function _interpolateStone(uint16 stoneId)
     public
     pure
-    returns (Template.Stone memory)
+    returns (Cauldron.Stone memory)
   {
     return interpolateStone(stoneId);
   }

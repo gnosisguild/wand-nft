@@ -27,7 +27,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [],
     log: true,
   });
-  await deploy("Template", {
+  await deploy("Cauldron", {
     from: deployer,
     args: [],
     log: true,
