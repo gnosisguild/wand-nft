@@ -11,18 +11,21 @@ import wandContract from "../../utils/contract";
 const WandsPage: NextPage = () => {
   const router = useRouter();
   const { tokenId } = router.query;
-  // const { data, isError, isLoading } = useContractRead({
-  //   addressOrName: wandContract.address,
-  //   contractInterface: wandContract.iface,
-  //   functionName: "tokenURI",
-  //   args: tokenId,
-  //   onError(error) {
-  //     console.log("Error", error);
-  //   },
-  //   onSuccess(data) {
-  //     console.log("Success", data);
-  //   },
-  // });
+
+  console.log(wandContract.iface.encodeFunctionData);
+  const { data, isError, isLoading } = useContractRead({
+    addressOrName: wandContract.address,
+    contractInterface: wandContract.iface,
+    functionName: "tokenURI",
+    args: tokenId,
+    enabled: !!tokenId,
+    onError(error) {
+      console.log("Error", error);
+    },
+    onSuccess(data) {
+      console.log("Success", data);
+    },
+  });
 
   // temp workaround for SRR hydration issue
   const [mounted, setMounted] = useState(false);
