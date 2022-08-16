@@ -9,6 +9,11 @@
   z-index: 11;
 }
 
+.navMode {
+  top: 4%;
+  width: 12vw;
+}
+
 .disabled {
   pointer-events: none;
 }

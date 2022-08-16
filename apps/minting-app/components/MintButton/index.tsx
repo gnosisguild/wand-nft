@@ -61,6 +61,7 @@ const MintButton: React.FC<Props> = ({ onClick, inactive, navMode }) => {
     <div
       className={classNames(styles.buttonContainer, {
         [styles.disabled]: state.minting,
+        [styles.navMode]: navMode,
       })}
       onClick={() => {
         if (navMode) {

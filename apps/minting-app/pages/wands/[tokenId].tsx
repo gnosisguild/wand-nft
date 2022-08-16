@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import "@rainbow-me/rainbowkit/styles.css";
 import { useContractRead } from "wagmi";
+import WandView from "../../components/WandView";
 import Layout from "../../components/Layout";
 import styles from "../../styles/Home.module.css";
 
@@ -21,9 +22,6 @@ const WandsPage: NextPage = () => {
     onError(error) {
       console.log("Error", error);
     },
-    onSuccess(data) {
-      console.log("Success", data);
-    },
   });
 
   // temp workaround for SRR hydration issue
@@ -31,11 +29,13 @@ const WandsPage: NextPage = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
-
+  useEffect(() => {
+    console.log("data", data);
+  }, [data]);
   return (
     <Layout description="Zodiac Wands Minting App">
       <div className={styles.centerContainer}>
-        <h1>{tokenId}</h1>
+        {data && <WandView tokenUri={data} />}
       </div>
     </Layout>
   );
