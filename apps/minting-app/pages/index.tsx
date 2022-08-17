@@ -10,6 +10,7 @@ import HaloPicker from "../components/HaloPicker";
 import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
+import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 
 const Home: NextPage = () => (
@@ -29,6 +30,10 @@ const Home: NextPage = () => (
       <div className={styles.haloPicker}>
         <HaloPicker />
       </div>
+    </div>
+
+    <div className={styles.recastButton}>
+      <RecastButton />
     </div>
 
     <div className={styles.downloadButtons}>

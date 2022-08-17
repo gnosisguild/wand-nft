@@ -98,3 +98,11 @@
   width: 76%;
   padding: 2%;
 }
+
+.recastButton {
+  cursor: pointer;
+}
+
+.recastButton:hover {
+  filter: brightness(1.2);
+}
