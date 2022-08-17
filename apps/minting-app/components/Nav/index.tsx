@@ -12,7 +12,7 @@ const Nav: React.FC = () => {
     <nav className={styles.nav}>
       <ul>
         <li className={styles.aboutLink}>
-          <Link href="/about">About</Link>
+          <Link href="/">Create</Link>
           <ButtonBackground className={styles.aboutBackground} />
         </li>
         <li className={styles.wandsLink}>
@@ -20,7 +20,7 @@ const Nav: React.FC = () => {
           <ButtonBackground className={styles.wandsBackground} />
         </li>
       </ul>
-      <MintButton navMode={currentRoute !== "/"} />
+      {currentRoute === "/" && <MintButton />}
       <div className={styles.AccountConnect}>
         <ConnectButton />
       </div>
