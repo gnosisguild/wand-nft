@@ -115,7 +115,7 @@ const HaloPicker: React.FC = () => {
           onClick={() => {
             dispatch({
               type: "changeHalo",
-              value: randomize(),
+              value: randomizeHalo(),
             });
           }}
         />
@@ -148,7 +148,7 @@ function teflonIndex(halo: Halo, index: number) {
   return (skew > 0 ? midway - skew : index) * multiplier;
 }
 
-function randomize(): Halo {
+export function randomizeHalo(): Halo {
   return {
     shape: randomInteger(5) as 0 | 1 | 2 | 3 | 4 | 5,
     rhythm: new Array(13)

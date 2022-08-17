@@ -1,4 +1,8 @@
 import { AppState, Background, Stone, Halo } from "../types";
+import { randomizeStone } from "../components/StonePicker";
+import randomInteger from "../components/randomInteger";
+import { randomizeBackground } from "../components/ColorPicker";
+import { randomizeHalo } from "../components/HaloPicker";
 
 // TODO: these are coordinates of Berlin, replace them with the coordinates of user's IP location
 const latitude = 52.5422;
@@ -6,35 +10,10 @@ const longitude = 13.3495;
 
 export const initialState: AppState = {
   minting: false,
-  background: {
-    radial: true,
-    dark: true,
-    color: {
-      hue: 281,
-      saturation: 33,
-      lightness: 0,
-    },
-  },
-  halo: {
-    shape: 2,
-    rhythm: [
-      true,
-      false,
-      true,
-      false,
-      true,
-      false,
-      true,
-      false,
-      true,
-      false,
-      true,
-      false,
-      true,
-    ],
-  },
+  background: randomizeBackground(),
+  halo: randomizeHalo(),
   handle: 0,
-  stone: 5,
+  stone: randomizeStone(),
   tokenId: 123,
   latitude,
   longitude,
@@ -60,11 +39,16 @@ export interface ChangeMintingStateAction {
   value: boolean;
 }
 
+export interface RandomizeWandAction {
+  type: "randomizeWand";
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
   | ChangeStoneAction
-  | ChangeMintingStateAction;
+  | ChangeMintingStateAction
+  | RandomizeWandAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -90,6 +74,14 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         minting: action.value,
+      };
+    }
+    case "randomizeWand": {
+      return {
+        ...state,
+        background: randomizeBackground(state.background),
+        halo: randomizeHalo(),
+        stone: randomizeStone(),
       };
     }
   }
