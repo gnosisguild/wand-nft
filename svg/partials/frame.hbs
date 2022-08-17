@@ -5,7 +5,7 @@
     <stop offset="1" stop-color="rgba(255,255,255,0.8)"></stop>
   </linearGradient>
   <style type="text/css">
-    .title {font: 45px serif; fill: #ffffffbb; letter-spacing: 10px} .frame-line
+    .title {font: 45px serif; fill: #ffffffbb; letter-spacing: 7px} .frame-line
     { fill: none; stroke: url(#gradient-fill); stroke-miterlimit: 10;
     stroke-width: 2px; mix-blend-mode: plus-lighter; } .frame-circ { fill:
     url(#gradient-fill); mix-blend-mode: plus-lighter; }
@@ -459,17 +459,6 @@
   ></path>
 </clipPath>
 
-<path id="ng" d="M 480 2905 L 1520 2905" stroke="none"></path>
-<text text-anchor="middle" class="title" clip-path="url(#tc)">
-  <textPath href="#ng" startOffset="50%">
-    <animate
-      attributeName="startOffset"
-      from="180%"
-      to="-80%"
-      begin="0s"
-      dur="20s"
-      repeatCount="indefinite"
-    ></animate>
-    {{title}}
-  </textPath>
+<text x="1000" y="2904" text-anchor="middle" class="title" clip-path="url(#tc)">
+  {{title}}
 </text>
