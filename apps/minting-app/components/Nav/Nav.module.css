@@ -31,7 +31,12 @@
   cursor: pointer;
   mix-blend-mode: color-dodge;
 }
-.aboutLink {
+
+.nav li.active .buttonBackground,
+.nav li:hover .buttonBackground {
+  filter: brightness(1.3);
+}
+.createLink {
   left: 11.27vw;
 }
 .wandsLink {

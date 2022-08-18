@@ -4,6 +4,7 @@ import ButtonBackground from "./ButtonBackground";
 import ConnectButton from "../ConnectButton";
 import MintButton from "../MintButton";
 import styles from "./Nav.module.css";
+import classNames from "classnames";
 
 const Nav: React.FC = () => {
   const router = useRouter();
@@ -11,11 +12,19 @@ const Nav: React.FC = () => {
   return (
     <nav className={styles.nav}>
       <ul>
-        <li className={styles.aboutLink}>
+        <li
+          className={classNames(styles.createLink, {
+            [styles.active]: currentRoute === "/",
+          })}
+        >
           <Link href="/">Create</Link>
           <ButtonBackground className={styles.aboutBackground} />
         </li>
-        <li className={styles.wandsLink}>
+        <li
+          className={classNames(styles.wandsLink, {
+            [styles.active]: currentRoute === "/wands",
+          })}
+        >
           <Link href="/wands">Wands</Link>
           <ButtonBackground className={styles.wandsBackground} />
         </li>

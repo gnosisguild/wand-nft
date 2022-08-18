@@ -2,11 +2,13 @@ import classNames from "classnames";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import {
+  useAccount,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
   useTransaction,
 } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAppContext } from "../../state";
 import {
   calculateAspects,
@@ -26,6 +28,8 @@ interface Props {
 const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const router = useRouter();
   const { state, dispatch } = useAppContext();
+  const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
 
   const planets = useMemo(
     () => calculatePlanets(state.latitude, state.longitude, 0, new Date()),
@@ -62,8 +66,12 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
         [styles.disabled]: state.minting,
       })}
       onClick={() => {
-        dispatch({ type: "changeMintingState", value: true });
-        write?.();
+        if (!address) {
+          openConnectModal?.();
+        } else {
+          dispatch({ type: "changeMintingState", value: true });
+          write?.();
+        }
       }}
     >
       <MintSvg disabled={state.minting} />
