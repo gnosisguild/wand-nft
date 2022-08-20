@@ -119,7 +119,7 @@ const StonePicker: React.FC = () => {
           onClick={() =>
             dispatch({
               type: "changeStone",
-              value: toStoneId(randomInteger(3600 - 1) / 10),
+              value: randomizeStone(),
             })
           }
         />
@@ -169,3 +169,7 @@ function toStoneId(angle: number) {
   const withoutSkew = angle + skew;
   return Math.round(withoutSkew * 10) % 3600;
 }
+
+export const randomizeStone = (): number => {
+  return toStoneId(randomInteger(3600 - 1) / 10);
+};

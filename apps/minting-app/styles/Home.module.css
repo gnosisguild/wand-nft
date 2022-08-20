@@ -20,7 +20,7 @@
   aspect-ratio: 1;
   width: 25%;
   border-radius: 50%;
-  max-width: 290px;
+  max-width: 312px;
 }
 
 .colorPicker {
@@ -49,4 +49,11 @@
   width: 6.5%;
   column-gap: 8%;
   max-width: 190px;
+}
+.recastButton {
+  position: fixed;
+  bottom: 0.78vw;
+  right: 1.5vw;
+  width: 7.5%;
+  max-width: 165px;
 }
