@@ -8,9 +8,14 @@ export function fromAngleToColor(state: AppState) {
       color: {
         ...state.background.color,
         lightness: toLightness(state.background.color.lightness),
+        hue: toHue(state.background.color.hue),
       },
     },
   };
+}
+
+function toHue(angle: number) {
+  return Math.round(360 - angle) % 360;
 }
 
 const LIGHTNESS_BOUNDS = [20, 70];

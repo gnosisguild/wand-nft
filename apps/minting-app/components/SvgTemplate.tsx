@@ -1,4 +1,4 @@
-import React,  from "react";
+import React from "react";
 import { useAppContext } from "../state";
 import { transformForRendering } from "../state/transforms/forRendering";
 
@@ -9,21 +9,6 @@ const template = require("../../../svg/template.svg.hbs");
 const SvgTemplate: React.FC<{}> = () => {
   const { state } = useAppContext();
   const seed = useSeed();
-
-  // const planets = useMemo(
-  //   () =>
-  //     scalePlanets(
-  //       calculatePlanets(state.latitude, state.longitude, 0, new Date())
-  //     ),
-  //   [state.latitude, state.longitude]
-  // );
-  // const aspects = useMemo(
-  //   () =>
-  //     scaleAspects(
-  //       calculateAspects(state.latitude, state.longitude, 0, new Date())
-  //     ),
-  //   [state.latitude, state.longitude]
-  // );
 
   return (
     <div
