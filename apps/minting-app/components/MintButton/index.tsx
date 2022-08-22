@@ -9,16 +9,10 @@ import {
   useTransaction,
 } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAppContext } from "../../state";
-import {
-  calculateAspects,
-  calculatePlanets,
-  transformBackground,
-} from "../../template";
-import { AppState, Aspect, Planet } from "../../types";
+import { useAppContext, packForMinting } from "../../state";
+
 import wandContract from "../../utils/contract";
 import styles from "./MintButton.module.css";
-import { pack } from "./packing";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -31,21 +25,11 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const planets = useMemo(
-    () => calculatePlanets(state.latitude, state.longitude, 0, new Date()),
-    [state.latitude, state.longitude]
-  );
-  const aspects = useMemo(
-    () => calculateAspects(state.latitude, state.longitude, 0, new Date()),
-
-    [state.latitude, state.longitude]
-  );
-
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
     contractInterface: wandContract.abi,
     functionName: "mint",
-    args: writeArgs(state, planets, aspects),
+    args: packForMinting(state),
   });
 
   const { data, isSuccess, write } = useContractWrite(config);
@@ -78,31 +62,6 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     </div>
   );
 };
-
-function writeArgs(state: AppState, planets: Planet[], aspects: Aspect[]) {
-  const {
-    packedHalo,
-    packedBackground,
-    packedPlanets,
-    packedAspects,
-    packedVisibility,
-  } = pack({
-    halo: state.halo,
-    background: transformBackground(state.background),
-    planets,
-    aspects,
-  });
-
-  return [
-    state.stone,
-    packedHalo,
-    state.handle,
-    packedBackground,
-    packedPlanets,
-    packedAspects,
-    packedVisibility,
-  ];
-}
 
 // function encodeCalldata(state: AppState) {
 //   return wandContract.iface.encodeFunctionData("mint", [

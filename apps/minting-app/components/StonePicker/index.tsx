@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import StoneViewer from "./StoneViewer";
-import { interpolateStone, stoneList, stoneCount } from "../../template";
+import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
 import styles from "./StonePicker.module.css";
 import UiCircle from "../UiCircle";
 import { useAppContext } from "../../state";

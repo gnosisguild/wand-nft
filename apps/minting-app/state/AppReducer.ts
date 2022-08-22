@@ -1,6 +1,5 @@
 import { AppState, Background, Stone, Halo } from "../types";
 import { randomizeStone } from "../components/StonePicker";
-import randomInteger from "../components/randomInteger";
 import { randomizeBackground } from "../components/ColorPicker";
 import { randomizeHalo } from "../components/HaloPicker";
 
@@ -79,7 +78,7 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
     case "randomizeWand": {
       return {
         ...state,
-        background: randomizeBackground(state.background),
+        background: randomizeBackground(),
         halo: randomizeHalo(),
         stone: randomizeStone(),
       };

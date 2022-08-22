@@ -1,6 +1,68 @@
 import assert from "assert";
 import { BigNumber } from "ethers";
-import { Aspect, Background, Halo, Planet } from "../../types";
+import memo from "memoize-one";
+import { calculateAspects, calculatePlanets } from "../../birthchart";
+import { AppState, Aspect, Halo, Planet } from "../../types";
+import { fromAngleToColor } from "./fromAngleToColor";
+
+export function packForMinting(state: AppState, date: Date = new Date()) {
+  state = fromAngleToColor(state);
+
+  const [packedPlanets, packedAspects, packedVisibility] = packAstrology(
+    state.latitude,
+    state.longitude,
+    date
+  );
+
+  return [
+    state.stone,
+    packHalo(state),
+    state.handle,
+    packBackground(state),
+    packedPlanets,
+    packedAspects,
+    packedVisibility,
+  ];
+}
+
+export function packHalo(state: AppState) {
+  const halo = cleanRhythm(state.halo);
+
+  let rhythm = 0;
+  for (let i = 0; i < 13; i++) {
+    rhythm |= (halo.rhythm[i] ? 1 : 0) << i;
+  }
+
+  return (rhythm << 3) | halo.shape;
+}
+
+export function packBackground(state: AppState) {
+  let packedBackground = 0;
+  // 1 bit
+  packedBackground |= state.background.radial ? 1 : 0;
+  // 1 bit
+  packedBackground |= (state.background.dark ? 1 : 0) << 1;
+  // 8 bits
+  packedBackground |= state.background.color.saturation << 2;
+  // 8 bits
+  packedBackground |= state.background.color.lightness << 10;
+  // 16 bits
+  packedBackground |= state.background.color.hue << 18;
+
+  return packedBackground;
+}
+
+export const packAstrology = memo(
+  (latitude: number, longitude: number, date: Date) => {
+    const planets = calculatePlanets(latitude, longitude, 0, date);
+    const aspects = calculateAspects(latitude, longitude, 0, date);
+
+    const [packedPlanets, packedVisibility] = packPlanets(planets);
+    const packedAspects = packAspects(aspects);
+
+    return [packedPlanets, packedAspects, packedVisibility];
+  }
+);
 
 export function packPlanets(planets: Planet[]) {
   assert(planets.length === 8);
@@ -52,52 +114,6 @@ export function packAspects(aspects: Aspect[]) {
   }
 
   return BigNumber.from(`0x${packedAspects}`);
-}
-
-export function packBackground(background: Background) {
-  let packedBackground = 0;
-  // 1 bit
-  packedBackground |= background.radial ? 1 : 0;
-  // 1 bit
-  packedBackground |= (background.dark ? 1 : 0) << 1;
-  // 8 bits
-  packedBackground |= background.color.saturation << 2;
-  // 8 bits
-  packedBackground |= background.color.lightness << 10;
-  // 16 bits
-  packedBackground |= background.color.hue << 18;
-
-  return packedBackground;
-}
-
-export function packHalo(halo: Halo) {
-  halo = cleanRhythm(halo);
-
-  let rhythm = 0;
-  for (let i = 0; i < 13; i++) {
-    rhythm |= (halo.rhythm[i] ? 1 : 0) << i;
-  }
-
-  return (rhythm << 3) | halo.shape;
-}
-
-type Args = {
-  planets: Planet[];
-  aspects: Aspect[];
-  background: Background;
-  halo: Halo;
-};
-
-export function pack({ planets, aspects, background, halo }: Args) {
-  const [packedPlanets, packedVisibility] = packPlanets(planets);
-
-  return {
-    packedPlanets,
-    packedAspects: packAspects(aspects),
-    packedBackground: packBackground(background),
-    packedHalo: packHalo(halo),
-    packedVisibility,
-  };
 }
 
 function cleanRhythm(halo: Halo): Halo {

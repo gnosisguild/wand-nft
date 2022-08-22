@@ -1,7 +1,7 @@
 import { BigNumber, utils } from "ethers";
 import { Sparkle } from "../types";
 
-export const generateSparkles = (tokenId: number): Sparkle[] => {
+export function generateSparkles(tokenId: number): Sparkle[] {
   let result = [];
   const seed = BigNumber.from(
     utils.solidityKeccak256(["uint256"], [BigNumber.from(tokenId)])
@@ -15,7 +15,7 @@ export const generateSparkles = (tokenId: number): Sparkle[] => {
     });
   }
   return result;
-};
+}
 
 const pseudoRandom = (seed: BigNumber, modulus: number) =>
   BigNumber.from(utils.solidityKeccak256(["uint256"], [seed]))

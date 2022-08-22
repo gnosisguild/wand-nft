@@ -1,17 +1,6 @@
-import React, { useMemo } from "react";
+import React,  from "react";
 import { useAppContext } from "../state";
-import {
-  calculateAspects,
-  calculatePlanets,
-  filterLayers,
-  generateHalo,
-  generateHandle,
-  interpolateStone,
-  scaleAspects,
-  scalePlanets,
-  xp,
-  transformBackground,
-} from "../template";
+import { transformForRendering } from "../state/transforms/forRendering";
 
 import classes from "./SvgTemplate.module.css";
 import useSeed from "./useSeed";
@@ -21,44 +10,25 @@ const SvgTemplate: React.FC<{}> = () => {
   const { state } = useAppContext();
   const seed = useSeed();
 
-  const planets = useMemo(
-    () =>
-      scalePlanets(
-        calculatePlanets(state.latitude, state.longitude, 0, new Date())
-      ),
-    [state.latitude, state.longitude]
-  );
-  const aspects = useMemo(
-    () =>
-      scaleAspects(
-        calculateAspects(state.latitude, state.longitude, 0, new Date())
-      ),
-    [state.latitude, state.longitude]
-  );
+  // const planets = useMemo(
+  //   () =>
+  //     scalePlanets(
+  //       calculatePlanets(state.latitude, state.longitude, 0, new Date())
+  //     ),
+  //   [state.latitude, state.longitude]
+  // );
+  // const aspects = useMemo(
+  //   () =>
+  //     scaleAspects(
+  //       calculateAspects(state.latitude, state.longitude, 0, new Date())
+  //     ),
+  //   [state.latitude, state.longitude]
+  // );
 
   return (
     <div
       dangerouslySetInnerHTML={{
-        __html: template({
-          planets,
-          aspects,
-          halo: generateHalo(
-            state.halo.shape,
-            state.halo.rhythm,
-            state.background.color.hue
-          ),
-          frame: {
-            level1: true,
-            title: "",
-          },
-          background: transformBackground(state.background),
-          filterLayers,
-          sparkles: [],
-          seed,
-          stone: interpolateStone(state.stone),
-          xp,
-          handle: generateHandle(state.handle),
-        }),
+        __html: template(transformForRendering(state, seed)),
       }}
       className={classes.container}
     />

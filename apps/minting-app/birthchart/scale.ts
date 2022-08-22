@@ -1,4 +1,4 @@
-import { Planet, Aspect } from "../../types";
+import { Planet, Aspect } from "../types";
 import { MAX_VALUE, CHART_RADIUS, STONE_RADIUS } from "./const";
 
 export const scaleAspects = (aspects: Aspect[]) =>
