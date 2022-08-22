@@ -70,7 +70,9 @@ export function packBackground(background: Background) {
   return packedBackground;
 }
 
-function packHalo(halo: Halo) {
+export function packHalo(halo: Halo) {
+  halo = cleanRhythm(halo);
+
   let rhythm = 0;
   for (let i = 0; i < 13; i++) {
     rhythm |= (halo.rhythm[i] ? 1 : 0) << i;
@@ -95,6 +97,18 @@ export function pack({ planets, aspects, background, halo }: Args) {
     packedBackground: packBackground(background),
     packedHalo: packHalo(halo),
     packedVisibility,
+  };
+}
+
+function cleanRhythm(halo: Halo): Halo {
+  if ([1, 5].includes(halo.shape)) {
+    // isNarrow
+    return halo;
+  }
+
+  return {
+    ...halo,
+    rhythm: halo.rhythm.map((r, index) => r && index % 2 === 0),
   };
 }
 
