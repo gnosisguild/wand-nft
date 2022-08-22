@@ -12,13 +12,15 @@ import { transformColor } from "./transformColor";
 
 export function transformForRendering(
   state: AppState,
-  seed: number
+  seed: number,
+  date?: Date
 ): TemplateInput {
   state = transformColor(state);
 
   const { planets, aspects } = transformAstrology(
     state.latitude,
-    state.longitude
+    state.longitude,
+    date
   );
 
   return {
@@ -56,16 +58,19 @@ function transformHalo(state: AppState) {
   };
 }
 
-const transformAstrology = memo((latitude: number, longitude: number) => {
-  const planets = scalePlanets(
-    calculatePlanets(latitude, longitude, 0, new Date())
-  );
-  const aspects = scaleAspects(
-    calculateAspects(latitude, longitude, 0, new Date())
-  );
+const transformAstrology = memo(
+  (latitude: number, longitude: number, date?: Date) => {
+    date = date || new Date();
+    const planets = scalePlanets(
+      calculatePlanets(latitude, longitude, 0, new Date())
+    );
+    const aspects = scaleAspects(
+      calculateAspects(latitude, longitude, 0, new Date())
+    );
 
-  return { planets, aspects };
-});
+    return { planets, aspects };
+  }
+);
 
 function transformHandle(handle: 0 | 1 | 2 | 3 | 4 | 5) {
   return {

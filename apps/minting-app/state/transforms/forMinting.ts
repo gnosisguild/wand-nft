@@ -5,7 +5,7 @@ import { calculateAspects, calculatePlanets } from "../../birthchart";
 import { AppState, Aspect, Halo, Planet } from "../../types";
 import { transformColor } from "./transformColor";
 
-export function packForMinting(state: AppState, date: Date = new Date()) {
+export function packForMinting(state: AppState, date?: Date) {
   state = transformColor(state);
 
   const [packedPlanets, packedAspects, packedVisibility] = packAstrology(
@@ -53,7 +53,8 @@ function packBackground(state: AppState) {
 }
 
 const packAstrology = memo(
-  (latitude: number, longitude: number, date: Date) => {
+  (latitude: number, longitude: number, date?: Date) => {
+    date = date || new Date();
     const planets = calculatePlanets(latitude, longitude, 0, date);
     const aspects = calculateAspects(latitude, longitude, 0, date);
 
