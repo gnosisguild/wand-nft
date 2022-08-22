@@ -104,7 +104,10 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     override
     returns (string memory)
   {
-    require(ERC721._exists(tokenId), "ZodiacWands: URI query for nonexistent token");
+    require(
+      ERC721._exists(tokenId),
+      "ZodiacWands: URI query for nonexistent token"
+    );
     return conjuror.generateWandURI(unpack(tokenId), ownerOf(tokenId));
   }
 
