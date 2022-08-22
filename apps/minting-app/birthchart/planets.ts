@@ -1,5 +1,5 @@
 import { Equator, Horizon, Observer } from "astronomy-engine";
-import { Planet } from "../../types";
+import { Planet } from "../types";
 import { ALL_BODIES, MAX_VALUE } from "./const";
 
 const toRad = (deg: number) => deg * (Math.PI / 180);

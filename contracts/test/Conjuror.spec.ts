@@ -5,7 +5,7 @@ import "@nomiclabs/hardhat-ethers";
 import {
   interpolateStone,
   interpolationParams,
-} from "../../apps/minting-app/template";
+} from "../../apps/minting-app/mimicking";
 
 describe("Conjuror", async () => {
   const baseSetup = deployments.createFixture(async () => {

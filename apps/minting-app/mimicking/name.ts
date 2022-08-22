@@ -1,9 +1,9 @@
-export const generateName = (tokenId: number) => {
+export function generateName(tokenId: number) {
   const action = actions[tokenId % actions.length];
   const adjective = adjectives[tokenId % adjectives.length];
   const noun = nouns[tokenId % nouns.length];
   return `${action} ${adjective} ${noun}`;
-};
+}
 
 const actions = [
   "ANIMATE",

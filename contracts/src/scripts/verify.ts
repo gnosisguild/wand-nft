@@ -6,6 +6,8 @@ import { getAddress } from "ethers/lib/utils";
 import hre from "hardhat";
 
 const alreadyVerifiedError = "Contract source code already verified";
+const sameBytecodeError =
+  "The verification may still succeed but should be checked manually.";
 
 function readDeploymentAddress(artifact: string) {
   const filePath = path.resolve(
@@ -49,7 +51,10 @@ async function verify(): Promise<void> {
       address: HandleLayer,
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`HandleLayer already verified`);
     } else {
       throw e;
@@ -61,7 +66,10 @@ async function verify(): Promise<void> {
       address: FrameLayer,
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`FrameLayer already verified`);
     } else {
       throw e;
@@ -73,7 +81,10 @@ async function verify(): Promise<void> {
       address: BackgroundLayer,
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`BackgroundLayer already verified`);
     } else {
       throw e;
@@ -90,7 +101,10 @@ async function verify(): Promise<void> {
       },
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`Cauldron already verified`);
     } else {
       throw e;
@@ -102,7 +116,10 @@ async function verify(): Promise<void> {
       address: Incantation,
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`Incantation already verified`);
     } else {
       throw e;
@@ -118,7 +135,10 @@ async function verify(): Promise<void> {
       },
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`Conjuror already verified`);
     } else {
       throw e;
@@ -132,7 +152,10 @@ async function verify(): Promise<void> {
       constructorArguments: [Conjuror],
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`ZodiacWands already verified`);
     } else {
       throw e;
@@ -145,7 +168,10 @@ async function verify(): Promise<void> {
       constructorArguments: [ZodiacWands],
     });
   } catch (e: any) {
-    if (e.message === alreadyVerifiedError) {
+    if (
+      e.message === alreadyVerifiedError ||
+      e.message.includes(sameBytecodeError)
+    ) {
       console.warn(`Forge already verified`);
     } else {
       throw e;

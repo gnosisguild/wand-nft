@@ -4,7 +4,6 @@ import UiCircle from "../UiCircle";
 import { useAppContext } from "../../state";
 import { describeSegments, describeFillers } from "../rhythm";
 import { Halo } from "../../types";
-import { isWideShape } from "../../template";
 import IconButton from "../IconButton";
 import randomInteger from "../randomInteger";
 
@@ -146,6 +145,10 @@ function teflonIndex(halo: Halo, index: number) {
 
   const skew = Math.max(0, index - midway);
   return (skew > 0 ? midway - skew : index) * multiplier;
+}
+
+function isWideShape(shape: number) {
+  return ![1, 5].includes(shape);
 }
 
 export function randomizeHalo(): Halo {

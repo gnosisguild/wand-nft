@@ -93,4 +93,29 @@ contract TestPacker {
       packedHandle = uint8(3);
     }
   }
+
+  function unpackHalo(uint16 packedHalo)
+    public
+    pure
+    returns (Cauldron.Halo memory halo)
+  {
+    bool[24] memory rhythm;
+    for (uint256 i = 0; i < 24; i++) {
+      uint256 bit = i > 12 ? 24 - i : i;
+      rhythm[i] = ((1 << bit) & (packedHalo >> 3)) != 0;
+    }
+    uint8 shape = uint8(packedHalo) & 0x07;
+
+    return
+      Cauldron.Halo({
+        halo0: shape == 0,
+        halo1: shape == 1,
+        halo2: shape == 2,
+        halo3: shape == 3,
+        halo4: shape == 4,
+        halo5: shape == 5,
+        hue: 0, //(wand.background.color.hue + 180) % 360,
+        rhythm: rhythm
+      });
+  }
 }

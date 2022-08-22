@@ -27,13 +27,13 @@ const ColorPicker: React.FC = () => {
   };
 
   const hueProps = useDragRotateAnimate<SVGPathElement>(
-    fromHue(background.color.hue),
+    background.color.hue,
     (nextRotation: number) => {
       handleChange({
         ...background,
         color: {
           ...background.color,
-          hue: toHue(nextRotation),
+          hue: nextRotation,
         },
       });
     }
@@ -78,7 +78,7 @@ const ColorPicker: React.FC = () => {
               height="70"
               x="470"
               y="30"
-              fill={`hsl(${background.color.hue}, 100%, 50%)`}
+              fill={`hsl(${360 - background.color.hue}, 100%, 50%)`}
             />
             <rect
               className={classNames(
@@ -156,7 +156,7 @@ const ColorPicker: React.FC = () => {
         <IconButton
           icon="PickerAura"
           shadow
-          onClick={() => handleChange(randomizeBackground(background))}
+          onClick={() => handleChange(randomizeBackground())}
         />
       </div>
     </div>
@@ -165,21 +165,13 @@ const ColorPicker: React.FC = () => {
 
 export default ColorPicker;
 
-function toHue(value: number): number {
-  return Math.round(360 - value) % 360;
-}
-
-function fromHue(value: number): number {
-  return 360 - value;
-}
-
 export const randomizeBackground = (): Background => {
   return {
     dark: randomInteger(1) == 1,
     radial: randomInteger(1) == 1,
     color: {
       saturation: 33,
-      hue: toHue(randomInteger(3599) / 10),
+      hue: randomInteger(3599) / 10,
       lightness: randomInteger(3599) / 10,
     },
   };
