@@ -5,12 +5,15 @@ import "@nomiclabs/hardhat-ethers";
 import {
   calculateAspects,
   calculatePlanets,
+  generateHalo,
 } from "../../apps/minting-app/template";
 import {
   packAspects,
   packBackground,
+  packHalo,
   packPlanets,
 } from "../../apps/minting-app/components/MintButton/packing";
+import { Halo } from "../../apps/minting-app/types";
 
 describe("Packing", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -47,6 +50,24 @@ describe("Packing", async () => {
       const js = packBackground(background);
       const sol = await testPacker.packBackground(background);
       expect(js).to.equal(sol);
+    });
+  });
+
+  describe("unpacking", () => {
+    it("wide halo", async () => {
+      const { testPacker } = await baseSetup();
+      const halo = wideHalo();
+
+      const js = generateHalo(halo.shape, halo.rhythm, 0);
+      const sol = await testPacker.unpackHalo(packHalo(halo));
+      expect(js.halo0).to.equal(sol.halo0);
+      expect(js.halo1).to.equal(sol.halo1);
+      expect(js.halo2).to.equal(sol.halo2);
+      expect(js.halo3).to.equal(sol.halo3);
+      expect(js.halo4).to.equal(sol.halo4);
+      expect(js.halo5).to.equal(sol.halo5);
+
+      expect(js.rhythm).to.deep.equal(sol.rhythm);
     });
   });
 });
@@ -108,5 +129,26 @@ function args() {
       shape: haloShape,
       rhythm: haloRhythm,
     },
+  };
+}
+
+function wideHalo(): Halo {
+  return {
+    shape: 3,
+    rhythm: [
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+    ],
   };
 }
