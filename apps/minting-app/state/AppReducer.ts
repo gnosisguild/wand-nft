@@ -1,4 +1,4 @@
-import { AppState, Background, Stone, Halo } from "../types";
+import { AppState, Background } from "../types";
 import { randomizeStone } from "../components/StonePicker";
 import { randomizeBackground } from "../components/ColorPicker";
 import { randomizeHalo } from "../components/HaloPicker";

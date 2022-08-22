@@ -6,11 +6,14 @@ import {
   calculateAspects,
   calculatePlanets,
 } from "../../apps/minting-app/birthchart";
-import { fromAngleToColor } from "../../apps/minting-app/state/transforms/fromAngleToColor";
-import { packForMinting } from "../../apps/minting-app/state/transforms/forMinting";
-import { transformForRendering } from "../../apps/minting-app/state/transforms/forRendering";
 
-import { AppState, Halo } from "../../apps/minting-app/types";
+import {
+  packForMinting,
+  transformForRendering,
+  transformColor,
+} from "../../apps/minting-app/state/transforms";
+
+import { AppState } from "../../apps/minting-app/types";
 
 describe("Transforms", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -28,15 +31,13 @@ describe("Transforms", async () => {
 
       const date = new Date("2022-07-12");
 
-      const [, , , , jsPlanets, , jsVisibility] = packForMinting(
-        state(),
-        new Date("2022-07-12")
-      );
+      const [, , , , jsPlanets, , jsVisibility] = packForMinting(state(), date);
       const sol = await testPacker.packPlanets(
         calculatePlanets(state().latitude, state().longitude, 0, date)
       );
-      expect(jsPlanets).to.equal(sol[0]);
-      expect(jsVisibility).to.equal(sol[1]);
+
+      expect(jsPlanets).to.deep.equal(sol[0]);
+      expect(jsVisibility).to.deep.equal(sol[1]);
     });
 
     it("aspects", async () => {
@@ -44,20 +45,20 @@ describe("Transforms", async () => {
 
       const date = new Date("2022-07-12");
 
-      const [, , , , , js] = packForMinting(state(), new Date("2022-07-12"));
+      const [, , , , , js] = packForMinting(state(), date);
       const sol = await testPacker.packAspects(
         calculateAspects(state().latitude, state().longitude, 0, date)
       );
-      expect(js).to.equal(sol);
+      expect(js).to.deep.equal(sol);
     });
 
     it("background", async () => {
       const { testPacker } = await baseSetup();
       const [, , , js] = packForMinting(state());
       const sol = await testPacker.packBackground(
-        fromAngleToColor(state()).background
+        transformColor(state()).background
       );
-      expect(js).to.equal(sol);
+      expect(js).to.deep.equal(sol);
     });
   });
 

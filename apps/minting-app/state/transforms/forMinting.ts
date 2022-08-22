@@ -3,10 +3,10 @@ import { BigNumber } from "ethers";
 import memo from "memoize-one";
 import { calculateAspects, calculatePlanets } from "../../birthchart";
 import { AppState, Aspect, Halo, Planet } from "../../types";
-import { fromAngleToColor } from "./fromAngleToColor";
+import { transformColor } from "./transformColor";
 
 export function packForMinting(state: AppState, date: Date = new Date()) {
-  state = fromAngleToColor(state);
+  state = transformColor(state);
 
   const [packedPlanets, packedAspects, packedVisibility] = packAstrology(
     state.latitude,
@@ -25,7 +25,7 @@ export function packForMinting(state: AppState, date: Date = new Date()) {
   ];
 }
 
-export function packHalo(state: AppState) {
+function packHalo(state: AppState) {
   const halo = cleanRhythm(state.halo);
 
   let rhythm = 0;
@@ -36,7 +36,7 @@ export function packHalo(state: AppState) {
   return (rhythm << 3) | halo.shape;
 }
 
-export function packBackground(state: AppState) {
+function packBackground(state: AppState) {
   let packedBackground = 0;
   // 1 bit
   packedBackground |= state.background.radial ? 1 : 0;
@@ -52,7 +52,7 @@ export function packBackground(state: AppState) {
   return packedBackground;
 }
 
-export const packAstrology = memo(
+const packAstrology = memo(
   (latitude: number, longitude: number, date: Date) => {
     const planets = calculatePlanets(latitude, longitude, 0, date);
     const aspects = calculateAspects(latitude, longitude, 0, date);
@@ -64,7 +64,7 @@ export const packAstrology = memo(
   }
 );
 
-export function packPlanets(planets: Planet[]) {
+function packPlanets(planets: Planet[]) {
   assert(planets.length === 8);
   let packedPlanets = "";
   let packedVisibility = 0;
@@ -87,7 +87,7 @@ export function packPlanets(planets: Planet[]) {
   return [BigNumber.from(`0x${packedPlanets}`), packedVisibility];
 }
 
-export function packAspects(aspects: Aspect[]) {
+function packAspects(aspects: Aspect[]) {
   assert(aspects.length === 8);
 
   let packedAspects = "";

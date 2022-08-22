@@ -8,13 +8,13 @@ import {
 import { filterLayers, interpolateStone } from "../../mimicking";
 
 import { AppState, TemplateInput } from "../../types";
-import { fromAngleToColor } from "./fromAngleToColor";
+import { transformColor } from "./transformColor";
 
 export function transformForRendering(
   state: AppState,
   seed: number
 ): TemplateInput {
-  state = fromAngleToColor(state);
+  state = transformColor(state);
 
   const { planets, aspects } = transformAstrology(
     state.latitude,
