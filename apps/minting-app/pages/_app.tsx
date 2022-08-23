@@ -1,13 +1,13 @@
 import "../styles/globals.css";
-import { AppWrapper } from "../state";
-import type { AppProps } from "next/app";
+import { AppWrapper, randomState } from "../state";
+import type { AppContext, AppProps } from "next/app";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
+import { AppState } from "../types";
 
 const { chains, provider } = configureChains(
   [chain.rinkeby],
@@ -25,9 +25,13 @@ const wagmiClient = createClient({
   provider,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+type MyAppProps = AppProps & {
+  initialState: AppState;
+};
+
+function MyApp({ Component, initialState }: MyAppProps) {
   return (
-    <AppWrapper>
+    <AppWrapper initialState={initialState}>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider
           chains={chains}
@@ -35,11 +39,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           avatar={BlockieAvatar}
           initialChain={4}
         >
-          <Component {...pageProps} />
+          <Component />
         </RainbowKitProvider>
       </WagmiConfig>
     </AppWrapper>
   );
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  return { initialState: randomState() };
+};
 
 export default MyApp;

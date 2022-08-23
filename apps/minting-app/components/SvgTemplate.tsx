@@ -12,6 +12,7 @@ const SvgTemplate: React.FC<{}> = () => {
 
   return (
     <div
+      suppressHydrationWarning={true}
       dangerouslySetInnerHTML={{
         __html: template(transformForRendering(state, seed)),
       }}
