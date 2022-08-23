@@ -4,14 +4,14 @@ import classNames from "classnames";
 import { Background } from "../../types";
 import { useAppContext } from "../../state";
 
+import randomInteger from "../../utils/randomInteger";
+import useDragRotateAnimate from "../useDragRotateAnimate";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
-import { HueArc, LightnessArc } from "./Arc";
-import ButtonBackground from "./ButtonBackground";
 import styles from "./ColorPicker.module.css";
-import randomInteger from "../randomInteger";
-import useDragRotateAnimate from "../useDragRotateAnimate";
+import ButtonBackground from "./ButtonBackground";
+import { HueArc, LightnessArc } from "./Arc";
 
 const ColorPicker: React.FC = () => {
   const {

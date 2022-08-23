@@ -1,11 +1,9 @@
-import { AppState, Background } from "../types";
+import { AppState, Background, Location } from "../types";
+import randomInteger from "../utils/randomInteger";
 import { randomizeStone } from "../components/StonePicker";
 import { randomizeBackground } from "../components/ColorPicker";
 import { randomizeHalo } from "../components/HaloPicker";
-
-// TODO: these are coordinates of Berlin, replace them with the coordinates of user's IP location
-const latitude = 52.5422;
-const longitude = 13.3495;
+import locations from "./locations";
 
 export interface ChangeBackgroundAction {
   type: "changeBackground";
@@ -65,17 +63,25 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       };
     }
     case "randomizeWand": {
+      const { latitude, longitude } = randomLocation();
       return {
         ...state,
         background: randomizeBackground(),
         halo: randomizeHalo(),
         stone: randomizeStone(),
+        latitude,
+        longitude,
       };
     }
   }
 };
 
+function randomLocation(): Location {
+  return locations[randomInteger(locations.length - 1)];
+}
+
 export function randomState(): AppState {
+  const { latitude, longitude } = randomLocation();
   return {
     minting: false,
     background: randomizeBackground(),
