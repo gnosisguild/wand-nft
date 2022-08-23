@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 import { useAppContext } from "../../state";
-import randomInteger from "../../utils/randomInteger";
+import { randomStone } from "../../utils/randomizer";
 import {
   describeFillers,
   describeSegments,
@@ -19,6 +19,7 @@ import StoneGlass from "./StoneGlass";
 import StoneFilter from "./StoneFilter";
 import StoneViewer from "./StoneViewer";
 import IconButton from "../IconButton";
+import { toStoneId } from "../../state/transforms/transformRotations";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
@@ -29,15 +30,12 @@ const StonePicker: React.FC = () => {
     hovering,
     dragging,
     rotation: { transform, value: rotation },
-  } = useDragRotateAnimate<HTMLDivElement>(
-    fromStoneId(state.stone),
-    (nextRotation) => {
-      dispatch({
-        type: "changeStone",
-        value: toStoneId(nextRotation),
-      });
-    }
-  );
+  } = useDragRotateAnimate<HTMLDivElement>(state.stone, (nextRotation) => {
+    dispatch({
+      type: "changeStone",
+      value: nextRotation,
+    });
+  });
 
   return (
     <div
@@ -122,7 +120,7 @@ const StonePicker: React.FC = () => {
           onClick={() =>
             dispatch({
               type: "changeStone",
-              value: randomizeStone(),
+              value: randomStone(),
             })
           }
         />
@@ -160,19 +158,3 @@ const CONFIG = {
 const segments = describeSegments(stoneCount, CONFIG.segment);
 const fillers = describeFillers(stoneCount, CONFIG.filler);
 const segmentCenters = findSegmentCenters(stoneCount, CONFIG.segment);
-
-const skew = (360 / stoneCount) * CONFIG.segment.percSkew;
-
-function fromStoneId(stoneId: number) {
-  const toAngleWithSkew = Math.round(stoneId / 10 - skew);
-  return (toAngleWithSkew + 360) % 360;
-}
-
-function toStoneId(angle: number) {
-  const withoutSkew = angle + skew;
-  return Math.round(withoutSkew * 10) % 3600;
-}
-
-export const randomizeStone = (): number => {
-  return toStoneId(randomInteger(3600 - 1) / 10);
-};

@@ -1,9 +1,7 @@
 import { AppState, Background, Location } from "../types";
 import randomInteger from "../utils/randomInteger";
-import { randomizeStone } from "../components/StonePicker";
-import { randomizeBackground } from "../components/ColorPicker";
-import { randomizeHalo } from "../components/HaloPicker";
-import locations from "./locations";
+import { randomStone, randomHalo, randomBackground } from "../utils/randomizer";
+import { LOCATIONS } from "../birthchart";
 
 export interface ChangeBackgroundAction {
   type: "changeBackground";
@@ -66,9 +64,9 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       const { latitude, longitude } = randomLocation();
       return {
         ...state,
-        background: randomizeBackground(),
-        halo: randomizeHalo(),
-        stone: randomizeStone(),
+        background: randomBackground(),
+        halo: randomHalo(),
+        stone: randomStone(),
         latitude,
         longitude,
       };
@@ -76,18 +74,14 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
   }
 };
 
-function randomLocation(): Location {
-  return locations[randomInteger(locations.length - 1)];
-}
-
 export function randomState(): AppState {
   const { latitude, longitude } = randomLocation();
   return {
     minting: false,
-    background: randomizeBackground(),
-    halo: randomizeHalo(),
+    background: randomBackground(),
+    halo: randomHalo(),
     handle: 0,
-    stone: randomizeStone(),
+    stone: randomStone(),
     tokenId: 0,
     latitude,
     longitude,
@@ -130,4 +124,8 @@ export function zeroState(): AppState {
     latitude: 0,
     longitude: 0,
   };
+}
+
+function randomLocation(): Location {
+  return LOCATIONS[randomInteger(LOCATIONS.length - 1)];
 }

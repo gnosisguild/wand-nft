@@ -10,7 +10,7 @@ import {
 import {
   packForMinting,
   transformForRendering,
-  transformColor,
+  transformRotations,
 } from "../../apps/minting-app/state/transforms";
 
 import { AppState } from "../../apps/minting-app/types";
@@ -56,7 +56,7 @@ describe("Transforms", async () => {
       const { testPacker } = await baseSetup();
       const [, , , js] = packForMinting(state());
       const sol = await testPacker.packBackground(
-        transformColor(state()).background
+        transformRotations(state()).background
       );
       expect(js).to.deep.equal(sol);
     });

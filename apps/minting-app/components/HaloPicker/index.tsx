@@ -3,8 +3,9 @@ import classNames from "classnames";
 import { Halo } from "../../types";
 import { useAppContext } from "../../state";
 
-import randomInteger from "../../utils/randomInteger";
 import { describeSegments, describeFillers } from "../../utils/rhythm";
+import { randomHalo } from "../../utils/randomizer";
+
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
@@ -120,7 +121,7 @@ const HaloPicker: React.FC = () => {
           onClick={() => {
             dispatch({
               type: "changeHalo",
-              value: randomizeHalo(),
+              value: randomHalo(),
             });
           }}
         />
@@ -155,15 +156,6 @@ function teflonIndex(halo: Halo, index: number) {
 
 function isWideShape(shape: number) {
   return ![1, 5].includes(shape);
-}
-
-export function randomizeHalo(): Halo {
-  return {
-    shape: randomInteger(5) as 0 | 1 | 2 | 3 | 4 | 5,
-    rhythm: new Array(13)
-      .fill(null)
-      .map(() => (randomInteger(1) === 1 ? true : false)),
-  };
 }
 
 export default HaloPicker;

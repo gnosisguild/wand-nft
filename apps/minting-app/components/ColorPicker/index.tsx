@@ -3,8 +3,8 @@ import classNames from "classnames";
 
 import { Background } from "../../types";
 import { useAppContext } from "../../state";
+import { randomBackground } from "../../utils/randomizer";
 
-import randomInteger from "../../utils/randomInteger";
 import useDragRotateAnimate from "../useDragRotateAnimate";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
@@ -156,7 +156,7 @@ const ColorPicker: React.FC = () => {
         <IconButton
           icon="PickerAura"
           shadow
-          onClick={() => handleChange(randomizeBackground())}
+          onClick={() => handleChange(randomBackground())}
         />
       </div>
     </div>
@@ -164,15 +164,3 @@ const ColorPicker: React.FC = () => {
 };
 
 export default ColorPicker;
-
-export const randomizeBackground = (): Background => {
-  return {
-    dark: randomInteger(1) == 1,
-    radial: randomInteger(1) == 1,
-    color: {
-      saturation: 33,
-      hue: randomInteger(3599) / 10,
-      lightness: randomInteger(3599) / 10,
-    },
-  };
-};
