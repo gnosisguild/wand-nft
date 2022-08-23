@@ -18,8 +18,16 @@
   z-index: 11;
 }
 
-.haloSegmentSvg {
-  position: relative;
+.haloSvg {
+  position: absolute;
+  inset: 0;
+}
+
+.segmentSvg {
+  z-index: 12;
+}
+
+.frameSvg {
   z-index: 11;
   mix-blend-mode: color-dodge;
 }

@@ -49,7 +49,7 @@ const HaloPicker: React.FC = () => {
       <UiCircle>
         <svg
           viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
-          className={styles.haloSegmentSvg}
+          className={classNames(styles.haloSvg, styles.frameSvg)}
         >
           <circle
             cy="500"
@@ -59,8 +59,20 @@ const HaloPicker: React.FC = () => {
             strokeWidth="16"
             fill="none"
             opacity="0.7"
-            style={{ mixBlendMode: "color-dodge" }}
           />
+          {fillers.map((d, index) => (
+            <path
+              key={`${isWide}-${index}`}
+              d={d}
+              fill="#D9D4AD"
+              opacity="0.7"
+            />
+          ))}
+        </svg>
+        <svg
+          viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
+          className={classNames(styles.haloSvg, styles.segmentSvg)}
+        >
           {segments.map((d, index) => (
             <path
               className={classNames(styles.rhythm, {
@@ -74,15 +86,6 @@ const HaloPicker: React.FC = () => {
                   value: setRhythm(halo, index),
                 });
               }}
-            />
-          ))}
-          {fillers.map((d, index) => (
-            <path
-              key={`${isWide}-${index}`}
-              d={d}
-              fill="#D9D4AD"
-              opacity="0.7"
-              style={{ mixBlendMode: "color-dodge" }}
             />
           ))}
         </svg>
