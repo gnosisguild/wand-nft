@@ -1,7 +1,10 @@
-import { AppState, Background, Location } from "../types";
-import randomInteger from "../utils/randomInteger";
-import { randomStone, randomHalo, randomBackground } from "../utils/randomizer";
-import { LOCATIONS } from "../birthchart";
+import { AppState, Background } from "../types";
+import {
+  randomStone,
+  randomHalo,
+  randomBackground,
+  randomLocation,
+} from "../utils/randomizer";
 
 export interface ChangeBackgroundAction {
   type: "changeBackground";
@@ -124,8 +127,4 @@ export function zeroState(): AppState {
     latitude: 0,
     longitude: 0,
   };
-}
-
-function randomLocation(): Location {
-  return LOCATIONS[randomInteger(LOCATIONS.length - 1)];
 }
