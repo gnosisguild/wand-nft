@@ -1,21 +1,24 @@
 import React from "react";
 import classNames from "classnames";
-import StoneViewer from "./StoneViewer";
-import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
-import styles from "./StonePicker.module.css";
-import UiCircle from "../UiCircle";
+
 import { useAppContext } from "../../state";
-import IconButton from "../IconButton";
-import StoneGlass from "./StoneGlass";
+import randomInteger from "../../utils/randomInteger";
+import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
+
+import UiCircle from "../UiCircle";
+import useDragRotateAnimate from "../useDragRotateAnimate";
+import useSeed from "../useSeed";
 import {
   describeFillers,
   describeSegments,
   findSegmentCenters,
 } from "../rhythm";
+
+import styles from "./StonePicker.module.css";
+import StoneGlass from "./StoneGlass";
 import StoneFilter from "./StoneFilter";
-import randomInteger from "../randomInteger";
-import useDragRotateAnimate from "../useDragRotateAnimate";
-import useSeed from "../useSeed";
+import StoneViewer from "./StoneViewer";
+import IconButton from "../IconButton";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();

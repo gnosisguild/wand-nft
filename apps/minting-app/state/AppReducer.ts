@@ -1,13 +1,9 @@
-import { AppState, Background } from "../types";
+import { AppState, Background, Location } from "../types";
+import randomInteger from "../utils/randomInteger";
 import { randomizeStone } from "../components/StonePicker";
 import { randomizeBackground } from "../components/ColorPicker";
 import { randomizeHalo } from "../components/HaloPicker";
 import locations from "./locations";
-import { Location } from "../types";
-
-function randomLocation(): Location {
-  return locations[Math.floor(Math.random() * locations.length)];
-}
 
 export interface ChangeBackgroundAction {
   type: "changeBackground";
@@ -67,21 +63,25 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       };
     }
     case "randomizeWand": {
-      const randLocation = randomLocation();
+      const { latitude, longitude } = randomLocation();
       return {
         ...state,
         background: randomizeBackground(),
         halo: randomizeHalo(),
         stone: randomizeStone(),
-        latitude: randLocation.latitude,
-        longitude: randLocation.longitude,
+        latitude,
+        longitude,
       };
     }
   }
 };
 
+function randomLocation(): Location {
+  return locations[randomInteger(locations.length - 1)];
+}
+
 export function randomState(): AppState {
-  const randLocation = randomLocation();
+  const { latitude, longitude } = randomLocation();
   return {
     minting: false,
     background: randomizeBackground(),
@@ -89,8 +89,8 @@ export function randomState(): AppState {
     handle: 0,
     stone: randomizeStone(),
     tokenId: 0,
-    latitude: randLocation.latitude,
-    longitude: randLocation.longitude,
+    latitude,
+    longitude,
   };
 }
 

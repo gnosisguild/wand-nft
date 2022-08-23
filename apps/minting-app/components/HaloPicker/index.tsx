@@ -1,11 +1,14 @@
 import classNames from "classnames";
-import styles from "./HaloPicker.module.css";
-import UiCircle from "../UiCircle";
-import { useAppContext } from "../../state";
-import { describeSegments, describeFillers } from "../rhythm";
+
 import { Halo } from "../../types";
+import { useAppContext } from "../../state";
+
+import randomInteger from "../../utils/randomInteger";
+import { describeSegments, describeFillers } from "../rhythm";
+import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
-import randomInteger from "../randomInteger";
+
+import styles from "./HaloPicker.module.css";
 
 const VIEWBOX_SIZE = 1000;
 const CONFIG = {
