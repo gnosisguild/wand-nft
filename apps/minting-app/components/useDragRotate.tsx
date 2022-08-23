@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useGesture } from "@use-gesture/react";
-import { clockwiseDelta, dimensions, toAngle } from "./trigonometry";
+import { clockwiseDelta, dimensions, toAngle } from "../utils/trigonometry";
 
 function useDragRotate<T>(
   value: number = 0,

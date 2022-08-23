@@ -1,6 +1,6 @@
 import { Location } from "../types";
 
-const locations: Location[] = [
+export const LOCATIONS: Location[] = [
   { name: "Zorats Karer", longitude: 46.028727, latitude: 39.55173 },
   { name: "Ngaut Ngaut ", longitude: 139.606972, latitude: -34.688345 },
   { name: "Wurdi Youang", longitude: 144.424444, latitude: -37.951111 },
@@ -196,5 +196,3 @@ const locations: Location[] = [
   { name: "Serpent Mound", longitude: -83.430198, latitude: 39.025241 },
   { name: "Skystone", longitude: -122.19462, latitude: 47.153839 },
 ];
-
-export default locations;

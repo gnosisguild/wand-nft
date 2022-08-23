@@ -8,14 +8,14 @@ import {
 import { filterLayers, interpolateStone } from "../../mimicking";
 
 import { AppState, TemplateInput } from "../../types";
-import { transformColor } from "./transformColor";
+import { transformRotations } from "./transformRotations";
 
 export function transformForRendering(
   state: AppState,
   seed: number,
   date?: Date
 ): TemplateInput {
-  state = transformColor(state);
+  state = transformRotations(state);
 
   const { planets, aspects } = transformAstrology(
     state.latitude,

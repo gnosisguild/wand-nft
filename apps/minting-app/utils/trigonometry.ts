@@ -5,11 +5,7 @@ export type Point = {
   y: number;
 };
 
-export function findClosestInCircumference(
-  center: Point,
-  radius: number,
-  point: Point
-) {
+export function findClosest(center: Point, radius: number, point: Point) {
   const vX = point.x - center.x;
   const vY = point.y - center.y;
   const magV = Math.sqrt(vX * vX + vY * vY);

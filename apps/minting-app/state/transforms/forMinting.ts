@@ -3,10 +3,10 @@ import { BigNumber } from "ethers";
 import memo from "memoize-one";
 import { calculateAspects, calculatePlanets } from "../../birthchart";
 import { AppState, Aspect, Halo, Planet } from "../../types";
-import { transformColor } from "./transformColor";
+import { transformRotations } from "./transformRotations";
 
 export function packForMinting(state: AppState, date?: Date) {
-  state = transformColor(state);
+  state = transformRotations(state);
 
   const [packedPlanets, packedAspects, packedVisibility] = packAstrology(
     state.latitude,
