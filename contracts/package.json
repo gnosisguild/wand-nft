@@ -33,7 +33,6 @@
     "@typescript-eslint/eslint-plugin": "4.7.0",
     "@typescript-eslint/parser": "4.7.0",
     "chai": "4.2.0",
-    "debug": "4.2.0",
     "eslint": "8.21.0",
     "eslint-config-prettier": "8.0.0",
     "eslint-plugin-import": "2.22.1",
@@ -57,7 +56,6 @@
     "base64-sol": "^1.1.0",
     "dotenv": "^8.0.0",
     "ethers": "^5.4.6",
-    "solid-mustache": "^4.5.0",
-    "yargs": "^16.1.1"
+    "solid-mustache": "^4.5.0"
   }
 }
