@@ -18,7 +18,7 @@ export function AppWrapper({
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   return (
-    <AppContext.Provider value={{ state: state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch }}>
       {children}
     </AppContext.Provider>
   );
