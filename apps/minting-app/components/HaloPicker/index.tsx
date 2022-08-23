@@ -4,7 +4,7 @@ import { Halo } from "../../types";
 import { useAppContext } from "../../state";
 
 import randomInteger from "../../utils/randomInteger";
-import { describeSegments, describeFillers } from "../rhythm";
+import { describeSegments, describeFillers } from "../../utils/rhythm";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 

@@ -3,16 +3,16 @@ import classNames from "classnames";
 
 import { useAppContext } from "../../state";
 import randomInteger from "../../utils/randomInteger";
+import {
+  describeFillers,
+  describeSegments,
+  findSegmentCenters,
+} from "../../utils/rhythm";
 import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
 
 import UiCircle from "../UiCircle";
 import useDragRotateAnimate from "../useDragRotateAnimate";
 import useSeed from "../useSeed";
-import {
-  describeFillers,
-  describeSegments,
-  findSegmentCenters,
-} from "../rhythm";
 
 import styles from "./StonePicker.module.css";
 import StoneGlass from "./StoneGlass";
