@@ -1,8 +1,6 @@
 import { Background, Halo, Location } from "../types";
 import { LOCATIONS } from "../birthchart";
 
-import randomInteger from "./randomInteger";
-
 export function randomStone(): number {
   return randomAngle();
 }
@@ -32,4 +30,8 @@ export function randomLocation(): Location {
 
 function randomAngle() {
   return randomInteger(3599) / 10;
+}
+
+function randomInteger(max: number): number {
+  return Math.floor(Math.random() * (max + 1));
 }
