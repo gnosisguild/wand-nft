@@ -72,28 +72,6 @@ export interface Halo {
   rhythm: boolean[];
 }
 
-export interface HaloInput {
-  halo0?: boolean;
-  halo1?: boolean;
-  halo2?: boolean;
-  halo3?: boolean;
-  halo4?: boolean;
-  halo5?: boolean;
-  rhythm: boolean[];
-  hue: number;
-}
-
-export interface AppState {
-  minting: boolean;
-  latitude: number;
-  longitude: number;
-  background: Background;
-  handle: 0 | 1 | 2 | 3 | 4 | 5;
-  stone: number;
-  tokenId: number;
-  halo: Halo;
-}
-
 export interface TemplateInput {
   frame: {
     title: string;
@@ -106,7 +84,16 @@ export interface TemplateInput {
   planets: Planet[];
   aspects: Aspect[];
   background: Background;
-  halo: HaloInput;
+  halo: {
+    halo0?: boolean;
+    halo1?: boolean;
+    halo2?: boolean;
+    halo3?: boolean;
+    halo4?: boolean;
+    halo5?: boolean;
+    rhythm: boolean[];
+    hue: number;
+  };
   handle: {
     handle0?: boolean;
     handle1?: boolean;
@@ -129,3 +116,17 @@ export interface Location {
   longitude: number;
   name: string;
 }
+
+export interface MintOptions {
+  handle: 0 | 1 | 2 | 3 | 4 | 5;
+  halo: Halo;
+  stone: number;
+  background: Background;
+  latitude: number;
+  longitude: number;
+}
+
+export type AppState = MintOptions & {
+  minting: boolean;
+  tokenId: number;
+};

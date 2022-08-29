@@ -9,9 +9,12 @@ import CenterGilding from "../components/Gilding/Center";
 import HaloPicker from "../components/HaloPicker";
 import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
-import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
+import {
+  FullDownloadButton,
+  PFPDownloadButton,
+} from "../components/DownloadButton";
 
 const Home: NextPage = () => (
   <Layout description="Zodiac Wands Minting App">
@@ -37,8 +40,8 @@ const Home: NextPage = () => (
     </div>
 
     <div className={styles.downloadButtons}>
-      <IconButton icon="FullDownload" />
-      <IconButton icon="PfpDownload" />
+      <FullDownloadButton />
+      <PFPDownloadButton />
     </div>
   </Layout>
 );
