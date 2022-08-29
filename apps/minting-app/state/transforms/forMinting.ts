@@ -2,31 +2,31 @@ import assert from "assert";
 import { BigNumber } from "ethers";
 import memo from "memoize-one";
 import { calculateAspects, calculatePlanets } from "../../birthchart";
-import { AppState, Aspect, Halo, Planet } from "../../types";
+import { Aspect, Halo, MintOptions, Planet } from "../../types";
 import { transformRotations } from "./transformRotations";
 
-export function packForMinting(state: AppState, date?: Date) {
-  state = transformRotations(state);
+export function packForMinting(options: MintOptions, date?: Date) {
+  options = transformRotations(options);
 
   const [packedPlanets, packedAspects, packedVisibility] = packAstrology(
-    state.latitude,
-    state.longitude,
+    options.latitude,
+    options.longitude,
     date
   );
 
   return [
-    state.stone,
-    packHalo(state),
-    state.handle,
-    packBackground(state),
+    options.stone,
+    packHalo(options),
+    options.handle,
+    packBackground(options),
     packedPlanets,
     packedAspects,
     packedVisibility,
   ];
 }
 
-function packHalo(state: AppState) {
-  const halo = cleanRhythm(state.halo);
+function packHalo(options: MintOptions) {
+  const halo = cleanRhythm(options.halo);
 
   let rhythm = 0;
   for (let i = 0; i < 13; i++) {
@@ -36,18 +36,18 @@ function packHalo(state: AppState) {
   return (rhythm << 3) | halo.shape;
 }
 
-function packBackground(state: AppState) {
+function packBackground(options: MintOptions) {
   let packedBackground = 0;
   // 1 bit
-  packedBackground |= state.background.radial ? 1 : 0;
+  packedBackground |= options.background.radial ? 1 : 0;
   // 1 bit
-  packedBackground |= (state.background.dark ? 1 : 0) << 1;
+  packedBackground |= (options.background.dark ? 1 : 0) << 1;
   // 8 bits
-  packedBackground |= state.background.color.saturation << 2;
+  packedBackground |= options.background.color.saturation << 2;
   // 8 bits
-  packedBackground |= state.background.color.lightness << 10;
+  packedBackground |= options.background.color.lightness << 10;
   // 16 bits
-  packedBackground |= state.background.color.hue << 18;
+  packedBackground |= options.background.color.hue << 18;
 
   return packedBackground;
 }

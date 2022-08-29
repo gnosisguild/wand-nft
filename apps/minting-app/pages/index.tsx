@@ -10,11 +10,14 @@ import CenterGilding from "../components/Gilding/Center";
 import HaloPicker from "../components/HaloPicker";
 import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
-import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import HandleClock from "../components/HandleClock";
 import classNames from "classnames";
+import {
+  FullDownloadButton,
+  PFPDownloadButton,
+} from "../components/DownloadButton";
 
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
@@ -55,8 +58,8 @@ const Home: NextPage = () => {
       </div>
 
       <div className={classNames(styles.downloadButtons, mintingClasses)}>
-        <IconButton icon="FullDownload" />
-        <IconButton icon="PfpDownload" />
+        <FullDownloadButton />
+        <PFPDownloadButton />
       </div>
       <HandleClock />
     </Layout>
