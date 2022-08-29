@@ -8,6 +8,7 @@ import {
 import { filterLayers, interpolateStone } from "../../mimicking";
 
 import { MintOptions, TemplateInput } from "../../types";
+import { transformRhythm } from "./transformRhythm";
 import { transformRotations } from "./transformRotations";
 
 export function transformForRendering(
@@ -16,8 +17,9 @@ export function transformForRendering(
   date?: Date
 ): TemplateInput {
   options = transformRotations(options);
+  options = transformRhythm(options);
 
-  const { planets, aspects } = transformAstrology(
+  const { planets, aspects } = calculateAstrology(
     options.latitude,
     options.longitude,
     date
@@ -37,10 +39,7 @@ export function transformForRendering(
       halo4: options.halo.shape == 4,
       halo5: options.halo.shape == 5,
       hue: (options.background.color.hue + 180) % 360,
-      rhythm: mirrorRhythm(
-        options.halo.rhythm,
-        isWideShape(options.halo.shape)
-      ),
+      rhythm: options.halo.rhythm,
     },
     frame: {
       level1: true,
@@ -59,7 +58,7 @@ export function transformForRendering(
   };
 }
 
-const transformAstrology = memo(
+const calculateAstrology = memo(
   (latitude: number, longitude: number, date?: Date) => {
     date = date || new Date();
     const planets = scalePlanets(
@@ -72,13 +71,3 @@ const transformAstrology = memo(
     return { planets, aspects };
   }
 );
-
-const mirrorRhythm = (rhythm: boolean[], isWide: boolean) => {
-  if (rhythm.length !== 13) throw new Error("Rhythm must have length 13");
-  const cleanRhythm = isWide
-    ? rhythm.map((x, index) => x && index % 2 === 0)
-    : rhythm;
-  return [...cleanRhythm, ...cleanRhythm.slice(1, -1).reverse()];
-};
-
-const isWideShape = (shape: number) => ![1, 5].includes(shape);
