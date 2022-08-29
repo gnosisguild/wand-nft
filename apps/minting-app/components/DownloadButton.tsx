@@ -35,17 +35,15 @@ function createDownloadButton({
             seed: seed.toString(),
           });
 
-          fetch(`/api/thumbnail?${params.toString()}`).then(
-            async (response) => {
-              const url = window.URL.createObjectURL(await response.blob());
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", filename);
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-          );
+          fetch(`/api/download?${params.toString()}`).then(async (response) => {
+            const url = window.URL.createObjectURL(await response.blob());
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          });
         }}
       />
     );
