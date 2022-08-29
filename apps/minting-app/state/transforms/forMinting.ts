@@ -2,11 +2,13 @@ import assert from "assert";
 import { BigNumber } from "ethers";
 import memo from "memoize-one";
 import { calculateAspects, calculatePlanets } from "../../birthchart";
-import { Aspect, Halo, MintOptions, Planet } from "../../types";
+import { Aspect, MintOptions, Planet } from "../../types";
+import { transformRhythm } from "./transformRhythm";
 import { transformRotations } from "./transformRotations";
 
 export function packForMinting(options: MintOptions, date?: Date) {
   options = transformRotations(options);
+  options = transformRhythm(options);
 
   const [packedPlanets, packedAspects, packedVisibility] = packAstrology(
     options.latitude,
@@ -26,14 +28,12 @@ export function packForMinting(options: MintOptions, date?: Date) {
 }
 
 function packHalo(options: MintOptions) {
-  const halo = cleanRhythm(options.halo);
-
   let rhythm = 0;
   for (let i = 0; i < 13; i++) {
-    rhythm |= (halo.rhythm[i] ? 1 : 0) << i;
+    rhythm |= (options.halo.rhythm[i] ? 1 : 0) << i;
   }
 
-  return (rhythm << 3) | halo.shape;
+  return (rhythm << 3) | options.halo.shape;
 }
 
 function packBackground(options: MintOptions) {
@@ -115,18 +115,6 @@ function packAspects(aspects: Aspect[]) {
   }
 
   return BigNumber.from(`0x${packedAspects}`);
-}
-
-function cleanRhythm(halo: Halo): Halo {
-  if ([1, 5].includes(halo.shape)) {
-    // isNarrow
-    return halo;
-  }
-
-  return {
-    ...halo,
-    rhythm: halo.rhythm.map((r, index) => r && index % 2 === 0),
-  };
 }
 
 function toBinary(n: number, length: number) {
