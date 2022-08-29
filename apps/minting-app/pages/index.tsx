@@ -12,6 +12,7 @@ import PickerLabels from "../components/PickerLabels";
 import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
+import HandleClock from "../components/HandleClock";
 
 const Home: NextPage = () => (
   <Layout description="Zodiac Wands Minting App">
@@ -40,6 +41,7 @@ const Home: NextPage = () => (
       <IconButton icon="FullDownload" />
       <IconButton icon="PfpDownload" />
     </div>
+    <HandleClock />
   </Layout>
 );
 

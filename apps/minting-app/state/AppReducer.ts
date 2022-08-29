@@ -30,11 +30,17 @@ export interface RandomizeWandAction {
   type: "randomizeWand";
 }
 
+export interface ChangeHandleAction {
+  type: "changeHandle";
+  value: 0 | 1 | 2 | 3;
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
   | ChangeStoneAction
   | ChangeMintingStateAction
+  | ChangeHandleAction
   | RandomizeWandAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
@@ -61,6 +67,12 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         minting: action.value,
+      };
+    }
+    case "changeHandle": {
+      return {
+        ...state,
+        handle: action.value,
       };
     }
     case "randomizeWand": {
