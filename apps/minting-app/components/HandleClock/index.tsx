@@ -26,10 +26,9 @@ const HandleClock: React.FC = () => {
       return 1
     } else if (hour >= 15 && hour <21) {
       return 2
-    } else if (hour >= 21 || hour <3) {
+    } else {
       return 3
     }
-    return 0;
   };
   return <></>;
 };
