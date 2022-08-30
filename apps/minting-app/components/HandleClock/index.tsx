@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
 
 const HandleClock: React.FC = () => {
-  const { dispatch } = useAppContext();
+  const { state, dispatch } = useAppContext();
 
   useEffect(() => {
     const timer = setInterval(() => {
       console.log("changing handle");
-      dispatch({type: "changeHandle", value: getHandleFromHour()});
+      const handle = getHandleFromHour();
+
+      if (handle !== state.handle) {
+        dispatch({type: "changeHandle", value: handle});
+      }
     }, 10 * 1000);
     return () => {
       clearInterval(timer);
