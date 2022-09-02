@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "compile:template": "solid-mustache ../svg/template.svg.hbs -o ./contracts/Cauldron.sol --name Cauldron --condense --dedupeThreshold=128",
+    "compile:cauldron": "solid-mustache ../svg/template.svg.hbs -o ./contracts/Cauldron.sol --name Cauldron --condense --dedupeThreshold=128",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat deploy --network",
