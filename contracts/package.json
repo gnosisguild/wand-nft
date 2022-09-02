@@ -56,6 +56,7 @@
     "base64-sol": "^1.1.0",
     "dotenv": "^8.0.0",
     "ethers": "^5.4.6",
+    "merkletreejs": "^0.2.32",
     "solid-mustache": "^4.5.0"
   }
 }
