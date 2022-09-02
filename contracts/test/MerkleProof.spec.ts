@@ -4,7 +4,7 @@ import "@nomiclabs/hardhat-ethers";
 
 import { MerkleTree } from "merkletreejs";
 
-describe.only("MerkleProof", async () => {
+describe("MerkleProof", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
@@ -17,8 +17,11 @@ describe.only("MerkleProof", async () => {
   });
 
   const keccak256 = (input: string) => {
+    const toBytes =
+      typeof input === "string" && !ethers.utils.isHexString(input);
+
     return ethers.utils.keccak256(
-      typeof input === "string" ? ethers.utils.toUtf8Bytes(input) : input
+      toBytes ? ethers.utils.toUtf8Bytes(input) : input
     );
   };
 

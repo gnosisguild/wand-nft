@@ -14,7 +14,7 @@ describe("Incantation", async () => {
     return { incantation };
   });
 
-  it.skip("cycles through namews checks uniqness", async () => {
+  it.skip("cycles through names checks uniqness", async () => {
     const { incantation } = await baseSetup();
 
     const set = new Set<string>();
