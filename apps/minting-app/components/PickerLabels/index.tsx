@@ -1,8 +1,13 @@
 import styles from "./PickerLabels.module.css";
+import classNames from "classnames";
 
-const PickerLabels: React.FC = () => {
+interface Props {
+  className: string;
+}
+
+const PickerLabels: React.FC<Props> = ({ className }) => {
   return (
-    <div className={styles.labels}>
+    <div className={classNames(styles.labels, className)}>
       <svg
         className={styles.stoneLabel}
         viewBox="0 0 65 20"

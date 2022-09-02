@@ -1,9 +1,14 @@
 import React from "react";
 import styles from "./Gilding.module.css";
+import classNames from "classnames";
 
-const CenterGilding: React.FC = () => {
+interface Props {
+  className: string;
+}
+
+const CenterGilding: React.FC<Props> = ({ className }) => {
   return (
-    <div className={styles.center}>
+    <div className={classNames(styles.center, className)}>
       <svg
         viewBox="0 0 732 767"
         fill="none"
