@@ -18,10 +18,15 @@ export default async function handler(
   const leaf = keccak256(request.body);
   const hit = rows.find((row) => row.leaf === leaf);
 
-  response
+  if (hit) {
+    response
     .status(200)
     .setHeader("Content-Type", "application/json")
-    .send(hit ? hit.proof : []);
+    .send(hit.proof);
+  } else {
+    response
+    .status(404).send('Address not found')
+  }  
 }
 
 async function loadRows(): Promise<{ leaf: string; proof: string[] }[]> {
