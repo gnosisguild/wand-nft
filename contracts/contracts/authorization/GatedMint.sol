@@ -4,7 +4,7 @@ pragma solidity ^0.8.6;
 import "./MerkleProof.sol";
 
 contract GatedMint {
-  bytes32 internal rootHash;
+  bytes32 public rootHash;
   mapping(bytes32 => bool) internal minted;
 
   constructor(bytes32 _rootHash) {

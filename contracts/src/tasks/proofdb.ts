@@ -23,6 +23,15 @@ task(
   await writePopulate(rows, merkleTree);
 });
 
+task(
+  "proofdb:print",
+  "Recalculates MerkleTree from spreadsheet columns and prints MerkleRoot"
+).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
+  const rows = await resolveENSNames(await readRows());
+  const merkleTree = createMerkleTree(rows);
+  console.info(`MerkleRoot: ${merkleTree.getHexRoot()}`);
+});
+
 export async function populate(hre: HardhatRuntimeEnvironment) {
   let rows = await readRows();
   rows = await resolveENSNames(rows);
