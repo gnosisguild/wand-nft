@@ -10,18 +10,33 @@ task(
   "proofdb:clean",
   "Cleans the proof and leaf columns from the proof spreadsheet"
 ).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
-  const rows = await resolveENSNames(await readSpreadsheet());
-  await clean(rows);
+  const rows = await resolveENSNames(await readRows());
+  await writeClean(rows);
 });
 
 task(
   "proofdb:populate",
   "Recalculates MerkleTree and populates proof and leaf columns of proof spreadsheet"
 ).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
-  const rows = await resolveENSNames(await readSpreadsheet());
+  const rows = await resolveENSNames(await readRows());
   const merkleTree = createMerkleTree(rows);
-  await populate(rows, merkleTree);
+  await writePopulate(rows, merkleTree);
 });
+
+export async function populate(hre: HardhatRuntimeEnvironment) {
+  let rows = await readRows();
+  rows = await resolveENSNames(rows);
+  const merkleTree = createMerkleTree(rows);
+  await writePopulate(rows, merkleTree);
+  return merkleTree;
+}
+
+export async function calculateRootHash(hre: HardhatRuntimeEnvironment) {
+  let rows = await readRows();
+  rows = await resolveENSNames(rows);
+  const merkleTree = createMerkleTree(rows);
+  return merkleTree.getHexRoot();
+}
 
 type Row = {
   index: number;
@@ -31,7 +46,7 @@ type Row = {
   proof?: string;
 };
 
-export async function readSpreadsheet(): Promise<Row[]> {
+async function readRows(): Promise<Row[]> {
   const sheet = await loadSheet();
   const rows = await sheet.getRows();
 
@@ -42,7 +57,7 @@ export async function readSpreadsheet(): Promise<Row[]> {
   }));
 }
 
-export async function populate(rows: Row[], merkleTree: MerkleTree) {
+async function writePopulate(rows: Row[], merkleTree: MerkleTree) {
   const sheet = await loadSheet();
   const { leafColumnIndex, proofColumnIndex } = await columnIndices(
     sheet,
@@ -66,7 +81,7 @@ export async function populate(rows: Row[], merkleTree: MerkleTree) {
   await sheet.saveUpdatedCells();
 }
 
-export async function clean(rows: Row[]) {
+async function writeClean(rows: Row[]) {
   const sheet = await loadSheet();
   const { leafColumnIndex, proofColumnIndex } = await columnIndices(
     sheet,
@@ -83,7 +98,7 @@ export async function clean(rows: Row[]) {
   await sheet.saveUpdatedCells();
 }
 
-export async function resolveENSNames(rows: Row[]) {
+async function resolveENSNames(rows: Row[]) {
   return rows.map((row) => ({
     ...row,
     address: ethers.utils.isAddress(row.address || "")
@@ -92,20 +107,12 @@ export async function resolveENSNames(rows: Row[]) {
   }));
 }
 
-export function createMerkleTree(rows: Row[]): MerkleTree {
+function createMerkleTree(rows: Row[]): MerkleTree {
   const leaves = rows.map((row) => row.address || row.phrase);
   return new MerkleTree(leaves, keccak256, {
     sortPairs: true,
     hashLeaves: true,
   });
-}
-
-export function keccak256(input: string) {
-  const toBytes = typeof input === "string" && !ethers.utils.isHexString(input);
-
-  return ethers.utils.keccak256(
-    toBytes ? ethers.utils.toUtf8Bytes(input) : input
-  );
 }
 
 async function loadSheet() {
@@ -139,4 +146,12 @@ async function columnIndices(sheet: any, rows: Row[]) {
   await sheet.loadCells();
 
   return { leafColumnIndex, proofColumnIndex };
+}
+
+export function keccak256(input: string) {
+  const toBytes = typeof input === "string" && !ethers.utils.isHexString(input);
+
+  return ethers.utils.keccak256(
+    toBytes ? ethers.utils.toUtf8Bytes(input) : input
+  );
 }

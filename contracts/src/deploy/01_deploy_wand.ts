@@ -1,7 +1,7 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import MerkleTree from "merkletreejs";
-import { keccak256 } from "../tasks/proofdb";
+import { keccak256, populate } from "../tasks/proofdb";
 
 const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
@@ -25,7 +25,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       Incantation: txIncantation.address,
     },
   });
-  const rootHash = await computeRootHash(hre);
+  const rootHash = await proofdbPopulate(hre);
   const txZodiacWands = await deploy("ZodiacWands", {
     from: deployer,
     args: [txConjuror.address, rootHash],
@@ -49,9 +49,10 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await zodiacWands.setForge(txForge.address);
 };
 
-async function computeRootHash(hre: HardhatRuntimeEnvironment) {
+async function proofdbPopulate(hre: HardhatRuntimeEnvironment) {
   if (hre.network.name !== "hardhat") {
-    throw new Error("AAAAA");
+    const merkleTree = await populate(hre);
+    return merkleTree.getHexRoot();
   } else {
     const signers = await hre.ethers.getSigners();
     const elements = await Promise.all(signers.map((s) => s.getAddress()));
