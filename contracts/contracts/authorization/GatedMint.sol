@@ -18,10 +18,7 @@ contract GatedMint {
       MerkleProof.verify(proof, rootHash, leaf) == true,
       "Invalid mint permit"
     );
-    require(
-      minted[leaf] == false,
-      "Mint permit already used"
-    );
+    require(minted[leaf] == false, "Mint permit already used");
     minted[leaf] = true;
   }
 }
