@@ -8,7 +8,7 @@ const { GoogleSpreadsheet } = require("google-spreadsheet");
 
 task(
   "proofdb:clean",
-  "Recalculates the current MerkleTree and posts root hash to owner safe"
+  "Cleans the proof and leaf columns from the proof spreadsheet"
 ).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
   const rows = await resolveENSNames(await readSpreadsheet());
   await clean(rows);
@@ -16,7 +16,7 @@ task(
 
 task(
   "proofdb:populate",
-  "Recalculates the current MerkleTree and posts root hash to owner safe"
+  "Recalculates MerkleTree and populates proof and leaf columns of proof spreadsheet"
 ).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
   const rows = await resolveENSNames(await readSpreadsheet());
   const merkleTree = createMerkleTree(rows);
@@ -50,16 +50,12 @@ export async function populate(rows: Row[], merkleTree: MerkleTree) {
   );
 
   for (let i = 0; i < rows.length; i++) {
-    if (i > 0 && i % 100 === 0) {
-      console.info(`Wand Spreasheet: Editing cells from ${i} rows...`);
-    }
-
     const { index, address, phrase } = rows[i];
     const leaf = keccak256(address || phrase);
     const proof = merkleTree.getHexProof(leaf);
     assert(
       proof.length > 0,
-      "Wand Spreadsheet: could not retrieve proof from generated MerkleTree"
+      "Proof DB: could not retrieve proof from generated MerkleTree"
     );
 
     const leafCell = sheet.getCell(index, leafColumnIndex);
@@ -67,7 +63,6 @@ export async function populate(rows: Row[], merkleTree: MerkleTree) {
     leafCell.value = leaf;
     proofCell.value = JSON.stringify(proof);
   }
-  console.info(`Saving updated cells`);
   await sheet.saveUpdatedCells();
 }
 
@@ -79,17 +74,12 @@ export async function clean(rows: Row[]) {
   );
 
   for (let i = 0; i < rows.length; i++) {
-    if (i > 0 && i % 100 === 0) {
-      console.info(`Wand Spreasheet: Cleanings cells from ${i} rows...`);
-    }
-
     const { index } = rows[i];
     const leafCell = sheet.getCell(index, leafColumnIndex);
     const proofCell = sheet.getCell(index, proofColumnIndex);
     leafCell.value = "";
     proofCell.value = "";
   }
-  console.info(`Saving updated cells`);
   await sheet.saveUpdatedCells();
 }
 
@@ -136,21 +126,15 @@ async function columnIndices(sheet: any, rows: Row[]) {
     assert(
       rows[i].index === remoteRows[i]._rowNumber - 1 &&
         rows[i].phrase === remoteRows[i].phrase,
-      "Wand Spreadsheet: read write mismatch"
+      "Proof DB: read write mismatch"
     );
   }
 
   const leafColumnIndex = sheet.headerValues.indexOf("leaf");
   const proofColumnIndex = sheet.headerValues.indexOf("proof");
 
-  assert(
-    leafColumnIndex !== -1,
-    "Wand Spreadsheet: couldn't find leaf column index"
-  );
-  assert(
-    proofColumnIndex !== -1,
-    "Wand Spreadsheet: couldn't find proof column index"
-  );
+  assert(leafColumnIndex !== -1, "Proof DB: couldn't find leaf column index");
+  assert(proofColumnIndex !== -1, "Proof DB: couldn't find proof column index");
 
   await sheet.loadCells();
 
