@@ -48,9 +48,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IZodiacWands.sol";
 import "./interfaces/IForge.sol";
 import "./interfaces/IConjuror.sol";
+import "./authorization/GatedMint.sol";
 import "./Decanter.sol";
 
-contract ZodiacWands is IZodiacWands, ERC721, Ownable {
+contract ZodiacWands is IZodiacWands, ERC721, GatedMint, Ownable {
   IForge public forge;
   IConjuror public conjuror;
 
@@ -67,7 +68,10 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     uint256 aspects
   );
 
-  constructor(IConjuror _conjuror) ERC721("ZodiacWands", "WAND") {
+  constructor(IConjuror _conjuror, bytes32 rootHash)
+    ERC721("ZodiacWands", "WAND")
+    GatedMint(rootHash)
+  {
     conjuror = _conjuror;
   }
 
@@ -78,8 +82,11 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     uint64 background,
     uint128 planets,
     uint256 aspects,
-    uint8 visibility
+    uint8 visibility,
+    bytes32[] calldata proof
   ) external override returns (uint256) {
+    preMint(proof);
+
     uint256 tokenId = nextTokenId++;
     _safeMint(msg.sender, tokenId);
 

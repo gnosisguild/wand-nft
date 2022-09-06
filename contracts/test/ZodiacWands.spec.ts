@@ -12,12 +12,14 @@ import { packForMinting } from "../../apps/minting-app/state/transforms/forMinti
 import { transformForRendering } from "../../apps/minting-app/state/transforms/forRendering";
 import { keccak256 } from "ethers/lib/utils";
 import { AppState } from "../../apps/minting-app/types";
+import MerkleTree from "merkletreejs";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const [signer] = await hre.ethers.getSigners();
+    const signers = await hre.ethers.getSigners();
+    const [signer] = signers;
 
     const deployment = await deployments.get("ZodiacWands");
     const zodiacWands = new Contract(
@@ -26,12 +28,19 @@ describe("ZodiacWands", async () => {
       signer
     );
 
-    return { zodiacWands };
+    const elements = await Promise.all(signers.map((s) => s.getAddress()));
+    const merkleTree = new MerkleTree(elements, keccak256, {
+      hashLeaves: true,
+      sortPairs: true,
+    });
+    const proof = merkleTree.getHexProof(keccak256(elements[0]));
+
+    return { zodiacWands, proof };
   });
 
   describe("SVG generation", () => {
     it("it render the template with the same results as JavaScript", async () => {
-      const { zodiacWands } = await baseSetup();
+      const { zodiacWands, proof } = await baseSetup();
 
       const background = {
         hue: 0,
@@ -76,7 +85,7 @@ describe("ZodiacWands", async () => {
         tokenId: -1,
       };
 
-      const tx = await zodiacWands.mint(...packForMinting(state));
+      const tx = await zodiacWands.mint(...[...packForMinting(state), proof]);
 
       await tx.wait();
 

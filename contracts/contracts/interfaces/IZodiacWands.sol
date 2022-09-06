@@ -12,6 +12,7 @@ interface IZodiacWands is IERC721 {
     uint64 background,
     uint128 planets,
     uint256 aspects,
-    uint8 visibility
+    uint8 visibility,
+    bytes32[] calldata proof
   ) external returns (uint256);
 }

@@ -1,16 +1,9 @@
 import { expect } from "chai";
-import hre, { deployments, ethers } from "hardhat";
+import hre, { deployments } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
 
 import { MerkleTree } from "merkletreejs";
-
-const keccak256 = (input: string) => {
-  const toBytes = typeof input === "string" && !ethers.utils.isHexString(input);
-
-  return ethers.utils.keccak256(
-    toBytes ? ethers.utils.toUtf8Bytes(input) : input
-  );
-};
+import { keccak256 } from "ethers/lib/utils";
 
 describe("GatedMint", async () => {
   const baseSetup = deployments.createFixture(async () => {
