@@ -13,6 +13,7 @@ import { useAppContext, packForMinting } from "../../state";
 
 import wandContract from "../../utils/contract";
 import styles from "./MintButton.module.css";
+import useMerkleProof from "../useMerkleProof";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -24,12 +25,13 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { state, dispatch } = useAppContext();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const merkleProof = useMerkleProof();
 
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
     contractInterface: wandContract.abi,
     functionName: "mint",
-    args: packForMinting(state),
+    args: [...packForMinting(state), merkleProof],
   });
 
   const { data, isSuccess, write } = useContractWrite({
@@ -61,8 +63,13 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
         if (!address) {
           openConnectModal?.();
         } else {
-          dispatch({ type: "changeMintingState", value: true });
-          write?.();
+          if (merkleProof.length === 0) {
+            alert("MerkleProof: not found");
+          } else {
+            alert(`MerkleProof: ${merkleProof}`);
+            dispatch({ type: "changeMintingState", value: true });
+            write?.();
+          }
         }
       }}
     >
