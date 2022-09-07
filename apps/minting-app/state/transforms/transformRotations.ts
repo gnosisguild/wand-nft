@@ -1,15 +1,15 @@
-import { AppState } from "../../types";
+import { MintOptions } from "../../types";
 
-export function transformRotations(state: AppState) {
+export function transformRotations(options: MintOptions) {
   return {
-    ...state,
-    stone: toStoneId(state.stone),
+    ...options,
+    stone: toStoneId(options.stone),
     background: {
-      ...state.background,
+      ...options.background,
       color: {
-        ...state.background.color,
-        hue: toHue(state.background.color.hue),
-        lightness: toLightness(state.background.color.lightness),
+        ...options.background.color,
+        hue: toHue(options.background.color.hue),
+        lightness: toLightness(options.background.color.lightness),
       },
     },
   };

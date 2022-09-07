@@ -25,6 +25,8 @@ interface Props {
   shadow?: boolean;
   thickBorder?: boolean;
   active?: boolean;
+  isLoading?: boolean;
+  disabled?: boolean;
   icon:
     | "Light"
     | "Dark"
@@ -49,6 +51,8 @@ const IconButton: React.FC<Props> = ({
   icon = "light",
   thickBorder = false,
   active = false,
+  isLoading = false,
+  disabled = false,
 }) => {
   const iconSwitch = (iconName: string) => {
     switch (iconName) {
@@ -91,7 +95,8 @@ const IconButton: React.FC<Props> = ({
       className={classnames(
         styles.iconButton,
         { [styles.shadow]: shadow },
-        { [styles.active]: active }
+        { [styles.active]: active },
+        { [styles.disabled]: disabled }
       )}
       onClick={onClick}
     >
@@ -162,9 +167,14 @@ const IconButton: React.FC<Props> = ({
           />
         </defs>
       </svg>
-      <div className={classnames(styles.iconContainer, styles[icon])}>
-        {iconSwitch(icon)}
-      </div>
+
+      {isLoading ? (
+        <div className={styles.loadingAnimation}></div>
+      ) : (
+        <div className={classnames(styles.iconContainer, styles[icon])}>
+          {iconSwitch(icon)}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
 import React from "react";
-import { useAppContext } from "../state";
+import classNames from "classnames";
 import "@rainbow-me/rainbowkit/styles.css";
 
+import { useAppContext } from "../state";
 import SvgTemplate from "../components/SvgTemplate";
 import StonePicker from "../components/StonePicker";
 import styles from "../styles/Home.module.css";
@@ -10,14 +11,16 @@ import CenterGilding from "../components/Gilding/Center";
 import HaloPicker from "../components/HaloPicker";
 import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
-import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import HandleClock from "../components/HandleClock";
-import classNames from "classnames";
+import {
+  FullDownloadButton,
+  PFPDownloadButton,
+} from "../components/DownloadButton";
 
 const Home: NextPage = () => {
-  const { state, dispatch } = useAppContext();
+  const { state } = useAppContext();
   const { minting } = state;
 
   const mintingClasses = [
@@ -55,8 +58,8 @@ const Home: NextPage = () => {
       </div>
 
       <div className={classNames(styles.downloadButtons, mintingClasses)}>
-        <IconButton icon="FullDownload" />
-        <IconButton icon="PfpDownload" />
+        <FullDownloadButton />
+        <PFPDownloadButton />
       </div>
       <HandleClock />
     </Layout>
