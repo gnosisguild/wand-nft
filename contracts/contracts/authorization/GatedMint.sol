@@ -18,7 +18,7 @@ contract GatedMint {
     merkleRoot = rootHash;
   }
 
-  function preMint(MintPermit memory permit) internal {
+  function greenlist(MintPermit memory permit) internal {
     bytes32 leaf = keccak256(abi.encodePacked(permit.signer));
 
     ensureSignatureIsValid(permit.signature, permit.signer);

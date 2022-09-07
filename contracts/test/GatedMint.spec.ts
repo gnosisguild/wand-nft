@@ -39,7 +39,7 @@ describe("GatedMint", async () => {
 
       const permit = await getPermit(signerIndex, minterIndex);
 
-      await expect(gatedMint.connect(signer)._preMint(permit)).to.not.be
+      await expect(gatedMint.connect(signer)._greenlist(permit)).to.not.be
         .reverted;
     });
 
@@ -55,7 +55,7 @@ describe("GatedMint", async () => {
       const permit = await getPermit(signerIndex, minterIndex);
 
       await expect(
-        gatedMint.connect(signer)._preMint(permit)
+        gatedMint.connect(signer)._greenlist(permit)
       ).to.be.revertedWith("Mint permit invalid signature");
     });
 
@@ -69,11 +69,11 @@ describe("GatedMint", async () => {
 
       const permit = await getPermit(signerIndex, minterIndex);
 
-      await expect(gatedMint.connect(signer)._preMint(permit)).to.not.be
+      await expect(gatedMint.connect(signer)._greenlist(permit)).to.not.be
         .reverted;
 
       await expect(
-        gatedMint.connect(signer)._preMint(permit)
+        gatedMint.connect(signer)._greenlist(permit)
       ).to.be.revertedWith("Mint permit already used");
     });
   });

@@ -84,10 +84,10 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
     uint8 visibility,
     MintPermit memory permit
   ) external returns (uint256) {
-    preMint(permit);
+    greenlist(permit);
 
     uint256 tokenId = nextTokenId++;
-    _safeMint(msg.sender, tokenId);
+    ERC721._safeMint(msg.sender, tokenId);
 
     wands[tokenId] = PackedWand({
       background: background,
@@ -114,7 +114,7 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
       ERC721._exists(tokenId),
       "ZodiacWands: URI query for nonexistent token"
     );
-    return conjuror.generateWandURI(unpack(tokenId), ownerOf(tokenId));
+    return conjuror.generateWandURI(unpack(tokenId), ERC721.ownerOf(tokenId));
   }
 
   function unpack(uint256 tokenId) internal view returns (Wand memory) {
