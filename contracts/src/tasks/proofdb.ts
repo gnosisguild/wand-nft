@@ -19,7 +19,7 @@ task(
   "Recalculates MerkleTree and populates proof and leaf columns of proof spreadsheet"
 ).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
   const rows = await resolveENSNames(await readRows());
-  const merkleTree = createMerkleTree(rows);
+  const merkleTree = await createMerkleTree(rows);
   await writePopulate(rows, merkleTree);
 });
 
@@ -28,14 +28,14 @@ task(
   "Recalculates MerkleTree from spreadsheet columns and prints MerkleRoot"
 ).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
   const rows = await resolveENSNames(await readRows());
-  const merkleTree = createMerkleTree(rows);
+  const merkleTree = await createMerkleTree(rows);
   console.info(`MerkleRoot: ${merkleTree.getHexRoot()}`);
 });
 
 export async function populate(hre: HardhatRuntimeEnvironment) {
   let rows = await readRows();
   rows = await resolveENSNames(rows);
-  const merkleTree = createMerkleTree(rows);
+  const merkleTree = await createMerkleTree(rows);
   await writePopulate(rows, merkleTree);
   return merkleTree;
 }
@@ -43,7 +43,7 @@ export async function populate(hre: HardhatRuntimeEnvironment) {
 export async function calculateRootHash(hre: HardhatRuntimeEnvironment) {
   let rows = await readRows();
   rows = await resolveENSNames(rows);
-  const merkleTree = createMerkleTree(rows);
+  const merkleTree = await createMerkleTree(rows);
   return merkleTree.getHexRoot();
 }
 
@@ -74,8 +74,15 @@ async function writePopulate(rows: Row[], merkleTree: MerkleTree) {
   );
 
   for (let i = 0; i < rows.length; i++) {
-    const { index, address, phrase } = rows[i];
-    const leaf = keccak256(address || phrase);
+    const { index, phrase } = rows[i];
+
+    const signer = new ethers.Wallet(
+      ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phrase.trim()))
+    );
+
+    const address = await signer.getAddress();
+
+    const leaf = keccak256(address);
     const proof = merkleTree.getHexProof(leaf);
     assert(
       proof.length > 0,
@@ -116,8 +123,15 @@ async function resolveENSNames(rows: Row[]) {
   }));
 }
 
-function createMerkleTree(rows: Row[]): MerkleTree {
-  const leaves = rows.map((row) => row.address || row.phrase);
+async function createMerkleTree(rows: Row[]): Promise<MerkleTree> {
+  const leaves = await Promise.all(
+    rows
+      .map((row) => row.phrase.trim())
+      .map((phrase) => ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phrase)))
+      .map((pk) => new ethers.Wallet(pk))
+      .map((s) => s.getAddress())
+  );
+
   return new MerkleTree(leaves, keccak256, {
     sortPairs: true,
     hashLeaves: true,
