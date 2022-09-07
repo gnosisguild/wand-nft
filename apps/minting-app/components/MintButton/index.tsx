@@ -32,7 +32,12 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     args: packForMinting(state),
   });
 
-  const { data, isSuccess, write } = useContractWrite(config);
+  const { data, isSuccess, write } = useContractWrite({
+    ...config,
+    onError(err) {
+      dispatch({ type: "changeMintingState", value: false });
+    },
+  });
   const waitForTransaction = useWaitForTransaction({
     hash: data?.hash,
     confirmations: 1,
@@ -41,6 +46,9 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
       const tokenId = parseInt(data.logs[0].topics[3], 16);
       dispatch({ type: "changeMintingState", value: false });
       router.push(`/wands/${tokenId}`);
+    },
+    onError(err) {
+      dispatch({ type: "changeMintingState", value: false });
     },
   });
 
