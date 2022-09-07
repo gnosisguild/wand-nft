@@ -45,13 +45,12 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IZodiacWands.sol";
 import "./interfaces/IForge.sol";
 import "./interfaces/IConjuror.sol";
 import "./authorization/GatedMint.sol";
 import "./Decanter.sol";
 
-contract ZodiacWands is IZodiacWands, ERC721, GatedMint, Ownable {
+contract ZodiacWands is ERC721, GatedMint, Ownable {
   IForge public forge;
   IConjuror public conjuror;
 
@@ -68,9 +67,9 @@ contract ZodiacWands is IZodiacWands, ERC721, GatedMint, Ownable {
     uint256 aspects
   );
 
-  constructor(IConjuror _conjuror, bytes32 rootHash)
+  constructor(IConjuror _conjuror, bytes32 merkleRoot)
     ERC721("ZodiacWands", "WAND")
-    GatedMint(rootHash)
+    GatedMint(merkleRoot)
   {
     conjuror = _conjuror;
   }
@@ -83,9 +82,9 @@ contract ZodiacWands is IZodiacWands, ERC721, GatedMint, Ownable {
     uint128 planets,
     uint256 aspects,
     uint8 visibility,
-    bytes32[] calldata proof
-  ) external override returns (uint256) {
-    preMint(proof);
+    MintPermit memory permit
+  ) external returns (uint256) {
+    preMint(permit);
 
     uint256 tokenId = nextTokenId++;
     _safeMint(msg.sender, tokenId);

@@ -1,24 +1,59 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.6;
 
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "./MerkleProof.sol";
 
 contract GatedMint {
-  bytes32 public rootHash;
-  mapping(bytes32 => bool) internal minted;
-
-  constructor(bytes32 _rootHash) {
-    rootHash = _rootHash;
+  struct MintPermit {
+    bytes32[] proof;
+    bytes signature;
+    address signer;
   }
 
-  function preMint(bytes32[] calldata proof) internal {
-    bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
+  bytes32 public merkleRoot;
+  mapping(bytes32 => bool) internal executed;
+
+  constructor(bytes32 rootHash) {
+    merkleRoot = rootHash;
+  }
+
+  function preMint(MintPermit memory permit) internal {
+    bytes32 leaf = keccak256(abi.encodePacked(permit.signer));
+
+    ensureSignatureIsValid(permit.signature, permit.signer);
+    ensureSignerIsAuthorized(permit.proof, merkleRoot, leaf);
+    ensurePermitIsFresh(leaf);
+
+    executed[leaf] = true;
+  }
+
+  function ensureSignatureIsValid(bytes memory signature, address signer)
+    private
+    view
+  {
+    bytes32 messageHash = ECDSA.toEthSignedMessageHash(
+      keccak256(abi.encodePacked(msg.sender))
+    );
 
     require(
-      MerkleProof.verify(proof, rootHash, leaf) == true,
-      "Invalid mint permit"
+      ECDSA.recover(messageHash, signature) == signer,
+      "Mint permit invalid signature"
     );
-    require(minted[leaf] == false, "Mint permit already used");
-    minted[leaf] = true;
+  }
+
+  function ensureSignerIsAuthorized(
+    bytes32[] memory proof,
+    bytes32 root,
+    bytes32 leaf
+  ) private pure {
+    require(
+      MerkleProof.verify(proof, root, leaf) == true,
+      "Mint signer not authorized"
+    );
+  }
+
+  function ensurePermitIsFresh(bytes32 leaf) private view {
+    require(executed[leaf] == false, "Mint permit already used");
   }
 }
