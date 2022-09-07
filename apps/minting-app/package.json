@@ -25,6 +25,8 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-hook": "^4.0.3",
+    "tonal": "^2.2.2",
+    "tone": "^14.7.77",
     "wagmi": "0.6.4"
   },
   "devDependencies": {

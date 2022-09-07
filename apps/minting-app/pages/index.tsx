@@ -14,6 +14,7 @@ import PickerLabels from "../components/PickerLabels";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
+import Music from "../components/Music";
 import {
   FullDownloadButton,
   PFPDownloadButton,
@@ -71,6 +72,9 @@ const Home: NextPage = () => {
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
+
+    <Music />
+
     </Layout>
   );
 };
