@@ -127,6 +127,10 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
     return wand;
   }
 
+  function setMerkleRoot(bytes32 nextMerkleRoot) external onlyOwner {
+    merkleRoot = nextMerkleRoot;
+  }
+
   function setForge(IForge _forge) external onlyOwner {
     forge = _forge;
   }
