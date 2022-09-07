@@ -13,6 +13,7 @@ import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import HandleClock from "../components/HandleClock";
+import Music from "../components/Music";
 
 const Home: NextPage = () => (
   <Layout description="Zodiac Wands Minting App">
@@ -41,7 +42,8 @@ const Home: NextPage = () => (
       <IconButton icon="FullDownload" />
       <IconButton icon="PfpDownload" />
     </div>
-    <HandleClock />
+    {/* <HandleClock /> */}
+    <Music />
   </Layout>
 );
 
