@@ -19,7 +19,6 @@ import classNames from "classnames";
 const Home: NextPage = () => {
   const { state, dispatch } = useAppContext();
   const { minting } = state;
-  console.log(minting);
 
   const mintingClasses = [
     styles.animateOnMint,
