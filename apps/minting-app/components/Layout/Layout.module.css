@@ -2,13 +2,28 @@
   width: 100vw;
   height: 100vh;
   background: #1d1d25;
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
-  position: fixed;
-  inset: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  position: fixed;
+}
+
+.backgroundImage {
+  object-position: center;
+  object-fit: cover;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  top: -1px;
+}
+
+.minting {
+  animation: flicker 2s infinite;
+  filter: blur(10px);
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1;}
+  50% { opacity: 0.5; }
 }
 
 .main {

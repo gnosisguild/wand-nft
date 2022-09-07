@@ -6,11 +6,15 @@ import MintButton from "../MintButton";
 import styles from "./Nav.module.css";
 import classNames from "classnames";
 
-const Nav: React.FC = () => {
+interface Props {
+  className: string;
+}
+
+const Nav: React.FC<Props> = ({ className }) => {
   const router = useRouter();
   const currentRoute = router.pathname;
   return (
-    <nav className={styles.nav}>
+    <nav className={classNames(styles.nav, className)}>
       <ul>
         <li
           className={classNames(styles.createLink, {
