@@ -6,13 +6,13 @@ import "./MerkleProof.sol";
 
 contract GatedMint {
   struct MintPermit {
-    bytes32[] proof;
-    bytes signature;
     address signer;
+    bytes signature;
+    bytes32[] proof;
   }
 
   bytes32 public merkleRoot;
-  mapping(bytes32 => bool) internal executed;
+  mapping(bytes32 => bool) internal merkleLeaves;
 
   constructor(bytes32 rootHash) {
     merkleRoot = rootHash;
@@ -25,7 +25,7 @@ contract GatedMint {
     ensureSignerIsAuthorized(permit.proof, merkleRoot, leaf);
     ensurePermitIsFresh(leaf);
 
-    executed[leaf] = true;
+    merkleLeaves[leaf] = true;
   }
 
   function ensureSignatureIsValid(bytes memory signature, address signer)
@@ -54,6 +54,6 @@ contract GatedMint {
   }
 
   function ensurePermitIsFresh(bytes32 leaf) private view {
-    require(executed[leaf] == false, "Mint permit already used");
+    require(merkleLeaves[leaf] == false, "Mint permit already used");
   }
 }
