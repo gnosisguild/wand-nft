@@ -22,6 +22,15 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   //   return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
   // };
 
+  const haloStyle = [
+    "fatsquare16",
+    "square16",
+    "triangle16",
+    "fattriangle16",
+    "fatsawtooth16",
+    "sawtooth16",
+  ];
+
   const material = "major";
   // Scale.names()[
   //   Math.floor(mapValue(state.stone, 0, 360, 0, Scale.names().length))
@@ -46,7 +55,10 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   useEffect(() => {
     Tone.Transport.bpm.value = 80;
 
-    filter = new Tone.Filter(300, "bandpass");
+    filter = new Tone.Filter(200, "bandpass", -12);
+
+    lfo = new Tone.LFO(0.5, 140, 240);
+    lfo.connect(filter.frequency);
 
     reverb = new Tone.Reverb({
       decay: 8,
@@ -57,9 +69,12 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     effect.wet.value = 0.1;
 
     synth = new Tone.PolySynth({
-      volume: -Infinity,
+      volume: -75,
     });
     synth.set({
+      oscillator: {
+        type: haloStyle[state.halo.shape],
+      },
       envelope: {
         attack: 30,
         sustain: 1,
@@ -83,9 +98,10 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
       prevNote = note;
     }, "4m");
 
+    lfo.start(0);
     melody.start(0);
 
-    synth.volume.rampTo(-16, 5);
+    synth.volume.rampTo(-19, 5);
 
     setReady(true);
   }, [play]);

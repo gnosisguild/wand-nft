@@ -31,6 +31,15 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   const haloRhythm = state.halo.rhythm;
   const lightness = state.background.color.lightness;
 
+  const haloStyle = [
+    "fatsquare16",
+    "square16",
+    "triangle16",
+    "fattriangle16",
+    "fatsawtooth16",
+    "sawtooth16",
+  ];
+
   const generateScale = () => {
     let baseOctave = Math.round(mapValue(lightness, 0, 360, 4, 5));
     let octaves = 6;
@@ -79,6 +88,9 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     filter = new Tone.Filter(6000, "highpass", -48);
 
     synth = new Tone.Synth({
+      oscillator: {
+        type: haloStyle[state.halo.shape],
+      },
       envelope: {
         attack: 0.01,
         decay: 0.01,
@@ -100,7 +112,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     let prevNote;
     let index = 0;
     melody = new Tone.Loop((time) => {
-      synth.portamento = Math.random() * 0.01;
+      synth.portamento = Math.random() * 0.03;
       let note = generateScale()[index % generateScale().length];
       if (prevNote != note) {
         // (freq, noteDuration, time)
@@ -120,7 +132,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     });
 
     // if the halo shape is wide, set a lower frequency interval
-    melody.interval = [0, 3, 4].includes(state.halo.shape) ? "32n" : "48n";
+    melody.interval = [0, 3, 4].includes(state.halo.shape) ? "48n" : "64n";
 
     Tone.Transport.bpm.rampTo(120, 10);
     melody.start(0);
