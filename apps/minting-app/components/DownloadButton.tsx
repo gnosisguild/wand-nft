@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { transformForRendering, useAppContext } from "../state";
 import IconButton from "./IconButton";
 import useSeed from "./useSeed";
@@ -26,13 +27,16 @@ function createDownloadButton({
   const DownloadButton = () => {
     const { state } = useAppContext();
     const seed = useSeed();
+    const [loading, setLoading] = useState(false);
 
     return (
       <IconButton
+        isLoading={loading}
+        disabled={loading}
         icon={icon}
         onClick={async () => {
           const { minting, tokenId, ...mintOptions } = state;
-
+          setLoading(true);
           const svg = template(
             transformForRendering(mintOptions, seed)
           ) as string;
@@ -60,6 +64,7 @@ function createDownloadButton({
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
+          setLoading(false);
         }}
       />
     );

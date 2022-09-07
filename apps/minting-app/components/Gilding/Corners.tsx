@@ -1,9 +1,13 @@
 import React from "react";
 import styles from "./Gilding.module.css";
 
-const CornerGilding: React.FC = () => {
+interface Props {
+  className: string;
+}
+
+const CornerGilding: React.FC<Props> = ({ className }) => {
   return (
-    <div>
+    <div className={className}>
       <div className={styles.upperLeft}>
         <svg
           viewBox="0 0 435 234"

@@ -7,11 +7,35 @@
   aspect-ratio: 1 / 0.9502813647;
 }
 
+.animateOnMint {
+  transition: opacity 3s ease-in-out, filter 2.5s 0.5s;
+}
+
+.minting {
+  opacity: 0;
+}
+
+.hasSvg { 
+  transition-duration: 1s;
+}
+
+.minting:not(.hasSvg) {
+  /* You can't apply a filter to a parent of svgs */
+  filter: blur(30px); 
+}
+
 .svgPreview {
   position: absolute;
   top: 13%;
   left: 0;
   width: 100%;
+  transition: transform 3s 0.25s ease-in-out, filter 2.5s 0.5s;
+  transform-origin: top center;
+}
+
+.mintingPreview {
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.85));
+  transform: translateY(-5%) scale(1.65);
 }
 
 .colorPicker,
