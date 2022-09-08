@@ -1,30 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppContext } from "../../state";
 import MagicSeq from "./MagicSeq";
 import Mids from "./Mids";
 import Drone from "./Drone";
 
 const Music: React.FC = () => {
+  const { state, dispatch } = useAppContext();
   const [play, setPlaying] = useState(false);
 
-  const handleClick = () => {
-    if (play) {
-      setPlaying(false);
-    } else {
-      setPlaying(true);
-    }
-  };
+  useEffect(() => {
+    setPlaying(!play);
+    window.setTimeout(() => setPlaying(true), 100);
+  }, [state]);
 
   return (
     <>
       <MagicSeq play={play} />
       <Mids play={play} />
       <Drone play={play} />
-      <button
-        style={{ position: "relative", zIndex: 99999 }}
-        onClick={() => handleClick()}
-      >
-        {`${play ? "Pause" : "Play"} Magic`}
-      </button>
     </>
   );
 };

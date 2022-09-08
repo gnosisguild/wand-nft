@@ -101,7 +101,6 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     let index = 0;
     melody = new Tone.Loop((time) => {
       synth.portamento = Math.random() * 0.03;
-      console.log(Tone.Transport.bpm.value);
       let note = generateScale()[index % generateScale().length];
       if (prevNote != note) {
         // (freq, noteDuration, time)
