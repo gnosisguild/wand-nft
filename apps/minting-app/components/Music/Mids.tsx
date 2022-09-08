@@ -35,7 +35,9 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     const scale3 = Scale.notes(
       `${transpose(`${baseFreq}3`, "5M")} ${material}`
     ).slice(0, chordNotes);
-    const chords = [scale, scale2, scale3];
+    let chords = [scale, scale2, scale3];
+
+    chords = chords.sort(() => 0.5 - Math.random()); // shuffle chords
 
     return chords;
   };
