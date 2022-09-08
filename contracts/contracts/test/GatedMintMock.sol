@@ -6,7 +6,7 @@ import "../authorization/GatedMint.sol";
 contract GatedMintMock is GatedMint {
   constructor(bytes32 merkleRoot) GatedMint(merkleRoot) {}
 
-  function _greenlist(MintPermit memory permit) public {
-    GatedMint.greenlist(permit);
+  function _redeem(MintPermit memory permit) public {
+    GatedMint.redeem(permit);
   }
 }

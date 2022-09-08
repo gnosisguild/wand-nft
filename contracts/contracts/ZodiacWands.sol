@@ -74,6 +74,19 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
     conjuror = _conjuror;
   }
 
+  function tokenURI(uint256 tokenId)
+    public
+    view
+    override
+    returns (string memory)
+  {
+    require(
+      ERC721._exists(tokenId),
+      "ZodiacWands: URI query for nonexistent token"
+    );
+    return conjuror.generateWandURI(unpack(tokenId), ERC721.ownerOf(tokenId));
+  }
+
   function mint(
     uint16 stone,
     uint16 halo,
@@ -84,7 +97,7 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
     uint8 visibility,
     MintPermit memory permit
   ) external returns (uint256) {
-    greenlist(permit);
+    redeem(permit);
 
     uint256 tokenId = nextTokenId++;
     ERC721._safeMint(msg.sender, tokenId);
@@ -102,19 +115,6 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
 
     emit WandBuilt(tokenId, stone, handle, halo, background, planets, aspects);
     return tokenId;
-  }
-
-  function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-  {
-    require(
-      ERC721._exists(tokenId),
-      "ZodiacWands: URI query for nonexistent token"
-    );
-    return conjuror.generateWandURI(unpack(tokenId), ERC721.ownerOf(tokenId));
   }
 
   function unpack(uint256 tokenId) internal view returns (Wand memory) {

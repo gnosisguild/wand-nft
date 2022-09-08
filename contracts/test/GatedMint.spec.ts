@@ -5,7 +5,7 @@ import "@nomiclabs/hardhat-ethers";
 import { MerkleTree } from "merkletreejs";
 import { keccak256 } from "ethers/lib/utils";
 
-import { getPermit, getPermitSigners } from "./createMintPermit";
+import { getWildcardPermit, getPermitSigners } from "./createMintPermit";
 
 describe("GatedMint", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -37,9 +37,9 @@ describe("GatedMint", async () => {
 
       const signer = (await hre.ethers.getSigners())[minterIndex];
 
-      const permit = await getPermit(signerIndex, minterIndex);
+      const permit = await getWildcardPermit(signerIndex, minterIndex);
 
-      await expect(gatedMint.connect(signer)._greenlist(permit)).to.not.be
+      await expect(gatedMint.connect(signer)._redeem(permit)).to.not.be
         .reverted;
     });
 
@@ -52,11 +52,11 @@ describe("GatedMint", async () => {
 
       const signer = (await hre.ethers.getSigners())[wrongMinterIndex];
 
-      const permit = await getPermit(signerIndex, minterIndex);
+      const permit = await getWildcardPermit(signerIndex, minterIndex);
 
       await expect(
-        gatedMint.connect(signer)._greenlist(permit)
-      ).to.be.revertedWith("MintPermit: Invalid signature");
+        gatedMint.connect(signer)._redeem(permit)
+      ).to.be.revertedWith("MintPermit: Not authorized");
     });
 
     it("reverts for an already used proof", async function () {
@@ -67,13 +67,13 @@ describe("GatedMint", async () => {
 
       const signer = (await hre.ethers.getSigners())[minterIndex];
 
-      const permit = await getPermit(signerIndex, minterIndex);
+      const permit = await getWildcardPermit(signerIndex, minterIndex);
 
-      await expect(gatedMint.connect(signer)._greenlist(permit)).to.not.be
+      await expect(gatedMint.connect(signer)._redeem(permit)).to.not.be
         .reverted;
 
       await expect(
-        gatedMint.connect(signer)._greenlist(permit)
+        gatedMint.connect(signer)._redeem(permit)
       ).to.be.revertedWith("MintPermit: Already used");
     });
   });

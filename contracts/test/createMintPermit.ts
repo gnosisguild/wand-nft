@@ -18,7 +18,7 @@ export function getPermitSigners() {
     .map((pk) => new ethers.Wallet(pk));
 }
 
-export async function getPermit(from: number, to: number) {
+export async function getWildcardPermit(from: number, to: number) {
   const permitSigners = getPermitSigners();
   const elements = await Promise.all(permitSigners.map((s) => s.getAddress()));
   const merkleTree = new MerkleTree(elements, keccak256, {
@@ -26,23 +26,20 @@ export async function getPermit(from: number, to: number) {
     sortPairs: true,
   });
 
-  const permitSigner = permitSigners[from] as Signer;
-  const permitSignerAddress = await permitSigner.getAddress();
+  const issuerSigner = permitSigners[from] as Signer;
+  const issuer = await issuerSigner.getAddress();
 
   const minterSigner = (await hre.ethers.getSigners())[to];
-  const minterAddress = await minterSigner.getAddress();
+  const minter = await minterSigner.getAddress();
 
   // not we have to arrayify because wallet.signMessage does not recognize hex strings
-  const messageHash = ethers.utils.arrayify(keccak256(minterAddress));
-  const signature = await permitSigner.signMessage(messageHash);
+  const messageHash = ethers.utils.arrayify(keccak256(minter));
+  const signature = await issuerSigner.signMessage(messageHash);
 
-  assert(
-    ethers.utils.verifyMessage(messageHash, signature) == permitSignerAddress
-  );
+  assert(ethers.utils.verifyMessage(messageHash, signature) == issuer);
 
   return {
     signature,
-    issuer: permitSignerAddress,
-    proof: merkleTree.getHexProof(keccak256(permitSignerAddress)),
+    proof: merkleTree.getHexProof(keccak256(issuer)),
   };
 }

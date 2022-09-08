@@ -7,53 +7,49 @@ import "./MerkleProof.sol";
 contract GatedMint {
   struct MintPermit {
     bytes signature;
-    address issuer;
     bytes32[] proof;
   }
 
   bytes32 public merkleRoot;
-  mapping(bytes32 => bool) public merkleLeaves;
+  mapping(address => bool) public issuers;
 
   constructor(bytes32 _merkleRoot) {
     merkleRoot = _merkleRoot;
   }
 
-  function greenlist(MintPermit memory permit) internal {
-    bytes32 leaf = keccak256(abi.encodePacked(permit.issuer));
-
-    ensureSignatureIsValid(permit.signature, permit.issuer);
-    ensureIssuerIsAuthorized(permit.proof, merkleRoot, leaf);
-    ensurePermitIsFresh(leaf);
-
-    merkleLeaves[leaf] = true;
+  function redeem(MintPermit memory permit) internal {
+    address issuer = getIssuer(permit);
+    enforceIsAuthorized(permit.proof, issuer);
+    enforceIsFresh(issuer);
+    issuers[issuer] = true;
   }
 
-  function ensureSignatureIsValid(bytes memory signature, address issuer)
+  function getIssuer(MintPermit memory permit) private view returns (address) {
+    if (permit.signature.length > 0) {
+      bytes32 messageHash = ECDSA.toEthSignedMessageHash(
+        keccak256(abi.encodePacked(msg.sender))
+      );
+
+      return ECDSA.recover(messageHash, permit.signature);
+    } else {
+      return msg.sender;
+    }
+  }
+
+  function enforceIsAuthorized(bytes32[] memory proof, address issuer)
     private
     view
   {
-    bytes32 messageHash = ECDSA.toEthSignedMessageHash(
-      keccak256(abi.encodePacked(msg.sender))
-    );
+    bytes32 root = merkleRoot;
+    bytes32 leaf = keccak256(abi.encodePacked(issuer));
 
-    require(
-      ECDSA.recover(messageHash, signature) == issuer,
-      "MintPermit: Invalid signature"
-    );
-  }
-
-  function ensureIssuerIsAuthorized(
-    bytes32[] memory proof,
-    bytes32 root,
-    bytes32 leaf
-  ) private pure {
     require(
       MerkleProof.verify(proof, root, leaf) == true,
-      "MintPermit: Issuer not authorized"
+      "MintPermit: Not authorized"
     );
   }
 
-  function ensurePermitIsFresh(bytes32 leaf) private view {
-    require(merkleLeaves[leaf] == false, "MintPermit: Already used");
+  function enforceIsFresh(address issuer) private view {
+    require(issuers[issuer] == false, "MintPermit: Already used");
   }
 }

@@ -13,7 +13,6 @@ import { transformForRendering } from "../../apps/minting-app/state/transforms/f
 import { keccak256 } from "ethers/lib/utils";
 import { AppState } from "../../apps/minting-app/types";
 import MerkleTree from "merkletreejs";
-import { getPermit, getPermitSigners } from "./createMintPermit";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -21,6 +20,7 @@ describe("ZodiacWands", async () => {
 
     const signers = await hre.ethers.getSigners();
     const [signer] = signers;
+    const signerAddress = await signer.getAddress();
 
     const deployment = await deployments.get("ZodiacWands");
     const zodiacWands = new Contract(
@@ -29,22 +29,15 @@ describe("ZodiacWands", async () => {
       signer
     );
 
-    const permitSigners = getPermitSigners();
-
-    const elements = await Promise.all(
-      permitSigners.map((s) => s.getAddress())
-    );
+    const elements = await Promise.all(signers.map((s) => s.getAddress()));
     const merkleTree = new MerkleTree(elements, keccak256, {
       hashLeaves: true,
       sortPairs: true,
     });
-    const merkleRoot = merkleTree.getHexRoot();
 
-    await zodiacWands.setMerkleRoot(merkleRoot);
+    const proof = merkleTree.getHexProof(keccak256(signerAddress));
 
-    const permit = await getPermit(0, 0);
-
-    return { zodiacWands, permit };
+    return { zodiacWands, permit: { proof, signature: "0x" } };
   });
 
   describe("SVG generation", () => {
