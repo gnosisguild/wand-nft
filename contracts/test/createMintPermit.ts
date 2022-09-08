@@ -42,7 +42,7 @@ export async function getPermit(from: number, to: number) {
 
   return {
     signature,
-    signer: permitSignerAddress,
+    issuer: permitSignerAddress,
     proof: merkleTree.getHexProof(keccak256(permitSignerAddress)),
   };
 }

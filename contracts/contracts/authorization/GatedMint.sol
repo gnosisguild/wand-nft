@@ -6,29 +6,29 @@ import "./MerkleProof.sol";
 
 contract GatedMint {
   struct MintPermit {
-    address signer;
     bytes signature;
+    address issuer;
     bytes32[] proof;
   }
 
   bytes32 public merkleRoot;
-  mapping(bytes32 => bool) internal merkleLeaves;
+  mapping(bytes32 => bool) public merkleLeaves;
 
-  constructor(bytes32 rootHash) {
-    merkleRoot = rootHash;
+  constructor(bytes32 _merkleRoot) {
+    merkleRoot = _merkleRoot;
   }
 
   function greenlist(MintPermit memory permit) internal {
-    bytes32 leaf = keccak256(abi.encodePacked(permit.signer));
+    bytes32 leaf = keccak256(abi.encodePacked(permit.issuer));
 
-    ensureSignatureIsValid(permit.signature, permit.signer);
-    ensureSignerIsAuthorized(permit.proof, merkleRoot, leaf);
+    ensureSignatureIsValid(permit.signature, permit.issuer);
+    ensureIssuerIsAuthorized(permit.proof, merkleRoot, leaf);
     ensurePermitIsFresh(leaf);
 
     merkleLeaves[leaf] = true;
   }
 
-  function ensureSignatureIsValid(bytes memory signature, address signer)
+  function ensureSignatureIsValid(bytes memory signature, address issuer)
     private
     view
   {
@@ -37,23 +37,23 @@ contract GatedMint {
     );
 
     require(
-      ECDSA.recover(messageHash, signature) == signer,
-      "Mint permit invalid signature"
+      ECDSA.recover(messageHash, signature) == issuer,
+      "MintPermit: Invalid signature"
     );
   }
 
-  function ensureSignerIsAuthorized(
+  function ensureIssuerIsAuthorized(
     bytes32[] memory proof,
     bytes32 root,
     bytes32 leaf
   ) private pure {
     require(
       MerkleProof.verify(proof, root, leaf) == true,
-      "Mint signer not authorized"
+      "MintPermit: Issuer not authorized"
     );
   }
 
   function ensurePermitIsFresh(bytes32 leaf) private view {
-    require(merkleLeaves[leaf] == false, "Mint permit already used");
+    require(merkleLeaves[leaf] == false, "MintPermit: Already used");
   }
 }

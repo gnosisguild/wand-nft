@@ -56,7 +56,7 @@ describe("GatedMint", async () => {
 
       await expect(
         gatedMint.connect(signer)._greenlist(permit)
-      ).to.be.revertedWith("Mint permit invalid signature");
+      ).to.be.revertedWith("MintPermit: Invalid signature");
     });
 
     it("reverts for an already used proof", async function () {
@@ -74,7 +74,7 @@ describe("GatedMint", async () => {
 
       await expect(
         gatedMint.connect(signer)._greenlist(permit)
-      ).to.be.revertedWith("Mint permit already used");
+      ).to.be.revertedWith("MintPermit: Already used");
     });
   });
 });
