@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
 import { Scale, transpose } from "tonal";
+import { haloStyle } from "./HaloShapeMappings";
 import * as Tone from "tone";
 
 interface MidsProps {
@@ -17,19 +18,6 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   let reverb;
   let effect;
   let synth;
-
-  // const mapValue = (n, start1, stop1, start2, stop2) => {
-  //   return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
-  // };
-
-  const haloStyle = [
-    "fatsquare16",
-    "square16",
-    "triangle16",
-    "fattriangle16",
-    "fatsawtooth16",
-    "sawtooth16",
-  ];
 
   const material = "major";
   // Scale.names()[

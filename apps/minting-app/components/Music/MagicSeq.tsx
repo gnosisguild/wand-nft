@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
-import Tonal, { Scale, transpose } from "tonal";
+import { Scale } from "tonal";
+import { haloStyle } from "./HaloShapeMappings";
+import { mapValue } from "../../utils/mapValue";
 import * as Tone from "tone";
 
 interface MidsProps {
@@ -15,12 +17,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   let effect;
   let reverb;
   let synth;
-  let scale = [];
   let melody;
-
-  const mapValue = (n, start1, stop1, start2, stop2) => {
-    return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
-  };
 
   const material =
     Scale.names()[
@@ -30,15 +27,6 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   const auraFreq = state.background.color.hue;
   const haloRhythm = state.halo.rhythm;
   const lightness = state.background.color.lightness;
-
-  const haloStyle = [
-    "fatsquare16",
-    "square16",
-    "triangle16",
-    "fattriangle16",
-    "fatsawtooth16",
-    "sawtooth16",
-  ];
 
   const generateScale = () => {
     let baseOctave = Math.round(mapValue(lightness, 0, 360, 4, 5));
