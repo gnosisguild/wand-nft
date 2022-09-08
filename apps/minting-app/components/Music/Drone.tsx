@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
-import { Scale, transpose } from "tonal";
+import { transpose } from "tonal";
 import * as Tone from "tone";
 
 interface DroneProps {
@@ -17,14 +17,6 @@ const Drone: React.FC<DroneProps> = ({ play }) => {
   let loop;
   let synth;
 
-  // const mapValue = (n, start1, stop1, start2, stop2) => {
-  //   return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
-  // };
-
-  // const material =
-  //   Scale.names()[
-  //     Math.floor(mapValue(state.stone, 0, 360, 0, Scale.names().length))
-  //   ];
   const auraFreq = state.background.color.hue;
 
   let baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
