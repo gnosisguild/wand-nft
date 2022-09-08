@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
+import RecordMusic from "./RecordMusic";
 import MagicSeq from "./MagicSeq";
 import Mids from "./Mids";
 import Drone from "./Drone";
@@ -21,6 +22,7 @@ const Music: React.FC = () => {
       setPlaying(!play);
     } else {
       setReady(true);
+      setPlaying(true);
     }
   };
 
@@ -29,6 +31,7 @@ const Music: React.FC = () => {
       <MagicSeq play={play} />
       <Mids play={play} />
       <Drone play={play} />
+      {state.minting && <RecordMusic />}
       <button
         style={{ position: "relative", zIndex: 99999 }}
         onClick={() => handleClick()}
