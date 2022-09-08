@@ -29,7 +29,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   const lightness = state.background.color.lightness;
 
   const generateScale = () => {
-    let baseOctave = Math.round(mapValue(lightness, 0, 360, 4, 5));
+    let baseOctave = 4;
     let octaves = 6;
     let baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
 
@@ -63,6 +63,8 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
 
   useEffect(() => {
     Tone.Transport.swing = 0.3;
+    const bpm = mapValue(lightness, 0, 360, 10, 200);
+    Tone.Transport.bpm.value = bpm;
 
     reverb = new Tone.Reverb({
       decay: 8,
@@ -95,25 +97,24 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
 
     synth.volume.rampTo(-29, 8);
 
-    Tone.Transport.bpm.value = 60;
-
     let prevNote;
     let index = 0;
     melody = new Tone.Loop((time) => {
       synth.portamento = Math.random() * 0.03;
+      console.log(Tone.Transport.bpm.value);
       let note = generateScale()[index % generateScale().length];
       if (prevNote != note) {
         // (freq, noteDuration, time)
         synth.triggerAttackRelease(note, "64n", time);
       }
       if (index === 200) {
-        Tone.Transport.bpm.rampTo(60, 10);
-      }
-      if (index === 500) {
-        Tone.Transport.bpm.rampTo(120, 10);
+        Tone.Transport.bpm.rampTo(bpm, 10);
       }
       if (index === 300) {
-        Tone.Transport.bpm.rampTo(60, 10);
+        Tone.Transport.bpm.rampTo(bpm * 2, 10);
+      }
+      if (index === 500) {
+        Tone.Transport.bpm.rampTo(bpm * 1.2, 40);
       }
       index++;
       prevNote = note;
@@ -122,7 +123,6 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     // if the halo shape is wide, set a lower frequency interval
     melody.interval = [0, 3, 4].includes(state.halo.shape) ? "48n" : "64n";
 
-    Tone.Transport.bpm.rampTo(120, 10);
     melody.start(0);
 
     setReady(true);
