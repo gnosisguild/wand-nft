@@ -1,7 +1,7 @@
 import { getAddress, Interface } from "ethers/lib/utils";
 
 const abi = [
-  "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility, bytes32[] proof) returns (uint256)",
+  "function mint(uint16 stone, uint16 halo, uint8 handle, uint64 background, uint128 planets, uint256 aspects, uint8 visibility, tuple(bytes signature, bytes32[] proof) permit) returns (uint256)",
   "function tokenURI(uint256 tokenId) view returns (string)",
 ];
 

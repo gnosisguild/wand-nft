@@ -1,32 +1,35 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 const { GoogleSpreadsheet } = require("google-spreadsheet");
+const greenlist = require("./greenlist.rinkeby.json");
 
-import assert from "assert";
 import { ethers } from "ethers";
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  if (typeof request.body !== "string") {
-    response.status(200).setHeader("Content-Type", "application/json").send([]);
-    return;
-  }
-
-  const rows = await loadRows();
-  const leaf = keccak256(request.body);
-  const hit = rows.find((row) => row.leaf === leaf);
-
-  if (hit) {
-    response
+  return response
     .status(200)
     .setHeader("Content-Type", "application/json")
-    .send(hit.proof);
-  } else {
-    response
-    .status(404).send('Address not found')
-  }  
+    .json(greenlist);
+  // if (typeof request.body !== "string") {
+  //   response.status(200).setHeader("Content-Type", "application/json").send([]);
+  //   return;
+  // }
+
+  // const rows = await loadRows();
+  // const leaf = keccak256(request.body);
+  // const hit = rows.find((row) => row.leaf === leaf);
+
+  // if (hit) {
+  //   response
+  //     .status(200)
+  //     .setHeader("Content-Type", "application/json")
+  //     .send(hit.proof);
+  // } else {
+  //   response.status(404).send("Address not found");
+  // }
 }
 
 async function loadRows(): Promise<{ leaf: string; proof: string[] }[]> {
