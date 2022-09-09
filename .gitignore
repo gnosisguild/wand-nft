@@ -9,6 +9,13 @@ env/
 coverage*
 deployments
 
+*.in.txt
+*.out.txt
+*.in.json
+*.out.json
+
 # Local Netlify folder
 .netlify
 .vercel
+
+

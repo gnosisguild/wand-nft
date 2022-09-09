@@ -9,9 +9,6 @@
   "scripts": {
     "compile:cauldron": "solid-mustache ../svg/template.svg.hbs -o ./contracts/Cauldron.sol --name Cauldron --condense --dedupeThreshold=128",
     "compile": "hardhat compile",
-    "proofdb:clean": "yarn hardhat proofdb:clean",
-    "proofdb:populate": "yarn hardhat proofdb:populate",
-    "proofdb:print": "yarn hardhat proofdb:print",
     "test": "hardhat test",
     "deploy": "hardhat deploy --network",
     "coverage": "hardhat coverage",

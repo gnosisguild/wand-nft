@@ -10,7 +10,7 @@ import yargs from "yargs";
 
 import "./src/tasks/spreadsheet";
 import "./src/tasks/passwords";
-import "./src/tasks/merkleProofs";
+import "./src/tasks/greenlist";
 
 const argv = yargs
   .option("network", {

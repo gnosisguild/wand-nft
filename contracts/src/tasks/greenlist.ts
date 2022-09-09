@@ -7,40 +7,43 @@ import MerkleTree from "merkletreejs";
 import { isAddress, keccak256 } from "ethers/lib/utils";
 import assert from "assert";
 
-task("merkleProofs:generate", "Passwords")
+task(
+  "greenlist:generate",
+  "Computes or expands a MerkleTree and writes it to a json file"
+)
   .addParam(
     "input",
-    "Path to file that contains the proofs we are expanding on",
+    "Path to file that contains the previous MerkleProofs to expand on",
     undefined,
     types.string,
     true
   )
   .addParam(
-    "directPermits",
+    "addresses",
     "Path to file a text file containing one ethereum address per line. These will be added as direct permits",
-    undefined,
+    `${__dirname}/addresses.in.txt`,
     types.inputFile,
     true
   )
   .addParam(
-    "wildcardPermits",
+    "passwords",
     "Path to file a text file containing one password per line. These will be used to add wildcard permits",
-    undefined,
+    `${__dirname}/passwords.in.txt`,
     types.inputFile,
     true
   )
   .addParam(
     "output",
     "Path to the output file",
-    `${__dirname}/../../../merkleProofs.json`,
+    `${__dirname}/greenlist.out.json`,
     types.string,
     true
   )
   .setAction(async (taskArgs) => {
-    const directAddresses = loadDirectPermits(taskArgs.directPermits);
-    const wildcardAddresses = loadWildcardPermits(taskArgs.wildcardPermits);
-
     const prevLeaves = loadPrevLeaves(taskArgs.input);
+    const directAddresses = loadDirectPermits(taskArgs.addresses);
+    const wildcardAddresses = loadWildcardPermits(taskArgs.passwords);
+
     const nextLeaves = [...directAddresses, ...wildcardAddresses].map(
       (address) => {
         assert(isAddress(address));
@@ -48,9 +51,7 @@ task("merkleProofs:generate", "Passwords")
       }
     );
 
-    const tree = createNextMerkleTree(prevLeaves, nextLeaves);
-
-    writeProofs(taskArgs.output, tree);
+    writeProofs(taskArgs.output, createNextMerkleTree(prevLeaves, nextLeaves));
     console.info(
       `Wrote updated proofs file at ${path.resolve(taskArgs.output)}`
     );
@@ -72,7 +73,7 @@ function createNextMerkleTree(prevLeaves: string[], nextLeaves: string[]) {
 }
 
 function loadDirectPermits(filePath: string): string[] {
-  if (!filePath) {
+  if (!filePath || !fs.existsSync(filePath)) {
     console.info("Not adding Direct Permits");
     return [];
   }
@@ -91,7 +92,7 @@ function loadDirectPermits(filePath: string): string[] {
 }
 
 function loadWildcardPermits(filePath: string): string[] {
-  if (!filePath) {
+  if (!filePath || !fs.existsSync(filePath)) {
     console.info("Not adding Wildcard Permits");
     return [];
   }
@@ -115,7 +116,7 @@ type JsonProofs = {
 };
 
 function loadPrevLeaves(filePath: string): string[] {
-  if (!filePath) {
+  if (!filePath || !fs.existsSync(filePath)) {
     console.info("No Current Proofs file provided");
     return [];
   }

@@ -11,6 +11,15 @@ task("passwords:generate", "Passwords")
     types.inputFile,
     true
   )
+
+  .addParam("wordCount", "Number of words per password", 6, types.int, true)
+  .addParam(
+    "outputCount",
+    "Number of passwords to generate",
+    50,
+    types.int,
+    true
+  )
   .addParam(
     "output",
     "Output file path",
@@ -18,19 +27,11 @@ task("passwords:generate", "Passwords")
     types.string,
     true
   )
-  .addParam("wordCount", "Number of words per password", 6, types.int, true)
-  .addParam(
-    "passwordCount",
-    "Number of passwords to generate",
-    50,
-    types.int,
-    true
-  )
   .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const words = readWordsFile(taskArgs.input);
 
     let passwords = [];
-    for (let i = 0; i < taskArgs.passwordCount; i++) {
+    for (let i = 0; i < taskArgs.outputCount; i++) {
       let password = [];
       for (let j = 0; j < taskArgs.wordCount; j++) {
         const k = randomInteger(words.length - 1);
