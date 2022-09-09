@@ -4,7 +4,6 @@ import path from "path";
 
 import { getAddress } from "ethers/lib/utils";
 import hre from "hardhat";
-import { calculateRootHash } from "../tasks/proofdb";
 
 const alreadyVerifiedError = "Contract source code already verified";
 const sameBytecodeError =
@@ -147,11 +146,11 @@ async function verify(): Promise<void> {
   }
 
   // Note Decanter gets inlined
-  const rootHash = await calculateRootHash(hre);
+
   try {
     await hre.run("verify:verify", {
       address: ZodiacWands,
-      constructorArguments: [Conjuror, rootHash],
+      constructorArguments: [Conjuror, merkleRoot()],
     });
   } catch (e: any) {
     if (
@@ -179,6 +178,13 @@ async function verify(): Promise<void> {
       throw e;
     }
   }
+}
+
+function merkleRoot() {
+  const filePath = process.env["GREENLIST_FILE_PATH"];
+  assert(!!filePath, "No greenlist file configured");
+  const json = require(filePath);
+  return json.root;
 }
 
 verify();

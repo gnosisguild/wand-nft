@@ -2,7 +2,7 @@ import assert from "assert";
 import { ethers, Signer } from "ethers";
 import MerkleTree from "merkletreejs";
 import hre from "hardhat";
-import { keccak256 } from "../src/tasks/proofdb";
+import { keccak256 } from "ethers/lib/utils";
 
 export function getPermitSigners() {
   const passwords = [
