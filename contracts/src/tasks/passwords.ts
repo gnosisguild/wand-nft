@@ -5,43 +5,41 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 task("passwords:generate", "Passwords")
   .addParam(
-    "wordsFilePath",
-    "Path to file that contains all possible words",
+    "input",
+    "Path to file that contains possible words",
     `${__dirname}/bip39.txt`,
     types.inputFile,
     true
   )
-  .addParam("wordCount", "Number of words per password", 4, types.int, true)
   .addParam(
-    "outputFilePath",
-    "Path to file that will contain generated passwords",
+    "output",
+    "Output file path",
     `${__dirname}/passwords.out.txt`,
     types.string,
     true
   )
+  .addParam("wordCount", "Number of words per password", 6, types.int, true)
   .addParam(
-    "outputCount",
-    "Number of passwords generated",
-    100,
+    "passwordCount",
+    "Number of passwords to generate",
+    50,
     types.int,
     true
   )
   .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const words = readWordsFile(
-      taskArgs.wordsFilePath || `${__dirname}/bip39.txt`
-    );
+    const words = readWordsFile(taskArgs.input);
 
-    let result = [];
-    for (let i = 0; i < taskArgs.outputCount; i++) {
+    let passwords = [];
+    for (let i = 0; i < taskArgs.passwordCount; i++) {
       let password = [];
       for (let j = 0; j < taskArgs.wordCount; j++) {
         const k = randomInteger(words.length - 1);
         password.push(words[k]);
       }
-      result.push(password.join(" "));
+      passwords.push(password.join(" "));
     }
 
-    writePasswords(taskArgs.outputFilePath, result);
+    writePasswords(taskArgs.output, passwords);
   });
 
 function readWordsFile(filePath: string): string[] {
