@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useAccount,
   useContractWrite,
@@ -25,7 +25,9 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { state, dispatch } = useAppContext();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const permit = useMintPermit("");
+
+  const [phrase, setPhrase] = useState<string>("");
+  const permit = useMintPermit(phrase);
 
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
@@ -54,27 +56,40 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     },
   });
 
+  const showInput = !permit || permit.signature != "0x";
+
   return (
-    <div
-      className={classNames(styles.buttonContainer, {
-        [styles.disabled]: state.minting,
-      })}
-      onClick={() => {
-        if (!address) {
-          openConnectModal?.();
-        } else {
-          if (!permit) {
-            alert("MerkleProof: not found");
+    <>
+      <div
+        className={classNames(styles.buttonContainer, {
+          [styles.disabled]: state.minting,
+        })}
+        onClick={() => {
+          if (!address) {
+            openConnectModal?.();
           } else {
-            alert(`MerkleProof:\n\t${permit.signature}\n\t${permit.proof}`);
-            dispatch({ type: "changeMintingState", value: true });
-            write?.();
+            if (!permit) {
+              alert("MerkleProof: not found");
+            } else {
+              alert(`MerkleProof:\n\t${permit.signature}\n\t${permit.proof}`);
+              dispatch({ type: "changeMintingState", value: true });
+              write?.();
+            }
           }
-        }
-      }}
-    >
-      <MintSvg disabled={state.minting} />
-    </div>
+        }}
+      >
+        {showInput && (
+          <input
+            value={phrase}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(event) => {
+              setPhrase(event.target.value);
+            }}
+          />
+        )}
+        <MintSvg disabled={state.minting} />
+      </div>
+    </>
   );
 };
 
