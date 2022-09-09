@@ -14,7 +14,9 @@ import PickerLabels from "../components/PickerLabels";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
+import Sparkles from "../components/Sparkles";
 import Music from "../components/Music";
+import * as Tone from "tone";
 import {
   FullDownloadButton,
   PFPDownloadButton,
@@ -46,6 +48,7 @@ const Home: NextPage = () => {
       <div className={styles.centerContainer}>
         <CenterGilding className={classNames(mintingClasses)} />
         <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
+        {Tone.Transport.state === "started" && <Sparkles />}
         <div
           className={classNames(styles.svgPreview, {
             [styles.mintingPreview]: isMinting,
@@ -73,8 +76,7 @@ const Home: NextPage = () => {
         <PFPDownloadButton />
       </div>
 
-    <Music />
-
+      <Music />
     </Layout>
   );
 };
