@@ -28,7 +28,7 @@ describe("GatedMint", async () => {
   });
 
   describe("redeem", function () {
-    it("it executes for a valid permit", async function () {
+    it("redeems for a valid wildcard permit", async function () {
       const { gatedMint } = await baseSetup();
 
       const issuerIndex = 0;
@@ -42,7 +42,7 @@ describe("GatedMint", async () => {
         .reverted;
     });
 
-    it("reverts for a permit produced for a different minter", async function () {
+    it("reverts for an invalid wildcard permit", async function () {
       const { gatedMint } = await baseSetup();
 
       const issuerIndex = 0;
@@ -58,7 +58,7 @@ describe("GatedMint", async () => {
       ).to.be.revertedWith("MintPermit: Not authorized");
     });
 
-    it("reverts for an already used proof", async function () {
+    it("reverts for an already used permit", async function () {
       const { gatedMint } = await baseSetup();
 
       const issuerIndex = 0;
