@@ -1,12 +1,11 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import {
   useAccount,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
-  useTransaction,
 } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAppContext, packForMinting } from "../../state";

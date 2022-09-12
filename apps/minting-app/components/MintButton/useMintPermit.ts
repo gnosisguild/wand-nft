@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import { keccak256 } from "ethers/lib/utils";
-import { useEffect, useState } from "react";
+import { computeAddress, keccak256, SigningKey } from "ethers/lib/utils";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 type Greenlist = {
@@ -13,13 +13,11 @@ type MintPermit = {
   proof: string[];
 };
 
-const useMintPermit = (phrase: string) => {
-  const { address } = useAccount();
+const useMintPermit = (phrase: string): MintPermit | null => {
+  const { address: minter } = useAccount();
   const [greenlist, setGreenlist] = useState<Greenlist | null>(null);
-  const [permit, setPermit] = useState<MintPermit | null>(null);
 
   useEffect(() => {
-    console.log("running");
     fetch(`/api/greenlist`, {
       headers: new Headers({ "content-type": "application/json" }),
     })
@@ -29,51 +27,46 @@ const useMintPermit = (phrase: string) => {
       });
   }, []);
 
-  useEffect(() => {
-    // a bit scruffy will beautify
-    const updatePermit = async () => {
-      if (!greenlist || !address) {
-        setPermit(null);
-        return;
-      }
+  const permit = useMemo(() => {
+    if (!greenlist || !minter) {
+      return null;
+    }
 
-      const minter = address;
+    const directProof = proof(greenlist, minter);
+    if (directProof) {
+      return { proof: directProof, signature: "0x" };
+    }
 
-      if (phrase) {
-        const signer = signerFromPhrase(phrase);
-        const leaf = keccak256(signer.address);
+    const { signingKey, issuer } = createSigningKey(phrase);
+    const wildcardProof = proof(greenlist, issuer);
+    if (wildcardProof) {
+      return { proof: wildcardProof, signature: sign(signingKey, minter) };
+    }
 
-        const hit = greenlist.proofs.find((proof) => proof.leaf == leaf);
-
-        if (hit) {
-          const messageHash = ethers.utils.arrayify(keccak256(minter));
-          const signature = await signer.signMessage(messageHash);
-          setPermit({ signature, proof: hit.proof });
-        } else {
-          setPermit(null);
-        }
-      } else {
-        const leaf = keccak256(minter);
-        const hit = greenlist.proofs.find((proof) => proof.leaf == leaf);
-
-        if (hit) {
-          setPermit({ signature: "0x", proof: hit.proof });
-        } else {
-          setPermit(null);
-        }
-      }
-    };
-
-    updatePermit();
-  }, [address, phrase, greenlist]);
+    return null;
+  }, [minter, phrase, greenlist]);
 
   return permit;
 };
 
-function signerFromPhrase(phrase: string) {
-  return new ethers.Wallet(
+function proof(greenlist: Greenlist, address: string) {
+  const leaf = keccak256(address);
+  return greenlist.proofs.find((proof) => proof.leaf == leaf)?.proof || null;
+}
+
+function sign(sk: SigningKey, minter: string) {
+  const message = ethers.utils.arrayify(keccak256(minter));
+  return ethers.utils.joinSignature(
+    sk.signDigest(ethers.utils.hashMessage(message))
+  );
+}
+
+function createSigningKey(phrase: string) {
+  const signingKey = new SigningKey(
     ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phrase))
   );
+
+  return { signingKey, issuer: computeAddress(signingKey.publicKey) };
 }
 
 export default useMintPermit;
