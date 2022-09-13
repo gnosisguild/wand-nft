@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
 import RecordMusic from "./RecordMusic";
+import BackgroundTrack from "./BackgroundTrack";
 import MagicSeq from "./MagicSeq";
 import Mids from "./Mids";
 import Drone from "./Drone";
@@ -28,6 +29,7 @@ const Music: React.FC = () => {
 
   return (
     <>
+      <BackgroundTrack play={play} />
       <MagicSeq play={play} />
       <Mids play={play} />
       <Drone play={play} />
