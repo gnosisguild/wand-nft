@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Sparkles.module.css";
-import * as Tone from "tone";
 
 const Sparkle: React.FC = () => {
   const [windowDimensions, setWindowDimensions] = useState({
@@ -68,12 +67,7 @@ const Sparkle: React.FC = () => {
 };
 
 const Sparkles: React.FC = () => {
-  let frequency;
   let numSparkles = 250;
-
-  useEffect(() => {
-    frequency = Tone.Transport.bpm;
-  });
 
   return (
     <div className={styles.wrapper}>
