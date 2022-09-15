@@ -25,6 +25,7 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [phrase, setPhrase] = useState<string>("");
   const permit = useMintPermit(phrase);
 
@@ -55,8 +56,6 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     },
   });
 
-  const showInput = !permit || permit.signature != "0x";
-
   return (
     <>
       <div
@@ -68,23 +67,27 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
             openConnectModal?.();
           } else {
             if (!permit) {
-              alert("MerkleProof: not found");
+              setShowModal(true);
             } else {
-              alert(`MerkleProof:\n\t${permit.signature}\n\t${permit.proof}`);
               dispatch({ type: "changeMintingState", value: true });
               write?.();
             }
           }
         }}
       >
-        {showInput && (
-          <input
-            value={phrase}
-            onClick={(e) => e.stopPropagation()}
-            onChange={(event) => {
-              setPhrase(event.target.value);
-            }}
-          />
+        {showModal && (
+          <div className={styles.modalBg}>
+            <div className={styles.passwordModal}>
+              <p>Input your incantation</p>
+              <input
+                value={phrase}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(event) => {
+                  setPhrase(event.target.value);
+                }}
+              />
+            </div>
+          </div>
         )}
         <MintSvg disabled={state.minting} />
       </div>

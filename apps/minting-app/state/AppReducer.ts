@@ -1,4 +1,4 @@
-import { AppState, Background } from "../types";
+import { AppState, Background, ModalState } from "../types";
 import {
   randomStone,
   randomHalo,
@@ -35,13 +35,19 @@ export interface ChangeHandleAction {
   value: 0 | 1 | 2 | 3;
 }
 
+export interface ChangeModalAction {
+  type: "changeModal";
+  value: ModalState;
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
   | ChangeStoneAction
   | ChangeMintingStateAction
   | ChangeHandleAction
-  | RandomizeWandAction;
+  | RandomizeWandAction
+  | ChangeModalAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -86,6 +92,12 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
         longitude,
       };
     }
+    case "changeModal": {
+      return {
+        ...state,
+        modal: action.value,
+      }
+    }
   }
 };
 
@@ -93,6 +105,9 @@ export function randomState(): AppState {
   const { latitude, longitude } = randomLocation();
   return {
     minting: false,
+    modal: {
+      show: false,
+    },
     background: randomBackground(),
     halo: randomHalo(),
     handle: 0,
@@ -106,6 +121,9 @@ export function randomState(): AppState {
 export function zeroState(): AppState {
   return {
     minting: false,
+    modal: {
+      show: false,
+    },
     background: {
       radial: false,
       dark: false,

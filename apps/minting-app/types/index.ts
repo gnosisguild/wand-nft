@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface Planet {
   x: number;
   y: number;
@@ -140,4 +142,10 @@ export interface MintOptions {
 export type AppState = MintOptions & {
   minting: boolean;
   tokenId: number;
+  modal: ModalState;
 };
+
+export interface ModalState {
+  show: boolean;
+  children?: React.ReactNode
+}

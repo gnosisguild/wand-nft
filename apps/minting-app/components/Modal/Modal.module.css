@@ -1,0 +1,16 @@
+.container {
+  position: fixed;
+  inset: 0;
+  width: 99vw;
+  height: 99vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  width: 80%;
+  max-width: 400px;
+  background: blue;
+  padding: 1em;
+}
