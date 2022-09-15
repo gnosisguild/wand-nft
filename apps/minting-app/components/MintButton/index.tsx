@@ -56,6 +56,25 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     },
   });
 
+  const PasswordModal = () => (
+    <div className={styles.passwordModal}>
+      <p>Enter your incantation</p>
+      <input
+        value={phrase}
+        autoFocus
+        placeholder="classup-known-illum"
+        onClick={(e) => e.stopPropagation()}
+        onChange={(event) => {
+          setPhrase(event.target.value);
+        }}
+      />
+      <div className={styles.passwordHelper}>
+        <p>Don&apos;t have one?</p>
+        <p>Read about how to get one here.</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <div
@@ -67,7 +86,13 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
             openConnectModal?.();
           } else {
             if (!permit) {
-              setShowModal(true);
+              dispatch({
+                type: "changeModal",
+                value: {
+                  show: true,
+                  children: PasswordModal(),
+                },
+              });
             } else {
               dispatch({ type: "changeMintingState", value: true });
               write?.();
@@ -75,20 +100,6 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
           }
         }}
       >
-        {showModal && (
-          <div className={styles.modalBg}>
-            <div className={styles.passwordModal}>
-              <p>Input your incantation</p>
-              <input
-                value={phrase}
-                onClick={(e) => e.stopPropagation()}
-                onChange={(event) => {
-                  setPhrase(event.target.value);
-                }}
-              />
-            </div>
-          </div>
-        )}
         <MintSvg disabled={state.minting} />
       </div>
     </>

@@ -63,14 +63,13 @@ const Home: NextPage = () => {
         <PFPDownloadButton />
       </div>
       <HandleClock />
-      {/* <Modal show={state.modal.show}>{state.modal.children}</Modal> */}
       <Modal
-        show={true}
+        show={state.modal.show}
         handleClose={() =>
           dispatch({ type: "changeModal", value: { show: false } })
         }
       >
-        <p>Testing the modal</p>
+        {state.modal.children}
       </Modal>
     </Layout>
   );

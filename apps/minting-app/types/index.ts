@@ -147,5 +147,5 @@ export type AppState = MintOptions & {
 
 export interface ModalState {
   show: boolean;
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }

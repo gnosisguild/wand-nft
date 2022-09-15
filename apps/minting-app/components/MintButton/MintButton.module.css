@@ -35,3 +35,29 @@
 .buttonContainer svg:hover .border {
   opacity: 1;
 }
+
+.passwordModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  row-gap: 2em;
+}
+
+.passwordModal p {
+  font-size: 1.7em;
+  text-align: center;
+}
+
+.passwordModal input {
+  width: 80%;
+  text-align: center;
+}
+
+.passwordHelper p {
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1em;
+}
