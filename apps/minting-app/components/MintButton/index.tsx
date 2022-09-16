@@ -12,9 +12,11 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAppContext, packForMinting } from "../../state";
 import wandContract from "../../utils/contract";
 
+import { useHasMinted } from "../useHasMinted";
 import styles from "./MintButton.module.css";
-import IncantationModal from "./IncantationModal";
 import { MintPermit, useDirectPermit } from "./usePermit";
+import IncantationModal from "./IncantationModal";
+import AlreadyMintedModal from "./AlreadyMintedModal";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -41,13 +43,16 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     args: [...packForMinting(state), permit],
   });
 
-  const { data, isSuccess, write } = useContractWrite({
+  const { data, write } = useContractWrite({
     ...config,
     onError(err) {
       dispatch({ type: "changeMintingState", value: false });
     },
   });
-  const waitForTransaction = useWaitForTransaction({
+
+  const hasMinted = useHasMinted(address);
+
+  useWaitForTransaction({
     hash: data?.hash,
     confirmations: 1,
     onSuccess(data) {
@@ -56,7 +61,7 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
       dispatch({ type: "changeMintingState", value: false });
       router.push(`/wands/${tokenId}`);
     },
-    onError(err) {
+    onSettled() {
       dispatch({ type: "changeMintingState", value: false });
     },
   });
@@ -68,10 +73,10 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
           [styles.disabled]: state.minting,
         })}
         onClick={() => {
-          setShowModal(!!address && !permit);
+          setShowModal(!!address && (!permit || hasMinted));
           if (!address) {
             openConnectModal?.();
-          } else if (permit) {
+          } else if (permit && !hasMinted) {
             dispatch({ type: "changeMintingState", value: true });
             write?.();
           }
@@ -79,7 +84,7 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
       >
         <MintSvg disabled={state.minting} />
       </div>
-      {showModal && (
+      {showModal && !permit && !hasMinted && (
         <IncantationModal
           onChange={(permit: MintPermit) => {
             setShowModal(false);
@@ -87,6 +92,9 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
           }}
           onClose={() => setShowModal(false)}
         />
+      )}
+      {showModal && hasMinted && (
+        <AlreadyMintedModal onClose={() => setShowModal(false)} />
       )}
     </>
   );
