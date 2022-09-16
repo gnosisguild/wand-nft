@@ -142,10 +142,4 @@ export interface MintOptions {
 export type AppState = MintOptions & {
   minting: boolean;
   tokenId: number;
-  modal: ModalState;
 };
-
-export interface ModalState {
-  show: boolean;
-  children?: React.ReactNode;
-}

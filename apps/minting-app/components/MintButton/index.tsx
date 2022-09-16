@@ -1,6 +1,7 @@
-import classNames from "classnames";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import classNames from "classnames";
+import { useDebounce } from "usehooks-ts";
 import {
   useAccount,
   useContractWrite,
@@ -8,11 +9,13 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAppContext, packForMinting } from "../../state";
 
+import { useAppContext, packForMinting } from "../../state";
 import wandContract from "../../utils/contract";
+
 import styles from "./MintButton.module.css";
 import useMintPermit from "./useMintPermit";
+import IncantationModal from "./IncantationModal";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -26,8 +29,10 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { openConnectModal } = useConnectModal();
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [phrase, setPhrase] = useState<string>("");
-  const permit = useMintPermit(phrase);
+
+  const [incantation, setIncantation] = useState<string>("");
+  const password = useDebounce(incantation, 300);
+  const permit = useMintPermit(password);
 
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
@@ -56,24 +61,9 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     },
   });
 
-  const PasswordModal = () => (
-    <div className={styles.passwordModal}>
-      <p>Enter your incantation</p>
-      <input
-        value={phrase}
-        autoFocus
-        placeholder="classup-known-illum"
-        onClick={(e) => e.stopPropagation()}
-        onChange={(event) => {
-          setPhrase(event.target.value);
-        }}
-      />
-      <div className={styles.passwordHelper}>
-        <p>Don&apos;t have one?</p>
-        <p>Read about how to get one here.</p>
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    setShowModal(false);
+  }, [permit]);
 
   return (
     <>
@@ -82,50 +72,27 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
           [styles.disabled]: state.minting,
         })}
         onClick={() => {
+          setShowModal(!!address && !permit);
           if (!address) {
             openConnectModal?.();
-          } else {
-            if (!permit) {
-              dispatch({
-                type: "changeModal",
-                value: {
-                  show: true,
-                  children: PasswordModal(),
-                },
-              });
-            } else {
-              dispatch({ type: "changeMintingState", value: true });
-              write?.();
-            }
+          } else if (permit) {
+            dispatch({ type: "changeMintingState", value: true });
+            write?.();
           }
         }}
       >
         <MintSvg disabled={state.minting} />
       </div>
+      {showModal && (
+        <IncantationModal
+          incantation={incantation}
+          onChange={(nextValue: string) => setIncantation(nextValue)}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </>
   );
 };
-
-// function encodeCalldata(state: AppState) {
-//   return wandContract.iface.encodeFunctionData("mint", [
-//     state.stone,
-//     state.handle,
-//     encodeHalo(state.halo.shape, state.halo.rhythm),
-//     state.background,
-//     calculatePlanets(
-//       state.latitude,
-//       state.longitude,
-//       0,
-//       new Date("2022-07-12")
-//     ),
-//     calculateAspects(
-//       state.latitude,
-//       state.longitude,
-//       0,
-//       new Date("2022-07-12")
-//     ),
-//   ]);
-// }
 
 interface SVGProps {
   disabled: boolean;
@@ -293,3 +260,24 @@ const MintSvg: React.FC<SVGProps> = ({ disabled }) => (
 );
 
 export default MintButton;
+
+// function encodeCalldata(state: AppState) {
+//   return wandContract.iface.encodeFunctionData("mint", [
+//     state.stone,
+//     state.handle,
+//     encodeHalo(state.halo.shape, state.halo.rhythm),
+//     state.background,
+//     calculatePlanets(
+//       state.latitude,
+//       state.longitude,
+//       0,
+//       new Date("2022-07-12")
+//     ),
+//     calculateAspects(
+//       state.latitude,
+//       state.longitude,
+//       0,
+//       new Date("2022-07-12")
+//     ),
+//   ]);
+// }

@@ -18,10 +18,9 @@ import {
   FullDownloadButton,
   PFPDownloadButton,
 } from "../components/DownloadButton";
-import Modal from "../components/Modal";
 
 const Home: NextPage = () => {
-  const { state, dispatch } = useAppContext();
+  const { state } = useAppContext();
   const { minting } = state;
 
   const mintingClasses = [
@@ -63,14 +62,6 @@ const Home: NextPage = () => {
         <PFPDownloadButton />
       </div>
       <HandleClock />
-      <Modal
-        show={state.modal.show}
-        handleClose={() =>
-          dispatch({ type: "changeModal", value: { show: false } })
-        }
-      >
-        {state.modal.children}
-      </Modal>
     </Layout>
   );
 };
