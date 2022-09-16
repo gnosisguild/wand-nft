@@ -31,21 +31,23 @@ export const useDirectPermit = (): MintPermit | null => {
   return permit;
 };
 
-export const useWildcardPermit = (phrase: string): MintPermit | null => {
+export const useWildcardPermit = (
+  phrase: string
+): { permit: MintPermit | null; issuer: string } => {
   const { address: minter } = useAccount();
   const greenlist = useGreenlist();
 
   const permit = useMemo(() => {
     if (!greenlist || !minter || !isAddress(minter)) {
-      return null;
+      return { permit: null, issuer: ethers.constants.AddressZero };
     }
 
     const { signingKey, address: issuer } = createSigningKey(phrase);
     const proof = findProof(greenlist, issuer);
 
     return proof !== null
-      ? { proof, signature: sign(signingKey, minter) }
-      : null;
+      ? { permit: { proof, signature: sign(signingKey, minter) }, issuer }
+      : { permit: null, issuer: ethers.constants.AddressZero };
   }, [greenlist, minter, phrase]);
 
   return permit;
