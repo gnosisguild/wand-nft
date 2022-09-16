@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import classNames from "classnames";
-import { useDebounce } from "usehooks-ts";
 import {
   useAccount,
   useContractWrite,
@@ -14,8 +13,8 @@ import { useAppContext, packForMinting } from "../../state";
 import wandContract from "../../utils/contract";
 
 import styles from "./MintButton.module.css";
-import useMintPermit from "./useMintPermit";
 import IncantationModal from "./IncantationModal";
+import { MintPermit, useDirectPermit } from "./usePermit";
 
 interface Props {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -30,9 +29,10 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [incantation, setIncantation] = useState<string>("");
-  const password = useDebounce(incantation, 300);
-  const permit = useMintPermit(password);
+  const directPermit = useDirectPermit();
+  const [wildcardPermit, setWildcardPermit] = useState<MintPermit | null>(null);
+
+  const permit = directPermit || wildcardPermit;
 
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
@@ -61,10 +61,6 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     },
   });
 
-  useEffect(() => {
-    setShowModal(false);
-  }, [permit]);
-
   return (
     <>
       <div
@@ -85,8 +81,10 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
       </div>
       {showModal && (
         <IncantationModal
-          incantation={incantation}
-          onChange={(nextValue: string) => setIncantation(nextValue)}
+          onChange={(permit: MintPermit) => {
+            setShowModal(false);
+            setWildcardPermit(permit);
+          }}
           onClose={() => setShowModal(false)}
         />
       )}
