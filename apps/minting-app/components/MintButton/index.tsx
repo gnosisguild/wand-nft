@@ -77,12 +77,15 @@ const MintButton: React.FC = () => {
           [styles.disabled]: isMinting,
         })}
         onClick={() => {
-          setShowModal(!!address && (hasMinted || !directPermit));
           if (!address) {
             openConnectModal?.();
-          } else if (directPermit && !hasMinted) {
-            dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
-            write?.();
+          } else {
+            if (directPermit && !hasMinted) {
+              dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
+              write?.();
+            } else {
+              setShowModal(true);
+            }
           }
         }}
       >
@@ -98,6 +101,10 @@ const MintButton: React.FC = () => {
             setWildcardPermit(null);
           }}
           onSubmit={() => {
+            // TODO delete this alert
+            if (!write) {
+              alert("this was too fast for the usePrepareContractWrite");
+            }
             setShowModal(false);
             dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
             write?.();
