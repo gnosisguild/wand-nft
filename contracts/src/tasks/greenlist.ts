@@ -1,10 +1,16 @@
 import fs from "fs";
 import path from "path";
-import { ethers } from "ethers";
 import { task, types } from "hardhat/config";
 import MerkleTree from "merkletreejs";
 
-import { isAddress, keccak256 } from "ethers/lib/utils";
+import {
+  computeAddress,
+  isAddress,
+  isHexString,
+  keccak256,
+  SigningKey,
+  toUtf8Bytes,
+} from "ethers/lib/utils";
 import assert from "assert";
 
 task(
@@ -46,7 +52,7 @@ task(
 
     const nextLeaves = [...directAddresses, ...wildcardAddresses].map(
       (address) => {
-        assert(isAddress(address), "Trying to add a non address leaf");
+        assert(isAddress(address), "Leaf not an address");
         return keccak256(address);
       }
     );
@@ -56,6 +62,27 @@ task(
     writeGreenlist(taskArgs.output, nextMerkleTree);
 
     console.info(`Wrote updated Greenlist at ${path.resolve(taskArgs.output)}`);
+  });
+
+task("greenlist:integrity", "Integrity check for a greenlist.json file")
+  .addPositionalParam(
+    "input",
+    "Path to a greenlist.json file",
+    undefined,
+    types.inputFile
+  )
+  .setAction(async (taskArgs) => {
+    const filePath = taskArgs.input;
+    assert(fs.existsSync(filePath), "File doesn't exist");
+
+    const data = fs.readFileSync(filePath, "utf8");
+    const greenlist = integrity(JSON.parse(data));
+
+    console.info(
+      `Greenlist at ${path.relative(__dirname, taskArgs.input)} with root ${
+        greenlist.root
+      } is valid`
+    );
   });
 
 function createNextMerkleTree(prevLeaves: string[], nextLeaves: string[]) {
@@ -79,7 +106,7 @@ function loadPrevLeaves(filePath: string): string[] {
     return [];
   }
   const data = fs.readFileSync(filePath, "utf8");
-  const greenlist = greenlistIntegrity(JSON.parse(data));
+  const greenlist = integrity(JSON.parse(data));
 
   return greenlist.proofs.map((proof) => proof.leaf);
 }
@@ -113,13 +140,9 @@ function loadWildcardPermits(filePath: string): string[] {
   const passwords = data.split("\n");
 
   return passwords
-    .map(
-      (password) =>
-        new ethers.Wallet(
-          ethers.utils.keccak256(ethers.utils.toUtf8Bytes(password))
-        )
-    )
-    .map((wallet) => wallet.address);
+    .map((password) => new SigningKey(keccak256(toUtf8Bytes(password))))
+    .map((signingKey) => signingKey.publicKey)
+    .map((publicKey) => computeAddress(publicKey));
 }
 
 type Greenlist = {
@@ -127,15 +150,31 @@ type Greenlist = {
   proofs: { leaf: string; proof: string[] }[];
 };
 
-function greenlistIntegrity(json: Greenlist) {
-  const leaves = json.proofs.map((p) => p.leaf);
+function integrity(json: Greenlist) {
+  assert(isHexString(json.root), "greenlist.root not a hex string");
+  assert(Array.isArray(json.proofs), "greenlist.proofs not an array");
+  assert(
+    json.proofs.every(({ leaf }) => isHexString(leaf)),
+    "greenlist.proofs.leaf not a hex string"
+  );
+  assert(
+    json.proofs.every(
+      ({ proof }) =>
+        Array.isArray(proof) && proof.every((entry) => isHexString(entry))
+    ),
+    "greenlist.greenlist.proofs.proof not an array"
+  );
 
+  const leaves = json.proofs.map((p) => p.leaf);
   const tree = new MerkleTree(leaves, keccak256, {
     hashLeaves: false,
     sortPairs: true,
   });
 
-  assert(tree.getHexRoot() === json.root, "Corrupted Greenlist file");
+  assert(
+    tree.getHexRoot() === json.root,
+    "Corrupted Greenlist file, roots don't match"
+  );
 
   return json;
 }
