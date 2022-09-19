@@ -55,7 +55,8 @@ p {
   font-size: 12px;
 }
 
-input {
+input, button {
+  font-family: "Spectral";
   background: rgba(40, 32, 25, 0.8);
   outline: none;
   border: 1px solid #d9d4adad;
@@ -65,6 +66,12 @@ input {
   border-radius: 50px;
 }
 
-input:hover, input:focus {
+button {
+  padding: 0.5em 2em;
+  cursor: pointer;
+}
+
+input:hover, input:focus, button:hover,
+button:focus {
   border-color: #d9d4ad;
 }
