@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useDebounce } from "usehooks-ts";
 import Modal from "../Modal";
 import { useHasMinted } from "../useHasMinted";
 import styles from "./MintButton.module.css";
@@ -30,7 +29,6 @@ const IncantationModal: React.FC<Props> = ({
 
   useEffect(() => {
     onChange(permit);
-    console.log(is404);
   }, [permit]);
 
   return (

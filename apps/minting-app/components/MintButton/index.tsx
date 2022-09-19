@@ -46,7 +46,10 @@ const MintButton: React.FC = () => {
   const { data, write } = useContractWrite({
     ...config,
     onError(err) {
-      dispatch({ type: "changeMintStage", value: MintStage.ERROR });
+      // unfortunately the error that gets here is not an EIP-1193 error
+      // for now assuming that error at this stage is a user rejection
+      // on meta-mask
+      dispatch({ type: "changeMintStage", value: MintStage.IDLE });
     },
   });
 
@@ -102,7 +105,7 @@ const MintButton: React.FC = () => {
           }}
           onSubmit={() => {
             if (write) {
-              // wagmi takes a few ms til the actual write function is ready. If it's must click again
+              // wagmi takes a few ms til the actual write function is ready.
               setShowModal(false);
               dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
               write?.();
