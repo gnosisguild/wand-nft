@@ -101,13 +101,12 @@ const MintButton: React.FC = () => {
             setWildcardPermit(null);
           }}
           onSubmit={() => {
-            // TODO delete this alert
-            if (!write) {
-              alert("this was too fast for the usePrepareContractWrite");
+            if (write) {
+              // wagmi takes a few ms til the actual write function is ready. If it's must click again
+              setShowModal(false);
+              dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
+              write?.();
             }
-            setShowModal(false);
-            dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
-            write?.();
           }}
         />
       )}
