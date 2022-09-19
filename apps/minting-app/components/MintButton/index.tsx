@@ -29,7 +29,6 @@ const MintButton: React.FC = () => {
 
   const directPermit = useDirectPermit();
   const [wildcardPermit, setWildcardPermit] = useState<MintPermit | null>(null);
-  const permit = directPermit || wildcardPermit;
 
   const hasMinted = useHasMinted(address);
   const isMinting =
@@ -41,7 +40,7 @@ const MintButton: React.FC = () => {
     addressOrName: wandContract.address,
     contractInterface: wandContract.abi,
     functionName: "mint",
-    args: [...packForMinting(state), permit],
+    args: [...packForMinting(state), directPermit || wildcardPermit],
   });
 
   const { data, write } = useContractWrite({
@@ -50,14 +49,6 @@ const MintButton: React.FC = () => {
       dispatch({ type: "changeMintStage", value: MintStage.ERROR });
     },
   });
-
-  data?.hash;
-
-  useEffect(() => {
-    if (state.stage === MintStage.SIGNING && !!data?.hash) {
-      dispatch({ type: "changeMintStage", value: MintStage.TRANSACTING });
-    }
-  }, [dispatch, state.stage, data?.hash]);
 
   useWaitForTransaction({
     hash: data?.hash,
@@ -73,6 +64,12 @@ const MintButton: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    if (state.stage === MintStage.SIGNING && !!data?.hash) {
+      dispatch({ type: "changeMintStage", value: MintStage.TRANSACTING });
+    }
+  }, [dispatch, state.stage, data?.hash]);
+
   return (
     <>
       <div
@@ -80,10 +77,10 @@ const MintButton: React.FC = () => {
           [styles.disabled]: isMinting,
         })}
         onClick={() => {
-          setShowModal(!!address && (!permit || hasMinted));
+          setShowModal(!!address && (hasMinted || !directPermit));
           if (!address) {
             openConnectModal?.();
-          } else if (permit && !hasMinted) {
+          } else if (directPermit && !hasMinted) {
             dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
             write?.();
           }
@@ -91,13 +88,18 @@ const MintButton: React.FC = () => {
       >
         <MintSvg disabled={isMinting} />
       </div>
-      {showModal && !permit && !hasMinted && (
+      {showModal && !directPermit && !hasMinted && (
         <IncantationModal
-          onChange={(permit: MintPermit) => {
-            setShowModal(false);
-            setWildcardPermit(permit);
+          onChange={(wildcardPermit) => {
+            setWildcardPermit(wildcardPermit);
           }}
-          onClose={() => setShowModal(false)}
+          onClose={(proceed) => {
+            setShowModal(false);
+            if (proceed && wildcardPermit) {
+              dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
+              write?.();
+            }
+          }}
         />
       )}
       {showModal && hasMinted && (

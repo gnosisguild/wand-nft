@@ -6,8 +6,8 @@ import styles from "./MintButton.module.css";
 import { MintPermit, useWildcardPermit } from "./usePermit";
 
 interface Props {
-  onChange: (permit: MintPermit) => void;
-  onClose: () => void;
+  onChange: (permit: MintPermit | null) => void;
+  onClose: (proceed: boolean) => void;
 }
 
 const IncantationModal: React.FC<Props> = ({ onChange, onClose }) => {
@@ -23,8 +23,12 @@ const IncantationModal: React.FC<Props> = ({ onChange, onClose }) => {
     setShowWarning(false);
   }, [incantation]);
 
+  useEffect(() => {
+    onChange(permit);
+  }, [permit]);
+
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={() => onClose(false)}>
       <div className={styles.passwordModal}>
         <p>Enter your incantation</p>
         <input
@@ -37,22 +41,24 @@ const IncantationModal: React.FC<Props> = ({ onChange, onClose }) => {
           }}
         />
 
-        <button
-          onClick={() => {
-            if (is404 || isUsed) {
-              setShowWarning(true);
-            }
-            if (isValid && !isUsed) {
-              onChange(permit);
-            }
-          }}
-        >
-          Submit
-        </button>
-
         {showWarning && isUsed && <p>Already Used</p>}
 
         {showWarning && is404 && <p>Invalid Password</p>}
+
+        {!showWarning && (
+          <button
+            onClick={() => {
+              if (is404 || isUsed) {
+                setShowWarning(true);
+              }
+              if (isValid && !isUsed) {
+                onClose(true);
+              }
+            }}
+          >
+            Continue Minting
+          </button>
+        )}
 
         {!showWarning && (
           <div className={styles.passwordHelper}>

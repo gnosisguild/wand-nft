@@ -11,7 +11,6 @@ const Modal: React.FC<Props> = ({ children, onClose }) => {
 
   useEffect(() => {
     const handleClick = (e: Event) => {
-      console.log("click");
       if (e.target === ref.current) {
         onClose();
       }
