@@ -88,17 +88,19 @@ const MintButton: React.FC = () => {
       >
         <MintSvg disabled={isMinting} />
       </div>
-      {showModal && !directPermit && !hasMinted && (
+      {showModal && !hasMinted && !directPermit && (
         <IncantationModal
           onChange={(wildcardPermit) => {
             setWildcardPermit(wildcardPermit);
           }}
-          onClose={(proceed) => {
+          onCancel={() => {
             setShowModal(false);
-            if (proceed && wildcardPermit) {
-              dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
-              write?.();
-            }
+            setWildcardPermit(null);
+          }}
+          onSubmit={() => {
+            setShowModal(false);
+            dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
+            write?.();
           }}
         />
       )}

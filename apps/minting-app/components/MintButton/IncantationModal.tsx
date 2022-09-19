@@ -7,10 +7,15 @@ import { MintPermit, useWildcardPermit } from "./usePermit";
 
 interface Props {
   onChange: (permit: MintPermit | null) => void;
-  onClose: (proceed: boolean) => void;
+  onCancel: () => void;
+  onSubmit: () => void;
 }
 
-const IncantationModal: React.FC<Props> = ({ onChange, onClose }) => {
+const IncantationModal: React.FC<Props> = ({
+  onChange,
+  onCancel,
+  onSubmit,
+}) => {
   const [incantation, setIncantation] = useState<string>("");
   const { permit, issuer } = useWildcardPermit(incantation);
 
@@ -28,7 +33,7 @@ const IncantationModal: React.FC<Props> = ({ onChange, onClose }) => {
   }, [permit]);
 
   return (
-    <Modal onClose={() => onClose(false)}>
+    <Modal onClose={onCancel}>
       <div className={styles.passwordModal}>
         <p>Enter your incantation</p>
         <input
@@ -46,25 +51,24 @@ const IncantationModal: React.FC<Props> = ({ onChange, onClose }) => {
         {showWarning && is404 && <p>Invalid Password</p>}
 
         {!showWarning && (
-          <button
-            onClick={() => {
-              if (is404 || isUsed) {
-                setShowWarning(true);
-              }
-              if (isValid && !isUsed) {
-                onClose(true);
-              }
-            }}
-          >
-            Continue Minting
-          </button>
-        )}
-
-        {!showWarning && (
-          <div className={styles.passwordHelper}>
-            <p>Don&apos;t have one?</p>
-            <p>Read about how to get one here.</p>
-          </div>
+          <>
+            <button
+              onClick={() => {
+                if (is404 || isUsed) {
+                  setShowWarning(true);
+                }
+                if (isValid && !isUsed) {
+                  onSubmit();
+                }
+              }}
+            >
+              Continue Minting
+            </button>
+            <div className={styles.passwordHelper}>
+              <p>Don&apos;t have one?</p>
+              <p>Read about how to get one here.</p>
+            </div>
+          </>
         )}
       </div>
     </Modal>
