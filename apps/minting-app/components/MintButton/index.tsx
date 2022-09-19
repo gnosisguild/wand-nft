@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import {
@@ -17,13 +17,9 @@ import styles from "./MintButton.module.css";
 import { MintPermit, useDirectPermit } from "./usePermit";
 import IncantationModal from "./IncantationModal";
 import AlreadyMintedModal from "./AlreadyMintedModal";
+import { MintStage } from "../../types";
 
-interface Props {
-  onClick?: React.MouseEventHandler<SVGSVGElement>;
-  inactive?: boolean;
-}
-
-const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
+const MintButton: React.FC = () => {
   const router = useRouter();
   const { state, dispatch } = useAppContext();
   const { address } = useAccount();
@@ -33,8 +29,13 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
 
   const directPermit = useDirectPermit();
   const [wildcardPermit, setWildcardPermit] = useState<MintPermit | null>(null);
-
   const permit = directPermit || wildcardPermit;
+
+  const hasMinted = useHasMinted(address);
+  const isMinting =
+    state.stage == MintStage.SIGNING ||
+    state.stage == MintStage.TRANSACTING ||
+    state.stage == MintStage.SUCCESS;
 
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
@@ -46,11 +47,17 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
   const { data, write } = useContractWrite({
     ...config,
     onError(err) {
-      dispatch({ type: "changeMintingState", value: false });
+      dispatch({ type: "changeMintStage", value: MintStage.ERROR });
     },
   });
 
-  const hasMinted = useHasMinted(address);
+  data?.hash;
+
+  useEffect(() => {
+    if (state.stage === MintStage.SIGNING && !!data?.hash) {
+      dispatch({ type: "changeMintStage", value: MintStage.TRANSACTING });
+    }
+  }, [dispatch, state.stage, data?.hash]);
 
   useWaitForTransaction({
     hash: data?.hash,
@@ -58,11 +65,11 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     onSuccess(data) {
       console.log("mint succerss", data);
       const tokenId = parseInt(data.logs[0].topics[3], 16);
-      dispatch({ type: "changeMintingState", value: false });
+      dispatch({ type: "changeMintStage", value: MintStage.SUCCESS });
       router.push(`/wands/${tokenId}`);
     },
-    onSettled() {
-      dispatch({ type: "changeMintingState", value: false });
+    onError() {
+      dispatch({ type: "changeMintStage", value: MintStage.ERROR });
     },
   });
 
@@ -70,19 +77,19 @@ const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
     <>
       <div
         className={classNames(styles.buttonContainer, {
-          [styles.disabled]: state.minting,
+          [styles.disabled]: isMinting,
         })}
         onClick={() => {
           setShowModal(!!address && (!permit || hasMinted));
           if (!address) {
             openConnectModal?.();
           } else if (permit && !hasMinted) {
-            dispatch({ type: "changeMintingState", value: true });
+            dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
             write?.();
           }
         }}
       >
-        <MintSvg disabled={state.minting} />
+        <MintSvg disabled={isMinting} />
       </div>
       {showModal && !permit && !hasMinted && (
         <IncantationModal

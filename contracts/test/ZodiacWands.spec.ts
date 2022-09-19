@@ -11,7 +11,7 @@ import renderSvgTemplate from "./renderSvgTemplate";
 import { packForMinting } from "../../apps/minting-app/state/transforms/forMinting";
 import { transformForRendering } from "../../apps/minting-app/state/transforms/forRendering";
 import { keccak256 } from "ethers/lib/utils";
-import { AppState } from "../../apps/minting-app/types";
+import { AppState, MintStage } from "../../apps/minting-app/types";
 import MerkleTree from "merkletreejs";
 
 describe("ZodiacWands", async () => {
@@ -83,7 +83,7 @@ describe("ZodiacWands", async () => {
           ],
         },
         // doesnt matter
-        minting: false,
+        stage: MintStage.IDLE,
         tokenId: -1,
       };
 
