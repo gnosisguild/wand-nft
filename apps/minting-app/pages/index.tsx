@@ -14,30 +14,38 @@ import PickerLabels from "../components/PickerLabels";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import HandleClock from "../components/HandleClock";
+import MintingToast from "../components/MintingToast";
 import {
   FullDownloadButton,
   PFPDownloadButton,
 } from "../components/DownloadButton";
+import { MintStage } from "../types";
 
 const Home: NextPage = () => {
   const { state } = useAppContext();
-  const { minting } = state;
+  const { stage } = state;
+
+  const isMinting =
+    stage == MintStage.SIGNING ||
+    stage == MintStage.TRANSACTING ||
+    stage == MintStage.SUCCESS;
 
   const mintingClasses = [
     styles.animateOnMint,
     {
-      [styles.minting]: minting,
+      [styles.minting]: isMinting,
     },
   ];
 
   return (
     <Layout description="Zodiac Wands Minting App">
+      <MintingToast />
       <div className={styles.centerContainer}>
         <CenterGilding className={classNames(mintingClasses)} />
         <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
         <div
           className={classNames(styles.svgPreview, {
-            [styles.mintingPreview]: minting,
+            [styles.mintingPreview]: isMinting,
           })}
         >
           <SvgTemplate />

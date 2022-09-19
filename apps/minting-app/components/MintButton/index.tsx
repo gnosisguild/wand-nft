@@ -1,6 +1,6 @@
-import classNames from "classnames";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import classNames from "classnames";
 import {
   useAccount,
   useContractWrite,
@@ -8,110 +8,117 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+
 import { useAppContext, packForMinting } from "../../state";
-
 import wandContract from "../../utils/contract";
+
+import { useHasMinted } from "../useHasMinted";
 import styles from "./MintButton.module.css";
-import useMintPermit from "./useMintPermit";
+import { MintPermit, useDirectPermit } from "./usePermit";
+import IncantationModal from "./IncantationModal";
+import AlreadyMintedModal from "./AlreadyMintedModal";
+import { MintStage } from "../../types";
 
-interface Props {
-  onClick?: React.MouseEventHandler<SVGSVGElement>;
-  inactive?: boolean;
-}
-
-const MintButton: React.FC<Props> = ({ onClick, inactive }) => {
+const MintButton: React.FC = () => {
   const router = useRouter();
   const { state, dispatch } = useAppContext();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const [phrase, setPhrase] = useState<string>("");
-  const permit = useMintPermit(phrase);
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const directPermit = useDirectPermit();
+  const [wildcardPermit, setWildcardPermit] = useState<MintPermit | null>(null);
+
+  const hasMinted = useHasMinted(address);
+  const isMinting =
+    state.stage == MintStage.SIGNING ||
+    state.stage == MintStage.TRANSACTING ||
+    state.stage == MintStage.SUCCESS;
 
   const { config } = usePrepareContractWrite({
     addressOrName: wandContract.address,
     contractInterface: wandContract.abi,
     functionName: "mint",
-    args: [...packForMinting(state), permit],
+    args: [...packForMinting(state), directPermit || wildcardPermit],
   });
 
-  const { data, isSuccess, write } = useContractWrite({
+  const { data, write } = useContractWrite({
     ...config,
     onError(err) {
-      dispatch({ type: "changeMintingState", value: false });
+      // unfortunately the error that gets here is not an EIP-1193 error
+      // for now assuming that error at this stage is a user rejection
+      // on meta-mask
+      dispatch({ type: "changeMintStage", value: MintStage.IDLE });
     },
   });
-  const waitForTransaction = useWaitForTransaction({
+
+  useWaitForTransaction({
     hash: data?.hash,
     confirmations: 1,
     onSuccess(data) {
       console.log("mint succerss", data);
       const tokenId = parseInt(data.logs[0].topics[3], 16);
-      dispatch({ type: "changeMintingState", value: false });
+      dispatch({ type: "changeMintStage", value: MintStage.SUCCESS });
       router.push(`/wands/${tokenId}`);
     },
-    onError(err) {
-      dispatch({ type: "changeMintingState", value: false });
+    onError() {
+      dispatch({ type: "changeMintStage", value: MintStage.ERROR });
     },
   });
 
-  const showInput = !permit || permit.signature != "0x";
+  useEffect(() => {
+    if (state.stage === MintStage.SIGNING && !!data?.hash) {
+      dispatch({ type: "changeMintStage", value: MintStage.TRANSACTING });
+    }
+  }, [dispatch, state.stage, data?.hash]);
 
   return (
     <>
       <div
         className={classNames(styles.buttonContainer, {
-          [styles.disabled]: state.minting,
+          [styles.disabled]: isMinting,
         })}
         onClick={() => {
           if (!address) {
             openConnectModal?.();
           } else {
-            if (!permit) {
-              alert("MerkleProof: not found");
-            } else {
-              alert(`MerkleProof:\n\t${permit.signature}\n\t${permit.proof}`);
-              dispatch({ type: "changeMintingState", value: true });
+            if (directPermit && !hasMinted) {
+              dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
               write?.();
+            } else {
+              setShowModal(true);
             }
           }
         }}
       >
-        {showInput && (
-          <input
-            value={phrase}
-            onClick={(e) => e.stopPropagation()}
-            onChange={(event) => {
-              setPhrase(event.target.value);
-            }}
-          />
-        )}
-        <MintSvg disabled={state.minting} />
+        <MintSvg disabled={isMinting} />
       </div>
+      {showModal && !hasMinted && !directPermit && (
+        <IncantationModal
+          onChange={(wildcardPermit) => {
+            setWildcardPermit(wildcardPermit);
+          }}
+          onCancel={() => {
+            setShowModal(false);
+            setWildcardPermit(null);
+          }}
+          onSubmit={() => {
+            if (write) {
+              // wagmi takes a few ms til the actual write function is ready.
+              setShowModal(false);
+              dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
+              write?.();
+            }
+          }}
+        />
+      )}
+      {showModal && hasMinted && (
+        <AlreadyMintedModal onClose={() => setShowModal(false)} />
+      )}
     </>
   );
 };
-
-// function encodeCalldata(state: AppState) {
-//   return wandContract.iface.encodeFunctionData("mint", [
-//     state.stone,
-//     state.handle,
-//     encodeHalo(state.halo.shape, state.halo.rhythm),
-//     state.background,
-//     calculatePlanets(
-//       state.latitude,
-//       state.longitude,
-//       0,
-//       new Date("2022-07-12")
-//     ),
-//     calculateAspects(
-//       state.latitude,
-//       state.longitude,
-//       0,
-//       new Date("2022-07-12")
-//     ),
-//   ]);
-// }
 
 interface SVGProps {
   disabled: boolean;
@@ -279,3 +286,24 @@ const MintSvg: React.FC<SVGProps> = ({ disabled }) => (
 );
 
 export default MintButton;
+
+// function encodeCalldata(state: AppState) {
+//   return wandContract.iface.encodeFunctionData("mint", [
+//     state.stone,
+//     state.handle,
+//     encodeHalo(state.halo.shape, state.halo.rhythm),
+//     state.background,
+//     calculatePlanets(
+//       state.latitude,
+//       state.longitude,
+//       0,
+//       new Date("2022-07-12")
+//     ),
+//     calculateAspects(
+//       state.latitude,
+//       state.longitude,
+//       0,
+//       new Date("2022-07-12")
+//     ),
+//   ]);
+// }

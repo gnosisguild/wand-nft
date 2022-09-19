@@ -1,4 +1,4 @@
-import { AppState, Background } from "../types";
+import { AppState, Background, MintStage } from "../types";
 import {
   randomStone,
   randomHalo,
@@ -21,9 +21,9 @@ export interface ChangeStoneAction {
   value: number;
 }
 
-export interface ChangeMintingStateAction {
-  type: "changeMintingState";
-  value: boolean;
+export interface ChangeMintStageAction {
+  type: "changeMintStage";
+  value: MintStage;
 }
 
 export interface RandomizeWandAction {
@@ -39,7 +39,7 @@ export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
   | ChangeStoneAction
-  | ChangeMintingStateAction
+  | ChangeMintStageAction
   | ChangeHandleAction
   | RandomizeWandAction;
 
@@ -63,10 +63,10 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
         stone: action.value,
       };
     }
-    case "changeMintingState": {
+    case "changeMintStage": {
       return {
         ...state,
-        minting: action.value,
+        stage: action.value,
       };
     }
     case "changeHandle": {
@@ -92,7 +92,7 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
 export function randomState(): AppState {
   const { latitude, longitude } = randomLocation();
   return {
-    minting: false,
+    stage: MintStage.IDLE,
     background: randomBackground(),
     halo: randomHalo(),
     handle: 0,
@@ -105,7 +105,7 @@ export function randomState(): AppState {
 
 export function zeroState(): AppState {
   return {
-    minting: false,
+    stage: MintStage.IDLE,
     background: {
       radial: false,
       dark: false,

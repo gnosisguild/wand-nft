@@ -11,7 +11,7 @@ contract GatedMint {
   }
 
   bytes32 public merkleRoot;
-  mapping(address => bool) public issuers;
+  mapping(address => bool) public redemptions;
 
   constructor(bytes32 _merkleRoot) {
     merkleRoot = _merkleRoot;
@@ -21,7 +21,7 @@ contract GatedMint {
     address issuer = getIssuer(permit);
     enforceIsAuthorized(permit.proof, issuer);
     enforceIsFresh(issuer);
-    issuers[issuer] = true;
+    redemptions[issuer] = true;
   }
 
   function getIssuer(MintPermit memory permit) private view returns (address) {
@@ -50,6 +50,6 @@ contract GatedMint {
   }
 
   function enforceIsFresh(address issuer) private view {
-    require(issuers[issuer] == false, "MintPermit: Already used");
+    require(redemptions[issuer] == false, "MintPermit: Already used");
   }
 }

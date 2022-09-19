@@ -15,21 +15,21 @@ task(
     "input",
     "Path to file that contains the previous MerkleProofs to expand on",
     undefined,
-    types.string,
+    types.inputFile,
     true
   )
   .addParam(
     "addresses",
-    "Path to file a text file containing one ethereum address per line. These will be added as direct permits",
+    "Path to file a text file containing one ethereum address per line. These will be added as direct permits to the next Greenlist",
     `${__dirname}/addresses.in.txt`,
-    types.inputFile,
+    types.string,
     true
   )
   .addParam(
     "passwords",
-    "Path to file a text file containing one password per line. These will be used to add wildcard permits",
+    "Path to file a text file containing one password per line. These will be used to add wildcard permits to the next Greenlist",
     `${__dirname}/passwords.in.txt`,
-    types.inputFile,
+    types.string,
     true
   )
   .addParam(
@@ -46,15 +46,16 @@ task(
 
     const nextLeaves = [...directAddresses, ...wildcardAddresses].map(
       (address) => {
-        assert(isAddress(address));
+        assert(isAddress(address), "Trying to add a non address leaf");
         return keccak256(address);
       }
     );
 
-    writeProofs(taskArgs.output, createNextMerkleTree(prevLeaves, nextLeaves));
-    console.info(
-      `Wrote updated proofs file at ${path.resolve(taskArgs.output)}`
-    );
+    const nextMerkleTree = createNextMerkleTree(prevLeaves, nextLeaves);
+
+    writeGreenlist(taskArgs.output, nextMerkleTree);
+
+    console.info(`Wrote updated Greenlist at ${path.resolve(taskArgs.output)}`);
   });
 
 function createNextMerkleTree(prevLeaves: string[], nextLeaves: string[]) {
@@ -70,6 +71,17 @@ function createNextMerkleTree(prevLeaves: string[], nextLeaves: string[]) {
     hashLeaves: false,
     sortPairs: true,
   });
+}
+
+function loadPrevLeaves(filePath: string): string[] {
+  if (!filePath || !fs.existsSync(filePath)) {
+    console.info("No previous Greenlist provided");
+    return [];
+  }
+  const data = fs.readFileSync(filePath, "utf8");
+  const greenlist = greenlistIntegrity(JSON.parse(data));
+
+  return greenlist.proofs.map((proof) => proof.leaf);
 }
 
 function loadDirectPermits(filePath: string): string[] {
@@ -110,23 +122,12 @@ function loadWildcardPermits(filePath: string): string[] {
     .map((wallet) => wallet.address);
 }
 
-type JsonProofs = {
+type Greenlist = {
   root: string;
   proofs: { leaf: string; proof: string[] }[];
 };
 
-function loadPrevLeaves(filePath: string): string[] {
-  if (!filePath || !fs.existsSync(filePath)) {
-    console.info("No Current Proofs file provided");
-    return [];
-  }
-  const data = fs.readFileSync(filePath, "utf8");
-  const json = validateJsonProofsIntegrity(JSON.parse(data));
-
-  return json.proofs.map((proof) => proof.leaf);
-}
-
-function validateJsonProofsIntegrity(json: JsonProofs) {
+function greenlistIntegrity(json: Greenlist) {
   const leaves = json.proofs.map((p) => p.leaf);
 
   const tree = new MerkleTree(leaves, keccak256, {
@@ -134,12 +135,12 @@ function validateJsonProofsIntegrity(json: JsonProofs) {
     sortPairs: true,
   });
 
-  assert(tree.getHexRoot() === json.root, "Corrupted json proofs file");
+  assert(tree.getHexRoot() === json.root, "Corrupted Greenlist file");
 
   return json;
 }
 
-function writeProofs(filePath: string, tree: MerkleTree) {
+function writeGreenlist(filePath: string, tree: MerkleTree) {
   const leaves = tree.getHexLeaves();
   const root = tree.getHexRoot();
 
