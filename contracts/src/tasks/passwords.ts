@@ -1,63 +1,48 @@
 import fs from "fs";
-import { ethers } from "ethers";
 import { task, types } from "hardhat/config";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 task("passwords:generate", "Passwords")
   .addParam(
     "input",
     "Path to file that contains possible words",
     `${__dirname}/bip39.txt`,
-    types.inputFile,
-    true
+    types.inputFile
   )
 
-  .addParam("wordCount", "Number of words per password", 6, types.int, true)
-  .addParam(
-    "outputCount",
-    "Number of passwords to generate",
-    50,
-    types.int,
-    true
-  )
+  .addParam("wordCount", "Number of words per password", 6, types.int)
+  .addParam("outputCount", "Number of passwords to generate", 50, types.int)
   .addParam(
     "output",
     "Output file path",
     `${__dirname}/passwords.out.txt`,
-    types.string,
-    true
+    types.string
   )
-  .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const words = readWordsFile(taskArgs.input);
+  .setAction(async (taskArgs) => {
+    const words = fs.readFileSync(taskArgs.input, "utf8").split("\n");
 
-    let passwords = [];
+    const passwords = [];
     for (let i = 0; i < taskArgs.outputCount; i++) {
-      let password = [];
-      for (let j = 0; j < taskArgs.wordCount; j++) {
-        const k = randomInteger(words.length - 1);
-        password.push(words[k]);
-      }
-      passwords.push(password.join(" "));
+      passwords.push(password(words, taskArgs.wordCount));
     }
 
-    writePasswords(taskArgs.output, passwords);
+    fs.writeFileSync(taskArgs.output, passwords.join("\n"), "utf8");
+    console.info(
+      `Generated ${taskArgs.outputCount} passwords of ${taskArgs.wordCount} words each.`
+    );
+    console.info(`Output at ${taskArgs.output}`);
   });
 
-function readWordsFile(filePath: string): string[] {
-  const data = fs.readFileSync(filePath, "utf8");
-  return data.split("\n");
-}
+function password(words: string[], wordCount: number) {
+  const result = [];
+  for (let j = 0; j < wordCount; j++) {
+    let word;
+    do {
+      word = words[randomInteger(words.length - 1)];
+    } while (result.indexOf(word) !== -1);
 
-function writePasswords(filePath: string, passwords: string[]) {
-  fs.writeFileSync(filePath, passwords.join("\n"), "utf8");
-}
-
-export function keccak256(input: string) {
-  const toBytes = typeof input === "string" && !ethers.utils.isHexString(input);
-
-  return ethers.utils.keccak256(
-    toBytes ? ethers.utils.toUtf8Bytes(input) : input
-  );
+    result.push(word);
+  }
+  return result.join(" ");
 }
 
 function randomInteger(max: number): number {

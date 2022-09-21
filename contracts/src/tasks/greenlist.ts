@@ -17,33 +17,29 @@ task(
   "greenlist:generate",
   "Computes or expands a MerkleTree and writes it to a json file"
 )
-  .addParam(
+  .addOptionalParam(
     "input",
     "Path to file that contains the previous MerkleProofs to expand on",
     undefined,
-    types.inputFile,
-    true
+    types.inputFile
   )
-  .addParam(
+  .addOptionalParam(
     "addresses",
     "Path to file a text file containing one ethereum address per line. These will be added as direct permits to the next Greenlist",
     `${__dirname}/addresses.in.txt`,
-    types.string,
-    true
+    types.string
   )
-  .addParam(
+  .addOptionalParam(
     "passwords",
     "Path to file a text file containing one password per line. These will be used to add wildcard permits to the next Greenlist",
     `${__dirname}/passwords.in.txt`,
-    types.string,
-    true
+    types.string
   )
-  .addParam(
+  .addOptionalParam(
     "output",
     "Path to the output file",
     `${__dirname}/greenlist.out.json`,
-    types.string,
-    true
+    types.string
   )
   .setAction(async (taskArgs) => {
     const prevLeaves = loadPrevLeaves(taskArgs.input);
