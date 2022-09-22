@@ -4,13 +4,10 @@ import { Scale, transpose } from "tonal";
 import { haloStyle } from "./HaloShapeMappings";
 import * as Tone from "tone";
 
-interface MidsProps {
-  play: boolean;
-}
-
-const Mids: React.FC<MidsProps> = ({ play }) => {
-  const { state, dispatch } = useAppContext();
+const Mids: React.FC = () => {
+  const { state } = useAppContext();
   const [ready, setReady] = useState(false);
+  const [chords, setChords] = useState();
 
   let filter;
   let lfo;
@@ -19,13 +16,13 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   let effect;
   let synth;
 
-  const material = "major";
-  // Scale.names()[
-  //   Math.floor(mapValue(state.stone, 0, 360, 0, Scale.names().length))
-  // ];
-  const auraFreq = state.background.color.hue;
+  useEffect(() => {
+    const material = "major";
+    // Scale.names()[
+    //   Math.floor(mapValue(state.stone, 0, 360, 0, Scale.names().length))
+    // ];
+    const auraFreq = state.background.color.hue;
 
-  const generateChords = () => {
     const chordNotes = 5;
     const baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
     const scale = Scale.notes(`${baseFreq}3 ${material}`).slice(0, chordNotes);
@@ -35,12 +32,12 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     const scale3 = Scale.notes(
       `${transpose(`${baseFreq}3`, "5M")} ${material}`
     ).slice(0, chordNotes);
-    let chords = [scale, scale2, scale3];
+    let _chords = [scale, scale2, scale3];
 
-    chords = chords.sort(() => 0.5 - Math.random()); // shuffle chords
+    _chords.sort(() => 0.5 - Math.random());
 
-    return chords;
-  };
+    setChords(_chords);
+  }, [state]);
 
   useEffect(() => {
     Tone.Transport.bpm.value = 80;
@@ -77,36 +74,44 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     filter.connect(effect);
     effect.connect(Tone.Destination);
 
-    let prevNote;
+    // Tone.Transport.cancel();
+    // console.log("cancel");
     let i = 0;
-    melody = new Tone.Loop((time) => {
-      let note = generateChords()[i % generateChords().length];
-      if (prevNote != note) {
-        synth.triggerAttackRelease(note, "4m", time);
-      }
-      i++;
-      prevNote = note;
-    }, "4m");
 
-    lfo.start(0);
-    melody.start(0);
+    let scheduleRepeat;
+    if (chords) {
+      if (scheduleRepeat) {
+        Tone.Transport.scheduleRepeat.clear(scheduleRepeat);
+      }
+      scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
+        let note = chords[i % chords.length];
+        console.log(note, time, Tone.Transport);
+        synth.triggerAttackRelease(note, "4m", time);
+        i++;
+      }, "4m");
+    }
+
+    // let prevNote;
+    // let i = 0;
+    // melody = new Tone.Loop((time) => {
+    //   let note = chords[i % chords.length];
+    //   if (prevNote != note) {
+    //     synth.triggerAttackRelease(note, "4m", time);
+    //   }
+    //   i++;
+    //   prevNote = note;
+    // }, "4m");
+
+    // melody.start(0);
+    // lfo.start(0);
 
     synth.volume.rampTo(-19, 5);
-
-    setReady(true);
-  }, [play]);
+  }, [chords]);
 
   useEffect(() => {
-    if (!ready) return;
-    if (play) {
-      console.log("starting drone");
-      Tone.Transport.start();
-    } else {
-      console.log("stopping drone");
-      Tone.Transport.cancel();
-      Tone.Transport.stop();
-    }
-  });
+    Tone.Transport.start();
+    setReady(true);
+  }, []);
 
   return <></>;
 };

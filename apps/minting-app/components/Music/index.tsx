@@ -11,12 +11,12 @@ const Music: React.FC = () => {
   const [ready, setReady] = useState(false);
   const [play, setPlaying] = useState(false);
 
-  useEffect(() => {
-    if (ready) {
-      setPlaying(!play);
-      window.setTimeout(() => setPlaying(true), 100);
-    }
-  }, [state]);
+  // useEffect(() => {
+  //   if (ready) {
+  //     setPlaying(!play);
+  //     window.setTimeout(() => setPlaying(true), 100);
+  //   }
+  // }, [state]);
 
   const handleClick = () => {
     if (ready) {
@@ -29,10 +29,10 @@ const Music: React.FC = () => {
 
   return (
     <>
-      <BackgroundTrack play={play} />
-      <MagicSeq play={play} />
-      <Mids play={play} />
-      <Drone play={play} />
+      {/* <BackgroundTrack play={play} /> */}
+      {/* <MagicSeq play={play} /> */}
+      <Mids />
+      {/* <Drone /> */}
       {state.minting && <RecordMusic />}
       <button
         style={{ position: "relative", zIndex: 99999 }}

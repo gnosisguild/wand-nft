@@ -3,33 +3,33 @@ import { useAppContext } from "../../state";
 import { transpose } from "tonal";
 import * as Tone from "tone";
 
-interface DroneProps {
-  play: boolean;
-}
-
-const Drone: React.FC<DroneProps> = ({ play }) => {
-  const { state, dispatch } = useAppContext();
-  const [ready, setReady] = useState(false);
+const Drone: React.FC = () => {
+  const { state } = useAppContext();
+  const [notes, setNotes] = useState([]);
 
   let filter;
   let effect;
   let reverb;
   let loop;
-  let synth;
+  let synth: any;
+  let baseFreq;
 
-  const auraFreq = state.background.color.hue;
+  useEffect(() => {
+    const auraFreq = state.background.color.hue;
 
-  let baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
-  const notes = [`${baseFreq}0`];
-  for (let i = 1; i < 4; i++) {
-    const increment = i < 2 ? 4 : 3;
-    notes.push(transpose(notes[0], `${i * increment}M`));
-  }
+    baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
+    setNotes([`${baseFreq}0`]);
+    // for (let i = 1; i < 3; i++) {
+    //   const increment = i < 2 ? 4 : 3;
+    //   _notes.push(transpose(_notes[0], `${i * increment}M`));
+    // }
+    // setNotes(_notes);
+  }, [state]);
 
   useEffect(() => {
     // Setup a reverb with ToneJS
     reverb = new Tone.Reverb({
-      decay: 10,
+      decay: 20,
       wet: 0.8,
       preDelay: 0.2,
     });
@@ -58,32 +58,26 @@ const Drone: React.FC<DroneProps> = ({ play }) => {
       volume: -Infinity,
     });
 
-    synth.volume.rampTo(-8, 10);
+    synth.volume.rampTo(-8, 4);
 
     synth.connect(effect);
     effect.connect(reverb);
     reverb.connect(filter);
     filter.connect(Tone.Destination);
 
-    loop = new Tone.Loop(() => {
-      // triggered every eighth note.
-      synth.triggerAttackRelease(notes[0], "1m", "+1m");
-    }, "1m").start(0);
-
-    setReady(true);
-  }, [play]);
+    let scheduleRepeat;
+    if (scheduleRepeat) {
+      Tone.Transport.clear(scheduleRepeat);
+    }
+    scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
+      console.log(notes[0], time, Tone.Transport);
+      synth.triggerAttackRelease(notes[0], "1m", "+1m" + time);
+    }, "1m");
+  }, [notes]);
 
   useEffect(() => {
-    if (!ready) return;
-    if (play) {
-      console.log("starting drone");
-      Tone.Transport.start();
-    } else {
-      console.log("stopping drone");
-      Tone.Transport.cancel();
-      Tone.Transport.stop();
-    }
-  });
+    Tone.Transport.start();
+  }, []);
 
   return <></>;
 };

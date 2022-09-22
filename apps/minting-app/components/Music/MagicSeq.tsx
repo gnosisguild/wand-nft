@@ -29,8 +29,8 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
   const lightness = state.background.color.lightness;
 
   const generateScale = () => {
-    let baseOctave = 4;
-    let octaves = 6;
+    let baseOctave = 5;
+    let octaves = 4;
     let baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
 
     let rhythm = [];
@@ -100,7 +100,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     let prevNote;
     let index = 0;
     melody = new Tone.Loop((time) => {
-      synth.portamento = Math.random() * 0.03;
+      // synth.portamento = Math.random() * 0.03;
       let note = generateScale()[index % generateScale().length];
       if (prevNote != note) {
         // (freq, noteDuration, time)
@@ -125,7 +125,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
     melody.start(0);
 
     setReady(true);
-  }, [play]);
+  }, [play, state]);
 
   useEffect(() => {
     if (!ready) return;
@@ -137,7 +137,7 @@ const Mids: React.FC<MidsProps> = ({ play }) => {
       Tone.Transport.cancel();
       Tone.Transport.stop();
     }
-  });
+  }, [state]);
 
   return <></>;
 };
