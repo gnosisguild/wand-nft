@@ -80,7 +80,7 @@ const BackgroundMusic: React.FC<BackgroundTrackProps> = ({ play }) => {
       Tone.Transport.cancel();
       Tone.Transport.stop();
     }
-  });
+  }, []);
 
   return <></>;
 };
