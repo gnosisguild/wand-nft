@@ -78,4 +78,4 @@ const Sparkles: React.FC = () => {
   );
 };
 
-export default Sparkles;
+export default React.memo(Sparkles);

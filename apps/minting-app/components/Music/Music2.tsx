@@ -46,8 +46,6 @@ const Mids: React.FC = () => {
 
     setChords(_chords);
 
-    Tone.Transport.bpm.value = 80;
-
     filter = new Tone.Filter(200, "bandpass", -12);
 
     lfo = new Tone.LFO(0.5, 140, 240);
@@ -197,7 +195,7 @@ const Mids: React.FC = () => {
         sustain: 0.8,
         release: 4,
       },
-      volume: -45,
+      volume: -50,
     });
 
     sequencerSynth.connect(reverb);
@@ -205,7 +203,7 @@ const Mids: React.FC = () => {
     reverb.connect(filter);
     filter.connect(Tone.Destination);
 
-    sequencerSynth.volume.rampTo(-29, 8);
+    sequencerSynth.volume.rampTo(-35, 8);
 
     setSequencer(sequencerSynth);
   }, [state]);
@@ -220,7 +218,6 @@ const Mids: React.FC = () => {
       Tone.Transport.start();
       scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
         let note = chords[i % chords.length];
-        console.log(note, time, Tone.Transport);
         mids.triggerAttackRelease(note, "4m", time);
         i++;
       }, "4m");
@@ -235,7 +232,6 @@ const Mids: React.FC = () => {
     }
     if (drone) {
       scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
-        console.log(droneNote, time, Tone.Transport);
         drone.triggerAttackRelease(droneNote, "1m", "+1m" + time);
       }, "1m");
     }
@@ -249,7 +245,6 @@ const Mids: React.FC = () => {
     }
     if (sequencer && sequence) {
       let index = 0;
-      console.log(sequence);
       const interval = [0, 3, 4].includes(state.halo.shape) ? "48n" : "64n";
       scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
         let sequencerNote = sequence[index % sequence.length];
