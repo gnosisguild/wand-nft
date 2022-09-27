@@ -29,7 +29,7 @@ const IncantationModal: React.FC<Props> = ({
 
   useEffect(() => {
     onChange(permit);
-  }, [permit]);
+  }, [onChange, permit]);
 
   return (
     <Modal onClose={onCancel}>

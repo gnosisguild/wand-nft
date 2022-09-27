@@ -5,22 +5,7 @@ import { MintStage } from "../../types";
 import styles from "./Toast.module.css";
 
 const MintingToast: React.FC = () => {
-  const { state, dispatch } = useAppContext();
-
-  useEffect(() => {
-    let id: NodeJS.Timeout | undefined;
-    if (state.stage === MintStage.ERROR || state.stage === MintStage.SUCCESS) {
-      id = setTimeout(() => {
-        dispatch({ type: "changeMintStage", value: MintStage.IDLE });
-      }, 5000);
-    }
-
-    return () => {
-      if (id) {
-        clearTimeout(id);
-      }
-    };
-  }, [dispatch, state.stage]);
+  const { state } = useAppContext();
 
   return state.stage !== MintStage.IDLE ? (
     <div className={styles.container}>
