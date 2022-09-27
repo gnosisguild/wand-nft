@@ -5,11 +5,11 @@ import { isAddress } from "ethers/lib/utils";
 import { task, types } from "hardhat/config";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
-const { GoogleSpreadsheet } = require("google-spreadsheet");
+import { GoogleSpreadsheet } from "google-spreadsheet";
 
 task(
   "spreadsheet:extract",
-  "Reads reads a spreadsheet and extracts ethereum addresses and resolves ens names into an outputfile"
+  "Reads reads a spreadsheet and extracts ethereum addresses and resolves ens names into an output file"
 )
   .addParam(
     "output",
@@ -85,6 +85,11 @@ async function resolveENSNames(hre: HardhatRuntimeEnvironment, rows: Row[]) {
 
 async function loadSheet() {
   const doc = new GoogleSpreadsheet(process.env["SPREADSHEET_ID"]);
+
+  if (!process.env["GOOGLE_SERVICE_ACCOUNT_EMAIL"])
+    throw new Error("Missing env var GOOGLE_SERVICE_ACCOUNT_EMAIL");
+  if (!process.env["GOOGLE_PRIVATE_KEY"])
+    throw new Error("Missing env var GOOGLE_PRIVATE_KEY");
 
   await doc.useServiceAccountAuth({
     client_email: process.env["GOOGLE_SERVICE_ACCOUNT_EMAIL"],

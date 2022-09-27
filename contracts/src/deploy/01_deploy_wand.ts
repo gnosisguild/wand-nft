@@ -55,6 +55,7 @@ async function merkleRoot(hre: HardhatRuntimeEnvironment) {
   if (hre.network.name !== "hardhat") {
     const filePath = process.env["GREENLIST_FILE_PATH"];
     assert(!!filePath, "No greenlist file configured");
+    /* eslint-disable-next-line @typescript-eslint/no-var-requires */
     const json = require(filePath);
 
     return json.root;
