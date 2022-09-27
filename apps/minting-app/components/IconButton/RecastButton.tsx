@@ -16,7 +16,7 @@ const RecastButton: React.FC = () => {
   });
 
   return (
-    <div className={styles.recastButtonContainer}>
+    <>
       <svg
         viewBox="0 0 89 89"
         fill="none"
@@ -205,7 +205,7 @@ const RecastButton: React.FC = () => {
           />
         </defs>
       </svg>
-    </div>
+    </>
   );
 };
 

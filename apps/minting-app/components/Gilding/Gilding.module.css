@@ -5,6 +5,7 @@
   width: 36%;
   max-width: 800px;
   mix-blend-mode: color-dodge;
+  z-index: 19;
 }
 
 .lowerLeft {

@@ -98,14 +98,6 @@
   width: 76%;
   padding: 2%;
 }
-
-.recastButtonContainer {
-  position: absolute;
-  bottom: 2.5%;
-  right: 4.1%;
-  width: 42%;
-}
-
 .recastButton {
   cursor: pointer;
 }

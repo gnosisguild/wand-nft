@@ -65,6 +65,10 @@ const Home: NextPage = () => {
         </div>
       </div>
 
+      <div className={classNames(styles.recastButton, mintingClasses)}>
+        <RecastButton />
+      </div>
+
       <div className={classNames(styles.downloadButtons, mintingClasses)}>
         <FullDownloadButton />
         <PFPDownloadButton />

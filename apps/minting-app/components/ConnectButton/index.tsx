@@ -84,24 +84,6 @@ const ConnectAccount = () => {
 
               return (
                 <div className={styles.connectedContainer}>
-                  <button onClick={openChainModal} type="button">
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? "Chain icon"}
-                            src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
-                          />
-                        )}
-                      </div>
-                    )}
-                    {chain.name}
-                  </button>
                   <button onClick={openAccountModal} type="button">
                     <img src={makeBlockie(account.address)} />
                     {account.displayName}

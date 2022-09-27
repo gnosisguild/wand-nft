@@ -232,8 +232,6 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
             />
           </g>
         </svg>
-
-        {currentRoute === "/" && <RecastButton />}
       </div>
     </div>
   );
