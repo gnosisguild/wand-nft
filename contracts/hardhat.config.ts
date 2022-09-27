@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-etherscan";
-import "@nomiclabs/hardhat-waffle";
+import "@nomicfoundation/hardhat-toolbox";
 import "solidity-coverage";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
