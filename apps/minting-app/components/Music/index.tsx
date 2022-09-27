@@ -19,8 +19,9 @@ const Music: React.FC = () => {
   const [sequence, setSequence] = useState();
   const [sequencer, setSequencer] = useState();
   const [backgroundTrack, setBackgroundTrack] = useState();
+  const [ready, setReady] = useState(false);
 
-  const player = useRef(null);
+  const player = useRef();
 
   let filter;
   let lfo;
@@ -49,7 +50,6 @@ const Music: React.FC = () => {
     const scale4 = Scale.notes(`${baseFreq}5 ${material}`);
     let _chords = [scale1, scale2, scale3, scale4];
 
-    console.log(_chords);
     setChords(_chords);
 
     filter = new Tone.Filter(500, "bandpass", -12);
@@ -219,59 +219,40 @@ const Music: React.FC = () => {
     const backgroundTracks = [
       {
         name: "dawn",
-        volume: -25,
+        volume: -33,
         audio: Birds,
-        filterRange: [100, 5000],
+        filterRange: [100, 10000],
         filterType: "highpass",
       },
       {
         name: "day",
-        volume: -20,
+        volume: -6,
         audio: Window,
-        filterRange: [1000, 10000],
+        filterRange: [300, 10000],
+        filterType: "highpass",
       },
       {
         name: "dusk",
-        volume: -25,
+        volume: -16,
         audio: Forest,
-        filterRange: [100, 5000],
+        filterRange: [500, 10000],
         filterType: "highpass",
       },
       {
         name: "night",
-        volume: -20,
+        volume: -18,
         audio: Crickets,
-        filterRange: [300, 6000],
+        filterRange: [1000, 10000],
+        filterType: "highpass",
       },
     ];
 
-    const activeTrack =
-      // backgroundTracks[Math.floor(Math.random() * backgroundTracks.length)];
-      // backgroundTracks[state.handle];
-      backgroundTracks[2];
+    const activeTrack = backgroundTracks[state.handle];
 
-    new Tone.ToneAudioBuffer(activeTrack.audio, () => {
-      console.log(`loaded ${activeTrack.name}`);
-    });
+    new Tone.ToneAudioBuffer(activeTrack.audio);
 
     setBackgroundTrack(activeTrack);
   };
-
-  useEffect(() => {
-    setupMids();
-  }, [state.stone, state.background.color.hue]);
-
-  useEffect(() => {
-    setupDrone();
-  }, [state.background.color.hue]);
-
-  useEffect(() => {
-    setupSequencer();
-  }, [state.stone, state.background.color.hue, state.halo]);
-
-  useEffect(() => {
-    setupBackgroundTrack();
-  }, [state.wand]);
 
   const triggerMids = () => {
     let i = 0;
@@ -357,24 +338,62 @@ const Music: React.FC = () => {
   };
 
   useEffect(() => {
-    triggerMids();
-  }, [mids]);
+    if (ready) {
+      setupMids();
+    }
+  }, [ready, state.stone, state.background.color.hue]);
 
   useEffect(() => {
-    triggerDrone();
-  }, [drone]);
+    if (ready) {
+      setupDrone();
+    }
+  }, [ready, state.background.color.hue]);
 
   useEffect(() => {
-    triggerSequencer();
-  }, [sequencer]);
+    if (ready) {
+      setupSequencer();
+    }
+  }, [ready, state.stone, state.background.color.hue, state.halo]);
 
   useEffect(() => {
-    triggerBackgroundTrack();
-  }, [backgroundTrack]);
+    if (ready) {
+      setupBackgroundTrack();
+    }
+  }, [ready, state.handle]);
 
   useEffect(() => {
-    Tone.Transport.start();
-  }, [state]);
+    if (ready) {
+      triggerMids();
+    }
+  }, [ready, mids]);
+
+  useEffect(() => {
+    if (ready) {
+      triggerDrone();
+    }
+  }, [ready, drone]);
+
+  useEffect(() => {
+    if (ready) {
+      triggerSequencer();
+    }
+  }, [ready, sequencer]);
+
+  useEffect(() => {
+    if (ready) {
+      triggerBackgroundTrack();
+    }
+  }, [ready, backgroundTrack]);
+
+  useEffect(() => {
+    const handleMouseDown = () => {
+      if (!ready) {
+        setReady(true);
+      }
+    };
+    window.addEventListener("mousedown", handleMouseDown, { passive: true });
+    return () => window.removeEventListener("mousedown", handleMouseDown);
+  }, []);
 
   return <></>;
 };
