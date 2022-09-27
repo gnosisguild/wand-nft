@@ -8,6 +8,7 @@ env/
 .history
 coverage*
 deployments
+typechain-types/
 
 *.in.txt
 *.out.txt

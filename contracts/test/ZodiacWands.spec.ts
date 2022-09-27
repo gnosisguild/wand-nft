@@ -13,6 +13,7 @@ import { transformForRendering } from "../../apps/minting-app/state/transforms/f
 import { keccak256 } from "ethers/lib/utils";
 import { AppState, MintStage } from "../../apps/minting-app/types";
 import MerkleTree from "merkletreejs";
+import { ZodiacWands } from "../typechain-types";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -27,7 +28,7 @@ describe("ZodiacWands", async () => {
       deployment.address,
       deployment.abi,
       signer
-    );
+    ) as ZodiacWands;
 
     const elements = await Promise.all(signers.map((s) => s.getAddress()));
     const merkleTree = new MerkleTree(elements, keccak256, {

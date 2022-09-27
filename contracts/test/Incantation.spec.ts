@@ -2,6 +2,7 @@ import { expect } from "chai";
 import hre, { deployments } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
 import { Contract } from "ethers";
+import { Incantation } from "../typechain-types";
 
 describe("Incantation", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -15,7 +16,7 @@ describe("Incantation", async () => {
       deployment.address,
       deployment.abi,
       signer
-    );
+    ) as Incantation;
 
     return { incantation };
   });
