@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.6;
 
+// Uniqueness of names is guaranteed up until the least common multiple of the lengths of the word lists, 
+// which is 83*84*85=592620.
 library Incantation {
   function generate(uint256 seed) public pure returns (string memory) {
     string[83] memory actions = [
