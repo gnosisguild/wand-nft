@@ -20,6 +20,7 @@ import {
 } from "../components/DownloadButton";
 import { MintStage } from "../types";
 import useHandleClock from "../components/useHandleClock";
+import MintButton from "../components/MintButton";
 
 const Home: NextPage = () => {
   useHandleClock();
@@ -44,6 +45,7 @@ const Home: NextPage = () => {
       <MintingToast />
       <div className={styles.centerContainer}>
         <CenterGilding className={classNames(mintingClasses)} />
+        <MintButton />
         <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
         <div
           className={classNames(styles.svgPreview, {
@@ -61,10 +63,6 @@ const Home: NextPage = () => {
         <div className={classNames(styles.haloPicker, mintingClasses)}>
           <HaloPicker />
         </div>
-      </div>
-
-      <div className={classNames(styles.recastButton, mintingClasses)}>
-        <RecastButton />
       </div>
 
       <div className={classNames(styles.downloadButtons, mintingClasses)}>
