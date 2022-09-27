@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Sparkles.module.css";
+import * as Tone from "tone";
 
 const Sparkle: React.FC = () => {
   const [windowDimensions, setWindowDimensions] = useState({
     width: 0,
     height: 0,
   });
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -19,6 +21,13 @@ const Sparkle: React.FC = () => {
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) {
+      setReady(true);
+      // setReady(Tone.Transport.state === "started");
+    }
   }, []);
 
   const size = Math.random() * 10;
@@ -40,6 +49,8 @@ const Sparkle: React.FC = () => {
         {
           animationDuration: `${dur}s`,
           animationDelay: `${delay}s`,
+          transition: "opacity 5s ease-in-out",
+          opacity: ready ? 1 : 0,
           "--moveX": `${move.x}`,
           "--moveY": `${move.y}`,
         } as React.CSSProperties
