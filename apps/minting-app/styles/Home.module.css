@@ -15,13 +15,13 @@
   opacity: 0;
 }
 
-.hasSvg { 
+.hasSvg {
   transition-duration: 1s;
 }
 
 .minting:not(.hasSvg) {
   /* You can't apply a filter to a parent of svgs */
-  filter: blur(30px); 
+  filter: blur(30px);
 }
 
 .svgPreview {
@@ -34,7 +34,7 @@
 }
 
 .mintingPreview {
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.85));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
   transform: translateY(-5%) scale(1.65);
 }
 
@@ -44,7 +44,6 @@
   aspect-ratio: 1;
   width: 25%;
   border-radius: 50%;
-  max-width: 312px;
 }
 
 .colorPicker {
@@ -73,11 +72,4 @@
   width: 6.5%;
   column-gap: 8%;
   max-width: 190px;
-}
-.recastButton {
-  position: fixed;
-  bottom: 0.78vw;
-  right: 1.5vw;
-  width: 7.5%;
-  max-width: 165px;
 }

@@ -7,7 +7,7 @@ import styles from "./Nav.module.css";
 import classNames from "classnames";
 
 interface Props {
-  className: string;
+  className?: string;
 }
 
 const Nav: React.FC<Props> = ({ className }) => {
@@ -33,10 +33,6 @@ const Nav: React.FC<Props> = ({ className }) => {
           <ButtonBackground className={styles.wandsBackground} />
         </li>
       </ul>
-      {currentRoute === "/" && <MintButton />}
-      <div className={styles.AccountConnect}>
-        <ConnectButton />
-      </div>
     </nav>
   );
 };

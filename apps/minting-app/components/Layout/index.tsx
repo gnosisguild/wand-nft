@@ -52,7 +52,6 @@ const Layout: React.FC<Props> = ({ children, description }) => {
       <main className={styles.main}>
         <CornerGilding className={classNames(mintingClasses)} />
         {children}
-        <Nav className={classNames(mintingClasses)} />
       </main>
     </div>
   );

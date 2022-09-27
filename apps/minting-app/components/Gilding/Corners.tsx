@@ -1,4 +1,9 @@
 import React from "react";
+import { useRouter } from "next/router";
+
+import ConnectButton from "../ConnectButton";
+import Nav from "../Nav";
+import RecastButton from "../IconButton/RecastButton";
 import styles from "./Gilding.module.css";
 
 interface Props {
@@ -6,6 +11,8 @@ interface Props {
 }
 
 const CornerGilding: React.FC<Props> = ({ className }) => {
+  const router = useRouter();
+  const currentRoute = router.pathname;
   return (
     <div className={className}>
       <div className={styles.upperLeft}>
@@ -26,6 +33,7 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
             />
           </g>
         </svg>
+        <Nav />
         <div className={styles.zodiacIcon}>
           <svg
             viewBox="0 0 79 79"
@@ -205,6 +213,7 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
             />
           </g>
         </svg>
+        <ConnectButton />
       </div>
       <div className={styles.lowerRight}>
         <svg
@@ -223,6 +232,8 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
             />
           </g>
         </svg>
+
+        {currentRoute === "/" && <RecastButton />}
       </div>
     </div>
   );
