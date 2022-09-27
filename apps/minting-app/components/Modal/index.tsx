@@ -31,7 +31,7 @@ const Modal: React.FC<Props> = ({ children, onClose }) => {
       document.removeEventListener("keydown", handleKeydown);
       element?.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [onClose]);
 
   return (
     <div className={styles.container} ref={ref}>

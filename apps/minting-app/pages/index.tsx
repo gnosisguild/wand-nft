@@ -13,15 +13,17 @@ import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
-import HandleClock from "../components/HandleClock";
 import MintingToast from "../components/MintingToast";
 import {
   FullDownloadButton,
   PFPDownloadButton,
 } from "../components/DownloadButton";
 import { MintStage } from "../types";
+import useHandleClock from "../components/useHandleClock";
 
 const Home: NextPage = () => {
+  useHandleClock();
+
   const { state } = useAppContext();
   const { stage } = state;
 
@@ -69,7 +71,6 @@ const Home: NextPage = () => {
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
-      <HandleClock />
     </Layout>
   );
 };

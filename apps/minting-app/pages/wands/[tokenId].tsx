@@ -36,9 +36,11 @@ const WandsPage: NextPage = () => {
     }
     setMounted(true);
   }, []);
+
   useEffect(() => {
     console.log("data", data);
   }, [data]);
+
   return (
     <Layout description="Zodiac Wands Minting App">
       <div className={styles.centerContainer}>

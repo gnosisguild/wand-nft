@@ -1,3 +1,4 @@
+import { getHandleFromHour } from "../components/useHandleClock";
 import { AppState, Background, MintStage } from "../types";
 import {
   randomStone,
@@ -95,7 +96,7 @@ export function randomState(): AppState {
     stage: MintStage.IDLE,
     background: randomBackground(),
     halo: randomHalo(),
-    handle: 0,
+    handle: getHandleFromHour(),
     stone: randomStone(),
     tokenId: 0,
     latitude,
