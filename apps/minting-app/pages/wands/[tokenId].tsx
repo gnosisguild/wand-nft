@@ -8,8 +8,11 @@ import Layout from "../../components/Layout";
 import styles from "../../styles/Home.module.css";
 
 import wandContract from "../../utils/contract";
+import { useAppContext } from "../../state";
+import { MintStage } from "../../types";
 
 const WandsPage: NextPage = () => {
+  const { state, dispatch } = useAppContext();
   const router = useRouter();
   const { tokenId } = router.query;
 
@@ -27,11 +30,17 @@ const WandsPage: NextPage = () => {
   // temp workaround for SRR hydration issue
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
+    console.log("app stage:", state.stage);
+    if (state.stage !== MintStage.IDLE) {
+      dispatch({ type: "changeMintStage", value: MintStage.IDLE });
+    }
     setMounted(true);
   }, []);
+
   useEffect(() => {
     console.log("data", data);
   }, [data]);
+
   return (
     <Layout description="Zodiac Wands Minting App">
       <div className={styles.centerContainer}>

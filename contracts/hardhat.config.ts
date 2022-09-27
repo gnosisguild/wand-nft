@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-etherscan";
-import "@nomiclabs/hardhat-waffle";
+import "@nomicfoundation/hardhat-toolbox";
 import "solidity-coverage";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
@@ -8,7 +8,9 @@ import dotenv from "dotenv";
 import type { HttpNetworkUserConfig } from "hardhat/types";
 import yargs from "yargs";
 
-import "./src/tasks/encodeRhythms";
+import "./src/tasks/spreadsheet";
+import "./src/tasks/passwords";
+import "./src/tasks/greenlist";
 
 const argv = yargs
   .option("network", {

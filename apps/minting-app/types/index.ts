@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface Planet {
   x: number;
   y: number;
@@ -137,7 +139,15 @@ export interface MintOptions {
   longitude: number;
 }
 
+export enum MintStage {
+  IDLE,
+  SIGNING,
+  TRANSACTING,
+  SUCCESS,
+  ERROR,
+}
+
 export type AppState = MintOptions & {
-  minting: boolean;
+  stage: MintStage;
   tokenId: number;
 };

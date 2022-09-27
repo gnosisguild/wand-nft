@@ -1,0 +1,45 @@
+.container {
+  position: fixed;
+  inset: 0;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  margin-top: 25px;
+  height: 60px;
+  aspect-ratio: 680/150;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(40, 32, 25, 0.8);
+  box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.5);
+}
+
+.main.error {
+  background: rgba(66, 20, 20, 0.8);
+}
+.main.success {
+  background: rgba(45, 66, 44, 0.8);
+}
+
+.message {
+  position: relative;
+  font-size: 1.2em;
+  z-index: 101;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.frame path {
+  stroke-width: 0.15vw;
+  stroke-opacity: 0.5;
+  stroke: #d9d4ad;
+}

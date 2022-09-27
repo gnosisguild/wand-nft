@@ -13,7 +13,7 @@ import {
   transformRotations,
 } from "../../apps/minting-app/state/transforms";
 
-import { AppState } from "../../apps/minting-app/types";
+import { AppState, MintStage } from "../../apps/minting-app/types";
 
 describe("Transforms", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -123,7 +123,7 @@ function state(): AppState {
     latitude: latBerlin,
     longitude: lngBerlin,
     // doesnt matter
-    minting: false,
+    stage: MintStage.IDLE,
     tokenId: -1,
   };
 }

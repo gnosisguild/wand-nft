@@ -146,10 +146,11 @@ async function verify(): Promise<void> {
   }
 
   // Note Decanter gets inlined
+
   try {
     await hre.run("verify:verify", {
       address: ZodiacWands,
-      constructorArguments: [Conjuror],
+      constructorArguments: [Conjuror, merkleRoot()],
     });
   } catch (e: any) {
     if (
@@ -177,6 +178,14 @@ async function verify(): Promise<void> {
       throw e;
     }
   }
+}
+
+function merkleRoot() {
+  const filePath = process.env["GREENLIST_FILE_PATH"];
+  assert(!!filePath, "No greenlist file configured");
+  /* eslint-disable-next-line @typescript-eslint/no-var-requires */
+  const json = require(filePath);
+  return json.root;
 }
 
 verify();
