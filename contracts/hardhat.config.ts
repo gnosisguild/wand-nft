@@ -1,8 +1,5 @@
-import "@nomiclabs/hardhat-etherscan";
 import "@nomicfoundation/hardhat-toolbox";
-import "solidity-coverage";
 import "hardhat-deploy";
-import "hardhat-gas-reporter";
 import "hardhat-contract-sizer";
 import dotenv from "dotenv";
 import type { HttpNetworkUserConfig } from "hardhat/types";
@@ -89,6 +86,9 @@ export default {
   },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
+  },
+  gasReporter: {
+    enabled: true,
   },
 };
 
