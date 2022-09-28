@@ -7,6 +7,16 @@
   aspect-ratio: 1 / 0.9502813647;
 }
 
+.createLayout {
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+}
+
+.wandsContainer {
+  padding: 9vw;
+}
+
 .animateOnMint {
   transition: opacity 3s ease-in-out, filter 2.5s 0.5s;
 }
@@ -66,7 +76,7 @@
 }
 
 .downloadButtons {
-  position: absolute;
+  position: fixed;
   bottom: 2.1vw;
   left: 2.7vw;
   display: flex;

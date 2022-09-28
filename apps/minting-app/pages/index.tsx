@@ -41,7 +41,10 @@ const Home: NextPage = () => {
   ];
 
   return (
-    <Layout description="Zodiac Wands Minting App">
+    <Layout
+      description="Zodiac Wands Minting App"
+      className={styles.createLayout}
+    >
       <MintingToast />
       <div className={styles.centerContainer}>
         <CenterGilding className={classNames(mintingClasses)} />

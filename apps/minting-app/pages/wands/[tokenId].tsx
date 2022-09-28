@@ -5,9 +5,12 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { useContractRead } from "wagmi";
 import WandView from "../../components/WandView";
 import Layout from "../../components/Layout";
-import styles from "../../styles/Home.module.css";
-import IconButton from "../../components/IconButton";
+import {
+  FullDownloadButton,
+  PFPDownloadButton,
+} from "../../components/DownloadButton";
 
+import styles from "../../styles/Home.module.css";
 import wandContract from "../../utils/contract";
 import { useAppContext } from "../../state";
 import { MintStage } from "../../types";
@@ -39,8 +42,8 @@ const WandsPage: NextPage = () => {
         {mounted && data && <WandView tokenUri={data as unknown as string} />}
       </div>
       <div className={styles.downloadButtons}>
-        <IconButton icon="FullDownload" />
-        <IconButton icon="PfpDownload" />
+        <FullDownloadButton />
+        <PFPDownloadButton />
       </div>
     </Layout>
   );

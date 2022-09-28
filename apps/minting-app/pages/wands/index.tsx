@@ -54,7 +54,7 @@ const WandsPage: NextPage = () => {
   return (
     <Layout description="Zodiac Wands Minting App">
       {mounted && (
-        <div className={styles.centerContainer}>
+        <div className={styles.wandsContainer}>
           <WandGrid wands={allWands} />
 
           {(isLoading || !isLastPage) && (
