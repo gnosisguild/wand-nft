@@ -95,7 +95,7 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
     uint128 planets,
     uint256 aspects,
     uint8 visibility,
-    MintPermit memory permit
+    MintPermit calldata permit
   ) external returns (uint256) {
     redeem(permit);
 

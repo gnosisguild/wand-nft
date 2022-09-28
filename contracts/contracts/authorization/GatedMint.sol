@@ -17,14 +17,14 @@ contract GatedMint {
     merkleRoot = _merkleRoot;
   }
 
-  function redeem(MintPermit memory permit) internal {
+  function redeem(MintPermit calldata permit) internal {
     address issuer = getIssuer(permit);
     enforceIsAuthorized(permit.proof, issuer);
     enforceIsFresh(issuer);
     redemptions[issuer] = true;
   }
 
-  function getIssuer(MintPermit memory permit) private view returns (address) {
+  function getIssuer(MintPermit calldata permit) private view returns (address) {
     if (permit.signature.length > 0) {
       bytes32 messageHash = ECDSA.toEthSignedMessageHash(
         keccak256(abi.encodePacked(msg.sender))
@@ -36,7 +36,7 @@ contract GatedMint {
     }
   }
 
-  function enforceIsAuthorized(bytes32[] memory proof, address issuer)
+  function enforceIsAuthorized(bytes32[] calldata proof, address issuer)
     private
     view
   {
