@@ -14,10 +14,13 @@ const Music: React.FC = () => {
   const { state } = useAppContext();
   const [chords, setChords] = useState();
   const [mids, setMids] = useState();
+  const [midSchedule, setMidSchedule] = useState(0);
   const [droneNote, setDroneNote] = useState();
   const [drone, setDrone] = useState();
+  const [droneSchedule, setDroneSchedule] = useState(0);
   const [sequence, setSequence] = useState();
   const [sequencer, setSequencer] = useState();
+  const [sequencerSchedule, setSequencerSchedule] = useState(0);
   const [backgroundTrack, setBackgroundTrack] = useState();
   const [ready, setReady] = useState(false);
 
@@ -50,6 +53,7 @@ const Music: React.FC = () => {
     const scale4 = Scale.notes(`${baseFreq}5 ${material}`);
     let _chords = [scale1, scale2, scale3, scale4];
 
+    console.log(_chords);
     setChords(_chords);
 
     filter = new Tone.Filter(500, "bandpass", -12);
@@ -84,7 +88,7 @@ const Music: React.FC = () => {
     reverb.connect(filter);
     filter.connect(effect);
     effect.connect(Tone.Destination);
-    synth.volume.rampTo(-50, 5);
+    synth.volume.rampTo(-40, 5);
 
     setMids(synth);
   };
@@ -126,7 +130,7 @@ const Music: React.FC = () => {
       volume: -Infinity,
     });
 
-    droneSynth.volume.rampTo(-24, 4);
+    droneSynth.volume.rampTo(-10, 4);
 
     droneSynth.connect(effect);
     effect.connect(reverb);
@@ -146,7 +150,7 @@ const Music: React.FC = () => {
     const haloRhythm = state.halo.rhythm;
     const lightness = state.background.color.lightness;
 
-    let baseOctave = 5;
+    let baseOctave = 4;
     let octaves = 4;
     let baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
 
@@ -182,7 +186,7 @@ const Music: React.FC = () => {
     Tone.Transport.bpm.value = bpm;
 
     reverb = new Tone.Reverb({
-      decay: 8,
+      decay: 2,
       wet: 0.8,
       preDelay: 1,
     });
@@ -190,7 +194,7 @@ const Music: React.FC = () => {
     effect = new Tone.FeedbackDelay(0.17, 0.7);
     effect.wet.value = 0.1;
 
-    filter = new Tone.Filter(6000, "highpass", -48);
+    filter = new Tone.Filter(8000, "bandpass", -48);
 
     const sequencerSynth = new Tone.Synth({
       oscillator: {
@@ -202,7 +206,7 @@ const Music: React.FC = () => {
         sustain: 0.8,
         release: 4,
       },
-      volume: -50,
+      volume: -70,
     });
 
     sequencerSynth.connect(reverb);
@@ -256,49 +260,43 @@ const Music: React.FC = () => {
 
   const triggerMids = () => {
     let i = 0;
-
-    let scheduleRepeat = 0;
     if (chords) {
-      // Tone.Transport.cancel();
-      Tone.Transport.cancel();
-      Tone.Transport.start();
-      scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
+      console.log("mid", midSchedule);
+      Tone.Transport.clear(midSchedule);
+      const scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
         let note = chords[i % chords.length];
         mids.triggerAttackRelease(note, "4m", time);
         i++;
       }, "4m");
+      setMidSchedule(scheduleRepeat);
     }
   };
 
   const triggerDrone = () => {
-    let scheduleRepeat;
-    if (scheduleRepeat) {
-      Tone.Transport.cancel();
-      Tone.Transport.start();
-    }
     if (drone) {
-      scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
+      console.log("drone", droneSchedule);
+      Tone.Transport.clear(droneSchedule);
+      const scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
         drone.triggerAttackRelease(droneNote, "1m", "+1m" + time);
       }, "1m");
+      setDroneSchedule(scheduleRepeat);
     }
   };
 
   const triggerSequencer = () => {
-    let scheduleRepeat;
-    if (scheduleRepeat) {
-      Tone.Transport.cancel();
-      Tone.Transport.start();
-    }
     if (sequencer && sequence) {
+      console.log("sequencer", sequencerSchedule);
+      Tone.Transport.clear(sequencerSchedule);
       let index = 0;
       const interval = [0, 3, 4].includes(state.halo.shape) ? "72n" : "96n";
-      scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
+      const scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
         let sequencerNote = sequence[index % sequence.length];
         if (sequencerNote) {
           sequencer.triggerAttackRelease(sequencerNote, interval, time);
         }
         index++;
       }, interval);
+      setSequencerSchedule(scheduleRepeat);
     }
   };
 
@@ -361,6 +359,10 @@ const Music: React.FC = () => {
     }
   }, [ready, state.handle]);
 
+  // // debounce every 1M
+  // const debounceTime = Tone.Time("1m").toSeconds();
+  // console.log(debounceTime);
+
   useEffect(() => {
     if (ready) {
       triggerMids();
@@ -388,11 +390,12 @@ const Music: React.FC = () => {
   useEffect(() => {
     const handleMouseDown = () => {
       if (!ready) {
+        Tone.Transport.start();
         setReady(true);
+        window.removeEventListener("mousedown", handleMouseDown);
       }
     };
     window.addEventListener("mousedown", handleMouseDown, { passive: true });
-    return () => window.removeEventListener("mousedown", handleMouseDown);
   }, []);
 
   return <></>;
