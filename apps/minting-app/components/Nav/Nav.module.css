@@ -48,3 +48,15 @@
 .buttonBackground:hover {
   opacity: 1;
 }
+
+@media (max-width: 800px) {
+  .nav li a {
+    font-size: 1.5vw;
+  }
+}
+
+@media (max-width: 500px) {
+  .nav li a {
+    font-size: 2.5vw;
+  }
+}

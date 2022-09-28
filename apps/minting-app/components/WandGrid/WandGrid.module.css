@@ -15,7 +15,6 @@
 
 .wandGrid {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  padding-top: 7vw;
+  gap: 3vw;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
