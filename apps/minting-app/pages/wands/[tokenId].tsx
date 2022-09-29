@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import "@rainbow-me/rainbowkit/styles.css";
-import { useContractRead } from "wagmi";
+import { useContractReads } from "wagmi";
 import WandView from "../../components/WandView";
 import Layout from "../../components/Layout";
 import {
@@ -25,12 +25,20 @@ const WandsPage: NextPage = () => {
     setMounted(true);
   }, []);
 
-  const { data, isError, isLoading } = useContractRead({
+  const contract = {
     addressOrName: wandContract.address,
     contractInterface: wandContract.abi,
-    functionName: "tokenURI",
-    args: tokenId,
+  };
+
+  const { data, isError, isLoading } = useContractReads({
+    contracts: [
+      { ...contract, functionName: "tokenURI", args: tokenId },
+      { ...contract, functionName: "ownerOf", args: tokenId },
+    ],
     enabled: !!tokenId,
+    onSuccess(data) {
+      console.log("success", data);
+    },
     onError(error) {
       console.log("Error", error);
     },
@@ -38,9 +46,12 @@ const WandsPage: NextPage = () => {
 
   return (
     <Layout description="Zodiac Wands Minting App">
-      <div className={styles.centerContainer}>
-        {mounted && data && <WandView tokenUri={data as unknown as string} />}
-      </div>
+      {mounted && data && (
+        <WandView
+          tokenUri={data as unknown as string}
+          tokenId={tokenId as unknown as string}
+        />
+      )}
       <div className={styles.downloadButtons}>
         <FullDownloadButton />
         <PFPDownloadButton />

@@ -1,19 +1,18 @@
+import WandImage from "../WandImage";
 import { WandTokenData } from "../../types";
 import styles from "./WandView.module.css";
 
 interface Props {
   tokenUri: string;
+  tokenId: string;
 }
 
-const WandView: React.FC<Props> = ({ tokenUri }) => {
+const WandView: React.FC<Props> = ({ tokenUri, tokenId }) => {
   const info = getDataFromUri(tokenUri);
   return (
     <div className={styles.wandViewContainer}>
       <div className={styles.wandView}>
-        <img
-          alt={`Picture of a Zodiac Wand named: '${info.name}'`}
-          src={info.image}
-        />
+        <WandImage tokenUri={tokenUri} tokenId={tokenId} width={320} />
       </div>
       <div className={styles.info}>
         <h1 className={styles.name}>{info.name}</h1>
