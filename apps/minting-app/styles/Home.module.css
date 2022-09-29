@@ -14,7 +14,8 @@
 }
 
 .wandsContainer {
-  padding: 9vw;
+  padding: 0 9vw 0;
+  position: relative;
 }
 
 .animateOnMint {
@@ -90,4 +91,10 @@
   right: 1.5vw;
   width: 7.5%;
   max-width: 165px;
+}
+
+@media (max-width: 500px) {
+  .wandsContainer {
+    padding: 0 16vw 0;
+  }
 }

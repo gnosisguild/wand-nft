@@ -13,8 +13,61 @@
   display: block;
 }
 
+.wandGridBorderTop {
+  border-top: 2.5px solid #845e2b55;
+  width: 100%;
+  transform: translateY(12vh);
+}
+
+.wandGridBorderBottom {
+  border-top: 2.5px solid #845e2b55;
+  width: 100%;
+  transform: translateY(-12vh);
+}
+
 .wandGrid {
   display: grid;
   gap: 3vw;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  height: 96vh;
+  padding: 14vh 2vh 14vh;
+  position: relative;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.08) 12.4%, rgba(0,0,0,1) 12.4%, rgba(0,0,0,1) 87.6%, rgba(0,0,0,0.08) 87.6%, rgba(0,0,0,0.08) 100%)
+}
+
+.wandGrid::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-height: 800px) {
+  .wandGridBorderTop {
+    transform: translateY(16vh);
+  }
+
+  .wandGridBorderBottom {
+    transform: translateY(-16vh);
+  }
+
+  .wandGrid {
+    padding: 18vh 2vh 18vh;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.08) 16.7%, rgba(0,0,0,1) 16.7%, rgba(0,0,0,1) 83.3%, rgba(0,0,0,0.08) 83.3%, rgba(0,0,0,0.08) 100%)
+  }
+}
+
+@media (max-width: 500px) {
+  .wandGridBorderTop {
+    transform: translateY(10vh);
+  }
+
+  .wandGridBorderBottom {
+    transform: translateY(-10vh);
+  }
+
+  .wandGrid {
+    padding: 12vh 2vh 12vh;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.08) 10.2%, rgba(0,0,0,1) 10.2%, rgba(0,0,0,1) 89.8%, rgba(0,0,0,0.08) 89.8%, rgba(0,0,0,0.08) 100%)
+  }
 }
