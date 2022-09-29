@@ -12,9 +12,14 @@ import { useAppContext } from "../../state";
 import { MintStage } from "../../types";
 
 const WandsPage: NextPage = () => {
-  const { state, dispatch } = useAppContext();
   const router = useRouter();
   const { tokenId } = router.query;
+
+  // // temp workaround for SRR hydration issue
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { data, isError, isLoading } = useContractRead({
     addressOrName: wandContract.address,
@@ -27,34 +32,13 @@ const WandsPage: NextPage = () => {
     },
   });
 
-  // temp workaround for SRR hydration issue
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    console.log("app stage:", state.stage);
-    if (state.stage !== MintStage.IDLE) {
-      dispatch({ type: "changeMintStage", value: MintStage.IDLE });
-    }
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    console.log("data", data);
-  }, [data]);
-
   return (
     <Layout description="Zodiac Wands Minting App">
       <div className={styles.centerContainer}>
-        {data && <WandView tokenUri={data} />}
+        {mounted && data && <WandView tokenUri={data as unknown as string} />}
       </div>
     </Layout>
   );
 };
 
 export default WandsPage;
-
-const getImageUri = (tokenUri: string) => {
-  const json = atob(tokenUri.slice("data:application/json;base64,".length));
-  if (!json) return "";
-  const obj = JSON.parse(json);
-  return obj.image;
-};

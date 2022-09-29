@@ -1,7 +1,6 @@
 .wandContainer {
   aspect-ratio: 2/3;
   width: 100%;
-  background-color: green;
   cursor: pointer;
 }
 

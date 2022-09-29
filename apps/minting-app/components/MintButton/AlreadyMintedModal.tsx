@@ -1,4 +1,3 @@
-import { useAccount } from "wagmi";
 import Modal from "../Modal";
 import styles from "./MintButton.module.css";
 
@@ -6,8 +5,7 @@ interface Props {
   onClose: () => void;
 }
 
-const AlreadMintedModal: React.FC<Props> = ({ onClose }) => {
-  const { address } = useAccount();
+const AlreadyMintedModal: React.FC<Props> = ({ onClose }) => {
   return (
     <Modal onClose={onClose}>
       <div className={styles.passwordModal}>
@@ -21,4 +19,4 @@ const AlreadMintedModal: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-export default AlreadMintedModal;
+export default AlreadyMintedModal;

@@ -12,6 +12,7 @@ const WandView: React.FC<Props> = ({ tokenUri }) => {
   );
 };
 export default WandView;
+
 const getImageUri = (tokenUri: string) => {
   const json = atob(tokenUri.slice("data:application/json;base64,".length));
   if (!json) return "";

@@ -57,13 +57,19 @@ const MintButton: React.FC = () => {
     hash: data?.hash,
     confirmations: 1,
     onSuccess(data) {
-      console.log("mint succerss", data);
+      console.log("mint success", data);
       const tokenId = parseInt(data.logs[0].topics[3], 16);
       dispatch({ type: "changeMintStage", value: MintStage.SUCCESS });
-      router.push(`/wands/${tokenId}`);
+      window.setTimeout(() => {
+        router.push(`/wands/${tokenId}`);
+        dispatch({ type: "changeMintStage", value: MintStage.IDLE });
+      }, 1000);
     },
     onError() {
       dispatch({ type: "changeMintStage", value: MintStage.ERROR });
+      window.setTimeout(() => {
+        dispatch({ type: "changeMintStage", value: MintStage.IDLE });
+      }, 5000);
     },
   });
 
@@ -96,9 +102,7 @@ const MintButton: React.FC = () => {
       </div>
       {showModal && !hasMinted && !directPermit && (
         <IncantationModal
-          onChange={(wildcardPermit) => {
-            setWildcardPermit(wildcardPermit);
-          }}
+          onChange={setWildcardPermit}
           onCancel={() => {
             setShowModal(false);
             setWildcardPermit(null);
@@ -108,7 +112,7 @@ const MintButton: React.FC = () => {
               // wagmi takes a few ms til the actual write function is ready.
               setShowModal(false);
               dispatch({ type: "changeMintStage", value: MintStage.SIGNING });
-              write?.();
+              write();
             }
           }}
         />
