@@ -4,7 +4,7 @@ import { clockwiseDelta, dimensions, toAngle } from "../utils/trigonometry";
 
 function useDragRotate<T>(
   value: number = 0,
-  onDragEnd: (angle: number) => void
+  onDragEnd: (angle: number, velocity: number) => void
 ) {
   const container = useRef<T | null>(null);
   const [pin, setPin] = useState<number>(0);
@@ -24,6 +24,7 @@ function useDragRotate<T>(
       last,
       initial: [initialX, initialY],
       xy: [x, y],
+      velocity,
     }) => {
       const { center } = dimensions(
         (container.current as Element).getBoundingClientRect()
@@ -46,7 +47,10 @@ function useDragRotate<T>(
       }
 
       if (last) {
-        onDragEnd(nextRotation);
+        onDragEnd(
+          nextRotation,
+          Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2))
+        );
       }
     },
   });

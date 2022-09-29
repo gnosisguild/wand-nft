@@ -7,7 +7,7 @@ import classNames from "classnames";
 type Props = {
   children: ReactNode;
   showIndicator?: boolean;
-  rotation?: SpringValue<string>;
+  rotation?: string | FluidValue<string, any> | undefined;
   dialClass?: string;
 };
 
