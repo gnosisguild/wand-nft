@@ -30,10 +30,6 @@ function useDragRotateAnimate<T>(
     },
   });
 
-  useEffect(() => {
-    transform.start({ config: { velocity } });
-  }, [velocity]);
-
   return {
     bind,
     hovering,
