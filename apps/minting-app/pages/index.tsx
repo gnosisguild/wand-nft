@@ -14,6 +14,7 @@ import PickerLabels from "../components/PickerLabels";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
+import JourneyModal from "../components/JourneyModal";
 import {
   FullDownloadButton,
   PFPDownloadButton,
@@ -45,8 +46,8 @@ const Home: NextPage = () => {
       description="Zodiac Wands Minting App"
       className={styles.createLayout}
     >
-      <MintingToast />
-      <div className={styles.centerContainer}>
+      {/* <MintingToast /> */}
+      {/* <div className={styles.centerContainer}>
         <CenterGilding className={classNames(mintingClasses)} />
         <MintButton />
         <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
@@ -66,7 +67,7 @@ const Home: NextPage = () => {
         <div className={classNames(styles.haloPicker, mintingClasses)}>
           <HaloPicker />
         </div>
-      </div>
+      </div> */}
 
       <div className={classNames(styles.recastButton, mintingClasses)}>
         <RecastButton />
@@ -76,6 +77,7 @@ const Home: NextPage = () => {
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
+      <JourneyModal />
     </Layout>
   );
 };
