@@ -9,22 +9,31 @@ import Window from "../../public/background-tracks/window.mp3";
 import Forest from "../../public/background-tracks/forest.mp3";
 import Crickets from "../../public/background-tracks/crickets.mp3";
 import * as Tone from "tone";
+import { TypeWithPartials } from "tone/build/esm/source/oscillator/OscillatorInterface";
+
+interface BackgroundTrack {
+  name: string;
+  volume: number;
+  audio: string;
+  filterRange: number[];
+  filterType: BiquadFilterType;
+}
 
 const Music: React.FC = () => {
   const { state } = useAppContext();
-  const [chords, setChords] = useState();
-  const [mids, setMids] = useState();
+  const [chords, setChords] = useState<string[][]>();
+  const [mids, setMids] = useState<Tone.PolySynth>();
   const [midSchedule, setMidSchedule] = useState(0);
-  const [droneNote, setDroneNote] = useState();
-  const [drone, setDrone] = useState();
+  const [droneNote, setDroneNote] = useState<Tone.Unit.Frequency>(0);
+  const [drone, setDrone] = useState<Tone.Synth>();
   const [droneSchedule, setDroneSchedule] = useState(0);
-  const [sequence, setSequence] = useState();
-  const [sequencer, setSequencer] = useState();
+  const [sequence, setSequence] = useState<Tone.Unit.Frequency[]>();
+  const [sequencer, setSequencer] = useState<Tone.Synth>();
   const [sequencerSchedule, setSequencerSchedule] = useState(0);
-  const [backgroundTrack, setBackgroundTrack] = useState();
+  const [backgroundTrack, setBackgroundTrack] = useState<BackgroundTrack>();
   const [ready, setReady] = useState(false);
 
-  const player = useRef();
+  const player = useRef<Tone.Player>();
 
   let filter;
   let lfo;
@@ -220,7 +229,7 @@ const Music: React.FC = () => {
   };
 
   const setupBackgroundTrack = () => {
-    const backgroundTracks = [
+    const backgroundTracks: BackgroundTrack[] = [
       {
         name: "dawn",
         volume: -33,
@@ -265,7 +274,7 @@ const Music: React.FC = () => {
       Tone.Transport.clear(midSchedule);
       const scheduleRepeat = Tone.Transport.scheduleRepeat((time) => {
         let note = chords[i % chords.length];
-        mids.triggerAttackRelease(note, "4m", time);
+        mids?.triggerAttackRelease(note, "4m", time);
         i++;
       }, "4m");
       setMidSchedule(scheduleRepeat);
@@ -319,13 +328,15 @@ const Music: React.FC = () => {
     });
 
     player.current = new Tone.Player(backgroundTrack.audio, () => {
-      player.loop = true;
-      player.current.volume.value = -80;
-      player.current.autostart = true;
-      player.current.fadeIn = 1;
-      player.current.fadeOut = 1;
-      player.current.loop = true;
-      player.current.volume.rampTo(backgroundTrack.volume, 3);
+      if (player && player.current) {
+        player.current.loop = true;
+        player.current.volume.value = -80;
+        player.current.autostart = true;
+        player.current.fadeIn = 1;
+        player.current.fadeOut = 1;
+        player.current.loop = true;
+        player.current.volume.rampTo(backgroundTrack.volume, 3);
+      }
     });
 
     player.current.connect(filter);
