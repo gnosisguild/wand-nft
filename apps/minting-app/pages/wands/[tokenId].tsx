@@ -33,7 +33,7 @@ const WandsPage: NextPage = () => {
   const { data, isError, isLoading } = useContractReads({
     contracts: [
       { ...contract, functionName: "tokenURI", args: tokenId },
-      { ...contract, functionName: "ownerOf", args: tokenId },
+      // { ...contract, functionName: "ownerOf", args: tokenId },
     ],
     enabled: !!tokenId,
     onSuccess(data) {
@@ -48,7 +48,7 @@ const WandsPage: NextPage = () => {
     <Layout description="Zodiac Wands Minting App">
       {mounted && data && (
         <WandView
-          tokenUri={data as unknown as string}
+          tokenUri={data[0] as unknown as string}
           tokenId={tokenId as unknown as string}
         />
       )}
