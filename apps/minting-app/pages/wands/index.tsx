@@ -7,9 +7,11 @@ import WandGrid from "../../components/WandGrid";
 import styles from "../../styles/Home.module.css";
 
 import wandContract from "../../utils/contract";
+import useInfiniteScroll from "react-infinite-scroll-hook";
+import IconButton from "../../components/IconButton";
 
 const WandsPage: NextPage = () => {
-  const { data, fetchNextPage } = useContractInfiniteReads({
+  const { data, fetchNextPage, isLoading } = useContractInfiniteReads({
     cacheKey: "mintedWands",
     ...paginatedIndexesConfig(
       (index = 0) => ({
@@ -18,7 +20,7 @@ const WandsPage: NextPage = () => {
         functionName: "tokenURI",
         args: [index],
       }),
-      { start: 0, perPage: 20, direction: "increment" }
+      { start: 0, perPage: 18, direction: "increment" }
     ),
     onSuccess(data) {
       console.log("Success", data);
@@ -28,28 +30,40 @@ const WandsPage: NextPage = () => {
     },
   });
 
+  const isLastPage = data?.pages?.some((page) => page.includes(null));
+  console.log({ isLoading, isLastPage });
+  const [sentryRef] = useInfiniteScroll({
+    loading: isLoading,
+    hasNextPage: !isLastPage,
+    onLoadMore: fetchNextPage,
+
+    // `rootMargin` is passed to `IntersectionObserver`.
+    // We can use it to trigger 'onLoadMore' when the sentry comes near to become
+    // visible, instead of becoming fully visible on the screen.
+    rootMargin: "0px 0px 100px 0px",
+  });
+
   // temp workaround for SRR hydration issue
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const allWands = data?.pages?.flat() || ([] as string[]);
+
   return (
     <Layout description="Zodiac Wands Minting App">
-      <div className={styles.centerContainer}>
-        {mounted && <WandGrid wands={data?.pages[0]} />}
-      </div>
-      {/* {mounted &&
-          data?.pages.map((tokenUris, i) => (
-            <Fragment key={i}>
-              {tokenUris.map(
-                (tokenUri, j) =>
-                  tokenUri && (
-                    <img src={getImageUri(tokenUri)} key={j} height={150} />
-                  )
-              )}
-            </Fragment>
-          ))} */}
+      {mounted && (
+        <div className={styles.centerContainer}>
+          <WandGrid wands={allWands} />
+
+          {(isLoading || !isLastPage) && (
+            <div ref={sentryRef} style={{ width: 50, margin: "16px auto" }}>
+              <IconButton icon="Linear" isLoading />
+            </div>
+          )}
+        </div>
+      )}
     </Layout>
   );
 };
