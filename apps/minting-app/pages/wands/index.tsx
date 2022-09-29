@@ -31,7 +31,7 @@ const WandsPage: NextPage = () => {
   });
 
   const isLastPage = data?.pages?.some((page) => page.includes(null));
-  console.log({ isLoading, isLastPage });
+
   const [sentryRef] = useInfiniteScroll({
     loading: isLoading,
     hasNextPage: !isLastPage,
