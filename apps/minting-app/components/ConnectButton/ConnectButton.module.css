@@ -59,3 +59,9 @@
   align-items: center;
   padding: 1%;
 }
+
+@media (max-width: 800px) {
+  .connectContainer button {
+    font-size: 1vw;
+  }
+}

@@ -4,15 +4,13 @@
   left: 0.5vw;
   width: 36%;
   max-width: 800px;
-  min-width: 350px;
   mix-blend-mode: color-dodge;
   z-index: 19;
 }
 
 .lowerLeft {
-  display: block;
   position: fixed;
-  bottom: 0.3vw;
+  bottom: 0.6vw;
   left: 0.7vw;
   width: 37%;
   max-width: 800px;
@@ -20,7 +18,6 @@
 }
 
 .upperRight {
-  display: block;
   position: fixed;
   top: 0.7vw;
   right: 0.5vw;
@@ -31,11 +28,10 @@
 
 .lowerRight {
   position: fixed;
-  bottom: 0.3vw;
+  bottom: 0.6vw;
   right: 0.7vw;
   width: 18%;
   max-width: 400px;
-  min-width: 100px;
   mix-blend-mode: color-dodge;
 }
 
@@ -78,9 +74,37 @@
   fill: var(--icon-color);
 }
 
+@media (max-width: 800px) {
+  .upperLeft {
+    transform-origin: top left;
+  }
+  .lowerLeft {
+    transform-origin: bottom left;
+  }
+  .lowerRight {
+    transform-origin: bottom right;
+  }
+  .upperLeft, .lowerRight, .lowerLeft, .upperRight  {
+    transform: scale(1.3);
+  }
+  .upperRight {
+    transform-origin: top right;
+    transform: scale(1.25);
+  }
+}
+
 @media (max-width: 500px) {
   .lowerLeft,
   .upperRight {
     display: none;
+  }
+  .upperLeft {
+    transform-origin: top left;
+  }
+  .lowerRight {
+    transform-origin: bottom right;
+  }
+  .upperLeft, .lowerRight {
+    transform: scale(2.25);
   }
 }
