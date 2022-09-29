@@ -1,12 +1,15 @@
+import classNames from "classnames";
 import { useRef, useEffect } from "react";
 import styles from "./Modal.module.css";
 
 interface Props {
   children: React.ReactNode;
+  mainClass?: string;
   onClose: () => void;
 }
 
-const Modal: React.FC<Props> = ({ children, onClose }) => {
+const Modal: React.FC<Props> = ({ children, mainClass, onClose }) => {
+  console.log(mainClass);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ const Modal: React.FC<Props> = ({ children, onClose }) => {
 
   return (
     <div className={styles.container} ref={ref}>
-      <div className={styles.main}>
+      <div className={classNames(styles.main, mainClass)}>
         <svg
           viewBox="0 0 680 590"
           fill="none"

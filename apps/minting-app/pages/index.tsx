@@ -14,6 +14,7 @@ import PickerLabels from "../components/PickerLabels";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
+import JourneyModal from "../components/JourneyModal";
 import {
   FullDownloadButton,
   PFPDownloadButton,
@@ -119,6 +120,7 @@ const Home: NextPage = () => {
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
+      <JourneyModal />
     </Layout>
   );
 };
