@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useGesture } from "@use-gesture/react";
+import { FullGestureState, useGesture } from "@use-gesture/react";
 import { usePrevious } from "./usePrevious";
 import { useSpring } from "@react-spring/web";
 
@@ -39,6 +39,7 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
 
   const bind = useGesture({
     onHover: ({ hovering }) => setHovering(hovering as boolean),
+    // @ts-ignore-next-line - somehow the typing of onDrag is a bit broken
     onDrag: ({
       dragging,
       first,
@@ -47,7 +48,7 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
       xy: [x, y],
       velocity: absVelocity,
       movement,
-    }) => {
+    }: FullGestureState<"drag">) => {
       if (first) {
         valueAtStart.current = rotationSpring.get();
       }
