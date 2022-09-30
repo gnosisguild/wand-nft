@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { animated } from "@react-spring/web";
+import { animated, SpringValue } from "@react-spring/web";
 import { ReactDOMAttributes } from "@use-gesture/react/dist/declarations/src/types";
 
 import { HueGradient, LightnessGradient } from "./Gradient";
@@ -15,22 +15,14 @@ export type Props = {
   bind: () => ReactDOMAttributes;
   hovering: boolean;
   dragging: boolean;
-  rotation: {
-    transform: SpringValue<string>;
-    value: number;
-  };
+  rotation: SpringValue<number>;
 };
 
-export const HueArc = ({
-  bind,
-  rotation: { transform },
-  hovering,
-  dragging,
-}: Props) => {
+export const HueArc = ({ bind, rotation, hovering, dragging }: Props) => {
   return (
     <animated.g
       style={{
-        transform,
+        transform: rotation.to((rotation) => `rotate(${rotation}deg)`),
         transformOrigin: "center",
       }}
       className={classNames(styles.dragGroup, {
@@ -61,16 +53,11 @@ export const HueArc = ({
   );
 };
 
-export const LightnessArc = ({
-  bind,
-  rotation: { transform },
-  hovering,
-  dragging,
-}: Props) => {
+export const LightnessArc = ({ bind, rotation, hovering, dragging }: Props) => {
   return (
     <animated.g
       style={{
-        transform,
+        transform: rotation.to((rotation) => `rotate(${rotation}deg)`),
         transformOrigin: "center",
       }}
       className={classNames(styles.dragGroup, {

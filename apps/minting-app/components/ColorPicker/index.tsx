@@ -5,7 +5,7 @@ import { Background } from "../../types";
 import { useAppContext } from "../../state";
 import { randomBackground } from "../../utils/randomizer";
 
-import useDragRotateAnimate from "../useDragRotateAnimate";
+import useDragRotate from "../useDragRotate";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
@@ -26,7 +26,7 @@ const ColorPicker: React.FC = () => {
     });
   };
 
-  const hueProps = useDragRotateAnimate<SVGPathElement>(
+  const hueProps = useDragRotate<SVGPathElement>(
     background.color.hue,
     (nextRotation: number) => {
       handleChange({
@@ -39,7 +39,7 @@ const ColorPicker: React.FC = () => {
     }
   );
 
-  const lightnessProps = useDragRotateAnimate<SVGPathElement>(
+  const lightnessProps = useDragRotate<SVGPathElement>(
     background.color.lightness,
     (nextRotation: number) => {
       handleChange({

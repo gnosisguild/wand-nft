@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 
 import { useAppContext } from "../../state";
@@ -11,7 +11,7 @@ import {
 import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
 
 import UiCircle from "../UiCircle";
-import useDragRotateAnimate from "../useDragRotateAnimate";
+import useDragRotate from "../useDragRotate";
 import useSeed from "../useSeed";
 
 import styles from "./StonePicker.module.css";
@@ -25,13 +25,15 @@ const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const seed = useSeed();
 
-  const { bind, hovering, dragging, rotation } =
-    useDragRotateAnimate<HTMLDivElement>(state.stone, (nextRotation) => {
+  const { bind, hovering, dragging, rotation } = useDragRotate<HTMLDivElement>(
+    state.stone,
+    (nextRotation) => {
       dispatch({
         type: "changeStone",
         value: nextRotation,
       });
-    });
+    }
+  );
 
   return (
     <div
