@@ -9,11 +9,13 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
   const valueAtStart = useRef(value);
   const [dragging, setDragging] = useState<boolean>(false);
 
-  const [velocity, setVelocity] = useState(0);
-  const [rotation, setRotation] = useState<number>(value);
-  const [dragRotation, setDragRotation] = useState<number>(value);
-  const [hovering, setHovering] = useState<boolean>(false);
+  // This state is not read, but used to trigger view updates while dragging/spinning.
+  // For reading we use the rotation spring value instead.
+  const [, setRotation] = useState<number>(value);
 
+  const [velocity, setVelocity] = useState(0);
+  const [hovering, setHovering] = useState<boolean>(false);
+  const [dragRotation, setDragRotation] = useState<number>(value);
   const prevDragRotation = usePrevious(dragRotation);
 
   const { rotation: rotationSpring } = useSpring({
