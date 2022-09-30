@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FullGestureState, useGesture } from "@use-gesture/react";
 import { usePrevious } from "./usePrevious";
 import { useSpring } from "@react-spring/web";
@@ -16,6 +16,11 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
   const [hovering, setHovering] = useState<boolean>(false);
   const [dragRotation, setDragRotation] = useState<number>(value);
   const prevDragRotation = usePrevious(dragRotation);
+
+  useEffect(() => {
+    setDragRotation(value);
+    setVelocity(0);
+  }, [value]);
 
   const { rotation: rotationSpring } = useSpring({
     from: { rotation: prevDragRotation },

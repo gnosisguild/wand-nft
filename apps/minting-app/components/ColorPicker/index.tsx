@@ -156,7 +156,7 @@ const ColorPicker: React.FC = () => {
         <IconButton
           icon="PickerAura"
           shadow
-          onClick={() => handleChange(randomBackground())}
+          onClick={() => handleChange(randomBackground(background))}
         />
       </div>
     </div>

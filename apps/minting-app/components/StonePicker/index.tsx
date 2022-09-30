@@ -118,7 +118,7 @@ const StonePicker: React.FC = () => {
           onClick={() =>
             dispatch({
               type: "changeStone",
-              value: randomStone(),
+              value: randomStone(state.stone),
             })
           }
         />
