@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useGesture } from "@use-gesture/react";
-import { clockwiseDelta, dimensions, toAngle } from "../utils/trigonometry";
 import { usePrevious } from "./usePrevious";
 import { useSpring } from "@react-spring/web";
 
@@ -106,3 +105,13 @@ const minus = (a: Point, b: Point) => ({
 
 const polarAngle = (point: Point) =>
   (Math.atan2(point.y, point.x) * 180) / Math.PI;
+
+const dimensions = (rect: DOMRect) => {
+  const { left, right, top, bottom } = rect;
+
+  const width = right - left;
+  const height = bottom - top;
+  const center = { x: left + width / 2, y: top + height / 2 };
+
+  return { center, width, height };
+};
