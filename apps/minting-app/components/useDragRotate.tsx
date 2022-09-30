@@ -50,41 +50,39 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
       movement,
     }) => {
       if (first) {
-        console.log("first", valueAtStart.current, rotationSpring.get(), value);
         valueAtStart.current = rotationSpring.get();
       }
 
       const { center } = dimensions(
         (container.current as Element).getBoundingClientRect()
       );
-      const initialAngle = toAngle(center, { x: initialX, y: initialY });
-      const currentAngle = toAngle(center, { x, y });
+      const initialAngle = polarAngle(
+        minus({ x: initialX, y: initialY }, center)
+      );
+      const currentAngle = polarAngle(minus({ x, y }, center));
+
       const delta = currentAngle - initialAngle;
       const nextRotation = valueAtStart.current + delta;
 
-      const velocity = [
-        absVelocity[0] * Math.sign(movement[0]),
-        absVelocity[1] * Math.sign(movement[1]),
-      ];
+      const velocity = {
+        x: absVelocity[0] * Math.sign(movement[0]),
+        y: absVelocity[1] * Math.sign(movement[1]),
+      };
 
-      const veloTarget = { x: x + velocity[0], y: y + velocity[1] };
-      const angularVelocity =
-        toAngle(center, veloTarget) - toAngle(center, { x, y });
-
-      // the length of the vector from the center to the release+velocity position is a measure of the spinning lever
-      // const lever = Math.sqrt(
-      //   Math.pow(veloTarget.x - center.x, 2) +
-      //     Math.pow(veloTarget.y - center.y, 2)
-      // );
+      // calculate the component of the velocity in tangential direction (i.e. perpendicular to the vector from center to current drag position)
+      const velocityAngle = polarAngle(velocity);
+      const velocityMagnitude = Math.sqrt(velocity.x ** 2 + velocity.y ** 2);
+      const velocityAngleToTangent = currentAngle - velocityAngle + 90;
+      const tangentialVelocity =
+        Math.cos((velocityAngleToTangent / 180) * Math.PI) * velocityMagnitude;
 
       setDragging(dragging as boolean);
       setDragRotation(nextRotation);
       setRotation(nextRotation);
 
       if (last) {
-        console.log("last", nextRotation, movement, velocity, angularVelocity);
-        setVelocity(angularVelocity);
-        if (angularVelocity === 0) onRest(nextRotation);
+        setVelocity(tangentialVelocity);
+        if (tangentialVelocity === 0) onRest(nextRotation);
       }
     },
   });
@@ -98,3 +96,13 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
 }
 
 export default useDragRotate;
+
+type Point = { x: number; y: number };
+
+const minus = (a: Point, b: Point) => ({
+  x: a.x - b.x,
+  y: a.y - b.y,
+});
+
+const polarAngle = (point: Point) =>
+  (Math.atan2(point.y, point.x) * 180) / Math.PI;
