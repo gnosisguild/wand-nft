@@ -17,6 +17,11 @@ export function findClosest(center: Point, radius: number, point: Point) {
 }
 
 export function toAngle(center: Point, { x, y }: Point) {
+  const polar = { x: x - center.x, y: y - center.y };
+  const angle = (Math.atan2(polar.y, polar.x) * 180) / Math.PI;
+
+  return angle;
+
   let carry;
   let opposite;
   let adjacent;
@@ -66,12 +71,6 @@ export function dimensions(rect: DOMRect) {
   const center = { x: left + width / 2, y: top + height / 2 };
 
   return { center, width, height };
-}
-
-export function delta(start: number, end: number) {
-  assertDegrees(start);
-  assertDegrees(end);
-  return end > start ? end - start : start - end;
 }
 
 export function clockwiseDelta(start: number, end: number) {

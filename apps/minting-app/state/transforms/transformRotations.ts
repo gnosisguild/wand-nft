@@ -28,6 +28,8 @@ function toLightness(angle: number): number {
 }
 
 export function toStoneId(angle: number) {
+  let normalizedAngle = angle % 360;
+  if (normalizedAngle < 0) normalizedAngle += 360;
   const skew = (360 / 29) * 0.5;
-  return Math.round((angle + skew) * 10) % 3600;
+  return Math.round((normalizedAngle + skew) * 10) % 3600;
 }

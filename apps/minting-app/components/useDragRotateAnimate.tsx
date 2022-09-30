@@ -8,36 +8,41 @@ function useDragRotateAnimate<T>(
   value: number = 0,
   onChange: (angle: number) => void
 ) {
+  const [dragging, setDragging] = useState<boolean>(false);
   const [velocity, setVelocity] = useState(0);
+  const [dragRotation, setDragRotation] = useState<number>(value);
+  const prevDragRotation = usePrevious(dragRotation);
 
-  const { bind, hovering, dragging, rotation } = useDragRotate<T>(
-    value,
-    (next: number, velocity: number) => {
-      // onChange(next);
-      setVelocity(velocity);
-    }
-  );
-
-  const prevRotation = usePrevious(rotation);
-
-  const { transform } = useSpring({
-    from: { transform: prevRotation },
-    to: { transform: rotation },
+  const { rotation } = useSpring({
+    from: { rotation: prevDragRotation },
+    to: { rotation: dragRotation },
     immediate: dragging,
     config: {
       velocity: velocity,
       decay: velocity !== 0,
     },
+    onChange() {
+      // console.log("change", transform.get());
+    },
+    onRest() {
+      if (!dragging) onChange(rotation.get());
+    },
   });
+
+  const { bind, hovering } = useDragRotate<T>(
+    rotation,
+    (rotation: number, velocity: number) => {
+      setDragRotation(rotation);
+      setVelocity(velocity);
+      if (velocity === 0) onChange(rotation);
+    }
+  );
 
   return {
     bind,
     hovering,
     dragging,
-    rotation: {
-      transform: transform.to((rotation) => `rotate(${rotation}deg)`),
-      value: rotation,
-    },
+    rotation,
   };
 }
 

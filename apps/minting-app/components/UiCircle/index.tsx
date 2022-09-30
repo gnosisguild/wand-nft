@@ -7,7 +7,7 @@ import classNames from "classnames";
 type Props = {
   children: ReactNode;
   showIndicator?: boolean;
-  rotation?: string | FluidValue<string, any> | undefined;
+  rotation?: SpringValue<number>;
   dialClass?: string;
 };
 
@@ -27,7 +27,8 @@ const UiCircle: React.FC<Props> = ({
       >
         <animated.g
           style={{
-            transform: rotation,
+            transform:
+              rotation && rotation.to((rotation) => `rotate(${rotation}deg)`),
             transformOrigin: "center",
           }}
         >
