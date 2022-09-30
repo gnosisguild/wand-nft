@@ -10,12 +10,13 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
   const [dragging, setDragging] = useState<boolean>(false);
 
   const [velocity, setVelocity] = useState(0);
+  const [rotation, setRotation] = useState<number>(value);
   const [dragRotation, setDragRotation] = useState<number>(value);
   const [hovering, setHovering] = useState<boolean>(false);
 
   const prevDragRotation = usePrevious(dragRotation);
 
-  const { rotation } = useSpring({
+  const { rotation: rotationSpring } = useSpring({
     from: { rotation: prevDragRotation },
     to: { rotation: dragRotation },
     immediate: dragging,
@@ -23,8 +24,15 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
       velocity: velocity,
       decay: velocity !== 0,
     },
+    onChange: () => {
+      if (!dragging) {
+        setRotation(rotationSpring.get());
+      }
+    },
     onRest() {
-      if (!dragging) onRest(rotation.get());
+      if (!dragging) {
+        onRest(rotationSpring.get());
+      }
     },
   });
 
@@ -39,10 +47,14 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
       velocity: absVelocity,
       movement,
     }) => {
+      if (first) {
+        console.log("first", valueAtStart.current, rotationSpring.get(), value);
+        valueAtStart.current = rotationSpring.get();
+      }
+
       const { center } = dimensions(
         (container.current as Element).getBoundingClientRect()
       );
-
       const initialAngle = toAngle(center, { x: initialX, y: initialY });
       const currentAngle = toAngle(center, { x, y });
       const delta = currentAngle - initialAngle;
@@ -52,11 +64,6 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
         absVelocity[0] * Math.sign(movement[0]),
         absVelocity[1] * Math.sign(movement[1]),
       ];
-
-      if (first) {
-        valueAtStart.current = rotation.get();
-        console.log("first", valueAtStart.current);
-      }
 
       const veloTarget = { x: x + velocity[0], y: y + velocity[1] };
       const angularVelocity =
@@ -70,10 +77,10 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
 
       setDragging(dragging as boolean);
       setDragRotation(nextRotation);
+      setRotation(nextRotation);
 
       if (last) {
         console.log("last", nextRotation, movement, velocity, angularVelocity);
-
         setVelocity(angularVelocity);
         if (angularVelocity === 0) onRest(nextRotation);
       }
@@ -84,7 +91,7 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
     bind: () => ({ ...bind(), ref: container }),
     dragging,
     hovering,
-    rotation,
+    rotation: rotationSpring,
   };
 }
 
