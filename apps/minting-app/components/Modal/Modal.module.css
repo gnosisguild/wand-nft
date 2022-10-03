@@ -1,23 +1,28 @@
 .container {
+  animation: fadeIn 1.5s ease-in-out forwards;
   position: fixed;
   inset: 0;
-  width: 99vw;
-  height: 99vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.2);
 }
 
 .main {
+  animation: fadeIn 1.5s 1.25s ease-in-out forwards;
   width: 80%;
   max-width: 400px;
   aspect-ratio: 680 / 590;
   padding: 2em;
+  opacity: 0;
   position: relative;
-  background: rgba(40, 32, 25, 0.3);
-  box-shadow: 0px 48px 96px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
+  background: rgba(40, 32, 25, 0.4);
+  box-shadow: 0px 48px 96px rgba(0, 0, 0, 0.8);
+  transform: translateY(3vh);
 }
 
 .content {
@@ -37,4 +42,13 @@
   stroke-width: 0.15vw;
   stroke-opacity: 0.5;
   stroke: #d9d4ad;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

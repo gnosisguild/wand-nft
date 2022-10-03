@@ -41,33 +41,41 @@ const Home: NextPage = () => {
     },
   ];
 
+  const showJourneyModal = true;
+
   return (
     <Layout
       description="Zodiac Wands Minting App"
       className={styles.createLayout}
     >
-      {/* <MintingToast /> */}
-      {/* <div className={styles.centerContainer}>
-        <CenterGilding className={classNames(mintingClasses)} />
-        <MintButton />
-        <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
-        <div
-          className={classNames(styles.svgPreview, {
-            [styles.mintingPreview]: isMinting,
-          })}
-        >
-          <SvgTemplate />
-        </div>
-        <div className={classNames(styles.colorPicker, mintingClasses)}>
-          <ColorPicker />
-        </div>
-        <div className={classNames(styles.stonePicker, mintingClasses)}>
-          <StonePicker />
-        </div>
-        <div className={classNames(styles.haloPicker, mintingClasses)}>
-          <HaloPicker />
-        </div>
-      </div> */}
+      {!showJourneyModal && (
+        <>
+          <MintingToast />
+          <div className={styles.centerContainer}>
+            <CenterGilding className={classNames(mintingClasses)} />
+            <MintButton />
+            <PickerLabels
+              className={classNames(mintingClasses, styles.hasSvg)}
+            />
+            <div
+              className={classNames(styles.svgPreview, {
+                [styles.mintingPreview]: isMinting,
+              })}
+            >
+              <SvgTemplate />
+            </div>
+            <div className={classNames(styles.colorPicker, mintingClasses)}>
+              <ColorPicker />
+            </div>
+            <div className={classNames(styles.stonePicker, mintingClasses)}>
+              <StonePicker />
+            </div>
+            <div className={classNames(styles.haloPicker, mintingClasses)}>
+              <HaloPicker />
+            </div>
+          </div>
+        </>
+      )}
 
       <div className={classNames(styles.recastButton, mintingClasses)}>
         <RecastButton />
