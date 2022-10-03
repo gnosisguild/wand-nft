@@ -1,82 +1,78 @@
-.modalLg {
-  max-width: 750px;
-}
-
-.journeyModal {
+.frameWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  row-gap: 1em;
+  row-gap: 2em;
 }
 
-.animationWrapper {
+.frameSlide {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 3rem);
+  flex-direction: column;
+}
+
+.frameTextWrapper {
+  display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 80%;
 }
 
-.isAnimating {
-  animation: smoke 3s 0.75s ease-in-out;
-}
-
-@keyframes smoke {
-  50% {
-    box-shadow: 0 0 120px rgba(0,0,0,0.5);
-    opacity: 0.2;
-  }
-  100% {
-    filter: blur(50px) brightness(20) saturate(0);
-    transform: translate3d(9rem,-4rem,0) scale(1.25, 0.5);
-    opacity: 0;
-  }
-}
-
-.animateText {
+.frameText {
   color: transparent;
   display: inline-block;
+  font-size: 1.5rem;
   text-shadow: 0 0 0 whitesmoke;
-  line-height: 1.5;
-  margin-right: 4px;
+  line-height: 1.35;
+  opacity: 0;
+  margin-right: 0.5rem;
+  text-align: center;
 }
 
-.isAnimatingText {
-  animation: smoke-text 5s both;
+.frameImage {
+  animation-delay: 1s;
+  height: 50%;
 }
 
-.isAnimatingText:nth-child(even) {
-  animation: smoke-text-2 5s both;
+.animateIn {
+  animation: fadeIn 1.5s var(--fadeInDelay, 0s) ease-in-out forwards;
 }
 
-@keyframes smoke-text {
-  60% {
-    text-shadow: 0 0 40px whitesmoke;
+.animateOut {
+  animation: fadeOut 1.5s var(--fadeOutDelay, 0s) ease-in-out forwards;
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  0% {
+    filter: blur(50px);
+    opacity: 0;
   }
-  to {
-    transform:
-      translate3d(19rem,-8rem,0)
-      rotate(-40deg)
-      skewX(70deg)
-      scale(1.25);
-    text-shadow: 0 0 20px whitesmoke;
+  100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    filter: blur(0);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(50px);
     opacity: 0;
   }
 }
 
-@keyframes smoke-text-2 {
-  60% {
-    text-shadow: 0 0 40px whitesmoke;
-  }
-  to {
-    transform:
-      translate3d(12rem,-14rem,0)
-      rotate(-10deg)
-      skewX(60deg)
-      scale(1.25);
-    text-shadow: 0 0 20px whitesmoke;
-    opacity: 0;
-  }
+.button {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
 }

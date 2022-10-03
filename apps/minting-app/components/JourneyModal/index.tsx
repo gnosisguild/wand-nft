@@ -1,53 +1,119 @@
 import classnames from "classnames";
-import { useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import styles from "./JourneyModal.module.css";
+import ZodiacIcon from "../../public/images/zodiac-icon.png";
+import ZodiacEcosystem from "../../public/images/zodiac-ecosystem.png";
 
 interface Props {
   onCancel: () => void;
   onSubmit: () => void;
 }
 
+interface FrameProps {
+  text?: string;
+  image?: StaticImageData;
+}
+
+const frames = [
+  {
+    text: `Myths are resilient.`,
+  },
+  {
+    text: `Take, for instance, the stories we tell ourselves about the stars.`,
+  },
+  {
+    text: `The characters that accompany the constellations, like the Great Bear, the Bull, or the Seven Sisters, appear to pass easily from one generation to the next.`,
+  },
+  {
+    text: `These myths, however, are not merely stories, they are also design systems, supported by artefacts like glyphs, charts, and cards that carry their resemblance through time…`,
+  },
+  {
+    image: ZodiacIcon,
+  },
+  {
+    text: `The Wand NFTs are a portal to the Zodiac ecosystem. We hope you hold them in common.`,
+  },
+  {
+    image: ZodiacEcosystem,
+    text: `The Zodiac ecosystem has the open standard at its heart, supported by the tools and wiki.`,
+  },
+];
+
 const IncantationModal: React.FC<Props> = ({ onCancel }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const handleClick = () => {
-    setIsAnimating(true);
+  let [activeFrame, setActiveFrame] = useState<number>(0);
 
+  const queueNextFrame = (delay = 1500) => {
+    setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
-    }, 4000);
+      setActiveFrame((activeFrame += 1));
+    }, delay);
   };
 
-  const frame1 = `These myths, however, are not merely stories, they are also design systems, supported by artefacts like glyphs, charts, and cards that carry their resemblance through time…`;
+  const handleClick = () => {
+    queueNextFrame();
+  };
 
   return (
-    <Modal onClose={() => console.log("close")} mainClass={styles.modalLg}>
-      <div className={styles.journeyModal}>
-        <div className={styles.animationWrapper}>
-          {frame1.split(" ").map((word, i) => (
-            <div
-              style={{
-                animationDelay: `${0.01 * i}s`,
-              }}
-              className={classnames(
-                styles.animateText,
-                isAnimating && styles.isAnimatingText
-              )}
-            >
-              {word}
-              {` `}
-            </div>
-          ))}
-        </div>
-        <img
-          width="500"
-          className={classnames(
-            styles.animate,
-            isAnimating && styles.isAnimating
-          )}
-          src="https://mirror-media.imgix.net/publication-images/xsC-WpXuJpb2za6KwQw-4.png?height=750&width=1500&h=750&w=1500&auto=compress"
-        />
-        <button onClick={handleClick}>Click me</button>
+    <Modal onClose={() => console.log("close")} maxWidth={"85vh"}>
+      <div className={styles.frameWrapper}>
+        {frames.map((frame, i) => {
+          if (activeFrame === i) {
+            return (
+              <>
+                <div className={styles.frameTextWrapper}>
+                  {frame.text &&
+                    frame.text.split(" ").map((word, j) => {
+                      return (
+                        <div
+                          key={j}
+                          style={{
+                            "--fadeInDelay":
+                              activeFrame === 0
+                                ? `${2 + j * 0.03}s`
+                                : `${0.03 * j}s`,
+                            "--fadeOutDelay": `${
+                              (0.03 * j) / j ? j * 0.03 : 0.03
+                            }s`,
+                          }}
+                          className={classnames(
+                            styles.frameText,
+                            activeFrame === i &&
+                              isAnimating &&
+                              styles.animateOut,
+                            activeFrame === i && styles.animateIn
+                          )}
+                        >
+                          {word}
+                        </div>
+                      );
+                    })}
+                </div>
+                {frame.image && (
+                  <img
+                    className={classnames(
+                      styles.frameImage,
+                      activeFrame === i && isAnimating && styles.animateOut,
+                      activeFrame === i && styles.animateIn
+                    )}
+                    src={frame.image.src}
+                    alt=""
+                  />
+                )}
+              </>
+            );
+          }
+        })}
+        <button
+          className={styles.button}
+          onClick={isAnimating ? undefined : handleClick}
+          disabled={isAnimating}
+        >
+          Continue
+        </button>
       </div>
     </Modal>
   );
