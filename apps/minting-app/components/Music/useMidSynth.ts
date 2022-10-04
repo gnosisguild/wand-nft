@@ -17,7 +17,31 @@ const useMidSynth = (props: Props) => {
   const chords = useRef<string[]>([]);
 
   // setup synth on page load
-  useEffect(() => {}, []);
+  useEffect(() => {
+    midSynthRef.current = new Tone.PolySynth({
+      volume: -30,
+    });
+    midSynthRef.current.set({
+      envelope: {
+        attack: 1,
+        decay: 1,
+        sustain: 1,
+        release: 1,
+      },
+    });
+
+    const filter = new Tone.Filter(500, "bandpass", -12);
+    const lfo = new Tone.LFO(0.01, 140, 240);
+    lfo.connect(filter.frequency);
+    const effect = new Tone.FeedbackDelay(0.1, 0.4);
+    effect.wet.value = 0.1;
+    const reverb = new Tone.Reverb({
+      decay: 14,
+      wet: 0.75,
+    });
+
+    midSynthRef.current.chain(reverb, filter, effect, Tone.Destination);
+  }, []);
 
   // changes on every state update
   useEffect(() => {
@@ -25,27 +49,12 @@ const useMidSynth = (props: Props) => {
 
     if (midSynthRef.current) {
       midSynthRef.current.releaseAll();
-      if (sequenceRef.current) {
-        sequenceRef.current.stop();
-        sequenceRef.current.clear();
-        sequenceRef.current.dispose();
-      }
-      midSynthRef.current.dispose();
+      // changing the oscillator is causing polysynth to get backed up and fail
+      // midSynthRef.current.set({
+      //   oscillator: { type: haloStyle[state.halo.shape] },
+      // });
     }
-    midSynthRef.current = new Tone.PolySynth({
-      volume: -30,
-    }).toDestination();
-    midSynthRef.current?.set({
-      oscillator: {
-        type: haloStyle[state.halo.shape],
-      },
-      // envelope: {
-      //   attack: 4,
-      //   decay: 0.1,
-      //   sustain: 0.8,
-      //   release: 4,
-      // },
-    });
+
     const scales = ["major", "minor", "minor pentatonic", "phrygian", "dorian"];
     const material =
       scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
@@ -79,17 +88,22 @@ const useMidSynth = (props: Props) => {
       JSON.stringify(cleanScale(chord4)),
     ];
 
-    console.log(chords.current);
-
-    sequenceRef.current = new Tone.Sequence((time, noteJSON) => {
-      const noteArray = JSON.parse(noteJSON);
-      console.log(
-        "playing — ",
-        midSynthRef.current?.get().oscillator,
-        noteArray
-      );
-      midSynthRef.current?.triggerAttackRelease(noteArray, "0.2");
-    }, chords.current).start(0);
+    if (sequenceRef.current) {
+      sequenceRef.current.dispose();
+    }
+    sequenceRef.current = new Tone.Sequence(
+      (time, noteJSON) => {
+        const noteArray = JSON.parse(noteJSON);
+        console.log(
+          "playing — ",
+          midSynthRef.current?.get().oscillator,
+          noteArray
+        );
+        midSynthRef.current?.triggerAttackRelease(noteArray, "4m");
+      },
+      chords.current,
+      "4m"
+    ).start();
   }, [
     state.stone,
     state.halo.shape,
