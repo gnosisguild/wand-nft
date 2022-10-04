@@ -19,7 +19,7 @@ const useMidSynth = (props: Props) => {
   // setup synth on page load
   useEffect(() => {
     midSynthRef.current = new Tone.PolySynth({
-      volume: -30,
+      volume: -40,
     });
     midSynthRef.current.set({
       envelope: {
@@ -45,8 +45,6 @@ const useMidSynth = (props: Props) => {
 
   // changes on every state update
   useEffect(() => {
-    console.log("update chords");
-
     if (midSynthRef.current) {
       midSynthRef.current.releaseAll();
       // changing the oscillator is causing polysynth to get backed up and fail
@@ -94,11 +92,6 @@ const useMidSynth = (props: Props) => {
     sequenceRef.current = new Tone.Sequence(
       (time, noteJSON) => {
         const noteArray = JSON.parse(noteJSON);
-        console.log(
-          "playing — ",
-          midSynthRef.current?.get().oscillator,
-          noteArray
-        );
         midSynthRef.current?.triggerAttackRelease(noteArray, "4m");
       },
       chords.current,
