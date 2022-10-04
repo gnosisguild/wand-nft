@@ -1,5 +1,5 @@
 .container {
-  animation: fadeIn 1.5s ease-in-out forwards;
+  animation: fadeIn 1s ease-in-out forwards;
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -13,7 +13,7 @@
 }
 
 .main {
-  animation: fadeIn 1.5s 1.25s ease-in-out forwards;
+  animation: fadeIn 1s 0.75s ease-in-out forwards;
   width: 80%;
   max-width: 400px;
   min-height: 10rem;

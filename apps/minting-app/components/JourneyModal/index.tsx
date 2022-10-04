@@ -38,6 +38,7 @@ const frames = [
   {
     image: ZodiacEcosystem,
     text: `The Zodiac ecosystem has the open standard at its heart, supported by the tools and wiki.`,
+    height: `70vh`,
   },
 ];
 
@@ -45,7 +46,7 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   let [activeFrame, setActiveFrame] = useState<number>(0);
 
-  const queueNextFrame = (delay = 1500) => {
+  const queueNextFrame = (delay = 1000) => {
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
@@ -58,22 +59,29 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
   };
 
   return (
-    <Modal onClose={() => console.log("close")} maxWidth={"85vh"}>
-      <div className={styles.frameWrapper}>
+    <Modal onClose={() => console.log("close")} maxWidth={"40vmax"}>
+      <div
+        className={styles.frameWrapper}
+        style={{
+          maxHeight: frames[activeFrame]?.height
+            ? frames[activeFrame].height
+            : undefined,
+        }}
+      >
         {frames.map((frame, i) => {
           if (activeFrame === i) {
             return (
               <>
-                <div className={styles.frameTextWrapper}>
-                  {frame.text &&
-                    frame.text.split(" ").map((word, j) => {
+                {frame.text && (
+                  <div className={styles.frameTextWrapper}>
+                    {frame.text.split(" ").map((word, j) => {
                       return (
                         <div
                           key={j}
                           style={{
                             "--fadeInDelay":
                               activeFrame === 0
-                                ? `${2 + j * 0.03}s`
+                                ? `${0.75 + j * 0.03}s`
                                 : `${0.03 * j}s`,
                             "--fadeOutDelay": `${
                               (0.03 * j) / j ? j * 0.03 : 0.03
@@ -91,7 +99,8 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
                         </div>
                       );
                     })}
-                </div>
+                  </div>
+                )}
                 {frame.image && (
                   <img
                     className={classnames(
