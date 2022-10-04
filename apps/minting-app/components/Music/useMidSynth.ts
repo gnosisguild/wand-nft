@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as ToneLib from "tone";
 import { Scale, transpose, Chord } from "tonal";
 
+import { haloStyle } from "./HaloShapeMappings";
 import { mapValue } from "../../utils/mapValue";
 import { useAppContext } from "../../state";
 interface Props {
@@ -16,15 +17,35 @@ const useMidSynth = (props: Props) => {
   const chords = useRef<string[]>([]);
 
   // setup synth on page load
-  useEffect(() => {
-    midSynthRef.current = new Tone.PolySynth({
-      volume: -30,
-    }).toDestination();
-  }, []);
+  useEffect(() => {}, []);
 
   // changes on every state update
   useEffect(() => {
     console.log("update chords");
+
+    if (midSynthRef.current) {
+      midSynthRef.current.releaseAll();
+      if (sequenceRef.current) {
+        sequenceRef.current.stop();
+        sequenceRef.current.clear();
+        sequenceRef.current.dispose();
+      }
+      midSynthRef.current.dispose();
+    }
+    midSynthRef.current = new Tone.PolySynth({
+      volume: -30,
+    }).toDestination();
+    midSynthRef.current?.set({
+      oscillator: {
+        type: haloStyle[state.halo.shape],
+      },
+      // envelope: {
+      //   attack: 4,
+      //   decay: 0.1,
+      //   sustain: 0.8,
+      //   release: 4,
+      // },
+    });
     const scales = ["major", "minor", "minor pentatonic", "phrygian", "dorian"];
     const material =
       scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
@@ -50,6 +71,7 @@ const useMidSynth = (props: Props) => {
     const chord3 = Chord.notes(noteFreq, scaleChords[2]);
     const chord4 = Chord.notes(noteFreq, scaleChords[3]);
 
+    // stringify array so Tone.Sequence doesn't use the array to create sub-sequences
     chords.current = [
       JSON.stringify(cleanScale(chord1)),
       JSON.stringify(cleanScale(chord2)),
@@ -58,12 +80,14 @@ const useMidSynth = (props: Props) => {
     ];
 
     console.log(chords.current);
-    if (sequenceRef.current) {
-      sequenceRef.current.dispose();
-    }
 
     sequenceRef.current = new Tone.Sequence((time, noteJSON) => {
       const noteArray = JSON.parse(noteJSON);
+      console.log(
+        "playing — ",
+        midSynthRef.current?.get().oscillator,
+        noteArray
+      );
       midSynthRef.current?.triggerAttackRelease(noteArray, "0.2");
     }, chords.current).start(0);
   }, [
