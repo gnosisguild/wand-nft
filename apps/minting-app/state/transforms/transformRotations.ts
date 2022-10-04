@@ -35,7 +35,7 @@ export function toStoneId(angle: number) {
 }
 
 // normalize an angle to the range [0, 360)
-function normalizeAngle(angle: number) {
+export function normalizeAngle(angle: number) {
   let normalizedAngle = angle % 360;
   if (normalizedAngle < 0) normalizedAngle += 360;
   return normalizedAngle;
