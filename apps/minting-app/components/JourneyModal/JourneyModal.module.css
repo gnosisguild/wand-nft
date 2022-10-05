@@ -8,10 +8,12 @@
   max-height: 50vh;
   transition: max-height 0.5s ease-in-out;
   row-gap: 2em;
+  transform: translateY(-1rem);
 }
 
 .frameTextWrapper {
   display: flex;
+  align-content: flex-start;
   justify-content: center;
   flex-wrap: wrap;
   max-width: 80%;
@@ -43,11 +45,11 @@
 }
 
 .animateIn {
-  animation: fadeIn 0.75s var(--fadeInDelay, 0s) ease-in-out forwards;
+  animation: fadeIn var(--animationDuration, 0.75s) var(--fadeInDelay, 0s) ease-in-out forwards;
 }
 
 .animateOut {
-  animation: fadeOut 0.75s var(--fadeOutDelay, 0s) ease-in-out forwards;
+  animation: fadeOut var(--animationDuration, 0.75s) var(--fadeOutDelay, 0s) ease-in-out forwards;
   opacity: 1;
 }
 
@@ -77,6 +79,7 @@
   position: absolute;
   width: 2.5rem;
   bottom: 0.5rem;
+  transition: filter 0.5s ease-in-out;
 }
 
 .forwardButton {
@@ -98,7 +101,3 @@
 .navigationGuilding {
   opacity: 0.6;
 }
-
-
-
-

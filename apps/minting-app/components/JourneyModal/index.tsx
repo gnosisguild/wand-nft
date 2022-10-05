@@ -1,6 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import classnames from "classnames";
 import Image, { StaticImageData } from "next/image";
-import { useEffect, useState } from "react";
 import IconButton from "../IconButton";
 import FrameImage from "./FrameImage";
 import Modal from "../Modal";
@@ -10,6 +10,7 @@ import ZodiacEcosystem from "../../public/images/zodiac-ecosystem.png";
 import Wand1 from "../../public/images/wand-1.png";
 import Wand2 from "../../public/images/wand-2.png";
 import Wand3 from "../../public/images/wand-3.png";
+import Link from "next/link";
 
 interface Props {
   onCancel: () => void;
@@ -24,23 +25,30 @@ interface ImageProps {
 }
 
 interface FrameProps {
-  text?: string;
+  text?: (string | JSX.Element)[];
   images?: ImageProps;
   height?: string;
+  textHeight?: number;
 }
 
 const frames: FrameProps[] = [
   {
-    text: `Myths are resilient.`,
+    text: [`Myths are resilient.`],
   },
   {
-    text: `Take, for instance, the stories we tell ourselves about the stars.`,
+    text: [
+      `Take, for instance, the stories we tell ourselves about the stars.`,
+    ],
   },
   {
-    text: `The characters that accompany the constellations, like the Great Bear, the Bull, or the Seven Sisters, appear to pass easily from one generation to the next.`,
+    text: [
+      `The characters that accompany the constellations, like the Great Bear, the Bull, or the Seven Sisters, appear to pass easily from one generation to the next.`,
+    ],
   },
   {
-    text: `These myths, however, are not merely stories, they are also design systems, supported by artefacts like glyphs, charts, and cards that carry their resemblance through time…`,
+    text: [
+      `These myths, however, are not merely stories, they are also design systems, supported by artefacts like glyphs, charts, and cards that carry their resemblance through time…`,
+    ],
   },
   {
     images: {
@@ -48,13 +56,29 @@ const frames: FrameProps[] = [
     },
   },
   {
-    text: `The Wand NFTs are a portal to the Zodiac ecosystem. We hope you hold them in common.`,
+    text: [
+      `The Wand NFTs are a portal to the Zodiac ecosystem. We hope you hold them in common.`,
+    ],
   },
   {
     images: {
       paths: [ZodiacEcosystem],
     },
-    text: `The Zodiac ecosystem has the open standard at its heart, supported by the tools and wiki.`,
+    text: [
+      `The Zodiac ecosystem has the open standard at its heart, supported by the tools and wiki.`,
+    ],
+    height: `70vh`,
+    textHeight: 1.5,
+  },
+  {
+    images: {
+      paths: [ZodiacEcosystem],
+      persist: true,
+      animateIn: "#governed-by",
+    },
+    text: [
+      `The Wand NFTs govern the Zodiac ecosystem. However, holding a wand alone does not confer governance power.`,
+    ],
     height: `70vh`,
   },
   {
@@ -63,31 +87,25 @@ const frames: FrameProps[] = [
       persist: true,
       animateIn: "#governed-by",
     },
-    text: `The Wand NFTs govern the Zodiac ecosystem. However, holding a wand alone does not confer governance power.`,
+    text: [
+      `With evolved wands, you can vote, curate the wiki, and administrate the tools repository.`,
+    ],
     height: `70vh`,
+    textHeight: 1.5,
   },
   {
-    images: {
-      paths: [ZodiacEcosystem],
-      persist: true,
-      animateIn: "#governed-by",
-    },
-    text: `With evolved wands, you can vote, curate the wiki, and administrate the tools repository.`,
-    height: `70vh`,
-  },
-  {
-    text: `To evolve your Wand NFT, you can contribute to the Zodiac ecosystem over time.
-
-    This will be reflected in greater governance power attributed to your account.
-    `,
+    text: [
+      `To evolve your Wand NFT, you can contribute to the Zodiac ecosystem over time.`,
+      `This will be reflected in greater governance power attributed to your account.`,
+    ],
   },
   {
     images: {
       paths: [Wand1, Wand2, Wand3],
       reverse: true,
     },
-    text: `As well as an evolved wand…`,
-    height: `70vh`,
+    text: [`As well as an evolved wand…`],
+    height: `60vh`,
   },
   {
     images: {
@@ -95,35 +113,47 @@ const frames: FrameProps[] = [
       persist: true,
       reverse: true,
     },
-    text: `You can choose to sell your evolved Wand NFT.`,
+    text: [`You can choose to sell your evolved Wand NFT.`],
     height: `70vh`,
   },
   {
-    text: `But you won’t be able to actively participate in Zodiac ecosystem governance until you hold a Wand NFT again.
-
-    Also, your governance power won’t transfer with your  Wand NFT.
-
-    Some powers can only be earned through experience…
-    `,
+    text: [
+      `But you won’t be able to actively participate in Zodiac ecosystem governance until you hold a Wand NFT again.`,
+      `Also, your governance power won’t transfer with your  Wand NFT.`,
+      `Some powers can only be earned through experience…`,
+    ],
   },
   {
-    text: `So choose which account holds your Wand NFT wisely.
-
-    For the full description of Zodiac ecosystem governance, visit [URL].
-    `,
+    text: [
+      `So choose which account holds your Wand NFT wisely.`,
+      <>
+        For the full description of Zodiac ecosystem governance, visit{` `}
+        <Link href="#URL" target="_blank" rel="noredirect">
+          [URL]
+        </Link>
+        .
+      </>,
+    ],
   },
 ];
 
 const IncantationModal: React.FC<Props> = ({ onCancel }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   let [activeIndex, setActiveIndex] = useState<number>(0);
+  let [textWrapperHeight, setTextWrapperHeight] = useState<number>(0);
+
+  const frameWrapperTextRef = useRef<any>(null);
+
+  const animationDuration = 750; // in microseconds
+  const wordDelay = 5; // in microseconds
+  const activeFrame = frames[activeIndex];
 
   const queueFrame = (direction: number) => {
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
       setActiveIndex((activeIndex += direction));
-    }, 750);
+    }, animationDuration);
   };
 
   const prevSlide = () => {
@@ -133,74 +163,126 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
     queueFrame(1);
   };
 
-  const wordDelay = 0.01;
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        prevSlide();
+      } else if (e.key === "ArrowRight") {
+        nextSlide();
+      }
+    };
 
-  const activeFrame = frames[activeIndex];
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (frameWrapperTextRef.current) {
+      setTextWrapperHeight(frameWrapperTextRef.current?.clientHeight);
+    }
+  }, [frameWrapperTextRef.current]);
 
   return (
     <Modal onClose={() => console.log("close")} maxWidth={"730px"}>
-      <div
-        className={styles.frameWrapper}
-        style={{
-          maxHeight: frames[activeIndex]?.height
-            ? frames[activeIndex].height
-            : undefined,
-          flexDirection: activeFrame.images?.reverse ? "column-reverse" : null,
-        }}
-      >
-        {activeFrame?.images && (
-          <div className={styles.imagesWrapper}>
-            {activeFrame.images.paths?.map((image, i) => {
-              const imageLen = activeFrame.images?.paths.length;
-              return (
-                <FrameImage
-                  src={image.src}
-                  alt={""}
-                  style={{
-                    width:
-                      imageLen && imageLen > 0
-                        ? `calc(${Math.floor(100 / imageLen)}% - 15px)`
-                        : null,
-                  }}
-                  className={classnames(
-                    styles.frameImage,
-                    !activeFrame?.images?.persist && styles.animateIn,
-                    isAnimating &&
-                      !frames[activeIndex + 1]?.images?.persist &&
-                      styles.animateOut
-                  )}
-                />
-              );
-            })}
-          </div>
-        )}
-        {activeFrame.text && (
-          <div className={styles.frameTextWrapper}>
-            {activeFrame.text.split(" ").map((word, j) => {
-              return (
-                <div
-                  key={j}
-                  style={{
-                    "--fadeInDelay":
-                      activeIndex === 0
-                        ? `${0.75 + j * wordDelay}s`
-                        : `${wordDelay * j}s`,
-                    "--fadeOutDelay": `${
-                      (wordDelay * j) / j ? j * wordDelay : wordDelay
-                    }s`,
-                  }}
-                  className={classnames(
-                    styles.frameText,
-                    isAnimating && styles.animateOut,
-                    styles.animateIn
-                  )}
-                >
-                  {word}
-                </div>
-              );
-            })}
-          </div>
-        )}
+      <>
+        <div
+          className={styles.frameWrapper}
+          style={{
+            maxHeight: frames[activeIndex]?.height
+              ? frames[activeIndex].height
+              : undefined,
+            flexDirection: activeFrame.images?.reverse
+              ? "column-reverse"
+              : null,
+          }}
+        >
+          {activeFrame?.images && (
+            <div className={styles.imagesWrapper}>
+              {activeFrame.images.paths?.map((image, i) => {
+                const imageLen = activeFrame.images?.paths.length;
+                return (
+                  <FrameImage
+                    src={image.src}
+                    alt={""}
+                    style={{
+                      width:
+                        imageLen && imageLen > 0
+                          ? `calc(${Math.floor(100 / imageLen)}% - 15px)`
+                          : "auto",
+                    }}
+                    className={classnames(
+                      styles.frameImage,
+                      !activeFrame?.images?.persist && styles.animateIn,
+                      isAnimating &&
+                        !frames[activeIndex + 1]?.images?.persist &&
+                        styles.animateOut
+                    )}
+                  />
+                );
+              })}
+            </div>
+          )}
+          {console.log(textWrapperHeight, activeFrame.textHeight)}
+          {activeFrame.text &&
+            activeFrame.text.map((p, i) => (
+              <div
+                className={styles.frameTextWrapper}
+                ref={frameWrapperTextRef}
+                style={{
+                  height:
+                    textWrapperHeight && activeFrame.textHeight
+                      ? textWrapperHeight * activeFrame.textHeight
+                      : "unset",
+                }}
+              >
+                {typeof p === "string" ? (
+                  p.split(" ").map((word, j) => {
+                    return (
+                      <div
+                        key={j}
+                        style={{
+                          "--animationDuration": `${animationDuration}ms`,
+                          "--fadeInDelay":
+                            activeIndex === 0
+                              ? `${
+                                  animationDuration + i * 300 + j * wordDelay
+                                }ms`
+                              : `${wordDelay * j + i * 300}ms`,
+                          "--fadeOutDelay": `${
+                            (wordDelay * j) / j ? j * wordDelay : wordDelay
+                          }s`,
+                        }}
+                        className={classnames(
+                          styles.frameText,
+                          isAnimating && styles.animateOut,
+                          styles.animateIn
+                        )}
+                      >
+                        {word}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div
+                    style={{
+                      "--animationDuration": `${animationDuration}ms`,
+                      "--fadeInDelay": `0.5s`,
+                      "--fadeOutDelay": `0s`,
+                    }}
+                    className={classnames(
+                      styles.frameText,
+                      isAnimating && styles.animateOut,
+                      styles.animateIn
+                    )}
+                  >
+                    {p}
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
         <div className={styles.navigationFrame}>
           <svg
             viewBox="0 0 609 49"
@@ -217,14 +299,23 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
               />
             </g>
           </svg>
-          <div className={classnames(styles.iconButton, styles.forwardButton)}>
+          <div
+            className={classnames(styles.iconButton, styles.forwardButton)}
+            style={{
+              filter: !isAnimating ? "brightness(2)" : "brightness(1)",
+              transitionDelay: !isAnimating ? `${animationDuration}ms` : "0s",
+            }}
+          >
             <IconButton
               icon="Forward"
               shadow
               onClick={isAnimating ? undefined : nextSlide}
             />
           </div>
-          <div className={classnames(styles.iconButton, styles.backwardButton)}>
+          <div
+            className={classnames(styles.iconButton, styles.backwardButton)}
+            style={{ opacity: activeIndex === 0 ? 0.5 : "unset" }}
+          >
             <IconButton
               icon="Backward"
               shadow
@@ -233,7 +324,7 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
             />
           </div>
         </div>
-      </div>
+      </>
     </Modal>
   );
 };
