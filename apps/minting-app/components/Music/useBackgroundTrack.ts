@@ -72,17 +72,16 @@ const useBackgroundTrack = (props: Props) => {
 
   // changes on every state update
   useEffect(() => {
-    console.log("loaded", loaded);
+    console.log("tone context", Tone.context.state);
     if (loaded) {
       if (playerRef.current) {
-        playerRef.current?.volume.rampTo(-80, 1);
-        playerRef.current.dispose();
+        playerRef.current.disconnect();
       }
       const currentTrack = tracks.current[state.handle];
       playerRef.current = playersRef.current?.player(currentTrack.name);
       playerRef.current?.set({
         loop: true,
-        volume: -80,
+        volume: 10,
         autostart: true,
         fadeIn: 1,
         fadeOut: 1,
@@ -103,9 +102,16 @@ const useBackgroundTrack = (props: Props) => {
       });
 
       playerRef.current?.chain(filter, reverb, Tone.Destination);
-      playerRef.current?.start();
+      console.log(
+        playerRef.current?.loaded,
+        Tone.context.state,
+        playerRef.current?.get().volume
+      );
+      if (Tone.context.state === "running" && playerRef.current?.loaded) {
+        playerRef.current?.start();
+      }
     }
-  }, [loaded, state.handle]);
+  }, [loaded, state.handle, Tone.context.state]);
 
   return playersRef.current;
 };
