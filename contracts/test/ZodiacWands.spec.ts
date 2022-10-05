@@ -46,7 +46,6 @@ describe("ZodiacWands", async () => {
       const { zodiacWands, permit } = await baseSetup();
 
       const background = {
-        hue: 0,
         radial: true,
         dark: true,
         color: {
@@ -88,8 +87,9 @@ describe("ZodiacWands", async () => {
         tokenId: -1,
         showJourney: false,
       };
+      const date = new Date("2022-10-01");
 
-      const tx = await zodiacWands.mint(...packForMinting(state), permit);
+      const tx = await zodiacWands.mint(...packForMinting(state, date), permit);
 
       await tx.wait();
 
@@ -111,7 +111,7 @@ describe("ZodiacWands", async () => {
       const seed = parseInt(keccak256(signer.address).slice(-4), 16);
 
       const svgFromJS = renderSvgTemplate({
-        ...transformForRendering(state, seed),
+        ...transformForRendering(state, seed, date),
         // sparkles and name are not on the preview, we mimick solidity
         sparkles: generateSparkles(tokenId),
         frame: {
