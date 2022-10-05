@@ -54,12 +54,6 @@ describe("Conjuror", async () => {
         expect(fromJS.rotation).to.equal(fromSolidity.rotation);
       };
 
-      // cycling through all takes time
-      // for (let stoneId = 0; stoneId < 3600; stoneId++) {
-      //   console.log(stoneId);
-      //   await checkIt(stoneId);
-      // }
-
       //random values
       await checkIt(3210);
       await checkIt(3014);
@@ -83,20 +77,10 @@ describe("Conjuror", async () => {
           progress: solProgress,
         } = await wandConjurorExposer._interpolationParams(stoneId);
         const [jsFrom, jsTo, jsProgress] = interpolationParams(stoneId);
-        // console.log(stoneId);
-        // console.log(solFrom, solTo);
-        // console.log(jsFrom, jsTo);
-        // console.log(jsProgress, solProgress);
         expect(solFrom).to.equal(jsFrom);
         expect(solTo).to.equal(jsTo);
         expect(solProgress).to.equal(jsProgress);
       };
-
-      // // cycling through all takes time
-      // for (let stoneId = 0; stoneId < 3600; stoneId++) {
-      //   console.log(stoneId);
-      //   await checkIt(stoneId);
-      // }
 
       // random values
       await checkIt(1251);
