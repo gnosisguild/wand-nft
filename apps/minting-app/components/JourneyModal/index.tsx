@@ -15,14 +15,14 @@ interface Props {
 }
 
 interface ImageProps {
-  path?: StaticImageData;
+  paths?: StaticImageData[];
   animateIn?: string;
   persist?: boolean;
 }
 
 interface FrameProps {
   text?: string;
-  image?: ImageProps;
+  images?: ImageProps;
   height?: string;
 }
 
@@ -40,21 +40,23 @@ const frames: FrameProps[] = [
     text: `These myths, however, are not merely stories, they are also design systems, supported by artefacts like glyphs, charts, and cards that carry their resemblance through time…`,
   },
   {
-    image: { path: ZodiacIcon },
+    images: {
+      paths: [ZodiacIcon],
+    },
   },
   {
     text: `The Wand NFTs are a portal to the Zodiac ecosystem. We hope you hold them in common.`,
   },
   {
-    image: {
-      path: ZodiacEcosystem,
+    images: {
+      paths: [ZodiacEcosystem],
     },
     text: `The Zodiac ecosystem has the open standard at its heart, supported by the tools and wiki.`,
     height: `70vh`,
   },
   {
-    image: {
-      path: ZodiacEcosystem,
+    images: {
+      paths: [ZodiacEcosystem],
       persist: true,
       animateIn: "#governed-by",
     },
@@ -62,8 +64,8 @@ const frames: FrameProps[] = [
     height: `70vh`,
   },
   {
-    image: {
-      path: ZodiacEcosystem,
+    images: {
+      paths: [ZodiacEcosystem],
       persist: true,
       animateIn: "#governed-by",
     },
@@ -77,15 +79,15 @@ const frames: FrameProps[] = [
     `,
   },
   {
-    image: {
-      path: ZodiacEcosystem,
+    images: {
+      paths: [ZodiacEcosystem],
     },
     text: `As well as an evolved wand…`,
     height: `70vh`,
   },
   {
-    image: {
-      path: ZodiacEcosystem,
+    images: {
+      paths: [ZodiacEcosystem],
     },
     text: `You can choose to sell your evolved Wand NFT.`,
     height: `70vh`,
@@ -139,19 +141,20 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
             : undefined,
         }}
       >
-        {activeFrame.image && (
-          <FrameImage
-            src={activeFrame?.image?.path.src}
-            alt={""}
-            className={classnames(
-              styles.frameImage,
-              !activeFrame?.image?.persist && styles.animateIn,
-              isAnimating &&
-                !frames[activeIndex + 1]?.image?.persist &&
-                styles.animateOut
-            )}
-          />
-        )}
+        {activeFrame?.images &&
+          activeFrame.images.paths?.map((image, i) => (
+            <FrameImage
+              src={image.src}
+              alt={""}
+              className={classnames(
+                styles.frameImage,
+                !activeFrame?.images?.persist && styles.animateIn,
+                isAnimating &&
+                  !frames[activeIndex + 1]?.images?.persist &&
+                  styles.animateOut
+              )}
+            />
+          ))}
         {activeFrame.text && (
           <div className={styles.frameTextWrapper}>
             {activeFrame.text.split(" ").map((word, j) => {
