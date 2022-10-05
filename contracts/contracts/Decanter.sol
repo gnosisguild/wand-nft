@@ -96,7 +96,7 @@ library Decanter {
         halo3: shape == 3,
         halo4: shape == 4,
         halo5: shape == 5,
-        hue: 0, //(wand.background.color.hue + 180) % 360,
+        hue: 0, // will be updated afterwards in unpack
         rhythm: rhythm
       });
   }
