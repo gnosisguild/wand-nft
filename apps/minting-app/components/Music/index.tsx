@@ -2,28 +2,17 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Scale, transpose } from "tonal";
 import * as ToneLib from "tone";
 
-import { useAppContext } from "../../state";
-import Birds from "../../public/background-tracks/birds.mp3";
-import Window from "../../public/background-tracks/window.mp3";
-import Forest from "../../public/background-tracks/forest.mp3";
-import Crickets from "../../public/background-tracks/crickets.mp3";
 import useMidSynth from "./useMidSynth";
 import useDroneSynth from "./useDroneSynth";
 import useArpSynth from "./useArpSynth";
-
-interface BackgroundTrack {
-  name: string;
-  volume: number;
-  audio: string;
-  filterRange: number[];
-  filterType: BiquadFilterType;
-}
+import useBackgroundTrack from "./useBackgroundTrack";
 
 const Music: React.FC = () => {
   const toneRef = useRef(ToneLib);
   useMidSynth({ Tone: toneRef.current });
   useDroneSynth({ Tone: toneRef.current });
   useArpSynth({ Tone: toneRef.current });
+  useBackgroundTrack({ Tone: toneRef.current });
 
   // const setupBackgroundTrack = () => {
   //   const backgroundTracks: BackgroundTrack[] = [
