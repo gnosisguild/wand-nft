@@ -39,9 +39,17 @@
 }
 
 .frameImage {
-  animation-delay: 1.5s;
   height: auto;
   object-fit: contain;
+  opacity: 0;
+}
+
+.frameSVG {
+  opacity: 0;
+}
+
+.frameSVG svg {
+  height: 100%;
 }
 
 .animateIn {

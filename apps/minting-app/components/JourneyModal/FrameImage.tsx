@@ -4,10 +4,11 @@ interface Props {
   className?: string;
   src?: string;
   alt?: string;
+  style?: React.CSSProperties;
 }
 
-const FrameImage: React.FC<Props> = ({ className, src, alt, ...props }) => {
-  return <img className={className} src={src} alt={alt} {...props} />;
+const FrameImage: React.FC<Props> = ({ className, src, alt, style }) => {
+  return <img className={className} src={src} alt={alt} style={style} />;
 };
 
 export default React.memo(FrameImage);
