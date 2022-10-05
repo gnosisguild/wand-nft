@@ -29,16 +29,16 @@
 }
 
 .frameImage {
-  animation-delay: 1s;
+  animation-delay: 1.5s;
   height: 50%;
 }
 
 .animateIn {
-  animation: fadeIn 1s var(--fadeInDelay, 0s) ease-in-out forwards;
+  animation: fadeIn 0.75s var(--fadeInDelay, 0s) ease-in-out forwards;
 }
 
 .animateOut {
-  animation: fadeOut 1s var(--fadeOutDelay, 0s) ease-in-out forwards;
+  animation: fadeOut 0.75s var(--fadeOutDelay, 0s) ease-in-out forwards;
   opacity: 1;
 }
 
@@ -64,9 +64,32 @@
   }
 }
 
-.button {
+.iconButton {
+  position: absolute;
+  width: 2.5rem;
+  bottom: 0.5rem;
+}
+
+.forwardButton {
+  right: 3.2rem;
+}
+
+.backwardButton {
+  left: 3.35rem;
+}
+
+.navigationFrame {
   position: absolute;
   bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 2rem;
+  width: calc(100% - 4rem);
+  mix-blend-mode: color-dodge;
 }
+
+.navigationGuilding {
+  opacity: 0.6;
+}
+
+
+
+
