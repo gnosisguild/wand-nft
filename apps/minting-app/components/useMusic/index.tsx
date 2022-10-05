@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as ToneLib from "tone";
 
 import useMidSynth from "./useMidSynth";
@@ -6,7 +6,7 @@ import useDroneSynth from "./useDroneSynth";
 import useArpSynth from "./useArpSynth";
 import useBackgroundTrack from "./useBackgroundTrack";
 
-const Music: React.FC = () => {
+const useMusic = () => {
   const toneRef = useRef(ToneLib);
   useMidSynth({ Tone: toneRef.current });
   useDroneSynth({ Tone: toneRef.current });
@@ -22,7 +22,7 @@ const Music: React.FC = () => {
     window.addEventListener("mousedown", handleMouseDown, { passive: true });
   }, []);
 
-  return <></>;
+  return toneRef.current;
 };
 
-export default Music;
+export default useMusic;

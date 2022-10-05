@@ -72,7 +72,6 @@ const useBackgroundTrack = (props: Props) => {
 
   // changes on every state update
   useEffect(() => {
-    console.log("tone context", Tone.context.state);
     if (loaded) {
       if (playerRef.current) {
         playerRef.current.disconnect();
@@ -102,11 +101,7 @@ const useBackgroundTrack = (props: Props) => {
       });
 
       playerRef.current?.chain(filter, reverb, Tone.Destination);
-      console.log(
-        playerRef.current?.loaded,
-        Tone.context.state,
-        playerRef.current?.get().volume
-      );
+
       if (Tone.context.state === "running" && playerRef.current?.loaded) {
         playerRef.current?.start();
       }
