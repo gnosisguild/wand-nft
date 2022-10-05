@@ -7,7 +7,9 @@ import Modal from "../Modal";
 import styles from "./JourneyModal.module.css";
 import ZodiacIcon from "../../public/images/zodiac-icon.png";
 import ZodiacEcosystem from "../../public/images/zodiac-ecosystem.png";
-import { Forward } from "../IconButton/Icons";
+import Wand1 from "../../public/images/wand-1.png";
+import Wand2 from "../../public/images/wand-2.png";
+import Wand3 from "../../public/images/wand-3.png";
 
 interface Props {
   onCancel: () => void;
@@ -18,6 +20,7 @@ interface ImageProps {
   paths?: StaticImageData[];
   animateIn?: string;
   persist?: boolean;
+  reverse?: boolean;
 }
 
 interface FrameProps {
@@ -80,14 +83,17 @@ const frames: FrameProps[] = [
   },
   {
     images: {
-      paths: [ZodiacEcosystem],
+      paths: [Wand1, Wand2, Wand3],
+      reverse: true,
     },
     text: `As well as an evolved wand…`,
     height: `70vh`,
   },
   {
     images: {
-      paths: [ZodiacEcosystem],
+      paths: [Wand3],
+      persist: true,
+      reverse: true,
     },
     text: `You can choose to sell your evolved Wand NFT.`,
     height: `70vh`,
@@ -139,22 +145,35 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
           maxHeight: frames[activeIndex]?.height
             ? frames[activeIndex].height
             : undefined,
+          flexDirection: activeFrame.images?.reverse ? "column-reverse" : null,
         }}
       >
-        {activeFrame?.images &&
-          activeFrame.images.paths?.map((image, i) => (
-            <FrameImage
-              src={image.src}
-              alt={""}
-              className={classnames(
-                styles.frameImage,
-                !activeFrame?.images?.persist && styles.animateIn,
-                isAnimating &&
-                  !frames[activeIndex + 1]?.images?.persist &&
-                  styles.animateOut
-              )}
-            />
-          ))}
+        {activeFrame?.images && (
+          <div className={styles.imagesWrapper}>
+            {activeFrame.images.paths?.map((image, i) => {
+              const imageLen = activeFrame.images?.paths.length;
+              return (
+                <FrameImage
+                  src={image.src}
+                  alt={""}
+                  style={{
+                    width:
+                      imageLen && imageLen > 0
+                        ? `calc(${Math.floor(100 / imageLen)}% - 15px)`
+                        : null,
+                  }}
+                  className={classnames(
+                    styles.frameImage,
+                    !activeFrame?.images?.persist && styles.animateIn,
+                    isAnimating &&
+                      !frames[activeIndex + 1]?.images?.persist &&
+                      styles.animateOut
+                  )}
+                />
+              );
+            })}
+          </div>
+        )}
         {activeFrame.text && (
           <div className={styles.frameTextWrapper}>
             {activeFrame.text.split(" ").map((word, j) => {
