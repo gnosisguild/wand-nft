@@ -1,0 +1,40 @@
+.wandHoldersWrapper {
+  animation: fadeIn 0.75s 0.25s ease-in forwards;
+  display: flex;
+  position: absolute;
+  flex-wrap: wrap;
+  width: 15vw;
+  opacity: 0;
+  justify-content: center;
+  left: -20%;
+  column-gap: 1vw;
+  row-gap: 0.5vw;
+  top: 50%;
+  transform: translateY(-47%);
+}
+
+.wandHolder {
+  display: flex;
+  width: calc(50% - 0.5vw);
+  aspect-ratio: 1/1;
+  max-height: 14vh;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #aaa58233;
+  border: 2px solid #efeac833;
+  padding: 1rem;
+  text-align: center;
+  line-height: 1.25;
+}
+
+@keyframes fadeIn {
+  0% {
+    filter: blur(50px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
