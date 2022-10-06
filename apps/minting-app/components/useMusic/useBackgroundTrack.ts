@@ -19,28 +19,28 @@ interface BackgroundTrack {
 const backgroundTracks: BackgroundTrack[] = [
   {
     name: "dawn",
-    volume: -33,
+    volume: -16,
     audioURL: "/background-tracks/birds.mp3",
     filterRange: [100, 10000],
     filterType: "highpass",
   },
   {
     name: "day",
-    volume: -6,
+    volume: 0,
     audioURL: "/background-tracks/window.mp3",
     filterRange: [300, 10000],
     filterType: "highpass",
   },
   {
     name: "dusk",
-    volume: -16,
+    volume: -6,
     audioURL: "/background-tracks/forest.mp3",
     filterRange: [500, 10000],
     filterType: "highpass",
   },
   {
     name: "night",
-    volume: -18,
+    volume: -22,
     audioURL: "/background-tracks/crickets.mp3",
     filterRange: [1000, 10000],
     filterType: "highpass",
@@ -78,9 +78,10 @@ const useBackgroundTrack = (props: Props) => {
       }
       const currentTrack = tracks.current[state.handle];
       playerRef.current = playersRef.current?.player(currentTrack.name);
+      console.log(currentTrack.volume)
       playerRef.current?.set({
         loop: true,
-        volume: 10,
+        volume: currentTrack.volume,
         autostart: true,
         fadeIn: 1,
         fadeOut: 1,
@@ -95,12 +96,11 @@ const useBackgroundTrack = (props: Props) => {
         currentTrack.filterRange[1]
       );
       lfo.connect(filter.frequency);
-      const reverb = new Tone.Reverb({
-        decay: 4,
-        wet: 0.7,
-      });
 
-      playerRef.current?.chain(filter, reverb, Tone.Destination);
+      const effect = new Tone.PingPongDelay(0.5, 0.45);
+      effect.wet.value = 0.05;
+
+      playerRef.current?.chain(filter, effect, Tone.Destination);
 
       if (Tone.context.state === "running" && playerRef.current?.loaded) {
         playerRef.current?.start();
