@@ -9,43 +9,61 @@ interface ITrackOwnership {
 }
 
 contract Forge is IForge, Ownable {
-  uint32[] public override nextLevelXp; // array of xp cost for upgrading to the respective levels
 
-  mapping(uint256 => uint8) public override level; // wand tokenId -> level
-  mapping(address => uint32) public override xp; // account -> total gained XP
-  mapping(address => uint32) public override xpSpent; // account -> XP that has been redeemed for leveling up wands
+  struct Experience {
+    uint32 accrued;
+    uint32 spent;
+  }
 
   ITrackOwnership public immutable wand;
 
-  constructor(ITrackOwnership _wand, uint32[] memory _levels) {
+  mapping(address => Experience) public experience;
+
+  mapping(uint256 => uint8) public override level; // wand tokenId -> level
+  uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
+
+  constructor(ITrackOwnership _wand, uint32[] memory levels) {
     wand = _wand;
-    nextLevelXp = _levels;
+    levelUpCost = levels;
   }
 
-  function levelUp(uint256 _tokenId, uint8 _toLevel) external override {
-    require(wand.ownerOf(_tokenId) == msg.sender, "Not your wand");
-    require(_toLevel > level[_tokenId], "Already at or above that level");
-    require(_toLevel <= nextLevelXp.length, "Level out of bounds");
+  function xp(address account) external view override returns (uint32) {
+    return experience[account].accrued;
+  }
 
-    uint32 availableXp = xp[msg.sender] - xpSpent[msg.sender];
-    for (uint8 i = level[_tokenId]; i < _toLevel; i++) {
-      uint32 levelCost = nextLevelXp[i];
-      require(availableXp >= levelCost, "Not enough XP to spend");
-      availableXp -= levelCost;
-      xpSpent[msg.sender] += levelCost;
+  function xpSpent(address account) external view override returns (uint32) {
+    return experience[account].spent;
+  }
+
+  function levelUp(uint256 tokenId, uint8 toLevel) external override {
+    require(wand.ownerOf(tokenId) == msg.sender, "Not your wand");
+    require(toLevel > level[tokenId], "Already at or above that level");
+    require(toLevel <= levelUpCost.length, "Level out of bounds");
+
+    uint32 spent = experience[msg.sender].spent;
+    uint32 available = experience[msg.sender].accrued - spent;
+
+    for (uint8 i = level[tokenId]; i < toLevel; i++) {
+      uint32 cost = levelUpCost[i];
+      require(available >= cost, "Not enough XP to spend");
+      available -= cost;
+      spent += cost;
     }
 
-    level[_tokenId] = _toLevel;
+    level[tokenId] = toLevel;
+    experience[msg.sender].spent = spent;
   }
 
-  function adjustXp(address _account, uint32 _xp) external onlyOwner {
-    xp[_account] = _xp;
-    if (xpSpent[_account] > _xp) {
-      xpSpent[_account] = _xp;
-    }
+  function adjustXp(address account, uint32 accrued) external onlyOwner {
+    uint32 spent = experience[account].spent;
+
+    experience[account] = Experience({
+      accrued: accrued,
+      spent: spent > accrued ? accrued : spent
+    });
   }
 
-  function setLevels(uint32[] memory _levels) external onlyOwner {
-    nextLevelXp = _levels;
+  function setLevelUpCost(uint32[] memory levels) external onlyOwner {
+    levelUpCost = levels;
   }
 }
