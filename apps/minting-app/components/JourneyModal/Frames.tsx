@@ -1,13 +1,14 @@
 import { StaticImageData } from "next/image";
 import ZodiacIcon from "../../public/images/zodiac-icon.png";
 import ZodiacEcosystem from "./ZodiacEcosystem";
+import ZodiacEcosystem2 from "./ZodiacEcosystem2";
 import Wand1 from "../../public/images/wand-1.png";
 import Wand2 from "../../public/images/wand-2.png";
 import Wand3 from "../../public/images/wand-3.png";
 
 interface ImageProps {
   paths?: StaticImageData[];
-  animateIn?: string;
+  iteration?: number;
   persist?: boolean;
   reverse?: boolean;
   svg?: JSX.Element;
@@ -64,7 +65,7 @@ export const frames: FrameProps[] = [
   {
     images: {
       persist: true,
-      svg: <ZodiacEcosystem animateIn={"governed-by"} />,
+      svg: <ZodiacEcosystem iteration={1} />,
       imageHeight: `60%`,
     },
     text: [
@@ -75,7 +76,7 @@ export const frames: FrameProps[] = [
   {
     images: {
       persist: true,
-      svg: <ZodiacEcosystem animateIn={"governed-by"} />,
+      svg: <ZodiacEcosystem iteration={2} />,
       imageHeight: `60%`,
     },
     text: [
