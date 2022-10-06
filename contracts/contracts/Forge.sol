@@ -9,61 +9,57 @@ interface ITrackOwnership {
 }
 
 contract Forge is IForge, Ownable {
-  mapping(address => Character) public characters; // account {XP, XP_Spent}
-  mapping(uint256 => uint256) public iLvl; // portal to iLvl
-  uint256 public maxLevel;
+  uint32[] public levels; // array of xp cost for upgrading to the respective levels
+
+  mapping(uint256 => uint8) override public level; // wand tokenId -> level
+  mapping(address => uint32) override public xp; // account -> total gained XP
+  mapping(address => uint32) override public xpSpent; // account -> XP that has been redeemed for leveling up wands
 
   ITrackOwnership public immutable wand;
 
-  constructor(ITrackOwnership _wand) {
+  constructor(ITrackOwnership _wand, uint32[] memory _levels) {
     wand = _wand;
+    levels = _levels;
   }
 
-  // increases a portals iLvl irrevocably
-  // XP per account can only be assigned to one portal NFT
-  // warning this lets new holders downgrade the iLvl
-  function forgePortal(uint256 _id, uint256 _amount) public {
-    require(wand.ownerOf(_id) == msg.sender);
-    Character memory temp = characters[msg.sender];
-    uint256 availableXP = temp.XP - temp.XPAssigned;
-    // ensure that this account has XP left to assign
-    require(availableXP > 0);
-    require(availableXP >= _amount);
-    characters[msg.sender].XPAssigned += _amount;
+  function levelUp(uint256 _tokenId, uint8 _level) override external {
+    require(wand.ownerOf(_tokenId) == msg.sender, "Not your wand");
+    require(_level > level[_tokenId], "Already at or above that level");
+    require(_level <= levels.length, "Invalid level");
 
-    if (_amount > 1000) {
-      iLvl[_id] += 1;
-    } else if (_amount > 5000) {
-      iLvl[_id] += 2;
-    } else if (_amount > 10000) {
-      iLvl[_id] += 3;
+    uint32 availableXp = xp[msg.sender] - xpSpent[msg.sender];
+    for(uint8 i = level[_tokenId] + 1; i <= _level; i++) {
+      uint32 levelCost = levels[i-1]; // -1 because level 0 is the default and not listed in the levels cost array
+      require(availableXp >= levelCost, "Not enough XP to spend");
+      availableXp -= levelCost;
+      xpSpent[msg.sender] += levelCost;
+    }
+
+    level[_tokenId] = _level;
+  }
+
+  function adjustXp(address _account, uint32 _xp) external onlyOwner {
+    xp[_account] = _xp;
+    if(xpSpent[_account] > _xp) {
+      xpSpent[_account] = _xp;
     }
   }
 
-  function level(uint256 tokenId) external view override returns (uint32) {
-    return uint32(iLvl[tokenId]);
-  }
-
-  function xp(address avatar) external view override returns (uint32) {
-    return uint32(characters[avatar].XP);
-  }
-
-  function adjustXP(address _id, uint256 _xp) public onlyOwner {
-    characters[_id].XP = _xp;
-  }
-
-  function adjustXPBatch(address[] memory _ids, uint256[] memory _xps)
+  function adjustXpBatch(address[] memory _accounts, uint32[] memory _xps)
     external
     onlyOwner
   {
-    require(_ids.length == _xps.length);
+    require(_accounts.length == _xps.length);
 
-    for (uint256 i = 0; i <= _ids.length; i++) {
-      characters[_ids[i]].XP = _xps[i];
+    for (uint256 i = 0; i < _accounts.length; i++) {
+      xp[_accounts[i]] = _xps[i];
+      if(xpSpent[_accounts[i]] > _xps[i]) {
+        xpSpent[_accounts[i]] = _xps[i];
+      }
     }
   }
 
-  function setMaxLevel(uint256 _maxLevel) public onlyOwner {
-    maxLevel = _maxLevel;
+  function setLevels(uint32[] memory _levels) external onlyOwner {
+    levels = _levels;
   }
 }
