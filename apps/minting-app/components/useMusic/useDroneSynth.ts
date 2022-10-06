@@ -38,7 +38,7 @@ const useDroneSynth = (props: Props) => {
         sustain: 0.5,
         release: 0.1,
       },
-      volume: -20,
+      volume: -18,
     });
 
     droneSynthRef.current.chain(effect, reverb, filter, Tone.Destination);
