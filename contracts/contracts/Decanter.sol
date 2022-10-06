@@ -29,8 +29,11 @@ library Decanter {
         background: background,
         planets: unpackPlanets(packedWand.planets, packedWand.visibility),
         aspects: unpackAspects(packedWand.aspects),
-        xp: 0,
-        level: 0
+        xp: Cauldron.Xp({
+          level: 0,
+          xp: 0,
+          xpSpent: 0
+        })
       });
   }
 

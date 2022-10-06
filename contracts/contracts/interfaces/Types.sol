@@ -25,8 +25,8 @@ struct Wand {
   Cauldron.Background background;
   Planet[8] planets;
   Aspect[8] aspects;
-  uint32 xp;
-  uint32 level;
+  uint8 level;
+  Cauldron.Xp xp;
 }
 
 struct PackedWand {

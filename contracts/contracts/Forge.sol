@@ -22,10 +22,14 @@ contract Forge is IForge, Ownable {
     levels = _levels;
   }
 
+  function nextLevelXp(uint8 _currentLevel) override external view returns (uint32) {
+    return levels[_currentLevel]; // level 0 is not listed in the levels cost array, so we find the cost for the next level under the index of the current level
+  }
+
   function levelUp(uint256 _tokenId, uint8 _level) override external {
     require(wand.ownerOf(_tokenId) == msg.sender, "Not your wand");
     require(_level > level[_tokenId], "Already at or above that level");
-    require(_level <= levels.length, "Invalid level");
+    require(_level <= levels.length, "Level out of bounds");
 
     uint32 availableXp = xp[msg.sender] - xpSpent[msg.sender];
     for(uint8 i = level[_tokenId] + 1; i <= _level; i++) {
