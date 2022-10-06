@@ -81,12 +81,16 @@ describe("Forge", async () => {
     it("adjusts spent XP if the new XP amount is lower", async function () {
       const { forge, wandHolder, wandTokenId } = await baseSetup();
 
-      const xp = 150;
-      await forge.adjustXp(wandHolder.address, xp);
+      const cost = await forge.levelUpCost(0);
+      const accruedXp = cost + 200;
+
+      await forge.adjustXp(wandHolder.address, accruedXp);
       await forge.connect(wandHolder).levelUp(wandTokenId, 1);
-      expect(await forge.xpSpent(wandHolder.address)).to.equal(128);
+      expect(await forge.xpSpent(wandHolder.address)).to.equal(cost);
+      expect(await forge.xp(wandHolder.address)).to.equal(accruedXp);
 
       await forge.adjustXp(wandHolder.address, 100);
+      expect(await forge.xp(wandHolder.address)).to.equal(100);
       expect(await forge.xpSpent(wandHolder.address)).to.equal(100);
     });
 
@@ -136,7 +140,10 @@ describe("Forge", async () => {
     it("reverts if the account does not have enough unspent XP", async function () {
       const { forge, wandTokenId, wandHolder } = await baseSetup();
 
-      await forge.adjustXp(wandHolder.address, 256);
+      const totalCost =
+        (await forge.levelUpCost(0)) + (await forge.levelUpCost(1));
+
+      await forge.adjustXp(wandHolder.address, totalCost - 1);
       await forge.connect(wandHolder).levelUp(wandTokenId, 1);
 
       await expect(
@@ -147,23 +154,31 @@ describe("Forge", async () => {
     it("updates the spent XP", async function () {
       const { forge, wandTokenId, wandHolder } = await baseSetup();
 
-      await forge.adjustXp(wandHolder.address, 256);
+      const cost = await forge.levelUpCost(0);
+      const xpAccrued = cost;
+
+      await forge.adjustXp(wandHolder.address, xpAccrued);
       await forge.connect(wandHolder).levelUp(wandTokenId, 1);
 
       expect(await forge.level(wandTokenId)).to.equal(1);
-      expect(await forge.xpSpent(wandHolder.address)).to.equal(128);
-      expect(await forge.xp(wandHolder.address)).to.equal(256);
+      expect(await forge.xpSpent(wandHolder.address)).to.equal(cost);
+      expect(await forge.xp(wandHolder.address)).to.equal(xpAccrued);
     });
 
     it("can upgrade over multiple levels", async function () {
       const { forge, wandTokenId, wandHolder } = await baseSetup();
 
-      await forge.adjustXp(wandHolder.address, 500);
+      const totalCost =
+        (await forge.levelUpCost(0)) + (await forge.levelUpCost(1));
+
+      const accruedXp = totalCost + 500;
+
+      await forge.adjustXp(wandHolder.address, accruedXp);
       await forge.connect(wandHolder).levelUp(wandTokenId, 2);
 
       expect(await forge.level(wandTokenId)).to.equal(2);
-      expect(await forge.xpSpent(wandHolder.address)).to.equal(128 + 256);
-      expect(await forge.xp(wandHolder.address)).to.equal(500);
+      expect(await forge.xpSpent(wandHolder.address)).to.equal(totalCost);
+      expect(await forge.xp(wandHolder.address)).to.equal(accruedXp);
     });
 
     it.skip('emits a "LeveledUp" event for each level', async function () {
