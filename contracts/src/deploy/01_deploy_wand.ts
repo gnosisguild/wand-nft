@@ -38,7 +38,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const levels = [128, 256, 512, 1024];
   const txForge = await deploy("Forge", {
     from: deployer,
-    args: [txZodiacWands.address],
+    args: [txZodiacWands.address, levels],
     log: true,
   });
 
