@@ -23,24 +23,24 @@ const useMidSynth = (props: Props) => {
     });
     midSynthRef.current.set({
       envelope: {
-        attack: 1,
-        decay: 1,
-        sustain: 1,
-        release: 1,
+        attack: 2,
+        decay: 0.3,
+        sustain: 0.8,
+        release: 2,
       },
     });
 
     const filter = new Tone.Filter(500, "bandpass", -12);
-    const lfo = new Tone.LFO(0.01, 140, 240);
+    const lfo = new Tone.LFO(0.1, 140, 600);
     lfo.connect(filter.frequency);
-    const effect = new Tone.FeedbackDelay(0.1, 0.4);
-    effect.wet.value = 0.1;
+    const effect = new Tone.FeedbackDelay(1, 0.8);
+    effect.wet.value = 0.4;
     const reverb = new Tone.Reverb({
-      decay: 14,
+      decay: 10,
       wet: 0.75,
     });
 
-    midSynthRef.current.chain(reverb, filter, effect, Tone.Destination);
+    midSynthRef.current.chain(filter, reverb, effect, Tone.Destination);
   }, []);
 
   // changes on every state update
