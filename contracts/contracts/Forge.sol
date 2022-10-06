@@ -28,8 +28,8 @@ contract Forge is IForge, Ownable {
     require(_toLevel <= nextLevelXp.length, "Level out of bounds");
 
     uint32 availableXp = xp[msg.sender] - xpSpent[msg.sender];
-    for (uint8 i = level[_tokenId] + 1; i <= _toLevel; i++) {
-      uint32 levelCost = nextLevelXp[i - 1]; // -1 because level 0 is the default and not listed in the nextLevelXp cost array
+    for (uint8 i = level[_tokenId]; i < _toLevel; i++) {
+      uint32 levelCost = nextLevelXp[i];
       require(availableXp >= levelCost, "Not enough XP to spend");
       availableXp -= levelCost;
       xpSpent[msg.sender] += levelCost;
