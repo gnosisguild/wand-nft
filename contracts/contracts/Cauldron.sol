@@ -62,6 +62,7 @@ library Cauldron {
   }
 
   struct Stone {
+    string name;
     bool fractalNoise;
     uint8 turbFreqX;
     uint8 turbFreqY;
