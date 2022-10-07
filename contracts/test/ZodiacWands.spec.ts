@@ -121,7 +121,7 @@ describe("ZodiacWands", async () => {
           level1: true,
           title: generateName(tokenId),
         },
-        xp: { amount: 0, cap: 128, crown: false },
+        xp: { amount: 0, cap: 2000, crown: false },
       });
 
       expect(svgFromSol).to.equal(svgFromJS);
@@ -177,6 +177,9 @@ describe("ZodiacWands", async () => {
       };
       const date = new Date("2022-10-01");
 
+      const xpAccrued = 6000;
+      const levelUpCost = 2000;
+
       const tx = await zodiacWands
         .connect(minter)
         .mint(...packForMinting(state, date), getPermit(minter.address));
@@ -186,7 +189,7 @@ describe("ZodiacWands", async () => {
       const wandOwner = await zodiacWands.ownerOf(tokenId);
       expect(wandOwner).to.equal(minter.address);
 
-      await forge.adjustXp(wandOwner, 150); // give XP to wand owner
+      await forge.adjustXp(wandOwner, xpAccrued); // give XP to wand owner
       await forge.connect(minter).levelUp(tokenId, 1); // wand owner redeems XP for leveling up the wand
       expect(await forge.level(tokenId)).to.equal(1);
 
@@ -212,7 +215,7 @@ describe("ZodiacWands", async () => {
           level2: true,
           title: generateName(tokenId),
         },
-        xp: { amount: 150 - 128, cap: 256, crown: false },
+        xp: { amount: xpAccrued - levelUpCost, cap: levelUpCost, crown: true },
       });
 
       expect(svgFromSol).to.equal(svgFromJS);
