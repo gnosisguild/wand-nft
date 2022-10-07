@@ -4,25 +4,29 @@ pragma solidity ^0.8.6;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IForge.sol";
 
-interface ITrackOwnership {
-  function ownerOf(uint256 tokenId) external returns (address);
+interface IOwnerOf {
+  function ownerOf(uint256 tokenId) external view returns (address);
 }
 
 contract Forge is IForge, Ownable {
+  IOwnerOf public immutable wand;
 
   struct Experience {
     uint32 accrued;
     uint32 spent;
   }
 
-  ITrackOwnership public immutable wand;
+  error LevelUpUnauthorized();
+  error LevelUpAlreadyThere(uint8 toLevel, uint8 atLevel);
+  error LevelUpOutOfBounds(uint8 toLevel, uint8 maxLevel);
+  error LevelUpInsufficientXP(uint8 atLevel, uint32 xpAvailable, uint32 xpCost);
 
   mapping(address => Experience) public experience;
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
   uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
 
-  constructor(ITrackOwnership _wand, uint32[] memory levels) {
+  constructor(IOwnerOf _wand, uint32[] memory levels) {
     wand = _wand;
     levelUpCost = levels;
   }
@@ -36,16 +40,34 @@ contract Forge is IForge, Ownable {
   }
 
   function levelUp(uint256 tokenId, uint8 toLevel) external override {
-    require(wand.ownerOf(tokenId) == msg.sender, "Not your wand");
-    require(toLevel > level[tokenId], "Already at or above that level");
-    require(toLevel <= levelUpCost.length, "Level out of bounds");
+    if (wand.ownerOf(tokenId) != msg.sender) {
+      revert LevelUpUnauthorized();
+    }
+
+    uint8 currLevel = level[tokenId];
+    if (toLevel <= currLevel) {
+      revert LevelUpAlreadyThere({toLevel: toLevel, atLevel: currLevel});
+    }
+
+    uint8 maxLevel = uint8(levelUpCost.length);
+    if (toLevel > maxLevel) {
+      revert LevelUpOutOfBounds({toLevel: toLevel, maxLevel: maxLevel});
+    }
 
     uint32 spent = experience[msg.sender].spent;
     uint32 available = experience[msg.sender].accrued - spent;
 
-    for (uint8 i = level[tokenId]; i < toLevel; i++) {
-      uint32 cost = levelUpCost[i];
-      require(available >= cost, "Not enough XP to spend");
+    for (uint8 atLevel = currLevel; atLevel < toLevel; atLevel++) {
+      uint32 cost = levelUpCost[atLevel];
+
+      if (cost > available) {
+        revert LevelUpInsufficientXP({
+          atLevel: atLevel,
+          xpAvailable: available,
+          xpCost: cost
+        });
+      }
+
       available -= cost;
       spent += cost;
     }

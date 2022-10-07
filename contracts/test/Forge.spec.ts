@@ -112,19 +112,20 @@ describe("Forge", async () => {
 
       await forge.adjustXp(wandHolder.address, 128);
 
-      await expect(forge.levelUp(wandTokenId, 1)).to.be.revertedWith(
-        "Not your wand"
+      await expect(forge.levelUp(wandTokenId, 1)).to.be.revertedWithCustomError(
+        forge,
+        "LevelUpUnauthorized"
       );
     });
 
     it("reverts if the wand is already at or above that level", async function () {
       const { forge, wandTokenId, wandHolder } = await baseSetup();
 
-      await forge.adjustXp(wandHolder.address, 128);
+      await forge.adjustXp(wandHolder.address, 10000000);
 
-      await expect(
-        forge.connect(wandHolder).levelUp(wandTokenId, 0)
-      ).to.be.revertedWith("Already at or above that level");
+      await expect(forge.connect(wandHolder).levelUp(wandTokenId, 0))
+        .to.be.revertedWithCustomError(forge, "LevelUpAlreadyThere")
+        .withArgs(0, 0);
     });
 
     it("reverts if the level is higher than the maximum level", async function () {
@@ -132,23 +133,26 @@ describe("Forge", async () => {
 
       await forge.adjustXp(wandHolder.address, 10000000);
 
-      await expect(
-        forge.connect(wandHolder).levelUp(wandTokenId, 5)
-      ).to.be.revertedWith("Level out of bounds");
+      await expect(forge.connect(wandHolder).levelUp(wandTokenId, 5))
+        .to.be.revertedWithCustomError(forge, "LevelUpOutOfBounds")
+        .withArgs(5, 4);
     });
 
     it("reverts if the account does not have enough unspent XP", async function () {
       const { forge, wandTokenId, wandHolder } = await baseSetup();
 
-      const totalCost =
-        (await forge.levelUpCost(0)) + (await forge.levelUpCost(1));
+      const costToLevelUpFrom0 = await forge.levelUpCost(0);
+      const costToLevelUpFrom1 = await forge.levelUpCost(1);
+
+      const totalCost = costToLevelUpFrom0 + costToLevelUpFrom1;
 
       await forge.adjustXp(wandHolder.address, totalCost - 1);
-      await forge.connect(wandHolder).levelUp(wandTokenId, 1);
 
-      await expect(
-        forge.connect(wandHolder).levelUp(wandTokenId, 2)
-      ).to.be.revertedWith("Not enough XP to spend");
+      const xpAvailable = costToLevelUpFrom1 - 1;
+
+      await expect(forge.connect(wandHolder).levelUp(wandTokenId, 2))
+        .to.be.revertedWithCustomError(forge, "LevelUpInsufficientXP")
+        .withArgs(1, xpAvailable, costToLevelUpFrom1);
     });
 
     it("updates the spent XP", async function () {
