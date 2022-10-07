@@ -94,7 +94,7 @@ describe("Forge", async () => {
       expect(await forge.xpSpent(wandHolder.address)).to.equal(100);
     });
 
-    it.skip('emits "XpAdjusted" event', async function () {
+    it('emits "XpAdjusted" event', async function () {
       const { forge, wandHolder } = await baseSetup();
 
       const xp = 100;
@@ -102,7 +102,9 @@ describe("Forge", async () => {
       const receipt = await tx.wait();
 
       const event = receipt.events?.find((e) => e.event === "XpAdjusted");
+      expect(event?.args?.account).to.equal(wandHolder.address);
       expect(event?.args?.xp).to.equal(xp);
+      expect(event?.args?.xpSpent).to.equal(0);
     });
   });
 
@@ -185,18 +187,21 @@ describe("Forge", async () => {
       expect(await forge.xp(wandHolder.address)).to.equal(accruedXp);
     });
 
-    it.skip('emits a "LeveledUp" event for each level', async function () {
+    it('emits a "LeveledUp" event', async function () {
       const { forge, wandTokenId, wandHolder } = await baseSetup();
 
-      await forge.adjustXp(wandHolder.address, 500);
+      const totalCost =
+        (await forge.levelUpCost(0)) + (await forge.levelUpCost(1));
+
+      await forge.adjustXp(wandHolder.address, totalCost);
       const tx = await forge.connect(wandHolder).levelUp(wandTokenId, 2);
       const receipt = await tx.wait();
 
-      const events =
-        receipt.events?.filter((e) => e.event === "LeveledUp") || [];
-      expect(events).to.have.length(2);
-      expect(events[0].args?.level).to.equal(1);
-      expect(events[1].args?.level).to.equal(2);
+      const event = receipt.events?.find((e) => e.event === "LeveledUp");
+      expect(event?.args?.account).to.equal(wandHolder.address);
+      expect(event?.args?.tokenId).to.equal(wandTokenId);
+      expect(event?.args?.fromLevel).to.equal(0);
+      expect(event?.args?.toLevel).to.equal(2);
     });
   });
 });

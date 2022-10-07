@@ -21,6 +21,15 @@ contract Forge is IForge, Ownable {
   error LevelUpOutOfBounds(uint8 toLevel, uint8 maxLevel);
   error LevelUpInsufficientXP(uint8 atLevel, uint32 xpAvailable, uint32 xpCost);
 
+  event LeveledUp(
+    address indexed account,
+    uint256 indexed tokenId,
+    uint8 fromLevel,
+    uint8 toLevel
+  );
+
+  event XpAdjusted(address indexed account, uint32 xp, uint32 xpSpent);
+
   mapping(address => Points) internal points;
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
@@ -72,17 +81,20 @@ contract Forge is IForge, Ownable {
       spent += cost;
     }
 
+    emit LeveledUp(msg.sender, tokenId, level[tokenId], toLevel);
+
     level[tokenId] = toLevel;
     points[msg.sender].spent = spent;
   }
 
   function adjustXp(address account, uint32 accrued) external onlyOwner {
-    uint32 spent = points[account].spent;
+    uint32 spent = points[account].spent > accrued
+      ? accrued
+      : points[account].spent;
 
-    points[account] = Points({
-      accrued: accrued,
-      spent: spent > accrued ? accrued : spent
-    });
+    points[account] = Points({accrued: accrued, spent: spent});
+
+    emit XpAdjusted(account, accrued, spent);
   }
 
   function setLevelUpCost(uint32[] memory levels) external onlyOwner {
