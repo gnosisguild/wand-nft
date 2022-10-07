@@ -1,7 +1,6 @@
 import { StaticImageData } from "next/image";
 import ZodiacIcon from "../../public/images/zodiac-icon.png";
 import ZodiacEcosystem from "./ZodiacEcosystem";
-import ZodiacEcosystem2 from "./ZodiacEcosystem2";
 import Wand1 from "../../public/images/wand-1.png";
 import Wand2 from "../../public/images/wand-2.png";
 import Wand3 from "../../public/images/wand-3.png";
