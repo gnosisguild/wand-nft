@@ -11,7 +11,7 @@ import { AppState } from "../types";
 import { GreenlistProvider } from "../components/useGreenlist";
 
 const { chains, provider } = configureChains(
-  [chain.rinkeby],
+  [chain.goerli],
   [publicProvider()]
 );
 
@@ -39,7 +39,7 @@ function MyApp({ Component, initialState }: MyAppProps) {
             chains={chains}
             theme={customTheme}
             avatar={BlockieAvatar}
-            initialChain={4}
+            initialChain={5}
           >
             <Component />
           </RainbowKitProvider>
