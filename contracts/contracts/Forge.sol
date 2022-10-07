@@ -21,7 +21,7 @@ contract Forge is IForge, Ownable {
   error LevelUpOutOfBounds(uint8 toLevel, uint8 maxLevel);
   error LevelUpInsufficientXP(uint8 atLevel, uint32 xpAvailable, uint32 xpCost);
 
-  mapping(address => Points) public points;
+  mapping(address => Points) internal points;
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
   uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
