@@ -5,6 +5,7 @@ import FrameImage from "./FrameImage";
 import Modal from "../Modal";
 import { frames } from "./Frames";
 import styles from "./JourneyModal.module.css";
+import MintButton from "../MintButton";
 
 interface Props {
   onCancel: () => void;
@@ -186,46 +187,55 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
               </div>
             ))}
         </div>
-        <div className={styles.navigationFrame}>
-          <svg
-            viewBox="0 0 609 49"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className={styles.navigationGuilding}
-          >
-            <g>
-              <path
-                d="M519.316 24.5C519.316 37.4787 529.837 48 542.816 48C553.357 48 562.277 41.06 565.256 31.5M519.316 24.5C519.316 19.2545 521.035 14.4103 523.94 10.5M519.316 24.5H506M318.658 24.5L304.658 38.5L290.658 24.5L304.658 10.5L318.658 24.5ZM318.658 24.5H387M566.316 24.5H606L592 10.5H561.693M566.316 24.5C566.316 19.2545 564.597 14.4103 561.693 10.5M566.316 24.5C566.316 26.9378 565.945 29.289 565.256 31.5M561.693 10.5C557.41 4.73526 550.549 1 542.816 1C535.083 1 528.222 4.73526 523.94 10.5M523.94 10.5H479.5L465.5 24.5M465.5 24.5H387M465.5 24.5L458.5 31.5M465.5 24.5H506M387 24.5L373 38.5H451.5L458.5 31.5M458.5 31.5H499L506 24.5M565.256 31.5H592M90.0299 24.5C90.0299 37.4787 79.5086 48 66.5299 48C55.9891 48 47.0691 41.06 44.0901 31.5M90.0299 24.5C90.0299 19.2545 88.3112 14.4103 85.4063 10.5M90.0299 24.5H103.346M290.688 24.5H222.346M43.0299 24.5H3.3457L17.3457 10.5H47.6535M43.0299 24.5C43.0299 19.2545 44.7486 14.4103 47.6535 10.5M43.0299 24.5C43.0299 26.9378 43.4011 29.289 44.0901 31.5M47.6535 10.5C51.936 4.73526 58.7968 1 66.5299 1C74.2631 1 81.1238 4.73526 85.4063 10.5M85.4063 10.5H129.846L143.846 24.5M143.846 24.5H222.346M143.846 24.5L150.846 31.5M143.846 24.5H103.346M222.346 24.5L236.346 38.5H157.846L150.846 31.5M150.846 31.5H110.346L103.346 24.5M44.0901 31.5H17.3457M304.658 17.5L297.658 24.5L304.658 31.5L311.658 24.5L304.658 17.5Z"
-                stroke="#D9D4AD"
-                strokeOpacity="0.3"
-                strokeWidth="2"
-              />
-            </g>
-          </svg>
-          <div
-            className={classnames(styles.iconButton, styles.forwardButton)}
-            style={{
-              filter: !isAnimating ? "brightness(2)" : "brightness(1)",
-              transitionDelay: !isAnimating ? `${animationDuration}ms` : "0s",
-            }}
-          >
-            <IconButton
-              icon="Forward"
-              shadow
-              onClick={isAnimating ? undefined : nextSlide}
+        <div className={styles.progress}>
+          {frames.map((_, i) => (
+            <div
+              key={i}
+              className={classnames(
+                styles.progressDot,
+                activeIndex === i && styles.activeDot
+              )}
             />
-          </div>
-          <div
-            className={classnames(styles.iconButton, styles.backwardButton)}
-            style={{ opacity: activeIndex === 0 ? 0.5 : "unset" }}
-          >
-            <IconButton
-              icon="Backward"
-              shadow
-              disabled={activeIndex === 0}
-              onClick={isAnimating ? undefined : prevSlide}
-            />
-          </div>
+          ))}
+        </div>
+        <div
+          className={classnames(styles.iconButton, styles.forwardButton)}
+          style={{
+            filter: !isAnimating ? "brightness(2)" : "brightness(1)",
+            transitionDelay: !isAnimating ? `${animationDuration}ms` : "0s",
+            opacity: `${activeIndex === frames.length - 1 ? 0.5 : "unset"}`,
+            animation: `${
+              activeIndex === frames.length - 1 ? undefined : "unset"
+            }`,
+          }}
+        >
+          <IconButton
+            icon="Forward"
+            shadow
+            onClick={isAnimating ? undefined : nextSlide}
+          />
+        </div>
+        <div
+          className={classnames(styles.iconButton, styles.backwardButton)}
+          style={{
+            animation: `${activeIndex === 0 ? undefined : "unset"}`,
+            opacity: activeIndex === 0 ? 0.5 : "unset",
+          }}
+        >
+          <IconButton
+            icon="Backward"
+            shadow
+            disabled={activeIndex === 0}
+            onClick={isAnimating ? undefined : prevSlide}
+          />
+        </div>
+        <div
+          className={classnames(
+            styles.buttonWrapper,
+            activeIndex === frames.length - 1 && styles.animateIn
+          )}
+        >
+          <MintButton />
         </div>
       </>
     </Modal>

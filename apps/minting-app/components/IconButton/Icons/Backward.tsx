@@ -1,15 +1,22 @@
 import React from "react";
 
-const FullDownload: React.FC = () => {
+const Backward: React.FC = () => {
   return (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        opacity="0.7"
-        d="M14.801 12.4683V6.24609L3.91211 17.135L14.801 28.0239V21.6461C22.5788 21.6461 28.0232 24.135 31.9121 29.5794C30.3566 21.8016 25.6899 14.0239 14.801 12.4683Z"
-        fill="#D9D9D9"
-      />
+    <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g style={{ mixBlendMode: "color-dodge" }}>
+        <path
+          d="M6.18963 3.89844V1.64233L1.20382 4.58136L6.18963 7.52039V5.28125"
+          stroke="#DCD7AF"
+          stroke-width="0.75"
+        />
+        <path
+          d="M6.3885 3.79742L5.05824 4.58141L6.3885 5.3654L7.71875 6.14939V3.01343L6.3885 3.79742Z"
+          stroke="#DCD7AF"
+          stroke-width="0.5"
+        />
+      </g>
     </svg>
   );
 };
 
-export default FullDownload;
+export default Backward;
