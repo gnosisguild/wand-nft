@@ -17,9 +17,15 @@ contract Forge is IForge, Ownable {
   }
 
   error LevelUpUnauthorized();
-  error LevelUpAlreadyThere(uint8 toLevel, uint8 atLevel);
-  error LevelUpOutOfBounds(uint8 toLevel, uint8 maxLevel);
-  error LevelUpInsufficientXP(uint8 atLevel, uint32 xpAvailable, uint32 xpCost);
+  error LevelUpAlreadyThere(uint8 fromLevel, uint8 toLevel);
+  error LevelUpOutOfBounds(uint8 fromLevel, uint8 toLevel, uint8 maxLevel);
+  error LevelUpInsufficientXP(
+    uint8 fromLevel,
+    uint8 toLevel,
+    uint8 atLevel,
+    uint32 xpAvailable,
+    uint32 xpCost
+  );
 
   event LeveledUp(
     address indexed account,
@@ -53,24 +59,26 @@ contract Forge is IForge, Ownable {
       revert LevelUpUnauthorized();
     }
 
-    uint8 currLevel = level[tokenId];
-    if (toLevel <= currLevel) {
-      revert LevelUpAlreadyThere({toLevel: toLevel, atLevel: currLevel});
+    uint8 fromLevel = level[tokenId];
+    if (toLevel <= fromLevel) {
+      revert LevelUpAlreadyThere(fromLevel, toLevel);
     }
 
     uint8 maxLevel = uint8(levelUpCost.length);
     if (toLevel > maxLevel) {
-      revert LevelUpOutOfBounds({toLevel: toLevel, maxLevel: maxLevel});
+      revert LevelUpOutOfBounds(fromLevel, toLevel, maxLevel);
     }
 
     uint32 spent = points[msg.sender].spent;
     uint32 available = points[msg.sender].accrued - spent;
 
-    for (uint8 atLevel = currLevel; atLevel < toLevel; atLevel++) {
+    for (uint8 atLevel = fromLevel; atLevel < toLevel; atLevel++) {
       uint32 cost = levelUpCost[atLevel];
 
       if (cost > available) {
         revert LevelUpInsufficientXP({
+          fromLevel: fromLevel,
+          toLevel: toLevel,
           atLevel: atLevel,
           xpAvailable: available,
           xpCost: cost
@@ -81,10 +89,10 @@ contract Forge is IForge, Ownable {
       spent += cost;
     }
 
-    emit LeveledUp(msg.sender, tokenId, level[tokenId], toLevel);
-
     level[tokenId] = toLevel;
     points[msg.sender].spent = spent;
+
+    emit LeveledUp(msg.sender, tokenId, fromLevel, toLevel);
   }
 
   function adjustXp(address account, uint32 accrued) external onlyOwner {
