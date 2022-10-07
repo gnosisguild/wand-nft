@@ -111,9 +111,11 @@ export const frames: FrameProps[] = [
   {
     text: [
       `But you won’t be able to actively participate in Zodiac ecosystem governance until you hold a Wand NFT again.`,
-      `Also, your governance power won’t transfer with your  Wand NFT.`,
-      `Some powers can only be earned through experience…`,
+      `Also, your governance power won’t transfer with your Wand NFT.`,
     ],
+  },
+  {
+    text: [`Some powers can only be earned through experience…`],
   },
   {
     text: [
