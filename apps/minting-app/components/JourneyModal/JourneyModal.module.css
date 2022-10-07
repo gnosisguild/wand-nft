@@ -16,7 +16,7 @@
   align-content: flex-start;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 80%;
+  max-width: 90%;
 }
 
 .frameText {
@@ -26,7 +26,7 @@
   text-shadow: 0 0 0 whitesmoke;
   line-height: 1.35;
   opacity: 0;
-  margin-right: 0.5rem;
+  margin-right: 0.4rem;
   text-align: center;
 }
 
