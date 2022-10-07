@@ -19,7 +19,7 @@ const useMidSynth = (props: Props) => {
   // setup synth on page load
   useEffect(() => {
     midSynthRef.current = new Tone.PolySynth({
-      volume: -40,
+      volume: -30,
     });
     midSynthRef.current.set({
       envelope: {

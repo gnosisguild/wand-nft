@@ -19,28 +19,28 @@ interface BackgroundTrack {
 const backgroundTracks: BackgroundTrack[] = [
   {
     name: "dawn",
-    volume: -16,
+    volume: -13,
     audioURL: "/background-tracks/birds.mp3",
     filterRange: [100, 10000],
     filterType: "highpass",
   },
   {
     name: "day",
-    volume: 0,
+    volume: 3,
     audioURL: "/background-tracks/window.mp3",
     filterRange: [300, 10000],
     filterType: "highpass",
   },
   {
     name: "dusk",
-    volume: -6,
+    volume: -3,
     audioURL: "/background-tracks/forest.mp3",
     filterRange: [500, 10000],
     filterType: "highpass",
   },
   {
     name: "night",
-    volume: -22,
+    volume: -19,
     audioURL: "/background-tracks/crickets.mp3",
     filterRange: [1000, 10000],
     filterType: "highpass",
@@ -78,7 +78,6 @@ const useBackgroundTrack = (props: Props) => {
       }
       const currentTrack = tracks.current[state.handle];
       playerRef.current = playersRef.current?.player(currentTrack.name);
-      console.log(currentTrack.volume)
       playerRef.current?.set({
         loop: true,
         volume: currentTrack.volume,

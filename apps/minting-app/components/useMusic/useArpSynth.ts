@@ -25,11 +25,11 @@ const useArpSynth = (props: Props) => {
       preDelay: 1,
     });
 
-    const effect = new Tone.PingPongDelay(0.125, 0.95);
+    const effect = new Tone.PingPongDelay(0.25, 0.75);
     effect.wet.value = 0.1;
 
     const filterHigh = new Tone.Filter(6000, "highpass", -48);
-    const filterLow = new Tone.Filter(12000, "lowpass", -12);
+    const filterLow = new Tone.Filter(14000, "lowpass", -12);
 
     arpSynthRef.current = new Tone.Synth({
       oscillator: {
@@ -59,8 +59,8 @@ const useArpSynth = (props: Props) => {
     const haloRhythm = state.halo.rhythm;
     const lightness = state.background.color.lightness;
 
-    let baseOctave = 4;
-    let octaves = 5;
+    let baseOctave = 5;
+    let octaves = 4;
     let baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
 
     let noteArray = [];
