@@ -8,7 +8,15 @@ env/
 .history
 coverage*
 deployments
+typechain-types/
+
+*.in.txt
+*.out.txt
+*.in.json
+*.out.json
 
 # Local Netlify folder
 .netlify
 .vercel
+
+

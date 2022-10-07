@@ -11,27 +11,39 @@ import renderSvgTemplate from "./renderSvgTemplate";
 import { packForMinting } from "../../apps/minting-app/state/transforms/forMinting";
 import { transformForRendering } from "../../apps/minting-app/state/transforms/forRendering";
 import { keccak256 } from "ethers/lib/utils";
-import { AppState } from "../../apps/minting-app/types";
+import { AppState, MintStage } from "../../apps/minting-app/types";
+import MerkleTree from "merkletreejs";
+import { ZodiacWands } from "../typechain-types";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
     await deployments.fixture();
 
-    const [signer] = await hre.ethers.getSigners();
+    const signers = await hre.ethers.getSigners();
+    const [signer] = signers;
+    const signerAddress = await signer.getAddress();
 
     const deployment = await deployments.get("ZodiacWands");
     const zodiacWands = new Contract(
       deployment.address,
       deployment.abi,
       signer
-    );
+    ) as ZodiacWands;
 
-    return { zodiacWands };
+    const elements = await Promise.all(signers.map((s) => s.getAddress()));
+    const merkleTree = new MerkleTree(elements, keccak256, {
+      hashLeaves: true,
+      sortPairs: true,
+    });
+
+    const proof = merkleTree.getHexProof(keccak256(signerAddress));
+
+    return { zodiacWands, permit: { proof, signature: "0x" } };
   });
 
   describe("SVG generation", () => {
     it("it render the template with the same results as JavaScript", async () => {
-      const { zodiacWands } = await baseSetup();
+      const { zodiacWands, permit } = await baseSetup();
 
       const background = {
         hue: 0,
@@ -72,11 +84,11 @@ describe("ZodiacWands", async () => {
           ],
         },
         // doesnt matter
-        minting: false,
+        stage: MintStage.IDLE,
         tokenId: -1,
       };
 
-      const tx = await zodiacWands.mint(...packForMinting(state));
+      const tx = await zodiacWands.mint(...[...packForMinting(state), permit]);
 
       await tx.wait();
 

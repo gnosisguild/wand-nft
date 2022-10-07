@@ -8,6 +8,7 @@ import { publicProvider } from "wagmi/providers/public";
 
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
 import { AppState } from "../types";
+import { GreenlistProvider } from "../components/useGreenlist";
 
 const { chains, provider } = configureChains(
   [chain.rinkeby],
@@ -32,16 +33,18 @@ type MyAppProps = AppProps & {
 function MyApp({ Component, initialState }: MyAppProps) {
   return (
     <AppWrapper initialState={initialState}>
-      <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider
-          chains={chains}
-          theme={customTheme}
-          avatar={BlockieAvatar}
-          initialChain={4}
-        >
-          <Component />
-        </RainbowKitProvider>
-      </WagmiConfig>
+      <GreenlistProvider>
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider
+            chains={chains}
+            theme={customTheme}
+            avatar={BlockieAvatar}
+            initialChain={4}
+          >
+            <Component />
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </GreenlistProvider>
     </AppWrapper>
   );
 }

@@ -45,12 +45,12 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IZodiacWands.sol";
 import "./interfaces/IForge.sol";
 import "./interfaces/IConjuror.sol";
+import "./authorization/GatedMint.sol";
 import "./Decanter.sol";
 
-contract ZodiacWands is IZodiacWands, ERC721, Ownable {
+contract ZodiacWands is ERC721, GatedMint, Ownable {
   IForge public forge;
   IConjuror public conjuror;
 
@@ -67,8 +67,24 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     uint256 aspects
   );
 
-  constructor(IConjuror _conjuror) ERC721("ZodiacWands", "WAND") {
+  constructor(IConjuror _conjuror, bytes32 merkleRoot)
+    ERC721("ZodiacWands", "WAND")
+    GatedMint(merkleRoot)
+  {
     conjuror = _conjuror;
+  }
+
+  function tokenURI(uint256 tokenId)
+    public
+    view
+    override
+    returns (string memory)
+  {
+    require(
+      ERC721._exists(tokenId),
+      "ZodiacWands: URI query for nonexistent token"
+    );
+    return conjuror.generateWandURI(unpack(tokenId), ERC721.ownerOf(tokenId));
   }
 
   function mint(
@@ -78,10 +94,13 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     uint64 background,
     uint128 planets,
     uint256 aspects,
-    uint8 visibility
-  ) external override returns (uint256) {
+    uint8 visibility,
+    MintPermit calldata permit
+  ) external returns (uint256) {
+    redeem(permit);
+
     uint256 tokenId = nextTokenId++;
-    _safeMint(msg.sender, tokenId);
+    ERC721._safeMint(msg.sender, tokenId);
 
     wands[tokenId] = PackedWand({
       background: background,
@@ -98,19 +117,6 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     return tokenId;
   }
 
-  function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-  {
-    require(
-      ERC721._exists(tokenId),
-      "ZodiacWands: URI query for nonexistent token"
-    );
-    return conjuror.generateWandURI(unpack(tokenId), ownerOf(tokenId));
-  }
-
   function unpack(uint256 tokenId) internal view returns (Wand memory) {
     Wand memory wand = Decanter.unpack(tokenId, wands[tokenId]);
     wand.xp = address(forge) != address(0)
@@ -119,6 +125,10 @@ contract ZodiacWands is IZodiacWands, ERC721, Ownable {
     wand.level = address(forge) != address(0) ? forge.level(tokenId) : 0;
 
     return wand;
+  }
+
+  function setMerkleRoot(bytes32 nextMerkleRoot) external onlyOwner {
+    merkleRoot = nextMerkleRoot;
   }
 
   function setForge(IForge _forge) external onlyOwner {

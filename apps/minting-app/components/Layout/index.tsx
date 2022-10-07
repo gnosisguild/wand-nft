@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import { ReactNode } from "react";
 import { useAppContext } from "../../state";
 import Head from "next/head";
@@ -10,6 +9,7 @@ import bgImage from "../../public/test-bg-small.jpg";
 import styles from "./Layout.module.css";
 import homeStyles from "../../styles/Home.module.css";
 import classNames from "classnames";
+import { MintStage } from "../../types";
 
 interface Props {
   children: ReactNode;
@@ -17,13 +17,18 @@ interface Props {
 }
 const Layout: React.FC<Props> = ({ children, description }) => {
   const { state, dispatch } = useAppContext();
-  const { minting } = state;
+  const { stage } = state;
+
+  const isMinting =
+    stage == MintStage.SIGNING ||
+    stage == MintStage.TRANSACTING ||
+    stage == MintStage.SUCCESS;
 
   const mintingClasses = [
     homeStyles.animateOnMint,
     homeStyles.hasSvg,
     {
-      [homeStyles.minting]: minting,
+      [homeStyles.minting]: isMinting,
     },
   ];
   return (
@@ -35,7 +40,7 @@ const Layout: React.FC<Props> = ({ children, description }) => {
           styles.backgroundImage,
           homeStyles.animateOnMint,
           {
-            [styles.minting]: minting,
+            [styles.minting]: isMinting,
           }
         )}
       />

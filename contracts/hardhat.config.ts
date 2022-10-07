@@ -1,14 +1,13 @@
-import "@nomiclabs/hardhat-etherscan";
-import "@nomiclabs/hardhat-waffle";
-import "solidity-coverage";
+import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
-import "hardhat-gas-reporter";
 import "hardhat-contract-sizer";
 import dotenv from "dotenv";
 import type { HttpNetworkUserConfig } from "hardhat/types";
 import yargs from "yargs";
 
-import "./src/tasks/encodeRhythms";
+import "./src/tasks/spreadsheet";
+import "./src/tasks/passwords";
+import "./src/tasks/greenlist";
 
 const argv = yargs
   .option("network", {
@@ -87,6 +86,9 @@ export default {
   },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
+  },
+  gasReporter: {
+    enabled: true,
   },
 };
 

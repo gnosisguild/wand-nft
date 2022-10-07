@@ -7,6 +7,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    domains: ["nftgp.io"],
+  },
   webpack: (config, options) => {
     const { isServer } = options;
     config.module.rules.push({

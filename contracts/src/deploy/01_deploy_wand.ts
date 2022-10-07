@@ -1,5 +1,8 @@
+import assert from "assert";
+import { keccak256 } from "ethers/lib/utils";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
+import MerkleTree from "merkletreejs";
 
 const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
@@ -23,9 +26,11 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       Incantation: txIncantation.address,
     },
   });
+
+  const rootHash = await merkleRoot(hre);
   const txZodiacWands = await deploy("ZodiacWands", {
     from: deployer,
-    args: [txConjuror.address],
+    args: [txConjuror.address, rootHash],
     log: true,
   });
   const txForge = await deploy("Forge", {
@@ -45,5 +50,25 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   );
   await zodiacWands.setForge(txForge.address);
 };
+
+async function merkleRoot(hre: HardhatRuntimeEnvironment) {
+  if (hre.network.name !== "hardhat") {
+    const filePath = process.env["GREENLIST_FILE_PATH"];
+    assert(!!filePath, "No greenlist file configured");
+    /* eslint-disable-next-line @typescript-eslint/no-var-requires */
+    const json = require(filePath);
+
+    return json.root;
+  } else {
+    const signers = await hre.ethers.getSigners();
+    const elements = await Promise.all(signers.map((s) => s.getAddress()));
+    const merkleTree = new MerkleTree(elements, keccak256, {
+      hashLeaves: true,
+      sortPairs: true,
+    });
+
+    return merkleTree.getHexRoot();
+  }
+}
 
 export default deploy;
