@@ -116,7 +116,7 @@ describe("Forge", async () => {
 
       await expect(forge.levelUp(wandTokenId, 1)).to.be.revertedWithCustomError(
         forge,
-        "LevelUpUnauthorized"
+        "NotYourWand"
       );
     });
 
@@ -126,7 +126,7 @@ describe("Forge", async () => {
       await forge.adjustXp(wandHolder.address, 10000000);
 
       await expect(forge.connect(wandHolder).levelUp(wandTokenId, 0))
-        .to.be.revertedWithCustomError(forge, "LevelUpAlreadyThere")
+        .to.be.revertedWithCustomError(forge, "WithinCurrentLevel")
         .withArgs(0, 0);
     });
 
@@ -140,7 +140,7 @@ describe("Forge", async () => {
       const maxLevel = 4;
 
       await expect(forge.connect(wandHolder).levelUp(wandTokenId, toLevel))
-        .to.be.revertedWithCustomError(forge, "LevelUpOutOfBounds")
+        .to.be.revertedWithCustomError(forge, "BeyondMaxLevel")
         .withArgs(fromLevel, toLevel, maxLevel);
     });
 
@@ -161,7 +161,7 @@ describe("Forge", async () => {
       const atLevel = 1;
 
       await expect(forge.connect(wandHolder).levelUp(wandTokenId, toLevel))
-        .to.be.revertedWithCustomError(forge, "LevelUpInsufficientXP")
+        .to.be.revertedWithCustomError(forge, "InsufficientXP")
         .withArgs(fromLevel, toLevel, atLevel, xpAvailable, costToLevelUpFrom1);
     });
 

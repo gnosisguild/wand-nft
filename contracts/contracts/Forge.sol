@@ -11,15 +11,15 @@ interface IOwnerOf {
 contract Forge is IForge, Ownable {
   IOwnerOf public immutable wand;
 
-  struct Points {
+  struct Score {
     uint32 accrued;
     uint32 spent;
   }
 
-  error LevelUpUnauthorized();
-  error LevelUpAlreadyThere(uint8 fromLevel, uint8 toLevel);
-  error LevelUpOutOfBounds(uint8 fromLevel, uint8 toLevel, uint8 maxLevel);
-  error LevelUpInsufficientXP(
+  error NotYourWand();
+  error WithinCurrentLevel(uint8 fromLevel, uint8 toLevel);
+  error BeyondMaxLevel(uint8 fromLevel, uint8 toLevel, uint8 maxLevel);
+  error InsufficientXP(
     uint8 fromLevel,
     uint8 toLevel,
     uint8 atLevel,
@@ -36,7 +36,7 @@ contract Forge is IForge, Ownable {
 
   event XpAdjusted(address indexed account, uint32 xp, uint32 xpSpent);
 
-  mapping(address => Points) internal points;
+  mapping(address => Score) internal score;
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
   uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
@@ -47,36 +47,36 @@ contract Forge is IForge, Ownable {
   }
 
   function xp(address account) external view override returns (uint32) {
-    return points[account].accrued;
+    return score[account].accrued;
   }
 
   function xpSpent(address account) external view override returns (uint32) {
-    return points[account].spent;
+    return score[account].spent;
   }
 
   function levelUp(uint256 tokenId, uint8 toLevel) external override {
     if (wand.ownerOf(tokenId) != msg.sender) {
-      revert LevelUpUnauthorized();
+      revert NotYourWand();
     }
 
     uint8 fromLevel = level[tokenId];
     if (toLevel <= fromLevel) {
-      revert LevelUpAlreadyThere(fromLevel, toLevel);
+      revert WithinCurrentLevel(fromLevel, toLevel);
     }
 
     uint8 maxLevel = uint8(levelUpCost.length);
     if (toLevel > maxLevel) {
-      revert LevelUpOutOfBounds(fromLevel, toLevel, maxLevel);
+      revert BeyondMaxLevel(fromLevel, toLevel, maxLevel);
     }
 
-    uint32 spent = points[msg.sender].spent;
-    uint32 available = points[msg.sender].accrued - spent;
+    uint32 spent = score[msg.sender].spent;
+    uint32 available = score[msg.sender].accrued - spent;
 
     for (uint8 atLevel = fromLevel; atLevel < toLevel; atLevel++) {
       uint32 cost = levelUpCost[atLevel];
 
       if (cost > available) {
-        revert LevelUpInsufficientXP({
+        revert InsufficientXP({
           fromLevel: fromLevel,
           toLevel: toLevel,
           atLevel: atLevel,
@@ -90,17 +90,17 @@ contract Forge is IForge, Ownable {
     }
 
     level[tokenId] = toLevel;
-    points[msg.sender].spent = spent;
+    score[msg.sender].spent = spent;
 
     emit LeveledUp(msg.sender, tokenId, fromLevel, toLevel);
   }
 
   function adjustXp(address account, uint32 accrued) external onlyOwner {
-    uint32 spent = points[account].spent > accrued
+    uint32 spent = score[account].spent > accrued
       ? accrued
-      : points[account].spent;
+      : score[account].spent;
 
-    points[account] = Points({accrued: accrued, spent: spent});
+    score[account] = Score({accrued: accrued, spent: spent});
 
     emit XpAdjusted(account, accrued, spent);
   }
