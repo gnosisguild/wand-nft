@@ -15,7 +15,7 @@ import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
 import Sparkles from "../components/Sparkles";
-import Music from "../components/Music";
+import useMusic from "../components/useMusic";
 import * as Tone from "tone";
 import {
   FullDownloadButton,
@@ -26,6 +26,7 @@ import useHandleClock from "../components/useHandleClock";
 
 const Home: NextPage = () => {
   useHandleClock();
+  useMusic();
 
   const { state } = useAppContext();
   const { stage } = state;
@@ -75,7 +76,6 @@ const Home: NextPage = () => {
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
-      <Music />
     </Layout>
   );
 };
