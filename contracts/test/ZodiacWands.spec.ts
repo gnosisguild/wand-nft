@@ -48,6 +48,9 @@ describe("ZodiacWands", async () => {
       const [signer] = await hre.ethers.getSigners();
       const { zodiacWands, getPermit } = await baseSetup();
 
+      const forgeAddress = await zodiacWands.forge();
+      const forge = Forge__factory.connect(forgeAddress, signer);
+
       const background = {
         radial: true,
         dark: true,
@@ -98,6 +101,7 @@ describe("ZodiacWands", async () => {
       );
       await tx.wait();
       const tokenId = 0;
+      const levelUpCost = await forge.levelUpCost(0);
 
       const tokenUri = await zodiacWands.tokenURI(tokenId);
       const tokenUriJson = JSON.parse(
@@ -121,7 +125,7 @@ describe("ZodiacWands", async () => {
           level1: true,
           title: generateName(tokenId),
         },
-        xp: { amount: 0, cap: 2000, crown: false },
+        xp: { amount: 0, cap: levelUpCost, crown: false },
       });
 
       expect(svgFromSol).to.equal(svgFromJS);
@@ -133,6 +137,11 @@ describe("ZodiacWands", async () => {
 
       const forgeAddress = await zodiacWands.forge();
       const forge = Forge__factory.connect(forgeAddress, signer);
+
+      const levelUpCosts = [
+        await forge.levelUpCost(0),
+        await forge.levelUpCost(1),
+      ];
 
       const background = {
         radial: false,
@@ -178,7 +187,6 @@ describe("ZodiacWands", async () => {
       const date = new Date("2022-10-01");
 
       const xpAccrued = 6000;
-      const levelUpCost = 2000;
 
       const tx = await zodiacWands
         .connect(minter)
@@ -207,6 +215,10 @@ describe("ZodiacWands", async () => {
 
       const seed = parseInt(keccak256(minter.address).slice(-4), 16);
 
+      const xpAmount = xpAccrued - levelUpCosts[0];
+      const xpCap = levelUpCosts[1];
+      const xpCrown = xpAccrued >= xpCap;
+
       const svgFromJS = renderSvgTemplate({
         ...transformForRendering(state, seed, date),
         // sparkles and name are not on the preview, we mimick solidity
@@ -215,7 +227,11 @@ describe("ZodiacWands", async () => {
           level2: true,
           title: generateName(tokenId),
         },
-        xp: { amount: xpAccrued - levelUpCost, cap: levelUpCost, crown: true },
+        xp: {
+          amount: xpAmount,
+          cap: xpCap,
+          crown: xpCrown,
+        },
       });
 
       expect(svgFromSol).to.equal(svgFromJS);
