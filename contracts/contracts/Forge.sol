@@ -11,7 +11,7 @@ interface IOwnerOf {
 contract Forge is IForge, Ownable {
   IOwnerOf public immutable wand;
 
-  struct Experience {
+  struct Points {
     uint32 accrued;
     uint32 spent;
   }
@@ -21,7 +21,7 @@ contract Forge is IForge, Ownable {
   error LevelUpOutOfBounds(uint8 toLevel, uint8 maxLevel);
   error LevelUpInsufficientXP(uint8 atLevel, uint32 xpAvailable, uint32 xpCost);
 
-  mapping(address => Experience) public experience;
+  mapping(address => Points) public points;
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
   uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
@@ -32,11 +32,11 @@ contract Forge is IForge, Ownable {
   }
 
   function xp(address account) external view override returns (uint32) {
-    return experience[account].accrued;
+    return points[account].accrued;
   }
 
   function xpSpent(address account) external view override returns (uint32) {
-    return experience[account].spent;
+    return points[account].spent;
   }
 
   function levelUp(uint256 tokenId, uint8 toLevel) external override {
@@ -54,8 +54,8 @@ contract Forge is IForge, Ownable {
       revert LevelUpOutOfBounds({toLevel: toLevel, maxLevel: maxLevel});
     }
 
-    uint32 spent = experience[msg.sender].spent;
-    uint32 available = experience[msg.sender].accrued - spent;
+    uint32 spent = points[msg.sender].spent;
+    uint32 available = points[msg.sender].accrued - spent;
 
     for (uint8 atLevel = currLevel; atLevel < toLevel; atLevel++) {
       uint32 cost = levelUpCost[atLevel];
@@ -73,13 +73,13 @@ contract Forge is IForge, Ownable {
     }
 
     level[tokenId] = toLevel;
-    experience[msg.sender].spent = spent;
+    points[msg.sender].spent = spent;
   }
 
   function adjustXp(address account, uint32 accrued) external onlyOwner {
-    uint32 spent = experience[account].spent;
+    uint32 spent = points[account].spent;
 
-    experience[account] = Experience({
+    points[account] = Points({
       accrued: accrued,
       spent: spent > accrued ? accrued : spent
     });
