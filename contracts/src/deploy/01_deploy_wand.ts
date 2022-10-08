@@ -17,6 +17,12 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
   });
 
+  const txInceptionStones = await deploy("InceptionStones", {
+    from: deployer,
+    args: [],
+    log: true,
+  });
+
   const txConjuror = await deploy("Conjuror", {
     from: deployer,
     args: [],
@@ -24,6 +30,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     libraries: {
       Cauldron: allDeployments.Cauldron.address,
       Incantation: txIncantation.address,
+      InceptionStones: txInceptionStones.address,
     },
   });
 

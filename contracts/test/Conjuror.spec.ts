@@ -13,6 +13,7 @@ describe("Conjuror", async () => {
 
     const cauldron = await deployments.get("Cauldron");
     const incantation = await deployments.get("Incantation");
+    const stones = await deployments.get("InceptionStones");
 
     const WandConjurorExposer = await hre.ethers.getContractFactory(
       "WandConjurorExposer",
@@ -20,6 +21,7 @@ describe("Conjuror", async () => {
         libraries: {
           Cauldron: cauldron.address,
           Incantation: incantation.address,
+          InceptionStones: stones.address,
         },
       }
     );
