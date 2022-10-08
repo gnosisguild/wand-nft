@@ -78,17 +78,17 @@ contract Conjuror is IConjuror {
     );
 
     bytes memory second = abi.encodePacked(
-      '},{ "display_type": "boost_number", "trait_type": "',
+      '},{ "trait_type": "',
       majorAlloy,
-      '", "max_value":"100", "value": ',
+      '", "max_value":100, "value": ',
       SolidMustacheHelpers.uintToString(majorWeight, 0)
     );
     string memory third = minorWeight > 0
       ? string(
         abi.encodePacked(
-          '},{ "display_type": "boost_number", "trait_type": "',
+          '},{ "trait_type": "',
           minorAlloy,
-          '", "max_value":"100", "value": ',
+          '", "max_value":100, "value": ',
           SolidMustacheHelpers.uintToString(minorWeight, 0)
         )
       )
@@ -349,35 +349,11 @@ contract Conjuror is IConjuror {
     minorAlloy = toStone.name;
     minorWeight = 100 - majorWeight;
 
-    if (progress == 0) {
-      name = string(
-        abi.encodePacked("Pure", " ", fromStone.name, " ", "Alloy")
-      );
-    } else if (progress == 50) {
-      name = string(
-        abi.encodePacked(
-          "Uniform",
-          " ",
-          fromStone.name,
-          " ",
-          toStone.name,
-          " ",
-          "Alloy"
-        )
-      );
+    if (progress < 25) {
+      name = string(abi.encodePacked("Uniform ", fromStone.name));
     } else {
       name = string(
-        abi.encodePacked(
-          "Major",
-          " ",
-          fromStone.name,
-          " ",
-          "Minor",
-          " ",
-          toStone.name,
-          " ",
-          "Alloy"
-        )
+        abi.encodePacked(fromStone.name, " ", toStone.name, " ", "Alloy")
       );
     }
   }

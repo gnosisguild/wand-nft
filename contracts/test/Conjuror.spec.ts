@@ -103,7 +103,7 @@ describe("Conjuror", async () => {
   });
 
   describe("interpolateStoneName", () => {
-    it("interpolates a PURE stone name", async () => {
+    it("interpolates a UNIFORM stone name", async () => {
       const { wandConjurorMock } = await baseSetup();
 
       // a stone id that yields a 0 progress
@@ -116,13 +116,33 @@ describe("Conjuror", async () => {
       const { name, majorAlloy, majorWeight, minorWeight } =
         await wandConjurorMock._interpolateStoneName(stoneId);
 
-      expect(name).to.equal(`Pure ${list[fromStone].name} Alloy`);
+      expect(name).to.equal(`Uniform ${list[fromStone].name}`);
       expect(majorAlloy).to.equal(list[fromStone].name);
       expect(majorWeight).to.equal(100);
       expect(minorWeight).to.equal(0);
     });
 
-    it("interpolates a UNIFORM stone name", async () => {
+    it("interpolates a UNIFORM stone name with non negligable minor stone", async () => {
+      const { wandConjurorMock } = await baseSetup();
+
+      // a stone id that yields a 10 progress
+      const stoneId = 199;
+      const [fromStone, toStone, progress] =
+        await wandConjurorMock._interpolationParams(stoneId);
+      expect(progress).to.equal(10);
+
+      const list = await wandConjurorMock._stoneList();
+      const { name, majorAlloy, majorWeight, minorAlloy, minorWeight } =
+        await wandConjurorMock._interpolateStoneName(stoneId);
+
+      expect(name).to.equal(`Uniform ${list[fromStone].name}`);
+      expect(majorAlloy).to.equal(list[fromStone].name);
+      expect(majorWeight).to.equal(90);
+      expect(minorAlloy).to.equal(list[toStone].name);
+      expect(minorWeight).to.equal(10);
+    });
+
+    it("interpolates an ALLOY stone name", async () => {
       const { wandConjurorMock } = await baseSetup();
 
       // a stone id that yields a 50 progress
@@ -136,34 +156,12 @@ describe("Conjuror", async () => {
         await wandConjurorMock._interpolateStoneName(stoneId);
 
       expect(name).to.equal(
-        `Uniform ${list[fromStone].name} ${list[toStone].name} Alloy`
+        `${list[fromStone].name} ${list[toStone].name} Alloy`
       );
       expect(majorAlloy).to.equal(list[fromStone].name);
       expect(majorWeight).to.equal(50);
       expect(minorAlloy).to.equal(list[toStone].name);
       expect(minorWeight).to.equal(50);
-    });
-
-    it("interpolates a MIXED stone name", async () => {
-      const { wandConjurorMock } = await baseSetup();
-
-      // a stone id that yields a 10 progress
-      const stoneId = 199;
-      const [fromStone, toStone, progress] =
-        await wandConjurorMock._interpolationParams(stoneId);
-      expect(progress).to.equal(10);
-
-      const list = await wandConjurorMock._stoneList();
-      const { name, majorAlloy, majorWeight, minorAlloy, minorWeight } =
-        await wandConjurorMock._interpolateStoneName(stoneId);
-
-      expect(name).to.equal(
-        `Major ${list[fromStone].name} Minor ${list[toStone].name} Alloy`
-      );
-      expect(majorAlloy).to.equal(list[fromStone].name);
-      expect(majorWeight).to.equal(90);
-      expect(minorAlloy).to.equal(list[toStone].name);
-      expect(minorWeight).to.equal(10);
     });
   });
 });
