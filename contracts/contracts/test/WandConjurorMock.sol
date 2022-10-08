@@ -4,7 +4,6 @@ pragma solidity ^0.8.6;
 import "../Conjuror.sol";
 
 contract WandConjurorMock is Conjuror {
-
   function _interpolateStone(uint16 stoneId)
     public
     pure

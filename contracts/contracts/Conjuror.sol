@@ -52,21 +52,50 @@ contract Conjuror is IConjuror {
           SolidMustacheHelpers.uintToString(wand.xp.amount, 0),
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
+          generateStoneTraits(wand.stone),
           "}"
         )
       );
   }
 
-  // function generateAttributeStone(uint16 stoneId) internal returns (string) {
-  //   (uint8 from, uint8 to, uint8 progress) = interpolationParams(stoneId);
+  function generateStoneTraits(uint16 stoneId)
+    internal
+    pure
+    returns (bytes memory)
+  {
+    (
+      string memory name,
+      string memory majorAlloy,
+      uint8 majorWeight,
+      string memory minorAlloy,
+      uint8 minorWeight
+    ) = interpolateStoneName(stoneId);
 
-  //   Cauldron.Stone memory fromStone = stoneList()[from];
-  //   Cauldron.Stone memory toStone = stoneList()[to];
+    bytes memory first = abi.encodePacked(
+      '},{"trait_type": "Stone", "value": "',
+      name,
+      '"'
+    );
 
-  //   string name = "";
+    bytes memory second = abi.encodePacked(
+      '},{ "display_type": "boost_number", "trait_type": "',
+      majorAlloy,
+      '", "max_value":"100", "value": ',
+      SolidMustacheHelpers.uintToString(majorWeight, 0)
+    );
+    string memory third = minorWeight > 0
+      ? string(
+        abi.encodePacked(
+          '},{ "display_type": "boost_number", "trait_type": "',
+          minorAlloy,
+          '", "max_value":"100", "value": ',
+          SolidMustacheHelpers.uintToString(minorWeight, 0)
+        )
+      )
+      : "";
 
-  //   return abi.encodePacked('},{"trait_type": "Stone", "value": ', name);
-  // }
+    return abi.encodePacked(first, second, third);
+  }
 
   function generateSVG(
     Wand memory wand,
