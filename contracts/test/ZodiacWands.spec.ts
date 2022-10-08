@@ -88,7 +88,7 @@ describe("ZodiacWands", async () => {
         tokenId: -1,
       };
 
-      const tx = await zodiacWands.mint(...[...packForMinting(state), permit]);
+      const tx = await zodiacWands.mint(...packForMinting(state), permit);
 
       await tx.wait();
 

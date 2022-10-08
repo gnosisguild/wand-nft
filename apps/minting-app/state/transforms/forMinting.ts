@@ -24,7 +24,7 @@ export function packForMinting(options: MintOptions, date?: Date) {
     packedPlanets,
     packedAspects,
     packedVisibility,
-  ];
+  ] as const;
 }
 
 function packHalo(options: MintOptions) {
