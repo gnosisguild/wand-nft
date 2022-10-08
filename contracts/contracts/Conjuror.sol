@@ -57,6 +57,17 @@ contract Conjuror is IConjuror {
       );
   }
 
+  // function generateAttributeStone(uint16 stoneId) internal returns (string) {
+  //   (uint8 from, uint8 to, uint8 progress) = interpolationParams(stoneId);
+
+  //   Cauldron.Stone memory fromStone = stoneList()[from];
+  //   Cauldron.Stone memory toStone = stoneList()[to];
+
+  //   string name = "";
+
+  //   return abi.encodePacked('},{"trait_type": "Stone", "value": ', name);
+  // }
+
   function generateSVG(
     Wand memory wand,
     string memory name,
@@ -287,6 +298,59 @@ contract Conjuror is IConjuror {
           progress
         )
       });
+  }
+
+  function interpolateStoneName(uint16 stoneId)
+    internal
+    pure
+    returns (
+      string memory name,
+      string memory majorAlloy,
+      uint8 majorWeight,
+      string memory minorAlloy,
+      uint8 minorWeight
+    )
+  {
+    (uint8 from, uint8 to, uint8 progress) = interpolationParams(stoneId);
+    InceptionStones.Stone memory fromStone = stoneList()[from];
+    InceptionStones.Stone memory toStone = stoneList()[to];
+
+    majorAlloy = fromStone.name;
+    majorWeight = 100 - progress;
+    minorAlloy = toStone.name;
+    minorWeight = 100 - majorWeight;
+
+    if (progress == 0) {
+      name = string(
+        abi.encodePacked("Pure", " ", fromStone.name, " ", "Alloy")
+      );
+    } else if (progress == 50) {
+      name = string(
+        abi.encodePacked(
+          "Uniform",
+          " ",
+          fromStone.name,
+          " ",
+          toStone.name,
+          " ",
+          "Alloy"
+        )
+      );
+    } else {
+      name = string(
+        abi.encodePacked(
+          "Major",
+          " ",
+          fromStone.name,
+          " ",
+          "Minor",
+          " ",
+          toStone.name,
+          " ",
+          "Alloy"
+        )
+      );
+    }
   }
 
   function interpolationParams(uint16 stone)

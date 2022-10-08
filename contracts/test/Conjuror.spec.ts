@@ -6,6 +6,7 @@ import {
   interpolateStone,
   interpolationParams,
 } from "../../apps/minting-app/mimicking";
+import { WandConjurorMock } from "../typechain-types/contracts/test/WandConjurorMock";
 
 describe("Conjuror", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -15,8 +16,8 @@ describe("Conjuror", async () => {
     const incantation = await deployments.get("Incantation");
     const stones = await deployments.get("InceptionStones");
 
-    const WandConjurorExposer = await hre.ethers.getContractFactory(
-      "WandConjurorExposer",
+    const WandConjurorMock = await hre.ethers.getContractFactory(
+      "WandConjurorMock",
       {
         libraries: {
           Cauldron: cauldron.address,
@@ -25,19 +26,17 @@ describe("Conjuror", async () => {
         },
       }
     );
-    const wandConjurorExposer = await WandConjurorExposer.deploy();
+    const wandConjurorMock: WandConjurorMock = await WandConjurorMock.deploy();
 
-    return { wandConjurorExposer };
+    return { wandConjurorMock };
   });
 
   describe("interpolateStone", () => {
     it("compares interpolated stone in Solidity vs JavaScript", async () => {
-      const { wandConjurorExposer } = await baseSetup();
+      const { wandConjurorMock } = await baseSetup();
 
       const checkIt = async (stoneId: number) => {
-        const fromSolidity = await wandConjurorExposer._interpolateStone(
-          stoneId
-        );
+        const fromSolidity = await wandConjurorMock._interpolateStone(stoneId);
         const fromJS = interpolateStone(stoneId);
 
         expect(fromJS.fractalNoise).to.equal(fromSolidity.fractalNoise);
@@ -70,19 +69,24 @@ describe("Conjuror", async () => {
     });
 
     it("compares param for interpolation calculation in Solidity vs JavaScript", async () => {
-      const { wandConjurorExposer } = await baseSetup();
+      const { wandConjurorMock } = await baseSetup();
 
       const checkIt = async (stoneId: number) => {
         const {
           from: solFrom,
           to: solTo,
           progress: solProgress,
-        } = await wandConjurorExposer._interpolationParams(stoneId);
+        } = await wandConjurorMock._interpolationParams(stoneId);
         const [jsFrom, jsTo, jsProgress] = interpolationParams(stoneId);
         expect(solFrom).to.equal(jsFrom);
         expect(solTo).to.equal(jsTo);
         expect(solProgress).to.equal(jsProgress);
       };
+
+      // // cycling through all takes time
+      // for (let stoneId = 0; stoneId < 3600; stoneId++) {
+      //   await checkIt(stoneId);
+      // }
 
       // random values
       await checkIt(1251);
@@ -95,6 +99,71 @@ describe("Conjuror", async () => {
       await checkIt(1550);
       await checkIt(2820);
       await checkIt(2569);
+    });
+  });
+
+  describe("interpolateStoneName", () => {
+    it("interpolates a PURE stone name", async () => {
+      const { wandConjurorMock } = await baseSetup();
+
+      // a stone id that yields a 0 progress
+      const stoneId = 62;
+      const [fromStone, , progress] =
+        await wandConjurorMock._interpolationParams(stoneId);
+      expect(progress).to.equal(0);
+
+      const list = await wandConjurorMock._stoneList();
+      const { name, majorAlloy, majorWeight, minorWeight } =
+        await wandConjurorMock._interpolateStoneName(stoneId);
+
+      expect(name).to.equal(`Pure ${list[fromStone].name} Alloy`);
+      expect(majorAlloy).to.equal(list[fromStone].name);
+      expect(majorWeight).to.equal(100);
+      expect(minorWeight).to.equal(0);
+    });
+
+    it("interpolates a UNIFORM stone name", async () => {
+      const { wandConjurorMock } = await baseSetup();
+
+      // a stone id that yields a 50 progress
+      const stoneId = 124;
+      const [fromStone, toStone, progress] =
+        await wandConjurorMock._interpolationParams(stoneId);
+      expect(progress).to.equal(50);
+
+      const list = await wandConjurorMock._stoneList();
+      const { name, majorAlloy, majorWeight, minorAlloy, minorWeight } =
+        await wandConjurorMock._interpolateStoneName(stoneId);
+
+      expect(name).to.equal(
+        `Uniform ${list[fromStone].name} ${list[toStone].name} Alloy`
+      );
+      expect(majorAlloy).to.equal(list[fromStone].name);
+      expect(majorWeight).to.equal(50);
+      expect(minorAlloy).to.equal(list[toStone].name);
+      expect(minorWeight).to.equal(50);
+    });
+
+    it("interpolates a MIXED stone name", async () => {
+      const { wandConjurorMock } = await baseSetup();
+
+      // a stone id that yields a 10 progress
+      const stoneId = 199;
+      const [fromStone, toStone, progress] =
+        await wandConjurorMock._interpolationParams(stoneId);
+      expect(progress).to.equal(10);
+
+      const list = await wandConjurorMock._stoneList();
+      const { name, majorAlloy, majorWeight, minorAlloy, minorWeight } =
+        await wandConjurorMock._interpolateStoneName(stoneId);
+
+      expect(name).to.equal(
+        `Major ${list[fromStone].name} Minor ${list[toStone].name} Alloy`
+      );
+      expect(majorAlloy).to.equal(list[fromStone].name);
+      expect(majorWeight).to.equal(90);
+      expect(minorAlloy).to.equal(list[toStone].name);
+      expect(minorWeight).to.equal(10);
     });
   });
 });
