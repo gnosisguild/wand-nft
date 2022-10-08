@@ -217,6 +217,7 @@ contract Conjuror is IConjuror {
     Cauldron.Stone memory toStone = stoneList()[to];
     return
       Cauldron.Stone({
+        name: "",
         turbFreqX: interpolateUInt8Value(
           fromStone.turbFreqX,
           toStone.turbFreqX,
