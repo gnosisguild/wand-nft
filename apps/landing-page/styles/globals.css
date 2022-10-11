@@ -1,0 +1,187 @@
+:root {
+  --border-color: rgb(255 252 199 / 20%);
+}
+
+@font-face {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/RobotoMono/roboto-mono-v13-latin-regular.woff) format("woff2"),
+    url(/fonts/RobotoMono/roboto-mono-v13-latin-regular.woff2) format("woff");
+}
+
+/* spectral-regular - latin */
+@font-face {
+  font-family: "Spectral";
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/Spectral/spectral-v7-latin-regular.woff) format("woff2"),
+    url(/fonts/Spectral/spectral-v7-latin-regular.woff2) format("woff");
+}
+
+/* spectral-extra-light - latin */
+@font-face {
+  font-family: "Spectral";
+  font-style: normal;
+  font-weight: 200;
+  src: url(/fonts/Spectral/Spectral-ExtraLight.woff) format("woff2"),
+    url(/fonts/Spectral/Spectral-ExtraLight.woff2) format("woff");
+}
+
+/* spectral-extra-light-italic - latin */
+@font-face {
+  font-family: "Spectral";
+  font-style: italic;
+  font-weight: 200;
+  src: url(/fonts/Spectral/Spectral-ExtraLightItalic.woff) format("woff2"),
+    url(/fonts/Spectral/Spectral-ExtraLightItalic.woff2) format("woff");
+}
+
+html,
+body {
+  font-family: "Spectral";
+  font-weight: 200;
+  color: white;
+  min-height: 100vh;
+  font-size: 13px;
+  letter-spacing: -0.03em;
+  margin: 0;
+  padding: 0;
+  background: black;
+}
+
+a {
+  color: white;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: rgba(252, 248, 217, 0.8);
+}
+
+* {
+  box-sizing: border-box;
+}
+.inputContainer {
+  position: relative;
+}
+
+.inputContainer:after {
+  content: " ";
+  position: absolute;
+  z-index: 8;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(
+    93.04deg,
+    rgba(0, 0, 0, 0.2) -2.35%,
+    rgba(134, 128, 25, 0.14) 103.39%
+  );
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.1s ease;
+}
+
+input,
+select {
+  position: relative;
+  z-index: 10;
+  font-size: 12px;
+  background-color: transparent;
+  font-family: "Roboto Mono", monospace;
+  color: white;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: #0000004f;
+  border: 1px solid rgba(217, 212, 173, 0.8);
+  border-radius: 4px;
+  line-height: 20px;
+  padding: 8px 10px;
+  height: 38px;
+  transition: all 0.1s ease;
+}
+
+input:hover:enabled,
+select:hover:enabled {
+  border-color: rgb(255, 253, 221);
+}
+
+input:active,
+select:active,
+input:focus,
+select:focus {
+  border: 1px solid rgb(255, 253, 221);
+  outline: none;
+}
+
+.button,
+input[type="submit"] {
+  font-family: "Spectral";
+  font-size: 1em;
+  display: block;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  background: linear-gradient(
+    98.66deg,
+    rgba(254, 245, 79, 0.5) 30.29%,
+    rgba(113, 107, 7, 0.24) 130.27%
+  );
+  box-shadow: 0px 2px 6px rgba(56, 65, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(217, 212, 173, 0.8);
+  padding: 0.5em;
+  color: white;
+  transition: all 0.1s ease;
+  position: relative;
+  z-index: 10;
+  background-clip: padding-box;
+}
+
+.button:hover:enabled,
+input[type="submit"]:hover:enabled {
+  cursor: pointer;
+  border-color: rgb(255, 253, 221);
+}
+
+.button:disabled,
+input[type="submit"]:disabled {
+  opacity: 0.6;
+}
+
+.button img {
+  height: 16px;
+  margin-right: 10px;
+}
+
+.buttonContainer:after {
+  content: " ";
+  position: absolute;
+  z-index: 8;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(
+    93.04deg,
+    rgba(0, 0, 0, 0.2) -2.35%,
+    rgba(134, 128, 25, 0.14) 103.39%
+  );
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  transition: all 0.1s ease;
+}
+.buttonContainer {
+  position: relative;
+  z-index: 8;
+}
+
+.button:hover:after {
+  border-color: rgb(255 252 199 / 40%);
+}
