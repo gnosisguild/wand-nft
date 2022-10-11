@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRef, useEffect } from "react";
 
-import GreenlistForm from "../components/greenlistForm";
+import EmailForm from "../components/emailForm";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Zodiac Portal</title>
+        <title>Zodiac Wands</title>
         <meta name="description" content="G҉ᴗG҉━━✫・*。.  *  ·   . ✵ " />
       </Head>
 
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
             <source src="/bg2.mp4" type="video/mp4" />
           </video>
         </div>
-        <GreenlistForm />
+        <EmailForm />
       </main>
     </div>
   );

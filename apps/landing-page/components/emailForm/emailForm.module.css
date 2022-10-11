@@ -1,3 +1,10 @@
+.title {
+  text-align: center;
+  margin: 0;
+  font-weight: 300;
+  font-size: 2em;
+}
+
 .formItemContent {
   padding: 0.75em 1em 1em;
   background: linear-gradient(
@@ -87,6 +94,12 @@
 .intro p {
   position: relative;
   z-index: 10;
+  margin: 0;
+  text-align: center;
+}
+
+.intro p:first-child {
+  margin-bottom: 1em;
 }
 
 .intro:after {
@@ -105,11 +118,6 @@
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
   border: 1px solid rgb(255 252 199 / 20%);
-}
-
-.intro p {
-  margin: 0;
-  text-align: center;
 }
 
 .zodiacTopHalfContainer {
