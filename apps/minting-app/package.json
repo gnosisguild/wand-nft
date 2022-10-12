@@ -27,7 +27,7 @@
     "react-infinite-scroll-hook": "^4.0.3",
     "tonal": "^2.2.2",
     "tone": "^14.7.77",
-    "wagmi": "0.6.4"
+    "wagmi": "0.6.8"
   },
   "devDependencies": {
     "@types/node": "17.0.21",

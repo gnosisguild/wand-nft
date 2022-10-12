@@ -55,9 +55,12 @@ describe("Transforms", async () => {
     it("background", async () => {
       const { testPacker } = await baseSetup();
       const [, , , js] = packForMinting(state());
-      const sol = await testPacker.packBackground(
-        transformRotations(state()).background
-      );
+      const background = transformRotations(state()).background;
+      const sol = await testPacker.packBackground({
+        color: background.color,
+        dark: background.dark || false,
+        radial: background.radial || false,
+      });
       expect(js).to.deep.equal(sol);
     });
   });
