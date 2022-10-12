@@ -17,6 +17,7 @@ import {
   Halo4,
   Halo5,
   FullDownload,
+  Intro,
   Forward,
   Backward,
   PfpDownload,
@@ -45,6 +46,7 @@ interface Props {
     | "PickerHalo"
     | "PfpDownload"
     | "FullDownload"
+    | "Intro"
     | "Forward"
     | "Backward";
 }
@@ -90,6 +92,8 @@ const IconButton: React.FC<Props> = ({
         return <PfpDownload />;
       case "FullDownload":
         return <FullDownload />;
+      case "Intro":
+        return <Intro />;
       case "Forward":
         return <Forward />;
       case "Backward":

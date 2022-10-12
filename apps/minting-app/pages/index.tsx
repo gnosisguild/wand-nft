@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -11,6 +11,7 @@ import CenterGilding from "../components/Gilding/Center";
 import HaloPicker from "../components/HaloPicker";
 import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
+import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
@@ -26,6 +27,8 @@ import MintButton from "../components/MintButton";
 const Home: NextPage = () => {
   useHandleClock();
 
+  const [showJourneyModal, setShowJourneyModal] = useState<boolean>(true);
+
   const { state } = useAppContext();
   const { stage } = state;
 
@@ -40,8 +43,6 @@ const Home: NextPage = () => {
       [styles.minting]: isMinting,
     },
   ];
-
-  const showJourneyModal = true;
 
   return (
     <Layout
@@ -82,10 +83,13 @@ const Home: NextPage = () => {
       </div>
 
       <div className={classNames(styles.downloadButtons, mintingClasses)}>
+        <IconButton icon="Intro" onClick={() => setShowJourneyModal(true)} />
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
-      <JourneyModal />
+      {showJourneyModal && (
+        <JourneyModal onClose={() => setShowJourneyModal(false)} />
+      )}
     </Layout>
   );
 };
