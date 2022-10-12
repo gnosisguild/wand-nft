@@ -8,11 +8,12 @@ import styles from "./JourneyModal.module.css";
 import MintButton from "../MintButton";
 
 interface Props {
-  onCancel: () => void;
-  onSubmit: () => void;
+  onCancel?: () => void;
+  onSubmit?: () => void;
+  onClose: any;
 }
 
-const IncantationModal: React.FC<Props> = ({ onCancel }) => {
+const IncantationModal: React.FC<Props> = ({ onClose }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   let [activeIndex, setActiveIndex] = useState<number>(0);
   let [textWrapperHeight, setTextWrapperHeight] = useState<number>(0);
@@ -60,7 +61,7 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
   }, [frameWrapperTextRef.current]);
 
   return (
-    <Modal onClose={() => console.log("close")} maxWidth={"730px"}>
+    <Modal onClose={onClose} maxWidth={"730px"}>
       <>
         <div
           className={styles.frameWrapper}
@@ -199,24 +200,36 @@ const IncantationModal: React.FC<Props> = ({ onCancel }) => {
           ))}
         </div>
         <div
-          className={classnames(styles.iconButton, styles.forwardButton)}
+          className={classnames(
+            styles.iconButton,
+            styles.forwardButton,
+            (isAnimating || activeIndex === frames.length - 1) &&
+              styles.disabled
+          )}
           style={{
             filter: !isAnimating ? "brightness(2)" : "brightness(1)",
             transitionDelay: !isAnimating ? `${animationDuration}ms` : "0s",
             opacity: `${activeIndex === frames.length - 1 ? 0.5 : "unset"}`,
-            animation: `${
-              activeIndex === frames.length - 1 ? undefined : "unset"
-            }`,
+            animation: "unset",
           }}
         >
           <IconButton
             icon="Forward"
+            disabled={isAnimating || activeIndex === frames.length - 1}
             shadow
-            onClick={isAnimating ? undefined : nextSlide}
+            onClick={
+              isAnimating || activeIndex === frames.length - 1
+                ? undefined
+                : nextSlide
+            }
           />
         </div>
         <div
-          className={classnames(styles.iconButton, styles.backwardButton)}
+          className={classnames(
+            styles.iconButton,
+            styles.backwardButton,
+            activeIndex === 0 && styles.disabled
+          )}
           style={{
             animation: `${activeIndex === 0 ? undefined : "unset"}`,
             opacity: activeIndex === 0 ? 0.5 : "unset",

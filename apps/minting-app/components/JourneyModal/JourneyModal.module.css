@@ -121,7 +121,7 @@
   transition: filter 0.5s ease-in-out;
 }
 
-.iconButton:active {
+.iconButton:active:not(.disabled) {
   transform: translateY(-50%) scale(0.96);
 }
 
