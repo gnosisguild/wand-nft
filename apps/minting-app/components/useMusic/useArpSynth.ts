@@ -21,15 +21,15 @@ const useArpSynth = (props: Props) => {
 
     const reverb = new Tone.Reverb({
       decay: 1,
-      wet: 1,
+      wet: 0.8,
       preDelay: 1,
     });
 
-    const effect = new Tone.PingPongDelay(0.25, 0.75);
-    effect.wet.value = 0.1;
+    const effect = new Tone.PingPongDelay(0.25, 0.45);
+    effect.wet.value = 0.8;
 
     const filterHigh = new Tone.Filter(6000, "highpass", -48);
-    const filterLow = new Tone.Filter(14000, "lowpass", -12);
+    const filterLow = new Tone.Filter(8000, "lowpass", -12);
 
     arpSynthRef.current = new Tone.Synth({
       oscillator: {
@@ -41,7 +41,7 @@ const useArpSynth = (props: Props) => {
         sustain: 0.8,
         release: 1,
       },
-      volume: -20,
+      volume: -30,
     });
 
     arpSynthRef.current.chain(reverb, filterHigh, filterLow, effect, Tone.Destination);
