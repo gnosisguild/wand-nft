@@ -24,7 +24,11 @@ contract GatedMint {
     redemptions[issuer] = true;
   }
 
-  function getIssuer(MintPermit calldata permit) private view returns (address) {
+  function getIssuer(MintPermit calldata permit)
+    private
+    view
+    returns (address)
+  {
     if (permit.signature.length > 0) {
       bytes32 messageHash = ECDSA.toEthSignedMessageHash(
         keccak256(abi.encodePacked(msg.sender))

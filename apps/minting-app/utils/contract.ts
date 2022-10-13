@@ -8,9 +8,9 @@ const abi = [
 ];
 
 const wandContract = {
-  address: getAddress("0x2542797Dcb8a3DbAA63c59b3884636D630F5D4D4"),
+  address: getAddress("0xBe41D6b67D1796A7196f08f43165724E196C15F1"),
   abi: new Interface(abi).format("json"),
-  chainId: 4,
+  chainId: 5,
 };
 
 export default wandContract;
