@@ -10,22 +10,18 @@ const Halo5Icon: React.FC = () => {
           width="4.875"
           height="5.95"
           stroke="#DCD7AF"
-          stroke-width="0.5"
+          strokeWidth="0.5"
         />
         <path
           d="M3.15625 3.09985H5.84375"
           stroke="#DCD7AF"
-          stroke-width="0.75"
+          strokeWidth="0.75"
         />
-        <path
-          d="M3.15625 4.5813H5.84375"
-          stroke="#DCD7AF"
-          stroke-width="0.75"
-        />
+        <path d="M3.15625 4.5813H5.84375" stroke="#DCD7AF" strokeWidth="0.75" />
         <path
           d="M3.15625 6.06274H5.84375"
           stroke="#DCD7AF"
-          stroke-width="0.75"
+          strokeWidth="0.75"
         />
       </g>
     </svg>
