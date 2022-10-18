@@ -60,7 +60,7 @@ const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
     const cornerGildHeight = refRect.height || 0;
     const offsetTop = refRect.y || 0;
     const offsetRight = window.innerWidth - refRect.width - refRect.x || 0;
-    console.log(offsetTop, offsetRight);
+
     return {
       width: cornerGildWidth * 0.36,
       top: cornerGildHeight * 0.1 + offsetTop,
