@@ -1,3 +1,7 @@
+.hideNarrowScreen {
+  display: block;
+}
+
 .centerContainer {
   position: relative;
   display: block;
@@ -5,6 +9,10 @@
   margin: 0 auto;
   max-height: 82vh;
   aspect-ratio: 1 / 0.9502813647;
+}
+
+.centerContainer.mobileDevice {
+  display: none;
 }
 
 .createLayout {
@@ -92,6 +100,42 @@
   right: 1.5vw;
   width: 7.5%;
   max-width: 165px;
+}
+
+.forceDesktop {
+  display: none;
+}
+
+.forceDesktop.mobileDevice {
+  display: block;
+}
+
+.forceDesktopMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3vh;
+  height: 100%;
+}
+
+.forceDesktopMessage p {
+  font-size: 3.5vw;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mobileDevice {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .hideNarrowScreen {
+    display: none;
+  }
+  .forceDesktop {
+    display: block;
+  }
 }
 
 @media (max-width: 500px) {
