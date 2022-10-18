@@ -5,7 +5,7 @@ import FrameImage from "./FrameImage";
 import Modal from "../Modal";
 import { frames } from "./Frames";
 import styles from "./JourneyModal.module.css";
-import MintButton from "../MintButton";
+import SimpleButton from "../MintButton/SimpleButton";
 
 interface Props {
   onCancel?: () => void;
@@ -33,10 +33,14 @@ const IncantationModal: React.FC<Props> = ({ onClose }) => {
   };
 
   const prevSlide = () => {
-    queueFrame(-1);
+    if (activeIndex !== 0) {
+      queueFrame(-1);
+    }
   };
   const nextSlide = () => {
-    queueFrame(1);
+    if (activeIndex !== frames.length - 1) {
+      queueFrame(1);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +73,7 @@ const IncantationModal: React.FC<Props> = ({ onClose }) => {
             maxHeight: frames[activeIndex]?.height
               ? frames[activeIndex].height
               : undefined,
-            ["flexDirection" as any]: activeFrame.images?.reverse
+            ["flexDirection" as any]: activeFrame?.images?.reverse
               ? "column-reverse"
               : null,
           }}
@@ -248,7 +252,7 @@ const IncantationModal: React.FC<Props> = ({ onClose }) => {
             activeIndex === frames.length - 1 && styles.animateIn
           )}
         >
-          <MintButton />
+          <SimpleButton onClick={onClose} />
         </div>
       </>
     </Modal>
