@@ -77,11 +77,23 @@
 }
 
 @media (max-width: 800px) {
+  .upperLeft,
+  .upperRight {
+    width: 48%;
+  }
 }
 
 @media (max-width: 500px) {
   .lowerLeft,
   .upperRight {
     display: none;
+  }
+
+  .upperLeft {
+    width: 90%;
+  }
+
+  .lowerRight {
+    width: 45%;
   }
 }

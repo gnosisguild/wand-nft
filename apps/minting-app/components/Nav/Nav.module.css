@@ -59,7 +59,7 @@
 
 @media (max-width: 500px) {
   .nav li a {
-    font-size: 1.3vw;
-    transform: translateY(8%);
+    font-size: 2vw;
+    transform: translateY(3%);
   }
 }
