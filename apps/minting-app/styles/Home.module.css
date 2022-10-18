@@ -16,6 +16,7 @@
 .wandsContainer {
   padding: 0 9vw 0;
   position: relative;
+  z-index: 20;
 }
 
 .animateOnMint {

@@ -16,15 +16,17 @@
   padding: 0;
   text-transform: uppercase;
   position: relative;
-  z-index: 21;
+  z-index: 101;
 }
 
 .nav li {
-  position: absolute;
-  top: 14.1%;
+  position: fixed;
+  z-index: 100;
+  top: 15%;
   width: 23%;
   height: 10%;
   cursor: pointer;
+  mix-blend-mode: color-dodge;
 }
 
 .nav li.active .buttonBackground,
@@ -42,7 +44,7 @@
   width: 100%;
   top: 0%;
   left: 0%;
-  z-index: 20;
+  z-index: 100;
   opacity: 0.7;
 }
 .buttonBackground:hover {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { ConnectButton, Theme, AvatarComponent } from "@rainbow-me/rainbowkit";
 import makeBlockie from "ethereum-blockies-base64";
 import ConnectBackground from "./ConnectBackground";
@@ -41,7 +42,43 @@ export const BlockieAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   );
 };
 
-const ConnectAccount = () => {
+interface Props {
+  sizeRef: React.RefObject<SVGSVGElement>;
+}
+
+interface Position {
+  top: number;
+  right: number;
+  width: number;
+}
+
+const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
+  const [gildPosition, setGildPosition] = useState<DOMRect>();
+
+  const getButtonPosition = (refRect: DOMRect): Position => {
+    const cornerGildWidth = refRect.width || 0;
+    const cornerGildHeight = refRect.height || 0;
+    const offsetTop = refRect.y || 0;
+    const offsetRight = window.innerWidth - refRect.width - refRect.x || 0;
+    console.log(offsetTop, offsetRight);
+    return {
+      width: cornerGildWidth * 0.36,
+      top: cornerGildHeight * 0.1 + offsetTop,
+      right: cornerGildWidth * 0.087 + offsetRight,
+    };
+  };
+
+  useEffect(() => {
+    setGildPosition(sizeRef.current?.getBoundingClientRect());
+
+    const handleResize = () => {
+      setGildPosition(sizeRef.current?.getBoundingClientRect());
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <ConnectButton.Custom>
       {({
@@ -63,6 +100,7 @@ const ConnectAccount = () => {
               },
             })}
             className={styles.connectContainer}
+            style={gildPosition && { ...getButtonPosition(gildPosition) }}
           >
             <ConnectBackground />
             {(() => {

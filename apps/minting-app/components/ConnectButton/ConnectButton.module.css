@@ -1,11 +1,13 @@
 .connectContainer {
-  position: absolute;
+  position: fixed;
+  z-index: 100;
   top: 10%;
   right: 8.7%;
   aspect-ratio: 6.063;
   width: 36%;
   display: flex;
   justify-content: center;
+  mix-blend-mode: color-dodge;
 }
 
 .connectBackground {

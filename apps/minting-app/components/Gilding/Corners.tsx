@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/router";
 
 import ConnectButton from "../ConnectButton";
@@ -11,16 +11,21 @@ interface Props {
 }
 
 const CornerGilding: React.FC<Props> = ({ className }) => {
+  const upperLeftRef = useRef<SVGSVGElement>(null);
+  const upperRightRef = useRef<SVGSVGElement>(null);
   const router = useRouter();
   const currentRoute = router.pathname;
   return (
     <div className={className}>
+      <Nav sizeRef={upperLeftRef} />
+      <ConnectButton sizeRef={upperRightRef} />
       <div className={styles.upperLeft}>
         <svg
           viewBox="0 0 435 234"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className={styles.gildPiece}
+          ref={upperLeftRef}
         >
           <g className={styles.gildComposite}>
             <path
@@ -33,7 +38,6 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
             />
           </g>
         </svg>
-        <Nav />
         <div className={styles.zodiacIcon}>
           <svg
             viewBox="0 0 79 79"
@@ -200,6 +204,7 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className={styles.gildPiece}
+          ref={upperRightRef}
         >
           <g className={styles.gildComposite}>
             <path
@@ -213,7 +218,6 @@ const CornerGilding: React.FC<Props> = ({ className }) => {
             />
           </g>
         </svg>
-        <ConnectButton />
       </div>
       <div className={styles.lowerRight}>
         <svg
