@@ -98,4 +98,7 @@
   .wandsContainer {
     padding: 0 16vw 0;
   }
+  .downloadButtons {
+    width: 25%;
+  }
 }
