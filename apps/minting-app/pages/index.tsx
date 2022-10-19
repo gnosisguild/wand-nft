@@ -11,9 +11,11 @@ import CenterGilding from "../components/Gilding/Center";
 import HaloPicker from "../components/HaloPicker";
 import ColorPicker from "../components/ColorPicker";
 import PickerLabels from "../components/PickerLabels";
+import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
+import JourneyModal from "../components/JourneyModal";
 import {
   FullDownloadButton,
   PFPDownloadButton,
@@ -26,7 +28,7 @@ import Modal from "../components/Modal";
 const Home: NextPage = () => {
   useHandleClock();
 
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const { stage } = state;
   const [isMobile, setIsMobile] = useState(false);
 
@@ -96,7 +98,6 @@ const Home: NextPage = () => {
           </div>
         </Modal>
       </div>
-
       <div
         className={classNames(
           styles.recastButton,
@@ -116,9 +117,18 @@ const Home: NextPage = () => {
           { [styles.mobileDevice]: isMobile }
         )}
       >
+        <IconButton
+          icon="Intro"
+          onClick={() => dispatch({ type: "ChangeJourney", value: true })}
+        />
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
+      {state.showJourney && (
+        <JourneyModal
+          onClose={() => dispatch({ type: "ChangeJourney", value: false })}
+        />
+      )}
     </Layout>
   );
 };

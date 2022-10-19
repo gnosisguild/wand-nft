@@ -36,13 +36,19 @@ export interface ChangeHandleAction {
   value: 0 | 1 | 2 | 3;
 }
 
+export interface ChangeJourneyAction {
+  type: "ChangeJourney";
+  value: boolean;
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
   | ChangeStoneAction
   | ChangeMintStageAction
   | ChangeHandleAction
-  | RandomizeWandAction;
+  | RandomizeWandAction
+  | ChangeJourneyAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -87,6 +93,13 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
         longitude,
       };
     }
+    case "ChangeJourney": {
+      localStorage.setItem("seenJourney", "true");
+      return {
+        ...state,
+        showJourney: action.value,
+      };
+    }
   }
 };
 
@@ -94,6 +107,7 @@ export function randomState(): AppState {
   const { latitude, longitude } = randomLocation();
   return {
     stage: MintStage.IDLE,
+    showJourney: false,
     background: randomBackground(),
     halo: randomHalo(),
     handle: getHandleFromHour(),
@@ -107,6 +121,7 @@ export function randomState(): AppState {
 export function zeroState(): AppState {
   return {
     stage: MintStage.IDLE,
+    showJourney: false,
     background: {
       radial: false,
       dark: false,

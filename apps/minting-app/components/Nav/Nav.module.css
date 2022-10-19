@@ -29,6 +29,10 @@
   mix-blend-mode: color-dodge;
 }
 
+.hidden {
+  opacity: 0;
+}
+
 .nav li.active .buttonBackground,
 .nav li:hover .buttonBackground {
   filter: brightness(1.3);

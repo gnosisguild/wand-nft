@@ -6,6 +6,7 @@ import ButtonBackground from "./ButtonBackground";
 import ConnectButton from "../ConnectButton";
 import MintButton from "../MintButton";
 import styles from "./Nav.module.css";
+import useFadeIn from "../useFadeIn";
 
 interface Props {
   className?: string;
@@ -20,6 +21,7 @@ interface Position {
 }
 
 const Nav: React.FC<Props> = ({ className, sizeRef }) => {
+  const [_, setShowNav, fadeInClass] = useFadeIn(300);
   const router = useRouter();
   const currentRoute = router.pathname;
   const [gildPosition, setGildPosition] = useState<DOMRect>();
@@ -56,13 +58,23 @@ const Nav: React.FC<Props> = ({ className, sizeRef }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (gildPosition) {
+      setShowNav(true);
+    }
+  });
+
   return (
     <nav className={classNames(styles.nav, className)}>
       <ul>
         <li
-          className={classNames(styles.createLink, {
-            [styles.active]: currentRoute === "/",
-          })}
+          className={classNames(
+            styles.createLink,
+            {
+              [styles.active]: currentRoute === "/",
+            },
+            fadeInClass
+          )}
           style={
             gildPosition && {
               ...getNavPosition(gildPosition),
@@ -73,9 +85,13 @@ const Nav: React.FC<Props> = ({ className, sizeRef }) => {
           <ButtonBackground className={styles.aboutBackground} />
         </li>
         <li
-          className={classNames(styles.wandsLink, {
-            [styles.active]: currentRoute === "/wands",
-          })}
+          className={classNames(
+            styles.wandsLink,
+            {
+              [styles.active]: currentRoute === "/wands",
+            },
+            fadeInClass
+          )}
           style={
             gildPosition && {
               ...getNavPosition(gildPosition, false),

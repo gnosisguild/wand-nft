@@ -13,3 +13,6 @@ export { default as PickerAura } from "./PickerAura";
 export { default as PickerHalo } from "./PickerHalo";
 export { default as PfpDownload } from "./PfpDownload";
 export { default as FullDownload } from "./FullDownload";
+export { default as Intro } from "./Intro";
+export { default as Forward } from "./Forward";
+export { default as Backward } from "./Backward";
