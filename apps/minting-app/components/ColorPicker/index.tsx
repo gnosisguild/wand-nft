@@ -5,13 +5,14 @@ import { Background } from "../../types";
 import { useAppContext } from "../../state";
 import { randomBackground } from "../../utils/randomizer";
 
-import useDragRotateAnimate from "../useDragRotateAnimate";
+import useDragRotate from "../useDragRotate";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
 import styles from "./ColorPicker.module.css";
 import ButtonBackground from "./ButtonBackground";
 import { HueArc, LightnessArc } from "./Arc";
+import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const ColorPicker: React.FC = () => {
   const {
@@ -26,7 +27,7 @@ const ColorPicker: React.FC = () => {
     });
   };
 
-  const hueProps = useDragRotateAnimate<SVGPathElement>(
+  const hueProps = useDragRotate<SVGPathElement>(
     background.color.hue,
     (nextRotation: number) => {
       handleChange({
@@ -39,7 +40,7 @@ const ColorPicker: React.FC = () => {
     }
   );
 
-  const lightnessProps = useDragRotateAnimate<SVGPathElement>(
+  const lightnessProps = useDragRotate<SVGPathElement>(
     background.color.lightness,
     (nextRotation: number) => {
       handleChange({
@@ -78,7 +79,9 @@ const ColorPicker: React.FC = () => {
               height="70"
               x="470"
               y="30"
-              fill={`hsl(${360 - background.color.hue}, 100%, 50%)`}
+              fill={`hsl(${
+                360 - normalizeAngle(background.color.hue)
+              }, 100%, 50%)`}
             />
             <rect
               className={classNames(
@@ -90,7 +93,9 @@ const ColorPicker: React.FC = () => {
               x="470"
               y="210"
               fill={`hsl(0, 0%, ${
-                (Math.abs(background.color.lightness - 180) / 180) * 100
+                (Math.abs(normalizeAngle(background.color.lightness) - 180) /
+                  180) *
+                100
               }%)`}
             />
           </g>
@@ -156,7 +161,7 @@ const ColorPicker: React.FC = () => {
         <IconButton
           icon="PickerAura"
           shadow
-          onClick={() => handleChange(randomBackground())}
+          onClick={() => handleChange(randomBackground(background))}
         />
       </div>
     </div>
