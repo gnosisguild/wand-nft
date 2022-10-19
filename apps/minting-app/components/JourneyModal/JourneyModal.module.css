@@ -20,6 +20,10 @@
   }
 }
 
+.modal {
+  background: rgba(40, 32, 25, 0.8);
+}
+
 .frameWrapper {
   display: flex;
   flex-direction: column;
@@ -75,11 +79,13 @@
 }
 
 .animateIn {
-  animation: fadeIn var(--animationDuration, 0.75s) var(--fadeInDelay, 0s) ease-in-out forwards;
+  animation: fadeIn var(--animationDuration, 0.75s) var(--fadeInDelay, 0s)
+    ease-in-out forwards;
 }
 
 .animateOut {
-  animation: fadeOut var(--animationDuration, 0.75s) var(--fadeOutDelay, 0s) ease-in-out forwards;
+  animation: fadeOut var(--animationDuration, 0.75s) var(--fadeOutDelay, 0s)
+    ease-in-out forwards;
   opacity: 1;
 }
 
@@ -106,7 +112,7 @@
 }
 
 .progressDot.activeDot {
-  background-color: #DCD7AF;
+  background-color: #dcd7af;
   opacity: 0.8;
 }
 
@@ -114,7 +120,7 @@
   animation: fadeIn 1.5s ease-in-out forwards;
   position: absolute;
   border-radius: 999px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8);
   width: 3.5rem;
   top: 50%;
   transform: translateY(-50%);
@@ -141,7 +147,6 @@
 }
 
 @media (max-width: 800px) {
-
   .iconButton {
     top: calc(100% + 48px);
   }

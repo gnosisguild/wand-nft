@@ -149,6 +149,7 @@ export enum MintStage {
 
 export type AppState = MintOptions & {
   stage: MintStage;
+  showJourney: boolean;
   tokenId: number;
 };
 
@@ -162,5 +163,5 @@ export interface WandTokenData {
   name: string;
   description: string;
   image: string;
-  attributes: WandAttribute[]
+  attributes: WandAttribute[];
 }

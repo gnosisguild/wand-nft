@@ -13,14 +13,14 @@ interface Props {
   onClose: any;
 }
 
-const IncantationModal: React.FC<Props> = ({ onClose }) => {
+const JourneyModal: React.FC<Props> = ({ onClose }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   let [activeIndex, setActiveIndex] = useState<number>(0);
   let [textWrapperHeight, setTextWrapperHeight] = useState<number>(0);
 
   const frameWrapperTextRef = useRef<any>(null);
 
-  const animationDuration = 350; // in microseconds
+  const animationDuration = 750; // in microseconds
   const wordDelay = 0; // in microseconds
   const activeFrame = frames[activeIndex];
 
@@ -65,7 +65,7 @@ const IncantationModal: React.FC<Props> = ({ onClose }) => {
   }, [frameWrapperTextRef.current]);
 
   return (
-    <Modal onClose={onClose} maxWidth={"730px"}>
+    <Modal onClose={onClose} maxWidth={"730px"} modalClassName={styles.modal}>
       <>
         <div
           className={styles.frameWrapper}
@@ -259,4 +259,4 @@ const IncantationModal: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-export default IncantationModal;
+export default JourneyModal;

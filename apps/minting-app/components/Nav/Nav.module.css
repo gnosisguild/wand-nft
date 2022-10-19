@@ -26,6 +26,7 @@
   width: 23%;
   height: 10%;
   cursor: pointer;
+  mix-blend-mode: color-dodge;
 }
 
 .nav li.active .buttonBackground,

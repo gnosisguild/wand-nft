@@ -28,9 +28,7 @@ import Modal from "../components/Modal";
 const Home: NextPage = () => {
   useHandleClock();
 
-  const [showJourneyModal, setShowJourneyModal] = useState(true);
-
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const { stage } = state;
   const [isMobile, setIsMobile] = useState(false);
 
@@ -59,42 +57,32 @@ const Home: NextPage = () => {
       description="Zodiac Wands Minting App"
       className={styles.createLayout}
     >
-      {!showJourneyModal && (
-        <>
-          <MintingToast />
-          <div
-            className={classNames(
-              styles.centerContainer,
-              styles.hideNarrowScreen,
-              {
-                [styles.mobileDevice]: isMobile,
-              }
-            )}
-          >
-            <CenterGilding className={classNames(mintingClasses)} />
-            <MintButton />
-            <PickerLabels
-              className={classNames(mintingClasses, styles.hasSvg)}
-            />
-            <div
-              className={classNames(styles.svgPreview, {
-                [styles.mintingPreview]: isMinting,
-              })}
-            >
-              <SvgTemplate />
-            </div>
-            <div className={classNames(styles.colorPicker, mintingClasses)}>
-              <ColorPicker />
-            </div>
-            <div className={classNames(styles.stonePicker, mintingClasses)}>
-              <StonePicker />
-            </div>
-            <div className={classNames(styles.haloPicker, mintingClasses)}>
-              <HaloPicker />
-            </div>
-          </div>
-        </>
-      )}
+      <MintingToast />
+      <div
+        className={classNames(styles.centerContainer, styles.hideNarrowScreen, {
+          [styles.mobileDevice]: isMobile,
+        })}
+      >
+        <CenterGilding className={classNames(mintingClasses)} />
+        <MintButton />
+        <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
+        <div
+          className={classNames(styles.svgPreview, {
+            [styles.mintingPreview]: isMinting,
+          })}
+        >
+          <SvgTemplate />
+        </div>
+        <div className={classNames(styles.colorPicker, mintingClasses)}>
+          <ColorPicker />
+        </div>
+        <div className={classNames(styles.stonePicker, mintingClasses)}>
+          <StonePicker />
+        </div>
+        <div className={classNames(styles.haloPicker, mintingClasses)}>
+          <HaloPicker />
+        </div>
+      </div>
       <div
         className={classNames(styles.forceDesktop, {
           [styles.mobileDevice]: isMobile,
@@ -129,12 +117,17 @@ const Home: NextPage = () => {
           { [styles.mobileDevice]: isMobile }
         )}
       >
-        <IconButton icon="Intro" onClick={() => setShowJourneyModal(true)} />
+        <IconButton
+          icon="Intro"
+          onClick={() => dispatch({ type: "ChangeJourney", value: true })}
+        />
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>
-      {showJourneyModal && (
-        <JourneyModal onClose={() => setShowJourneyModal(false)} />
+      {state.showJourney && (
+        <JourneyModal
+          onClose={() => dispatch({ type: "ChangeJourney", value: false })}
+        />
       )}
     </Layout>
   );
