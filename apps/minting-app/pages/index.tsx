@@ -21,6 +21,7 @@ import {
   FullDownloadButton,
   PFPDownloadButton,
 } from "../components/DownloadButton";
+import { SoundButton } from "../components/SoundButton";
 import { MintStage } from "../types";
 import useHandleClock from "../components/useHandleClock";
 
@@ -72,6 +73,7 @@ const Home: NextPage = () => {
         <RecastButton />
       </div>
       <div className={classNames(styles.downloadButtons, mintingClasses)}>
+        <SoundButton />
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>

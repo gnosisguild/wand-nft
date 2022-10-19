@@ -15,13 +15,13 @@
   opacity: 0;
 }
 
-.hasSvg { 
+.hasSvg {
   transition-duration: 1s;
 }
 
 .minting:not(.hasSvg) {
   /* You can't apply a filter to a parent of svgs */
-  filter: blur(30px); 
+  filter: blur(30px);
 }
 
 .svgPreview {
@@ -70,7 +70,7 @@
   bottom: 2.1vw;
   left: 2.7vw;
   display: flex;
-  width: 6.5%;
+  width: 10.25%;
   column-gap: 8%;
   max-width: 190px;
 }

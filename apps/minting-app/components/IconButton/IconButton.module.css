@@ -137,6 +137,11 @@
   animation: ring-rotate 1.2s linear infinite;
 }
 
+.soundOnAnimation {
+  animation: sound 1s var(--soundDelay, 0s) ease-in-out alternate infinite;
+  transform-origin: center;
+}
+
 @keyframes ring-rotate {
   0% {
     transform: rotate(0deg);
@@ -144,5 +149,14 @@
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes sound {
+  0% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0.2);
   }
 }
