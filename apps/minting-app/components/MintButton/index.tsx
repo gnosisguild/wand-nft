@@ -27,7 +27,7 @@ const MintButton: React.FC = () => {
   const { openConnectModal } = useConnectModal();
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [_, setShowButton, buttonHiddenClass, fadeInStyles] = useFadeIn(600);
+  const [_, setShowButton, buttonHiddenClass, fadeInStyles] = useFadeIn(800);
 
   const directPermit = useDirectPermit();
   const [wildcardPermit, setWildcardPermit] = useState<MintPermit | null>(null);
