@@ -1,5 +1,5 @@
 import { StaticImageData } from "next/image";
-import ZodiacIcon from "../../public/images/zodiac-icon.png";
+import ZodiacIcon from "./ZodiacIcon";
 import ZodiacEcosystem from "./ZodiacEcosystem";
 import Wand1 from "../../public/images/wand-1.png";
 import Wand2 from "../../public/images/wand-2.png";
@@ -42,7 +42,8 @@ export const frames: FrameProps[] = [
   },
   {
     images: {
-      paths: [ZodiacIcon],
+      svg: <ZodiacIcon />,
+      imageHeight: `80%`,
     },
   },
   {

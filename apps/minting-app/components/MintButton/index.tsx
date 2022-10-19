@@ -128,7 +128,7 @@ interface SVGProps {
   disabled: boolean;
 }
 
-const MintSvg: React.FC<SVGProps> = ({ disabled }) => (
+export const MintSvg: React.FC<SVGProps> = ({ disabled }) => (
   <svg
     viewBox="0 0 255 64"
     fill="none"

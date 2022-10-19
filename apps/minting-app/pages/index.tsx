@@ -110,7 +110,6 @@ const Home: NextPage = () => {
           </div>
         </Modal>
       </div>
-
       <div
         className={classNames(
           styles.recastButton,
