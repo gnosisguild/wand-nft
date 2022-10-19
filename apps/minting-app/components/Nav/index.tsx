@@ -21,7 +21,7 @@ interface Position {
 }
 
 const Nav: React.FC<Props> = ({ className, sizeRef }) => {
-  const [_, setShowNav, navHiddenClass, fadeInStyles] = useFadeIn(300);
+  const [_, setShowNav, fadeInClass] = useFadeIn(300);
   const router = useRouter();
   const currentRoute = router.pathname;
   const [gildPosition, setGildPosition] = useState<DOMRect>();
@@ -73,12 +73,11 @@ const Nav: React.FC<Props> = ({ className, sizeRef }) => {
             {
               [styles.active]: currentRoute === "/",
             },
-            navHiddenClass
+            fadeInClass
           )}
           style={
             gildPosition && {
               ...getNavPosition(gildPosition),
-              ...fadeInStyles,
             }
           }
         >
@@ -91,12 +90,11 @@ const Nav: React.FC<Props> = ({ className, sizeRef }) => {
             {
               [styles.active]: currentRoute === "/wands",
             },
-            navHiddenClass
+            fadeInClass
           )}
           style={
             gildPosition && {
               ...getNavPosition(gildPosition, false),
-              ...fadeInStyles,
             }
           }
         >

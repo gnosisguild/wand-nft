@@ -85,25 +85,3 @@ button:hover,
 button:focus {
   border-color: #d9d4ad;
 }
-
-@keyframes fadeIn {
-  0% {
-    filter: blur(50px);
-    opacity: 0;
-  }
-  100% {
-    filter: blur(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  0% {
-    filter: blur(0);
-    opacity: 1;
-  }
-  100% {
-    filter: blur(50px);
-    opacity: 0;
-  }
-}

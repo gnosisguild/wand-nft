@@ -7,8 +7,7 @@ const useFadeIn = (
 ): [
   boolean | undefined,
   React.Dispatch<React.SetStateAction<boolean>>,
-  string,
-  {}
+  string
 ] => {
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -23,10 +22,9 @@ const useFadeIn = (
     }
   });
 
-  const styleProp = { animation: visible ? "fadeIn .3s" : "" };
-  const hiddenClass = visible ? "" : styles.hidden;
+  const classes = visible ? styles.fadeIn : styles.hidden;
 
-  return [show, setShow, hiddenClass, styleProp];
+  return [show, setShow, classes];
 };
 
 export default useFadeIn;

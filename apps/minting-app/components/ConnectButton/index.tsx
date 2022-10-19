@@ -56,7 +56,7 @@ interface Position {
 
 const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
   const [gildPosition, setGildPosition] = useState<DOMRect>();
-  const [_, setShowButton, buttonHiddenClass, fadeInStyles] = useFadeIn(300);
+  const [_, setShowButton, fadeInClass] = useFadeIn(300);
 
   const getButtonPosition = (refRect: DOMRect): Position => {
     const cornerGildWidth = refRect.width || 0;
@@ -109,11 +109,10 @@ const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
                 userSelect: "none",
               },
             })}
-            className={classNames(styles.connectContainer, buttonHiddenClass)}
+            className={classNames(styles.connectContainer, fadeInClass)}
             style={
               gildPosition && {
                 ...getButtonPosition(gildPosition),
-                ...fadeInStyles,
               }
             }
           >
