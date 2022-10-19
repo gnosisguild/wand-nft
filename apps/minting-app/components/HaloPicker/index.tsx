@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import classNames from "classnames";
 
 import { Halo } from "../../types";
@@ -8,6 +9,9 @@ import { randomHalo } from "../../utils/randomizer";
 
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
+
+import * as ToneLib from "tone";
+import useFoley from "../useMusic/useFoley";
 
 import styles from "./HaloPicker.module.css";
 
@@ -40,6 +44,8 @@ const NARROW = [
 
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
+
+  const toneRef = useRef(ToneLib);
 
   const { halo } = state;
   const isWide = isWideShape(halo.shape);
@@ -82,6 +88,7 @@ const HaloPicker: React.FC = () => {
               key={`${isWide}-${index}`}
               d={d}
               onClick={() => {
+                // useFoley({ Tone: toneRef.current, trigger: true, type: 1 });
                 dispatch({
                   type: "changeHalo",
                   value: setRhythm(halo, index),

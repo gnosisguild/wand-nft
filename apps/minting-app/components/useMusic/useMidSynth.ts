@@ -30,11 +30,11 @@ const useMidSynth = (props: Props) => {
       },
     });
 
-    const filter = new Tone.Filter(500, "bandpass", -12);
+    const filter = new Tone.Filter(500, "bandpass", -24);
     const lfo = new Tone.LFO(0.1, 140, 600);
     lfo.connect(filter.frequency);
     const effect = new Tone.FeedbackDelay(1, 0.8);
-    effect.wet.value = 0.4;
+    effect.wet.value = 0.8;
     const reverb = new Tone.Reverb({
       decay: 10,
       wet: 0.75,
@@ -65,7 +65,7 @@ const useMidSynth = (props: Props) => {
     // noteHeight gives us the frequency notation
     // of the note e.g. "3"
     const noteHeight = Math.floor(
-      mapValue(state.background.color.lightness, 0, 360, 3, 5)
+      mapValue(state.background.color.lightness, 0, 360, 2, 5)
     );
 
     // noteFreq gives us a valid notation e.g. "C3"
