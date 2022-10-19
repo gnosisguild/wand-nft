@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { ConnectButton, Theme, AvatarComponent } from "@rainbow-me/rainbowkit";
 import makeBlockie from "ethereum-blockies-base64";
+import useFadeIn from "../useFadeIn";
 import ConnectBackground from "./ConnectBackground";
 import styles from "./ConnectButton.module.css";
+import classNames from "classnames";
 
 export const customTheme: Theme = {
   colors: {
@@ -54,6 +56,7 @@ interface Position {
 
 const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
   const [gildPosition, setGildPosition] = useState<DOMRect>();
+  const [_, setShowButton, buttonHiddenClass, fadeInStyles] = useFadeIn(300);
 
   const getButtonPosition = (refRect: DOMRect): Position => {
     const cornerGildWidth = refRect.width || 0;
@@ -79,6 +82,13 @@ const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (gildPosition) {
+      setShowButton(true);
+    }
+  });
+
   return (
     <ConnectButton.Custom>
       {({
@@ -99,8 +109,13 @@ const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
                 userSelect: "none",
               },
             })}
-            className={styles.connectContainer}
-            style={gildPosition && { ...getButtonPosition(gildPosition) }}
+            className={classNames(styles.connectContainer, buttonHiddenClass)}
+            style={
+              gildPosition && {
+                ...getButtonPosition(gildPosition),
+                ...fadeInStyles,
+              }
+            }
           >
             <ConnectBackground />
             {(() => {
