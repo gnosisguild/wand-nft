@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ReactNode } from "react";
 import { useAppContext } from "../../state";
 import Head from "next/head";
@@ -8,14 +9,14 @@ import Nav from "../Nav";
 import bgImage from "../../public/test-bg-small.jpg";
 import styles from "./Layout.module.css";
 import homeStyles from "../../styles/Home.module.css";
-import classNames from "classnames";
 import { MintStage } from "../../types";
 
 interface Props {
   children: ReactNode;
   description: string;
+  className?: string;
 }
-const Layout: React.FC<Props> = ({ children, description }) => {
+const Layout: React.FC<Props> = ({ children, description, className }) => {
   const { state, dispatch } = useAppContext();
   const { stage } = state;
 
@@ -32,7 +33,7 @@ const Layout: React.FC<Props> = ({ children, description }) => {
     },
   ];
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, className)}>
       <img
         src={bgImage.src}
         alt=""
@@ -52,7 +53,6 @@ const Layout: React.FC<Props> = ({ children, description }) => {
       <main className={styles.main}>
         <CornerGilding className={classNames(mintingClasses)} />
         {children}
-        <Nav className={classNames(mintingClasses)} />
       </main>
     </div>
   );

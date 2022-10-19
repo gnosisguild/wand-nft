@@ -1,3 +1,7 @@
+.hideNarrowScreen {
+  display: block;
+}
+
 .centerContainer {
   position: relative;
   display: block;
@@ -5,6 +9,22 @@
   margin: 0 auto;
   max-height: 82vh;
   aspect-ratio: 1 / 0.9502813647;
+}
+
+.centerContainer.mobileDevice {
+  display: none;
+}
+
+.createLayout {
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+}
+
+.wandsContainer {
+  padding: 0 9vw 0;
+  position: relative;
+  z-index: 20;
 }
 
 .animateOnMint {
@@ -15,13 +35,13 @@
   opacity: 0;
 }
 
-.hasSvg { 
+.hasSvg {
   transition-duration: 1s;
 }
 
 .minting:not(.hasSvg) {
   /* You can't apply a filter to a parent of svgs */
-  filter: blur(30px); 
+  filter: blur(30px);
 }
 
 .svgPreview {
@@ -34,7 +54,7 @@
 }
 
 .mintingPreview {
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.85));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
   transform: translateY(-5%) scale(1.65);
 }
 
@@ -66,7 +86,7 @@
 }
 
 .downloadButtons {
-  position: absolute;
+  position: fixed;
   bottom: 2.1vw;
   left: 2.7vw;
   display: flex;
@@ -76,8 +96,53 @@
 }
 .recastButton {
   position: fixed;
-  bottom: 0.78vw;
+  bottom: 1.1vw;
   right: 1.5vw;
   width: 7.5%;
   max-width: 165px;
+}
+
+.forceDesktop {
+  display: none;
+}
+
+.forceDesktop.mobileDevice {
+  display: block;
+}
+
+.forceDesktopMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3vh;
+  height: 100%;
+}
+
+.forceDesktopMessage p {
+  font-size: 3.5vw;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mobileDevice {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .hideNarrowScreen {
+    display: none;
+  }
+  .forceDesktop {
+    display: block;
+  }
+}
+
+@media (max-width: 500px) {
+  .wandsContainer {
+    padding: 0 16vw 0;
+  }
+  .downloadButtons {
+    width: 25%;
+  }
 }

@@ -1,5 +1,92 @@
 .wandViewContainer {
-  width: 50%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5vw;
+  height: 88vh;
+  padding: 9vh 9vw 0;
+  max-width: 1300px;
   margin: 0 auto;
-  margin-top: 10%;
+}
+
+.info {
+  max-width: 60%;
+}
+
+.name {
+  font-size: 2vw;
+  font-weight: 400;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 4vh;
+}
+
+.wandView {
+  max-width: 30%;
+  filter: drop-shadow(0px 5px 6px rgba(0, 0, 0, 0.85));
+}
+
+.wandView img {
+  display: block;
+  width: 100%;
+}
+
+.attribute {
+  border-top: 2.5px solid #845e2b99;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 3.5vh;
+  padding-bottom: 3.5vh;
+}
+
+.attributeName {
+  color: #d9d4ad;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.attributeValue {
+  font-family: "Roboto Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 700px) {
+  .attribute {
+    padding-bottom: 2vh;
+    padding-top: 2vh;
+  }
+  .wandView {
+    max-width: unset;
+  }
+  .info {
+    max-width: unset;
+  }
+  .name {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 2vh;
+  }
+}
+
+@media (max-width: 500px) {
+  .wandViewContainer {
+    padding: 10vh 16vw;
+  }
+
+  .wandView {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .name {
+    font-size: 4vw;
+  }
 }

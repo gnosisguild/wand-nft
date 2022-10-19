@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -20,12 +20,15 @@ import {
 } from "../components/DownloadButton";
 import { MintStage } from "../types";
 import useHandleClock from "../components/useHandleClock";
+import MintButton from "../components/MintButton";
+import Modal from "../components/Modal";
 
 const Home: NextPage = () => {
   useHandleClock();
 
   const { state } = useAppContext();
   const { stage } = state;
+  const [isMobile, setIsMobile] = useState(false);
 
   const isMinting =
     stage == MintStage.SIGNING ||
@@ -39,11 +42,27 @@ const Home: NextPage = () => {
     },
   ];
 
+  useEffect(() => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
+  }, []);
+
   return (
-    <Layout description="Zodiac Wands Minting App">
+    <Layout
+      description="Zodiac Wands Minting App"
+      className={styles.createLayout}
+    >
       <MintingToast />
-      <div className={styles.centerContainer}>
+      <div
+        className={classNames(styles.centerContainer, styles.hideNarrowScreen, {
+          [styles.mobileDevice]: isMobile,
+        })}
+      >
         <CenterGilding className={classNames(mintingClasses)} />
+        <MintButton />
         <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
         <div
           className={classNames(styles.svgPreview, {
@@ -62,12 +81,41 @@ const Home: NextPage = () => {
           <HaloPicker />
         </div>
       </div>
+      <div
+        className={classNames(styles.forceDesktop, {
+          [styles.mobileDevice]: isMobile,
+        })}
+      >
+        <Modal onClose={() => {}}>
+          <div className={styles.forceDesktopMessage}>
+            <p>
+              The Wand Conjuror is only available on wide format, desktop
+              displays.
+            </p>
+            <p>Please come back on another machine.</p>
+          </div>
+        </Modal>
+      </div>
 
-      <div className={classNames(styles.recastButton, mintingClasses)}>
+      <div
+        className={classNames(
+          styles.recastButton,
+          mintingClasses,
+          styles.hideNarrowScreen,
+          { [styles.mobileDevice]: isMobile }
+        )}
+      >
         <RecastButton />
       </div>
 
-      <div className={classNames(styles.downloadButtons, mintingClasses)}>
+      <div
+        className={classNames(
+          styles.downloadButtons,
+          mintingClasses,
+          styles.hideNarrowScreen,
+          { [styles.mobileDevice]: isMobile }
+        )}
+      >
         <FullDownloadButton />
         <PFPDownloadButton />
       </div>

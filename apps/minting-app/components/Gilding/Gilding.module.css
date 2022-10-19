@@ -5,11 +5,12 @@
   width: 36%;
   max-width: 800px;
   mix-blend-mode: color-dodge;
+  z-index: 19;
 }
 
 .lowerLeft {
   position: fixed;
-  bottom: 0.3vw;
+  bottom: 0.6vw;
   left: 0.7vw;
   width: 37%;
   max-width: 800px;
@@ -27,7 +28,7 @@
 
 .lowerRight {
   position: fixed;
-  bottom: 0.3vw;
+  bottom: 0.6vw;
   right: 0.7vw;
   width: 18%;
   max-width: 400px;
@@ -42,6 +43,8 @@
 .gildPiece {
   width: 100%;
   --gild-color: #d9d4ad;
+  display: block;
+  pointer-events: none;
 }
 .gildPiece path,
 .gildPiece circle {
@@ -71,4 +74,26 @@
 }
 .iconFill {
   fill: var(--icon-color);
+}
+
+@media (max-width: 800px) {
+  .upperLeft,
+  .upperRight {
+    width: 48%;
+  }
+}
+
+@media (max-width: 500px) {
+  .lowerLeft,
+  .upperRight {
+    display: none;
+  }
+
+  .upperLeft {
+    width: 90%;
+  }
+
+  .lowerRight {
+    width: 45%;
+  }
 }

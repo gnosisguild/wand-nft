@@ -98,7 +98,6 @@
   width: 76%;
   padding: 2%;
 }
-
 .recastButton {
   cursor: pointer;
 }
@@ -132,8 +131,8 @@
   aspect-ratio: 1;
   margin: 0;
   border-radius: 50%;
-  border: 2px solid #D9D4AD;
-  border-color: #D9D4AD transparent #D9D4AD transparent;
+  border: 2px solid #d9d4ad;
+  border-color: #d9d4ad transparent #d9d4ad transparent;
   animation: ring-rotate 1.2s linear infinite;
 }
 

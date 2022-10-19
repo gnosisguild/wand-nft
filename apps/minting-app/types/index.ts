@@ -151,3 +151,16 @@ export type AppState = MintOptions & {
   stage: MintStage;
   tokenId: number;
 };
+
+export interface WandAttribute {
+  trait_type: string;
+  display_type?: string;
+  value: any;
+}
+
+export interface WandTokenData {
+  name: string;
+  description: string;
+  image: string;
+  attributes: WandAttribute[]
+}

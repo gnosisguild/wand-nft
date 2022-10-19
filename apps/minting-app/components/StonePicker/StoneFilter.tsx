@@ -36,19 +36,7 @@ const StoneFilter: React.FC<{
       </feComponentTransfer>
       <feComposite operator="in" in2="SourceGraphic" result="picker_tex" />
 
-      <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="picker_glow" />
-      <feColorMatrix
-        in="picker_glow"
-        result="picker_bgg"
-        type="matrix"
-        values="-1 0 0 0 1
-            0 -1 0 0 1
-            0 0 -1 0 1
-            0 0 0 .8 0 "
-      />
-
       <feMerge>
-        <feMergeNode in="picker_bgg" />
         <feMergeNode in="picker_tex" />
       </feMerge>
     </filter>

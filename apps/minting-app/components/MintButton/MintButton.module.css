@@ -1,12 +1,11 @@
 .buttonContainer {
-  position: fixed;
-  top: 3%;
+  position: absolute;
+  top: -1%;
   left: 0;
   right: 0;
   margin: auto;
-  width: 20vw;
-  max-width: 350px;
-  z-index: 11;
+  width: 36%;
+  z-index: 20;
 }
 
 .navMode {
@@ -66,7 +65,6 @@
   width: 100%;
   margin-bottom: 0.5em;
 }
-
 
 .passwordHelper p {
   text-align: center;
