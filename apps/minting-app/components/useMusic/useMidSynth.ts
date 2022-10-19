@@ -48,12 +48,12 @@ const useMidSynth = (props: Props) => {
     if (midSynthRef.current) {
       midSynthRef.current.releaseAll();
       // changing the oscillator is causing polysynth to get backed up and fail
-      // midSynthRef.current.set({
-      //   oscillator: { type: haloStyle[state.halo.shape] },
-      // });
+      midSynthRef.current.set({
+        oscillator: { type: haloStyle[state.halo.shape] },
+      });
     }
 
-    const scales = ["major", "minor", "minor pentatonic", "phrygian", "dorian"];
+    const scales = ["major", "minor", "minor pentatonic", "major pentatonic", "phrygian", "dorian"];
     const material =
       scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
 
@@ -65,7 +65,7 @@ const useMidSynth = (props: Props) => {
     // noteHeight gives us the frequency notation
     // of the note e.g. "3"
     const noteHeight = Math.floor(
-      mapValue(state.background.color.lightness, 0, 360, 1, 6)
+      mapValue(state.background.color.lightness, 0, 360, 3, 5)
     );
 
     // noteFreq gives us a valid notation e.g. "C3"
