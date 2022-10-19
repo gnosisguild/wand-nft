@@ -7,42 +7,42 @@ const SoundOn: React.FC = () => {
       <g style={{ mixBlendMode: "color-dodge" }}>
         <path
           className={styles.soundOnAnimation}
-          style={{ "--soundDelay": `0.0s` }}
+          style={{ ["--soundDelay" as any]: `0.0s` }}
           d="M1.25 3V7"
           stroke="#D9D4AD"
           strokeWidth="0.75"
         />
         <path
           className={styles.soundOnAnimation}
-          style={{ "--soundDelay": `0.8s` }}
+          style={{ ["--soundDelay" as any]: `0.8s` }}
           d="M2.75 3L2.75 7"
           stroke="#D9D4AD"
           strokeWidth="0.75"
         />
         <path
           className={styles.soundOnAnimation}
-          style={{ "--soundDelay": `0.4s` }}
+          style={{ ["--soundDelay" as any]: `0.4s` }}
           d="M4.25 3L4.25 7"
           stroke="#D9D4AD"
           strokeWidth="0.75"
         />
         <path
           className={styles.soundOnAnimation}
-          style={{ "--soundDelay": `1s` }}
+          style={{ ["--soundDelay" as any]: `1s` }}
           d="M5.75 3L5.75 7"
           stroke="#D9D4AD"
           strokeWidth="0.75"
         />
         <path
           className={styles.soundOnAnimation}
-          style={{ "--soundDelay": `0.2s` }}
+          style={{ ["--soundDelay" as any]: `0.2s` }}
           d="M7.25 3L7.25 7"
           stroke="#D9D4AD"
           strokeWidth="0.75"
         />
         <path
           className={styles.soundOnAnimation}
-          style={{ "--soundDelay": `0.6s` }}
+          style={{ ["--soundDelay" as any]: `0.6s` }}
           d="M8.75 3L8.75 7"
           stroke="#D9D4AD"
           strokeWidth="0.75"
