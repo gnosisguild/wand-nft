@@ -1,12 +1,13 @@
 .connectContainer {
   position: fixed;
-  top: 3.35vw;
-  right: 3.6vw;
+  z-index: 100;
+  top: 10%;
+  right: 8.7%;
   aspect-ratio: 6.063;
-  width: 13%;
+  width: 36%;
   display: flex;
   justify-content: center;
-  mix-blend-mode: hard-light;
+  mix-blend-mode: color-dodge;
 }
 
 .connectBackground {
@@ -15,21 +16,22 @@
   position: absolute;
   top: 0;
   transition: opacity 0.25s ease-in-out;
+  opacity: 0.7;
   z-index: -1;
 }
 
 .connectContainer:hover .connectBackground {
-  opacity: 0.6;
+  filter: brightness(1.2);
 }
 
 .connectContainer button {
   font-family: serif;
-  color: white;
+  color: #fffcfc;
   background: none;
   cursor: pointer;
   border: none;
   text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.8);
-  font-size: 0.85vw;
+  font-size: 0.8vw;
   letter-spacing: 0.1em;
   display: flex;
   align-items: center;
@@ -58,4 +60,16 @@
   justify-content: center;
   align-items: center;
   padding: 1%;
+}
+
+@media (max-width: 800px) {
+  .connectContainer button {
+    font-size: 1vw;
+  }
+}
+
+@media (max-width: 500px) {
+  .connectContainer {
+    display: none;
+  }
 }

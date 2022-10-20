@@ -1,8 +1,8 @@
 import { Background, Halo, Location } from "../types";
 import { LOCATIONS } from "../birthchart";
 
-export function randomStone(): number {
-  return randomAngle();
+export function randomStone(currentStone = 0): number {
+  return randomAngle(currentStone);
 }
 
 export function randomHalo(): Halo {
@@ -12,14 +12,14 @@ export function randomHalo(): Halo {
   };
 }
 
-export function randomBackground(): Background {
+export function randomBackground(currentBackground?: Background): Background {
   return {
     dark: randomInteger(1) == 1,
     radial: randomInteger(1) == 1,
     color: {
       saturation: 33,
-      hue: randomAngle(),
-      lightness: randomAngle(),
+      hue: randomAngle(currentBackground?.color.hue),
+      lightness: randomAngle(currentBackground?.color.lightness),
     },
   };
 }
@@ -28,8 +28,8 @@ export function randomLocation(): Location {
   return LOCATIONS[randomInteger(LOCATIONS.length - 1)];
 }
 
-function randomAngle() {
-  return randomInteger(3599) / 10;
+function randomAngle(currentAngle = 0) {
+  return currentAngle + (randomInteger(3599) - 1800) / 10;
 }
 
 function randomInteger(max: number): number {

@@ -18,6 +18,7 @@ import { MintPermit, useDirectPermit } from "./usePermit";
 import IncantationModal from "./IncantationModal";
 import AlreadyMintedModal from "./AlreadyMintedModal";
 import { MintStage } from "../../types";
+import useFadeIn from "../useFadeIn";
 
 const MintButton: React.FC = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const MintButton: React.FC = () => {
   const { openConnectModal } = useConnectModal();
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [_, setShowButton, fadeInClass] = useFadeIn(800);
 
   const directPermit = useDirectPermit();
   const [wildcardPermit, setWildcardPermit] = useState<MintPermit | null>(null);
@@ -77,14 +79,19 @@ const MintButton: React.FC = () => {
     if (state.stage === MintStage.SIGNING && !!data?.hash) {
       dispatch({ type: "changeMintStage", value: MintStage.TRANSACTING });
     }
+    setShowButton(true);
   }, [dispatch, state.stage, data?.hash]);
 
   return (
     <>
       <div
-        className={classNames(styles.buttonContainer, {
-          [styles.disabled]: isMinting,
-        })}
+        className={classNames(
+          styles.buttonContainer,
+          {
+            [styles.disabled]: isMinting,
+          },
+          fadeInClass
+        )}
         onClick={() => {
           if (!address) {
             openConnectModal?.();
@@ -128,7 +135,7 @@ interface SVGProps {
   disabled: boolean;
 }
 
-const MintSvg: React.FC<SVGProps> = ({ disabled }) => (
+export const MintSvg: React.FC<SVGProps> = ({ disabled }) => (
   <svg
     viewBox="0 0 255 64"
     fill="none"

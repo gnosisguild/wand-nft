@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 
 import { AppReducer, Action, zeroState } from "./AppReducer";
 import { AppState } from "../types";
@@ -16,6 +16,13 @@ export function AppWrapper({
   initialState: AppState;
 }) {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+
+  useEffect(() => {
+    // only show the journey on load if localstorage doesn't have the "seenJourney" value set
+    // we can only check for this value on the client
+    const hasSeenJourney = localStorage.getItem("seenJourney") || false;
+    dispatch({ type: "ChangeJourney", value: hasSeenJourney ? false : true });
+  }, []);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

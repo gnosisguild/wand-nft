@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 
 import { useAppContext } from "../../state";
@@ -11,7 +11,7 @@ import {
 import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
 
 import UiCircle from "../UiCircle";
-import useDragRotateAnimate from "../useDragRotateAnimate";
+import useDragRotate from "../useDragRotate";
 import useSeed from "../useSeed";
 
 import styles from "./StonePicker.module.css";
@@ -25,17 +25,15 @@ const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const seed = useSeed();
 
-  const {
-    bind,
-    hovering,
-    dragging,
-    rotation: { transform, value: rotation },
-  } = useDragRotateAnimate<HTMLDivElement>(state.stone, (nextRotation) => {
-    dispatch({
-      type: "changeStone",
-      value: nextRotation,
-    });
-  });
+  const { bind, hovering, dragging, rotation } = useDragRotate<HTMLDivElement>(
+    state.stone,
+    (nextRotation) => {
+      dispatch({
+        type: "changeStone",
+        value: nextRotation,
+      });
+    }
+  );
 
   return (
     <div
@@ -44,7 +42,7 @@ const StonePicker: React.FC = () => {
       <div {...bind()} className={styles.drag}>
         <UiCircle
           showIndicator
-          rotation={transform}
+          rotation={rotation}
           dialClass={classNames(styles.dimDial, {
             [styles.hovering]: hovering,
           })}
@@ -109,7 +107,7 @@ const StonePicker: React.FC = () => {
       <div className={styles.stone}>
         <StoneViewer
           seed={seed}
-          stone={interpolateStone(toStoneId(rotation))}
+          stone={interpolateStone(toStoneId(rotation.get()))}
         />
         <StoneGlass />
       </div>
@@ -120,7 +118,7 @@ const StonePicker: React.FC = () => {
           onClick={() =>
             dispatch({
               type: "changeStone",
-              value: randomStone(),
+              value: randomStone(state.stone),
             })
           }
         />

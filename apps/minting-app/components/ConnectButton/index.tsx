@@ -1,7 +1,10 @@
+import { useState, useEffect } from "react";
 import { ConnectButton, Theme, AvatarComponent } from "@rainbow-me/rainbowkit";
 import makeBlockie from "ethereum-blockies-base64";
+import useFadeIn from "../useFadeIn";
 import ConnectBackground from "./ConnectBackground";
 import styles from "./ConnectButton.module.css";
+import classNames from "classnames";
 
 export const customTheme: Theme = {
   colors: {
@@ -41,7 +44,51 @@ export const BlockieAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   );
 };
 
-const ConnectAccount = () => {
+interface Props {
+  sizeRef: React.RefObject<SVGSVGElement>;
+}
+
+interface Position {
+  top: number;
+  right: number;
+  width: number;
+}
+
+const ConnectAccount: React.FC<Props> = ({ sizeRef }) => {
+  const [gildPosition, setGildPosition] = useState<DOMRect>();
+  const [_, setShowButton, fadeInClass] = useFadeIn(300);
+
+  const getButtonPosition = (refRect: DOMRect): Position => {
+    const cornerGildWidth = refRect.width || 0;
+    const cornerGildHeight = refRect.height || 0;
+    const offsetTop = refRect.y || 0;
+    const offsetRight = window.innerWidth - refRect.width - refRect.x || 0;
+
+    return {
+      width: cornerGildWidth * 0.36,
+      top: cornerGildHeight * 0.1 + offsetTop,
+      right: cornerGildWidth * 0.087 + offsetRight,
+    };
+  };
+
+  useEffect(() => {
+    setGildPosition(sizeRef.current?.getBoundingClientRect());
+
+    const handleResize = () => {
+      setGildPosition(sizeRef.current?.getBoundingClientRect());
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (gildPosition) {
+      setShowButton(true);
+    }
+  });
+
   return (
     <ConnectButton.Custom>
       {({
@@ -62,7 +109,12 @@ const ConnectAccount = () => {
                 userSelect: "none",
               },
             })}
-            className={styles.connectContainer}
+            className={classNames(styles.connectContainer, fadeInClass)}
+            style={
+              gildPosition && {
+                ...getButtonPosition(gildPosition),
+              }
+            }
           >
             <ConnectBackground />
             {(() => {
@@ -84,24 +136,6 @@ const ConnectAccount = () => {
 
               return (
                 <div className={styles.connectedContainer}>
-                  <button onClick={openChainModal} type="button">
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? "Chain icon"}
-                            src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
-                          />
-                        )}
-                      </div>
-                    )}
-                    {chain.name}
-                  </button>
                   <button onClick={openAccountModal} type="button">
                     <img src={makeBlockie(account.address)} />
                     {account.displayName}

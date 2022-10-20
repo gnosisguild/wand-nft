@@ -7,6 +7,7 @@
   position: absolute;
   inset: 10%;
   z-index: 10;
+  width: 80%;
 }
 .childrenContainer {
   position: absolute;

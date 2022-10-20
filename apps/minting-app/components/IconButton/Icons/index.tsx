@@ -15,3 +15,6 @@ export { default as SoundOff } from "./SoundOff";
 export { default as SoundOn } from "./SoundOn";
 export { default as PfpDownload } from "./PfpDownload";
 export { default as FullDownload } from "./FullDownload";
+export { default as Intro } from "./Intro";
+export { default as Forward } from "./Forward";
+export { default as Backward } from "./Backward";
