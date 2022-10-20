@@ -1,90 +1,126 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Sparkles.module.css";
-import * as Tone from "tone";
 
-const Sparkle: React.FC = () => {
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
-  const [ready, setReady] = useState(false);
+export const Sparkles = () => {
+  const [windowSize, setWindowSize] = useState({ w: 0, h: 0 });
 
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
+  let ctx = canvasCtxRef.current;
+
+  let start: number = 0;
+  let elapsed: number = 0;
+
+  function Circle(
+    this: any,
+    x: number,
+    y: number,
+    r: number,
+    c: string,
+    o: number,
+    i: number
+  ) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.c = c;
+    this.i = i + 1;
+    this.o = o;
+    this.duration = Math.random() * 0.01;
+
+    this.dx = Math.random() - 0.5;
+    this.dx *= Math.random() - 0.25;
+
+    this.dy = Math.random() - 0.5;
+    this.dy *= Math.random() - 0.25;
+
+    this.draw = function () {
+      if (ctx) {
+        ctx?.beginPath();
+        ctx!.fillStyle = `hsla(${this.c},${this.o}%)`;
+        ctx?.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx?.fill();
+      }
+    };
+
+    this.animate = function (elapsed: number) {
+      this.dx += Math.sin(elapsed + this.i * 200) * this.duration * 3;
+      this.dy += Math.cos(elapsed + this.i * 200) * this.duration * 3;
+      this.x += this.dx;
+      this.y += this.dy;
+      const opacity =
+        Math.sin(0.0002 * Math.sqrt(this.i) * elapsed) - 0.0001 * 16;
+
+      this.o += opacity;
+
+      if (this.x + this.r > windowSize.w || this.x - this.r < 0) {
+        this.dx = -this.dx;
+      }
+
+      if (this.y + this.r > windowSize.h || this.y - this.r < 0) {
+        this.dy = -this.dy;
+      }
+
+      this.draw();
+    };
+  }
+
+  let balls: any = [];
   useEffect(() => {
-    function handleResize() {
-      setWindowDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
+    const handleResize = () => {
+      setWindowSize({
+        w: window.innerWidth,
+        h: window.innerHeight,
       });
-    }
-    window.addEventListener("resize", handleResize);
+      ctx!.clearRect(0, 0, windowSize.w, windowSize.h);
+    };
 
-    handleResize();
+    setWindowSize({
+      w: window.innerWidth,
+      h: window.innerHeight,
+    });
 
+    window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    if (!ready) {
-      setReady(true);
-      // setReady(Tone.Transport.state === "started");
-    }
-  }, []);
-
-  const size = Math.random() * 10;
-  const pos = {
-    x: Math.random() * windowDimensions.width * 1.2 - 0.1,
-    y: Math.random() * windowDimensions.height * 1.2 - 0.1,
-  };
-  const move = {
-    x: `${Math.random() * 200 - 100}px`,
-    y: `${Math.random() * 200 - 100}px`,
-  };
-  const opacity = 4 / size;
-  const dur = Math.random() * 60 + 15;
-  const delay = Math.random() * 2;
-  return (
-    <div
-      className={styles.sparkleParent}
-      style={
-        {
-          animationDuration: `${dur}s`,
-          animationDelay: `${delay}s`,
-          transition: "opacity 5s ease-in-out",
-          opacity: ready ? 1 : 0,
-          "--moveX": `${move.x}`,
-          "--moveY": `${move.y}`,
-        } as React.CSSProperties
+    const update = (timestamp: number) => {
+      if (start === 0 && timestamp) {
+        start = timestamp;
       }
-    >
-      <div
-        className={styles.sparkle}
-        style={
-          {
-            animationDuration: `${dur / 3}s`,
-            animationDelay: `${delay}s`,
-            backgroundColor: `hsl(43,65%,${Math.random() * 60 + 30}%)`,
-            filter: `blur(${size / 4}px)`,
-            height: size,
-            left: pos.x,
-            opacity: 0,
-            top: pos.y,
-            width: size,
-            "--opacity": opacity,
-          } as React.CSSProperties
-        }
-      ></div>
-    </div>
-  );
-};
+      elapsed = timestamp - start;
 
-const Sparkles: React.FC = () => {
-  let numSparkles = 250;
+      ctx!.clearRect(0, 0, windowSize.w, windowSize.h);
+
+      for (let i = 0; i < balls.length; i++) {
+        let ball = balls[i];
+        ball.animate(elapsed);
+      }
+
+      requestAnimationFrame(update);
+    };
+
+    balls = [];
+    for (let i = 0; i < 250; i++) {
+      let r = Math.random() * Math.round(windowSize.h / 200) + 1;
+      let x = Math.random() * windowSize.w * 1.2 - 0.1;
+      let y = Math.random() * windowSize.h * 1.2 - 0.1;
+      let o = Math.random() * 60 + 5;
+      let c = `${Math.random() * 65 + 18},35%,${Math.random() * 40 + 40}%`;
+      balls.push(new (Circle as any)(x, y, r, c, o, i));
+    }
+
+    if (ref.current) {
+      canvasCtxRef.current = ref.current.getContext("2d");
+      ctx = canvasCtxRef.current;
+      update(0);
+    }
+  }, [ref.current, windowSize]);
 
   return (
     <div className={styles.wrapper}>
-      {[...Array(numSparkles)].map((item, index) => (
-        <Sparkle key={index} />
-      ))}
+      <canvas ref={ref} width={windowSize.w} height={windowSize.h} />
     </div>
   );
 };

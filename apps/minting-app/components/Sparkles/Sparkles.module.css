@@ -1,39 +1,8 @@
 .wrapper {
+  filter: blur(2px);
+  mix-blend-mode: color-dodge;
   position: fixed;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-}
-
-.sparkle {
-  animation: twinkle;
-  animation-iteration-count: infinite;
-  border-radius: 999px;
-  position: absolute;
-}
-
-@keyframes twinkle {
-  0%, 50%, 100% {
-    opacity: 0;
-  }
-  25%, 75% {
-    opacity: var(--opacity);
-  }
-  99% {
-    opacity: 0;
-  }
-}
-
-.sparkleParent {
-  animation: drift;
-  animation-iteration-count: infinite;
-}
-
-@keyframes drift {
-  0%, 100% {
-    transform: translate(0);
-  }
-  99% {
-    transform: translate(var(--moveY), var(--moveX)) scale(0.7);
-  }
 }
