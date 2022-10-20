@@ -47,7 +47,7 @@ const useDroneSynth = (props: Props) => {
   // changes on every state update
   useEffect(() => {
     droneSynthRef.current?.triggerRelease();
-    const auraFreq = state.background.color.hue;
+    const auraFreq = Math.abs(state.background.color.hue);
     const baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
     const droneNote = `${baseFreq}0`;
 

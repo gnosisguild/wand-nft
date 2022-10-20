@@ -53,25 +53,31 @@ const useMidSynth = (props: Props) => {
       });
     }
 
-    const scales = ["major", "minor", "minor pentatonic", "major pentatonic", "phrygian", "dorian"];
+    const scales = [
+      "major",
+      "minor",
+      "minor pentatonic",
+      "major pentatonic",
+      "phrygian",
+      "dorian",
+    ];
     const material =
       scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
 
     // baseNote gives us note letter e.g. "C"
-    const baseNote = Tone.Frequency(state.background.color.hue)
+    const baseNote = Tone.Frequency(Math.abs(state.background.color.hue))
       .toNote()
       .charAt(0);
 
     // noteHeight gives us the frequency notation
     // of the note e.g. "3"
     const noteHeight = Math.floor(
-      mapValue(state.background.color.lightness, 0, 360, 2, 5)
+      mapValue(Math.abs(state.background.color.lightness), 0, 360, 2, 5)
     );
 
     // noteFreq gives us a valid notation e.g. "C3"
     const noteFreq = baseNote + noteHeight.toString();
     const scaleChords = Scale.chords(material);
-
     // we can use the note and the material to get an array of chords
     const chord1 = Chord.notes(noteFreq, scaleChords[0]);
     const chord2 = Chord.notes(noteFreq, scaleChords[1]);
