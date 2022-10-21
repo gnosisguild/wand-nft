@@ -21,6 +21,26 @@ import StoneViewer from "./StoneViewer";
 import IconButton from "../IconButton";
 import { toStoneId } from "../../state/transforms/transformRotations";
 
+const everyTick = (tickSize: number, callback: (value: number) => void) => {
+  let lastTick: number | undefined;
+
+  return (value: number) => {
+    if (lastTick === undefined) {
+      lastTick = value;
+      return;
+    }
+
+    if (Math.abs(lastTick - value) > tickSize) {
+      lastTick = value;
+      callback(value);
+    }
+  };
+};
+
+const logOnEverySixthDegree = everyTick(6, (nextRotation) => {
+  console.log("onChange", nextRotation);
+});
+
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const seed = useSeed();
@@ -34,9 +54,7 @@ const StonePicker: React.FC = () => {
           value: nextRotation,
         });
       },
-      onChange(nextRotation) {
-        console.log("onChange", nextRotation);
-      },
+      onChange: logOnEverySixthDegree,
     }
   );
 
