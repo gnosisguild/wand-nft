@@ -27,11 +27,16 @@ const StonePicker: React.FC = () => {
 
   const { bind, hovering, dragging, rotation } = useDragRotate<HTMLDivElement>(
     state.stone,
-    (nextRotation) => {
-      dispatch({
-        type: "changeStone",
-        value: nextRotation,
-      });
+    {
+      onRest(nextRotation) {
+        dispatch({
+          type: "changeStone",
+          value: nextRotation,
+        });
+      },
+      onChange(nextRotation) {
+        console.log("onChange", nextRotation);
+      },
     }
   );
 
