@@ -19,8 +19,8 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
   const [dragRotation, setDragRotation] = useState<number>(value);
   const prevDragRotation = usePrevious(dragRotation);
 
-  const toneRef = useRef(ToneLib);
-  useFoley({ Tone: toneRef.current, active: dragging, type: 0 });
+  // const toneRef = useRef(ToneLib);
+  // useFoley({ Tone: toneRef.current, active: dragging, type: 0 });
 
   useEffect(() => {
     setDragRotation(value);

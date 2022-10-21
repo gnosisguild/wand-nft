@@ -1,19 +1,15 @@
 import { useEffect, useRef } from "react";
-import * as ToneLib from "tone";
+import * as Tone from "tone";
 import { Scale, transpose, Chord } from "tonal";
 
 import { haloStyle } from "./HaloShapeMappings";
 import { mapValue } from "../../utils/mapValue";
 import { useAppContext } from "../../state";
-interface Props {
-  Tone: typeof ToneLib;
-}
 
-const useMidSynth = (props: Props) => {
-  const { Tone } = props;
+const useMidSynth = () => {
   const { state } = useAppContext();
-  const midSynthRef = useRef<ToneLib.PolySynth>();
-  const sequenceRef = useRef<ToneLib.Sequence>();
+  const midSynthRef = useRef<Tone.PolySynth>();
+  const sequenceRef = useRef<Tone.Sequence>();
   const chords = useRef<string[]>([]);
 
   // setup synth on page load

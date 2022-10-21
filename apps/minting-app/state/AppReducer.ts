@@ -41,6 +41,11 @@ export interface ChangeJourneyAction {
   value: boolean;
 }
 
+export interface ChangeSoundAction {
+  type: "ChangeSound";
+  value: boolean;
+}
+
 export type Action =
   | ChangeBackgroundAction
   | ChangeHaloAction
@@ -48,7 +53,8 @@ export type Action =
   | ChangeMintStageAction
   | ChangeHandleAction
   | RandomizeWandAction
-  | ChangeJourneyAction;
+  | ChangeJourneyAction
+  | ChangeSoundAction;
 
 export const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -100,6 +106,13 @@ export const AppReducer = (state: AppState, action: Action): AppState => {
         showJourney: action.value,
       };
     }
+    case "ChangeSound": {
+      localStorage.setItem("seenJourney", "true");
+      return {
+        ...state,
+        soundOn: action.value,
+      };
+    }
   }
 };
 
@@ -108,6 +121,7 @@ export function randomState(): AppState {
   return {
     stage: MintStage.IDLE,
     showJourney: false,
+    soundOn: false,
     background: randomBackground(),
     halo: randomHalo(),
     handle: getHandleFromHour(),
@@ -122,6 +136,7 @@ export function zeroState(): AppState {
   return {
     stage: MintStage.IDLE,
     showJourney: false,
+    soundOn: false,
     background: {
       radial: false,
       dark: false,

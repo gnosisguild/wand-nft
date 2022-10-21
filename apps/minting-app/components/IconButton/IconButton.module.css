@@ -146,12 +146,24 @@
   transform-origin: center;
 }
 
-.soundOnAnimation:nth-of-type(1) {transform: scaleY(0.1)}
-.soundOnAnimation:nth-of-type(2) {transform: scaleY(0.8)}
-.soundOnAnimation:nth-of-type(3) {transform: scaleY(0.4)}
-.soundOnAnimation:nth-of-type(4) {transform: scaleY(1)}
-.soundOnAnimation:nth-of-type(5) {transform: scaleY(0.2)}
-.soundOnAnimation:nth-of-type(6) {transform: scaleY(0.6)}
+.soundOnAnimation:nth-of-type(1) {
+  transform: scaleY(0.1);
+}
+.soundOnAnimation:nth-of-type(2) {
+  transform: scaleY(0.8);
+}
+.soundOnAnimation:nth-of-type(3) {
+  transform: scaleY(0.4);
+}
+.soundOnAnimation:nth-of-type(4) {
+  transform: scaleY(1);
+}
+.soundOnAnimation:nth-of-type(5) {
+  transform: scaleY(0.2);
+}
+.soundOnAnimation:nth-of-type(6) {
+  transform: scaleY(0.6);
+}
 
 @keyframes ring-rotate {
   0% {
@@ -171,4 +183,3 @@
     transform: scaleY(0.2);
   }
 }
-

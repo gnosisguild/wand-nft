@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import * as ToneLib from "tone";
+import * as Tone from "tone";
 
 import { useAppContext } from "../../state";
 import { Loop } from "tone";
-
-interface Props {
-  Tone: typeof ToneLib;
-}
 
 interface BackgroundTrack {
   name: string;
@@ -47,12 +43,11 @@ const backgroundTracks: BackgroundTrack[] = [
   },
 ];
 
-const useBackgroundTrack = (props: Props) => {
-  const { Tone } = props;
+const useBackgroundTrack = () => {
   const { state } = useAppContext();
   const [loaded, setLoaded] = useState(false);
-  const playersRef = useRef<ToneLib.Players>();
-  const playerRef = useRef<ToneLib.Player>();
+  const playersRef = useRef<Tone.Players>();
+  const playerRef = useRef<Tone.Player>();
   const tracks = useRef<BackgroundTrack[]>(backgroundTracks);
 
   // setup synth on page load

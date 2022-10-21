@@ -150,6 +150,7 @@ export enum MintStage {
 export type AppState = MintOptions & {
   stage: MintStage;
   showJourney: boolean;
+  soundOn: boolean;
   tokenId: number;
 };
 

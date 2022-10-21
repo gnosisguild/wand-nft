@@ -1,16 +1,12 @@
 import { useEffect, useRef } from "react";
-import * as ToneLib from "tone";
+import * as Tone from "tone";
 
 import { useAppContext } from "../../state";
-interface Props {
-  Tone: typeof ToneLib;
-}
 
-const useDroneSynth = (props: Props) => {
-  const { Tone } = props;
+const useDroneSynth = () => {
   const { state } = useAppContext();
-  const droneSynthRef = useRef<ToneLib.Synth>();
-  const sequenceRef = useRef<ToneLib.Sequence>();
+  const droneSynthRef = useRef<Tone.Synth>();
+  const sequenceRef = useRef<Tone.Sequence>();
   const chords = useRef<string[]>([]);
 
   // setup synth on page load

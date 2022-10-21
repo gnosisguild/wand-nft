@@ -1,24 +1,19 @@
 import { useEffect, useRef } from "react";
-import * as ToneLib from "tone";
+import * as Tone from "tone";
 import { Scale, transpose, Chord, note } from "tonal";
 
 import { haloStyle } from "./HaloShapeMappings";
 import { mapValue } from "../../utils/mapValue";
 import { useAppContext } from "../../state";
-interface Props {
-  Tone: typeof ToneLib;
-}
 
-const useArpSynth = (props: Props) => {
-  const { Tone } = props;
+const useArpSynth = () => {
   const { state } = useAppContext();
-  const arpSynthRef = useRef<ToneLib.Synth>();
-  const sequenceRef = useRef<ToneLib.Sequence>();
+  const arpSynthRef = useRef<Tone.Synth>();
+  const sequenceRef = useRef<Tone.Sequence>();
   const chords = useRef<string[]>([]);
 
   // setup synth on page load
   useEffect(() => {
-
     const reverb = new Tone.Reverb({
       decay: 1,
       wet: 0.8,
@@ -44,16 +39,20 @@ const useArpSynth = (props: Props) => {
       volume: -30,
     });
 
-    arpSynthRef.current.chain(reverb, filterHigh, filterLow, effect, Tone.Destination);
+    arpSynthRef.current.chain(
+      reverb,
+      filterHigh,
+      filterLow,
+      effect,
+      Tone.Destination
+    );
   }, []);
 
   // changes on every state update
   useEffect(() => {
     const scales = ["major", "minor", "minor pentatonic", "phrygian", "dorian"];
     const material =
-      scales[
-        Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))
-      ];
+      scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
 
     const auraFreq = state.background.color.hue;
     const haloRhythm = state.halo.rhythm;
@@ -101,7 +100,7 @@ const useArpSynth = (props: Props) => {
         arpSynthRef.current?.triggerAttackRelease(note, interval);
       },
       noteArray,
-      sequenceLength,
+      sequenceLength
     ).start();
   }, [
     state.stone,
