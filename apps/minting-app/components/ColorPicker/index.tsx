@@ -27,9 +27,8 @@ const ColorPicker: React.FC = () => {
     });
   };
 
-  const hueProps = useDragRotate<SVGPathElement>(
-    background.color.hue,
-    (nextRotation: number) => {
+  const hueProps = useDragRotate<SVGPathElement>(background.color.hue, {
+    onRest(nextRotation: number) {
       handleChange({
         ...background,
         color: {
@@ -37,19 +36,21 @@ const ColorPicker: React.FC = () => {
           hue: nextRotation,
         },
       });
-    }
-  );
+    },
+  });
 
   const lightnessProps = useDragRotate<SVGPathElement>(
     background.color.lightness,
-    (nextRotation: number) => {
-      handleChange({
-        ...background,
-        color: {
-          ...background.color,
-          lightness: nextRotation,
-        },
-      });
+    {
+      onRest(nextRotation: number) {
+        handleChange({
+          ...background,
+          color: {
+            ...background.color,
+            lightness: nextRotation,
+          },
+        });
+      },
     }
   );
 
