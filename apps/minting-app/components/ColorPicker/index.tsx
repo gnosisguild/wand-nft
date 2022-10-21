@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import classNames from "classnames";
+import * as Tone from "tone";
 
 import { Background } from "../../types";
 import { useAppContext } from "../../state";
 import { randomBackground } from "../../utils/randomizer";
 
-import useDragRotate from "../useDragRotate";
+import useDragRotate, { everyTick } from "../useDragRotate";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
@@ -15,10 +16,33 @@ import { HueArc, LightnessArc } from "./Arc";
 import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const ColorPicker: React.FC = () => {
+  const synthRef = useRef<Tone.Synth>();
+
+  useEffect(() => {
+    synthRef.current = new Tone.Synth({
+      volume: -15,
+      envelope: {
+        attack: 0.001,
+        sustain: 0.001,
+        decay: 0.001,
+        release: 0.001,
+      },
+    }).toDestination();
+  }, []);
+
   const {
     state: { background },
     dispatch,
   } = useAppContext();
+
+  const colorClicker = useMemo(
+    () =>
+      everyTick(4, (nextRotation) => {
+        const now = Tone.now();
+        synthRef.current?.triggerAttackRelease("C7", "32n", now + 0.05);
+      }),
+    []
+  );
 
   const handleChange = (value: Background) => {
     dispatch({
@@ -37,6 +61,7 @@ const ColorPicker: React.FC = () => {
         },
       });
     },
+    onChange: colorClicker,
   });
 
   const lightnessProps = useDragRotate<SVGPathElement>(
@@ -51,6 +76,7 @@ const ColorPicker: React.FC = () => {
           },
         });
       },
+      onChange: colorClicker,
     }
   );
 

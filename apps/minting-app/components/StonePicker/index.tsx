@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 
 import { useAppContext } from "../../state";
@@ -11,7 +11,7 @@ import {
 import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
 
 import UiCircle from "../UiCircle";
-import useDragRotate from "../useDragRotate";
+import useDragRotate, { everyTick } from "../useDragRotate";
 import useSeed from "../useSeed";
 
 import styles from "./StonePicker.module.css";
@@ -20,30 +20,21 @@ import StoneFilter from "./StoneFilter";
 import StoneViewer from "./StoneViewer";
 import IconButton from "../IconButton";
 import { toStoneId } from "../../state/transforms/transformRotations";
-
-const everyTick = (tickSize: number, callback: (value: number) => void) => {
-  let lastTick: number | undefined;
-
-  return (value: number) => {
-    if (lastTick === undefined) {
-      lastTick = value;
-      return;
-    }
-
-    if (Math.abs(lastTick - value) > tickSize) {
-      lastTick = value;
-      callback(value);
-    }
-  };
-};
-
-const logOnEverySixthDegree = everyTick(6, (nextRotation) => {
-  console.log("onChange", nextRotation);
-});
+import * as Tone from "tone";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const seed = useSeed();
+  const synthRef = useRef<Tone.Synth>();
+
+  const stoneClicker = useMemo(
+    () =>
+      everyTick(4, (nextRotation) => {
+        const now = Tone.now();
+        synthRef.current?.triggerAttackRelease("A7", "32n", now + 0.05);
+      }),
+    []
+  );
 
   const { bind, hovering, dragging, rotation } = useDragRotate<HTMLDivElement>(
     state.stone,
@@ -54,9 +45,21 @@ const StonePicker: React.FC = () => {
           value: nextRotation,
         });
       },
-      onChange: logOnEverySixthDegree,
+      onChange: stoneClicker,
     }
   );
+
+  useEffect(() => {
+    synthRef.current = new Tone.Synth({
+      volume: -15,
+      envelope: {
+        attack: 0.001,
+        sustain: 0.001,
+        decay: 0.001,
+        release: 0.001,
+      },
+    }).toDestination();
+  }, []);
 
   return (
     <div

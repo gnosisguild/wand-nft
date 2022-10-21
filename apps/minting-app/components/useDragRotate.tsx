@@ -132,3 +132,22 @@ const dimensions = (rect: DOMRect) => {
 
   return { center, width, height };
 };
+
+export const everyTick = (
+  tickSize: number,
+  callback: (value: number) => void
+) => {
+  let lastTick: number | undefined;
+
+  return (value: number) => {
+    if (lastTick === undefined) {
+      lastTick = value;
+      return;
+    }
+
+    if (Math.abs(lastTick - value) > tickSize) {
+      lastTick = value;
+      callback(value);
+    }
+  };
+};
