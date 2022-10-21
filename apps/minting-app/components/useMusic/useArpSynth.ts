@@ -5,6 +5,7 @@ import { Scale, transpose, Chord, note } from "tonal";
 import { haloStyle } from "./HaloShapeMappings";
 import { mapValue } from "../../utils/mapValue";
 import { useAppContext } from "../../state";
+import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const useArpSynth = () => {
   const { state } = useAppContext();
@@ -50,13 +51,15 @@ const useArpSynth = () => {
 
   // changes on every state update
   useEffect(() => {
+    const stone = normalizeAngle(state.stone);
+    const auraFreq = normalizeAngle(state.background.color.hue);
+    const lightness = normalizeAngle(state.background.color.lightness);
+
     const scales = ["major", "minor", "minor pentatonic", "phrygian", "dorian"];
     const material =
-      scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
+      scales[Math.floor(mapValue(stone, 0, 360, 0, scales.length))];
 
-    const auraFreq = state.background.color.hue;
     const haloRhythm = state.halo.rhythm;
-    const lightness = state.background.color.lightness;
 
     let baseOctave = 5;
     let octaves = 4;

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as Tone from "tone";
 
 import { useAppContext } from "../../state";
+import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const useDroneSynth = () => {
   const { state } = useAppContext();
@@ -43,7 +44,7 @@ const useDroneSynth = () => {
   // changes on every state update
   useEffect(() => {
     droneSynthRef.current?.triggerRelease();
-    const auraFreq = Math.abs(state.background.color.hue);
+    const auraFreq = normalizeAngle(state.background.color.hue);
     const baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
     const droneNote = `${baseFreq}0`;
 

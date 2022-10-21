@@ -5,6 +5,7 @@ import { Scale, transpose, Chord } from "tonal";
 import { haloStyle } from "./HaloShapeMappings";
 import { mapValue } from "../../utils/mapValue";
 import { useAppContext } from "../../state";
+import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const useMidSynth = () => {
   const { state } = useAppContext();
@@ -57,19 +58,19 @@ const useMidSynth = () => {
       "phrygian",
       "dorian",
     ];
+    const stone = normalizeAngle(state.stone);
+    const hue = normalizeAngle(state.background.color.hue);
+    const lightness = normalizeAngle(state.background.color.lightness);
+
     const material =
-      scales[Math.floor(mapValue(state.stone, 0, 360, 0, scales.length))];
+      scales[Math.floor(mapValue(stone, 0, 360, 0, scales.length))];
 
     // baseNote gives us note letter e.g. "C"
-    const baseNote = Tone.Frequency(Math.abs(state.background.color.hue))
-      .toNote()
-      .charAt(0);
+    const baseNote = Tone.Frequency(hue).toNote().charAt(0);
 
     // noteHeight gives us the frequency notation
     // of the note e.g. "3"
-    const noteHeight = Math.floor(
-      mapValue(Math.abs(state.background.color.lightness), 0, 360, 2, 5)
-    );
+    const noteHeight = Math.floor(mapValue(lightness, 0, 360, 2, 5));
 
     // noteFreq gives us a valid notation e.g. "C3"
     const noteFreq = baseNote + noteHeight.toString();
