@@ -1,7 +1,10 @@
+import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
+import useFadeIn from "../useFadeIn";
 import styles from "./Sparkles.module.css";
 
 export const Sparkles = () => {
+  const [_, setFadeIn, fadeInClasses] = useFadeIn(300);
   const [windowSize, setWindowSize] = useState({ w: 0, h: 0 });
 
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -44,8 +47,8 @@ export const Sparkles = () => {
     };
 
     this.animate = function (elapsed: number) {
-      this.dx += Math.sin(elapsed + this.i * 200) * this.duration * 3;
-      this.dy += Math.cos(elapsed + this.i * 200) * this.duration * 3;
+      this.dx += (Math.sin(elapsed + this.i * 200) * this.duration) / 100;
+      this.dy += (Math.cos(elapsed + this.i * 200) * this.duration) / 100;
       this.x += this.dx;
       this.y += this.dy;
       const opacity =
@@ -67,6 +70,7 @@ export const Sparkles = () => {
 
   let balls: any = [];
   useEffect(() => {
+    setFadeIn(true);
     const handleResize = () => {
       setWindowSize({
         w: window.innerWidth,
@@ -102,7 +106,7 @@ export const Sparkles = () => {
     };
 
     balls = [];
-    for (let i = 0; i < 250; i++) {
+    for (let i = 0; i < 150; i++) {
       let r = Math.random() * Math.round(windowSize.h / 200) + 1;
       let x = Math.random() * windowSize.w * 1.2 - 0.1;
       let y = Math.random() * windowSize.h * 1.2 - 0.1;
@@ -119,7 +123,7 @@ export const Sparkles = () => {
   }, [ref.current, windowSize]);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={classNames(styles.wrapper, fadeInClasses)}>
       <canvas ref={ref} width={windowSize.w} height={windowSize.h} />
     </div>
   );
