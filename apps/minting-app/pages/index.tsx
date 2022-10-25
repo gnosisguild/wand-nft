@@ -97,6 +97,7 @@ const Home: NextPage = () => {
               </p>
               <p>Please come back on another machine.</p>
               <div
+                className={styles.readMoreLink}
                 onClick={() => dispatch({ type: "ChangeJourney", value: true })}
               >
                 Read More

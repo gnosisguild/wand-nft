@@ -131,6 +131,10 @@
   display: none;
 }
 
+.readMoreLink {
+  text-decoration: underline;
+}
+
 @media (max-width: 800px) {
   .hideNarrowScreen {
     display: none;
