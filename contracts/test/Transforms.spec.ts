@@ -128,6 +128,7 @@ function state(): AppState {
     // doesnt matter
     stage: MintStage.IDLE,
     tokenId: -1,
+    showJourney: false,
   };
 }
 
