@@ -116,6 +116,8 @@
   align-items: center;
   justify-content: center;
   gap: 3vh;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
   height: 100%;
 }
 
@@ -127,6 +129,10 @@
 
 .mobileDevice {
   display: none;
+}
+
+.readMoreLink {
+  text-decoration: underline;
 }
 
 @media (max-width: 800px) {

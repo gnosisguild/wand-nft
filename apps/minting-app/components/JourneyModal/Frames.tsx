@@ -105,7 +105,7 @@ export const frames: FrameProps[] = [
       persist: true,
       reverse: true,
     },
-    text: [`You can choose to sell your evolved Wand NFT.`],
+    text: [`You can choose to transfer your evolved Wand NFT.`],
     height: `70vh`,
   },
   {
