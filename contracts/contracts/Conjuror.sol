@@ -46,9 +46,9 @@ contract Conjuror is IConjuror {
     return
       string(
         abi.encodePacked(
-          '{"trait_type": "Wand Level", "display_type":, "number", "value": ',
+          '{"trait_type": "Wand Level", "display_type": "number", "value": ',
           SolidMustacheHelpers.uintToString(wand.level, 0),
-          '},{"trait_type": "Total Holder XP", "display_type":, "number", "value": ',
+          '},{"trait_type": "Total Holder XP", "display_type": "number", "value": ',
           SolidMustacheHelpers.uintToString(wand.xp.amount, 0),
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
