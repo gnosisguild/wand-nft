@@ -26,7 +26,7 @@ contract Conjuror is IConjuror {
               abi.encodePacked(
                 '{"name": "',
                 name,
-                '", "description":"A unique Wand, designed and built on-chain", "image": "data:image/svg+xml;base64,', // TODO: edit description
+                '", "description":"Zodiac Wands are the governing items of the Zodiac ecosystem. These Evolving Tokens (ETs) are fully on-chain public works that can be upgraded based on meaningful contributions to Zodiac. They will someday act as portals to untold worlds.", "image": "data:image/svg+xml;base64,', // TODO: edit description
                 Base64.encode(bytes(generateSVG(wand, name, owner))),
                 '", "attributes": [',
                 generateAttributes(wand),
@@ -46,9 +46,9 @@ contract Conjuror is IConjuror {
     return
       string(
         abi.encodePacked(
-          '{"trait_type": "Level", "value": ',
-          SolidMustacheHelpers.uintToString(wand.level + 1, 0),
-          '},{"trait_type": "Evolution", "value": ',
+          '{"trait_type": "Wand Level", "display_type":, "number", "value": ',
+          SolidMustacheHelpers.uintToString(wand.level, 0),
+          '},{"trait_type": "Total Holder XP", "display_type":, "number", "value": ',
           SolidMustacheHelpers.uintToString(wand.xp.amount, 0),
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
