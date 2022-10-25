@@ -16,10 +16,20 @@ import { HueArc, LightnessArc } from "./Arc";
 import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const ColorPicker: React.FC = () => {
-  const synthRef = useRef<Tone.Synth>();
+  const hueSynthRef = useRef<Tone.Synth>();
+  const lightSynthRef = useRef<Tone.Synth>();
 
   useEffect(() => {
-    synthRef.current = new Tone.Synth({
+    hueSynthRef.current = new Tone.Synth({
+      volume: -15,
+      envelope: {
+        attack: 0.001,
+        sustain: 0.001,
+        decay: 0.001,
+        release: 0.001,
+      },
+    }).toDestination();
+    lightSynthRef.current = new Tone.Synth({
       volume: -15,
       envelope: {
         attack: 0.001,
@@ -35,11 +45,20 @@ const ColorPicker: React.FC = () => {
     dispatch,
   } = useAppContext();
 
-  const colorClicker = useMemo(
+  const hueClicker = useMemo(
     () =>
       everyTick(4, (nextRotation) => {
         const now = Tone.now();
-        synthRef.current?.triggerAttackRelease("C7", "32n", now + 0.05);
+        hueSynthRef.current?.triggerAttackRelease("C7", "32n", now + 0.05);
+      }),
+    []
+  );
+
+  const lightClicker = useMemo(
+    () =>
+      everyTick(4, (nextRotation) => {
+        const now = Tone.now();
+        lightSynthRef.current?.triggerAttackRelease("E7", "32n", now + 0.05);
       }),
     []
   );
@@ -61,7 +80,7 @@ const ColorPicker: React.FC = () => {
         },
       });
     },
-    onChange: colorClicker,
+    onChange: hueClicker,
   });
 
   const lightnessProps = useDragRotate<SVGPathElement>(
@@ -76,7 +95,7 @@ const ColorPicker: React.FC = () => {
           },
         });
       },
-      onChange: colorClicker,
+      onChange: lightClicker,
     }
   );
 
