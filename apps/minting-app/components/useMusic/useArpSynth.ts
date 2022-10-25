@@ -6,6 +6,7 @@ import { haloStyle } from "./HaloShapeMappings";
 import { mapValue } from "../../utils/mapValue";
 import { useAppContext } from "../../state";
 import { normalizeAngle } from "../../state/transforms/transformRotations";
+import { transformRhythm } from "../../state/transforms/transformRhythm";
 
 const useArpSynth = () => {
   const { state } = useAppContext();
@@ -59,7 +60,7 @@ const useArpSynth = () => {
     const material =
       scales[Math.floor(mapValue(stone, 0, 360, 0, scales.length))];
 
-    const haloRhythm = state.halo.rhythm;
+    const haloRhythm = transformRhythm(state).halo.rhythm;
 
     let baseOctave = 5;
     let octaves = 4;
