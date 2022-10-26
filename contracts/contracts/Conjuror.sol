@@ -54,6 +54,8 @@ contract Conjuror is IConjuror {
           SolidMustacheHelpers.uintToString(wand.birth, 0),
           generateStoneTraits(wand.stone),
           generateHaloTraits(wand.halo),
+          generateAuraTraits(wand.background),
+          generateHandleTraits(wand.handle),
           "}"
         )
       );
@@ -107,6 +109,63 @@ contract Conjuror is IConjuror {
       abi.encodePacked(
         '},{"trait_type": "Halo", "value": "',
         haloName(halo),
+        '"'
+      );
+  }
+
+  function generateAuraTraits(Cauldron.Background memory background)
+    internal
+    pure
+    returns (bytes memory)
+  {
+    string memory basis = background.dark ? 'Penumbra' : 'Radiance';
+    string memory perspective = background.radial ? 'Polar' : 'Cartesian';
+
+    return 
+      abi.encodePacked(
+        '},{"trait_type": "Aura", "value": "(',
+        background.color.lightness,
+        ', ',
+        background.color.hue,
+        '\u00B0)"',
+        '},{"trait_type": "Aura Basis", "value": "',
+        basis,
+        '"',
+        '},{"trait_type": "Aura Perspective", "value": "',
+        perspective,
+        '"'
+      );
+  }
+
+  function generateHandleTraits(Cauldron.Handle memory handle)
+    internal
+    pure
+    returns (bytes memory)
+  {
+    string memory name;
+    string memory environment;
+
+    if (handle.handle0) {
+      name = 'Dawn Pommel';
+      environment = 'Home';
+    } else if (handle.handle1) {
+      name = 'Zenith Scry';
+      environment = 'Cave';
+    } else if (handle.handle2) {
+      name = 'Twilight Welt';
+      environment = 'Forest';
+    } else {
+      name = 'Zero Motor';
+      environment = 'Field';
+    }
+
+    return 
+      abi.encodePacked(
+        '},{"trait_type": "Handle", "value": "',
+        name,
+        '"',
+        '},{"trait_type": "Environment", "value": "',
+        environment,
         '"'
       );
   }
