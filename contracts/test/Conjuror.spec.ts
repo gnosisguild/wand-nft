@@ -164,4 +164,83 @@ describe("Conjuror", async () => {
       expect(minorWeight).to.equal(50);
     });
   });
+
+  describe("haloName", () => {
+    it("compiles names correctly", async () => {
+      const { wandConjurorMock } = await baseSetup();
+
+      expect(await wandConjurorMock._haloName(describeHalo(0, 0))).to.equal(
+        "parva furcata"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(0, 8))).to.equal(
+        "leviter furcata"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(0, 16))).to.equal(
+        "magnus furcatus"
+      );
+
+      expect(await wandConjurorMock._haloName(describeHalo(1, 0))).to.equal(
+        "parva furcatula"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(1, 4))).to.equal(
+        "leviter furcatula"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(1, 8))).to.equal(
+        "magnus furcatulus"
+      );
+
+      expect(await wandConjurorMock._haloName(describeHalo(2, 0))).to.equal(
+        "parva chordata"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(2, 8))).to.equal(
+        "leviter chordata"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(2, 16))).to.equal(
+        "magnus chordatus"
+      );
+
+      expect(await wandConjurorMock._haloName(describeHalo(3, 0))).to.equal(
+        "parva chordatula"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(3, 8))).to.equal(
+        "leviter chordatula"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(3, 16))).to.equal(
+        "magnus chordatulus"
+      );
+
+      expect(await wandConjurorMock._haloName(describeHalo(4, 0))).to.equal(
+        "parva baccata"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(4, 8))).to.equal(
+        "leviter baccata"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(4, 16))).to.equal(
+        "magnus baccatus"
+      );
+
+      expect(await wandConjurorMock._haloName(describeHalo(5, 0))).to.equal(
+        "parva baccatula"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(5, 4))).to.equal(
+        "leviter baccatula"
+      );
+      expect(await wandConjurorMock._haloName(describeHalo(5, 8))).to.equal(
+        "magnus baccatulus"
+      );
+
+      function describeHalo(shape: number, count: number) {
+        return {
+          halo0: shape === 0,
+          halo1: shape === 1,
+          halo2: shape === 2,
+          halo3: shape === 3,
+          halo4: shape === 4,
+          halo5: shape === 5,
+          hue: 0,
+          rhythm: new Array(24).fill(false).map((_, index) => index < count),
+        };
+      }
+    });
+  });
 });

@@ -53,6 +53,7 @@ contract Conjuror is IConjuror {
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
           generateStoneTraits(wand.stone),
+          generateHaloTraits(wand.halo),
           "}"
         )
       );
@@ -95,6 +96,19 @@ contract Conjuror is IConjuror {
       : "";
 
     return abi.encodePacked(first, second, third);
+  }
+
+  function generateHaloTraits(Cauldron.Halo memory halo)
+    internal
+    pure
+    returns (bytes memory)
+  {
+    return
+      abi.encodePacked(
+        '},{"trait_type": "Halo", "value": "',
+        haloName(halo),
+        '"'
+      );
   }
 
   function generateSVG(
@@ -435,5 +449,54 @@ contract Conjuror is IConjuror {
 
   function stoneList() private pure returns (InceptionStones.Stone[29] memory) {
     return InceptionStones.list();
+  }
+
+  function haloName(Cauldron.Halo memory halo)
+    internal
+    pure
+    returns (string memory)
+  {
+    string memory base;
+    uint256 max;
+    if (halo.halo0) {
+      base = "furcat";
+      max = 24;
+    } else if (halo.halo1) {
+      base = "furcatul";
+      max = 12;
+    } else if (halo.halo2) {
+      base = "chordat";
+      max = 24;
+    } else if (halo.halo3) {
+      base = "chordatul";
+      max = 24;
+    } else if (halo.halo4) {
+      base = "baccat";
+      max = 24;
+    } else {
+      base = "baccatul";
+      max = 12;
+    }
+
+    uint256 count;
+    for (uint256 i = 0; i < halo.rhythm.length; i++)
+      if (halo.rhythm[i]) count++;
+    uint256 fullness = (count * 100) / max;
+
+    string memory flavour;
+    string memory ending;
+
+    if (fullness < 33) {
+      flavour = "parva";
+      ending = "a";
+    } else if (fullness < 66) {
+      flavour = "leviter";
+      ending = "a";
+    } else {
+      flavour = "magnus";
+      ending = "us";
+    }
+
+    return string(abi.encodePacked(flavour, " ", base, ending));
   }
 }

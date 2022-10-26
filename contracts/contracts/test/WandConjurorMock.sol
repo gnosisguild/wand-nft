@@ -38,6 +38,14 @@ contract WandConjurorMock is Conjuror {
     return interpolateStoneName(stoneId);
   }
 
+  function _haloName(Cauldron.Halo memory halo)
+    public
+    pure
+    returns (string memory)
+  {
+    return haloName(halo);
+  }
+
   function _stoneList() public pure returns (InceptionStones.Stone[29] memory) {
     return InceptionStones.list();
   }
