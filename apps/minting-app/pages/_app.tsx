@@ -4,7 +4,7 @@ import type { AppContext, AppProps } from "next/app";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
+import { infuraProvider } from "wagmi/providers/infura";
 
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
 import { AppState } from "../types";
@@ -12,7 +12,7 @@ import { GreenlistProvider } from "../components/useGreenlist";
 
 const { chains, provider } = configureChains(
   [chain.goerli],
-  [publicProvider()]
+  [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID })]
 );
 
 const { connectors } = getDefaultWallets({
