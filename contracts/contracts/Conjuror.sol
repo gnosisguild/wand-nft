@@ -124,9 +124,9 @@ contract Conjuror is IConjuror {
     return 
       abi.encodePacked(
         '},{"trait_type": "Aura", "value": "(',
-        background.color.lightness,
+        SolidMustacheHelpers.uintToString(background.color.lightness, 0),
         ', ',
-        background.color.hue,
+        SolidMustacheHelpers.uintToString(background.color.hue, 0),
         '\u00B0)"',
         '},{"trait_type": "Aura Basis", "value": "',
         basis,
