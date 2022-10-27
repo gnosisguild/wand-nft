@@ -22,7 +22,7 @@ const JourneyModal: React.FC<Props> = ({ onClose }) => {
   const frameWrapperTextRef = useRef<any>(null);
 
   const animationDuration = 750; // in microseconds
-  const wordDelay = 0; // in microseconds
+  const wordDelay = 15; // in microseconds
   const activeFrame = frames[activeIndex];
 
   const queueFrame = (direction: number) => {
