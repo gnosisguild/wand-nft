@@ -68,22 +68,22 @@ const HaloPicker: React.FC = () => {
       },
     });
 
-    const reverb = new Tone.Reverb({
-      decay: isWide ? 1 : 0.5,
-      wet: 0.5,
-    });
+    // const reverb = new Tone.Reverb({
+    //   decay: isWide ? 1 : 0.5,
+    //   wet: 0.5,
+    // });
 
-    const filter = new Tone.Filter(5000, "lowpass", -12);
+    // const filter = new Tone.Filter(5000, "lowpass", -12);
 
-    const lfo = new Tone.LFO(
-      3,
-      Tone.Frequency(`${note}6`).toFrequency(),
-      Tone.Frequency(`${note}8`).toFrequency()
-    );
+    // const lfo = new Tone.LFO(
+    //   3,
+    //   Tone.Frequency(`${note}6`).toFrequency(),
+    //   Tone.Frequency(`${note}8`).toFrequency()
+    // );
 
-    lfo.connect(filter.frequency);
+    // lfo.connect(filter.frequency);
 
-    synthRef.current?.chain(filter, reverb, Tone.Destination);
+    synthRef.current?.chain(Tone.Destination);
   }, [halo.shape]);
 
   useEffect(() => {

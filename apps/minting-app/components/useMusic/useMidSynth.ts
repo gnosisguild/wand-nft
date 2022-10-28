@@ -27,17 +27,17 @@ const useMidSynth = () => {
       },
     });
 
-    const filter = new Tone.Filter(500, "bandpass", -24);
-    const lfo = new Tone.LFO(0.1, 140, 600);
-    lfo.connect(filter.frequency);
-    const effect = new Tone.FeedbackDelay(1, 0.8);
-    effect.wet.value = 0.8;
-    const reverb = new Tone.Reverb({
-      decay: 10,
-      wet: 0.75,
-    });
+    // const filter = new Tone.Filter(500, "bandpass", -24);
+    // const lfo = new Tone.LFO(0.1, 140, 600);
+    // lfo.connect(filter.frequency);
+    // const effect = new Tone.FeedbackDelay(1, 0.8);
+    // effect.wet.value = 0.8;
+    // const reverb = new Tone.Reverb({
+    //   decay: 10,
+    //   wet: 0.75,
+    // });
 
-    midSynthRef.current.chain(filter, reverb, effect, Tone.Destination);
+    midSynthRef.current.chain(Tone.Destination);
   }, []);
 
   // changes on every state update

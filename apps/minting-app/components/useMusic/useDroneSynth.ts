@@ -12,16 +12,16 @@ const useDroneSynth = () => {
 
   // setup synth on page load
   useEffect(() => {
-    const reverb = new Tone.Reverb({
-      decay: 20,
-      wet: 0.8,
-      preDelay: 0.2,
-    });
+    // const reverb = new Tone.Reverb({
+    //   decay: 20,
+    //   wet: 0.8,
+    //   preDelay: 0.2,
+    // });
 
-    const effect = new Tone.FeedbackDelay(0.2, 0.35);
-    effect.wet.value = 0.5;
+    // const effect = new Tone.FeedbackDelay(0.2, 0.35);
+    // effect.wet.value = 0.5;
 
-    const filter = new Tone.Filter(100, "lowpass");
+    // const filter = new Tone.Filter(100, "lowpass");
 
     droneSynthRef.current = new Tone.Synth({
       oscillator: {
@@ -38,7 +38,7 @@ const useDroneSynth = () => {
       volume: -12,
     });
 
-    droneSynthRef.current.chain(effect, reverb, filter, Tone.Destination);
+    droneSynthRef.current.chain(Tone.Destination);
   }, []);
 
   // changes on every state update

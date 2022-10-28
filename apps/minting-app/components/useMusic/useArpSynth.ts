@@ -16,17 +16,17 @@ const useArpSynth = () => {
 
   // setup synth on page load
   useEffect(() => {
-    const reverb = new Tone.Reverb({
-      decay: 1,
-      wet: 0.8,
-      preDelay: 1,
-    });
+    // const reverb = new Tone.Reverb({
+    //   decay: 1,
+    //   wet: 0.8,
+    //   preDelay: 1,
+    // });
 
-    const effect = new Tone.PingPongDelay(0.25, 0.45);
-    effect.wet.value = 0.8;
+    // const effect = new Tone.PingPongDelay(0.25, 0.45);
+    // effect.wet.value = 0.8;
 
-    const filterHigh = new Tone.Filter(6000, "highpass", -48);
-    const filterLow = new Tone.Filter(8000, "lowpass", -12);
+    // const filterHigh = new Tone.Filter(6000, "highpass", -48);
+    // const filterLow = new Tone.Filter(8000, "lowpass", -12);
 
     arpSynthRef.current = new Tone.Synth({
       oscillator: {
@@ -41,13 +41,7 @@ const useArpSynth = () => {
       volume: -30,
     });
 
-    arpSynthRef.current.chain(
-      reverb,
-      filterHigh,
-      filterLow,
-      effect,
-      Tone.Destination
-    );
+    arpSynthRef.current.chain(Tone.Destination);
   }, []);
 
   // changes on every state update
