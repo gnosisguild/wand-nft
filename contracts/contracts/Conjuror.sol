@@ -118,14 +118,14 @@ contract Conjuror is IConjuror {
     pure
     returns (bytes memory)
   {
-    string memory basis = background.dark ? 'Penumbra' : 'Radiance';
-    string memory perspective = background.radial ? 'Polar' : 'Cartesian';
+    string memory basis = background.dark ? "Penumbra" : "Radiance";
+    string memory perspective = background.radial ? "Polar" : "Cartesian";
 
-    return 
+    return
       abi.encodePacked(
         '},{"trait_type": "Aura", "value": "(',
         SolidMustacheHelpers.uintToString(background.color.lightness, 0),
-        ', ',
+        ", ",
         SolidMustacheHelpers.uintToString(background.color.hue, 0),
         '\u00B0)"',
         '},{"trait_type": "Aura Basis", "value": "',
@@ -146,20 +146,20 @@ contract Conjuror is IConjuror {
     string memory environment;
 
     if (handle.handle0) {
-      name = 'Dawn Pommel';
-      environment = 'Home';
+      name = "Dawn Pommel";
+      environment = "Home";
     } else if (handle.handle1) {
-      name = 'Zenith Scry';
-      environment = 'Cave';
+      name = "Zenith Scry";
+      environment = "Cave";
     } else if (handle.handle2) {
-      name = 'Twilight Welt';
-      environment = 'Forest';
+      name = "Twilight Welt";
+      environment = "Forest";
     } else {
-      name = 'Zero Motor';
-      environment = 'Field';
+      name = "Zero Motor";
+      environment = "Field";
     }
 
-    return 
+    return
       abi.encodePacked(
         '},{"trait_type": "Handle", "value": "',
         name,
