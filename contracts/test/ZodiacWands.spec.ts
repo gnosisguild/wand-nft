@@ -86,6 +86,7 @@ describe("ZodiacWands", async () => {
         // doesnt matter
         stage: MintStage.IDLE,
         tokenId: -1,
+        showJourney: false,
       };
 
       const tx = await zodiacWands.mint(...packForMinting(state), permit);

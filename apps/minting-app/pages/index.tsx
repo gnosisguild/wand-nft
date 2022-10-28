@@ -88,21 +88,29 @@ const Home: NextPage = () => {
           <HaloPicker />
         </div>
       </div>
-      <div
-        className={classNames(styles.forceDesktop, {
-          [styles.mobileDevice]: isMobile,
-        })}
-      >
-        <Modal onClose={() => {}}>
-          <div className={styles.forceDesktopMessage}>
-            <p>
-              The Wand Conjuror is only available on wide format, desktop
-              displays.
-            </p>
-            <p>Please come back on another machine.</p>
-          </div>
-        </Modal>
-      </div>
+      {!state.showJourney && (
+        <div
+          className={classNames(styles.forceDesktop, {
+            [styles.mobileDevice]: isMobile,
+          })}
+        >
+          <Modal onClose={() => {}}>
+            <div className={styles.forceDesktopMessage}>
+              <p>
+                The Wand Conjuror is only available on wide format, desktop
+                displays.
+              </p>
+              <p>Please come back on another machine.</p>
+              <div
+                className={styles.readMoreLink}
+                onClick={() => dispatch({ type: "ChangeJourney", value: true })}
+              >
+                Read More
+              </div>
+            </div>
+          </Modal>
+        </div>
+      )}
       <div
         className={classNames(
           styles.recastButton,

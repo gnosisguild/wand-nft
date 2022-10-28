@@ -13,12 +13,13 @@ import { useAppContext, packForMinting } from "../../state";
 import wandContract from "../../utils/contract";
 
 import { useHasMinted } from "../useHasMinted";
-import styles from "./MintButton.module.css";
 import { MintPermit, useDirectPermit } from "./usePermit";
 import IncantationModal from "./IncantationModal";
 import AlreadyMintedModal from "./AlreadyMintedModal";
 import { MintStage } from "../../types";
 import useFadeIn from "../useFadeIn";
+import styles from "./MintButton.module.css";
+import homeStyles from "../../styles/Home.module.css";
 
 const MintButton: React.FC = () => {
   const router = useRouter();
@@ -82,6 +83,14 @@ const MintButton: React.FC = () => {
     setShowButton(true);
   }, [dispatch, state.stage, data?.hash]);
 
+  const mintingClasses = [
+    homeStyles.animateOnMint,
+    homeStyles.hasSvg,
+    {
+      [homeStyles.minting]: isMinting,
+    },
+  ];
+
   return (
     <>
       <div
@@ -90,7 +99,8 @@ const MintButton: React.FC = () => {
           {
             [styles.disabled]: isMinting,
           },
-          fadeInClass
+          fadeInClass,
+          mintingClasses
         )}
         onClick={() => {
           if (!address) {

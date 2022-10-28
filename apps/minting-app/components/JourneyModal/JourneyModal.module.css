@@ -147,13 +147,19 @@
 }
 
 @media (max-width: 800px) {
+  .progressDot {
+    width: 1vw;
+    margin-right: 2vw;
+  }
+  .frameText {
+    font-size: 5vw;
+  }
   .iconButton {
     top: calc(100% + 48px);
   }
   .forwardButton {
     right: 80px;
   }
-
   .backwardButton {
     left: 80px;
   }

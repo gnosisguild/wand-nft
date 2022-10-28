@@ -15,13 +15,14 @@ interface Props {
 
 const JourneyModal: React.FC<Props> = ({ onClose }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  let [activeIndex, setActiveIndex] = useState<number>(0);
-  let [textWrapperHeight, setTextWrapperHeight] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [textWrapperHeight, setTextWrapperHeight] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const frameWrapperTextRef = useRef<any>(null);
 
   const animationDuration = 750; // in microseconds
-  const wordDelay = 0; // in microseconds
+  const wordDelay = 15; // in microseconds
   const activeFrame = frames[activeIndex];
 
   const queueFrame = (direction: number) => {
@@ -51,6 +52,12 @@ const JourneyModal: React.FC<Props> = ({ onClose }) => {
         nextSlide();
       }
     };
+
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
 
     window.addEventListener("keydown", handleKeydown);
     return () => {
@@ -82,9 +89,10 @@ const JourneyModal: React.FC<Props> = ({ onClose }) => {
             <div
               className={styles.imagesWrapper}
               style={{
-                height: activeFrame.images?.imageHeight
-                  ? activeFrame.images?.imageHeight
-                  : undefined,
+                height:
+                  activeFrame.images?.imageHeight && !isMobile
+                    ? activeFrame.images?.imageHeight
+                    : "50%",
               }}
             >
               {activeFrame.images.paths?.map((image, i) => {
@@ -141,7 +149,7 @@ const JourneyModal: React.FC<Props> = ({ onClose }) => {
                 ref={frameWrapperTextRef}
                 style={{
                   height:
-                    textWrapperHeight && activeFrame.textHeight
+                    textWrapperHeight && activeFrame.textHeight && !isMobile
                       ? textWrapperHeight * activeFrame.textHeight
                       : "unset",
                 }}
@@ -246,14 +254,16 @@ const JourneyModal: React.FC<Props> = ({ onClose }) => {
             onClick={isAnimating ? undefined : prevSlide}
           />
         </div>
-        <div
-          className={classnames(
-            styles.buttonWrapper,
-            activeIndex === frames.length - 1 && styles.animateIn
-          )}
-        >
-          <SimpleButton onClick={onClose} />
-        </div>
+        {!isMobile && (
+          <div
+            className={classnames(
+              styles.buttonWrapper,
+              activeIndex === frames.length - 1 && styles.animateIn
+            )}
+          >
+            <SimpleButton onClick={onClose} />
+          </div>
+        )}
       </>
     </Modal>
   );
