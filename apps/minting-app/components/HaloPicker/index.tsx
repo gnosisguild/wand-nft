@@ -1,8 +1,9 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import classNames from "classnames";
 
 import { Halo } from "../../types";
 import { useAppContext } from "../../state";
+import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 import { describeSegments, describeFillers } from "../../utils/rhythm";
 import { randomHalo } from "../../utils/randomizer";
@@ -44,6 +45,8 @@ const NARROW = [
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
+  const [note, setNote] = useState<string>("C");
+
   const synthRef = useRef<Tone.Synth>();
 
   const { halo } = state;
@@ -51,28 +54,42 @@ const HaloPicker: React.FC = () => {
   const [segments, fillers] = isWide ? WIDE : NARROW;
 
   useEffect(() => {
-    synthRef.current = new Tone.Synth({
-      oscillator: {
-        type: "fmsquare",
-        harmonicity: 0.8,
-        modulationType: "sine",
-      },
-      envelope: {
-        attackCurve: "linear",
-        attack: 0.05,
-        decay: 0.2,
-        sustain: 1,
-        release: 0.5,
-      },
-      volume: -25,
-    }).toDestination();
-  }, []);
+    const auraFreq = normalizeAngle(state.background.color.hue);
+    const baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
+    setNote(baseFreq);
+  }, [state.background.color.hue]);
 
   useEffect(() => {
-    const notes = ["A", "C", "D", "E", "F", "G"];
-    const noteBase = notes[halo.shape];
+    synthRef.current = new Tone.Synth({
+      volume: -20,
+      envelope: {
+        attack: 0.1,
+        decay: 0.5,
+      },
+    });
+
+    const reverb = new Tone.Reverb({
+      decay: isWide ? 1 : 0.5,
+      wet: 0.5,
+    });
+
+    const filter = new Tone.Filter(5000, "lowpass", -12);
+
+    const lfo = new Tone.LFO(
+      3,
+      Tone.Frequency(`${note}6`).toFrequency(),
+      Tone.Frequency(`${note}8`).toFrequency()
+    );
+
+    lfo.connect(filter.frequency);
+
+    synthRef.current?.chain(filter, reverb, Tone.Destination);
+  }, [halo.shape]);
+
+  useEffect(() => {
     if (state.soundOn) {
-      synthRef.current?.triggerAttackRelease(`${noteBase}10`, 0.11);
+      synthRef.current?.frequency.rampTo(`${note}8`, 0.02);
+      synthRef.current?.triggerAttackRelease(`${note}3`, 0.11);
     }
   }, [halo.rhythm]);
 
