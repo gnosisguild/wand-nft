@@ -1,4 +1,6 @@
-import React, { MouseEventHandler, useEffect, useRef } from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { useAppContext } from "../../state";
+import { normalizeAngle } from "../../state/transforms/transformRotations";
 import classnames from "classnames";
 import * as Tone from "tone";
 import uiCircleBg from "../UiCircle/uiCirclebg.jpg";
@@ -25,6 +27,7 @@ import {
   Backward,
   PfpDownload,
 } from "./Icons";
+import { mapValue } from "../../utils/mapValue";
 
 interface Props {
   onClick?: MouseEventHandler<HTMLDivElement>;
@@ -65,6 +68,8 @@ const IconButton: React.FC<Props> = ({
   isLoading = false,
   disabled = false,
 }) => {
+  const { state } = useAppContext();
+  const [note, setNote] = useState<string>("C");
   const synthRef = useRef<Tone.Synth>();
   const iconSwitch = (iconName: string) => {
     switch (iconName) {
@@ -114,30 +119,47 @@ const IconButton: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    synthRef.current = new Tone.MembraneSynth({
-      oscillator: {
-        type: "amsine",
-        harmonicity: 0.5,
-        modulationType: "sine",
-      },
-      envelope: {
-        attackCurve: "exponential",
-        attack: 0.02,
-        decay: 0.02,
-        sustain: 0.02,
-        release: 0.05,
-      },
-      portamento: 0.05,
+    const auraFreq = normalizeAngle(state.background.color.hue);
+    const baseFreq = Tone.Frequency(auraFreq).toNote().charAt(0);
+    setNote(baseFreq);
+  }, [state.background.color.hue]);
+
+  useEffect(() => {
+    synthRef.current = new Tone.Synth({
       volume: -15,
-    }).toDestination();
+      envelope: {
+        attack: 0.3,
+        decay: 0.5,
+      },
+    });
+
+    const reverb = new Tone.Reverb({
+      decay: 2,
+      wet: 0,
+    });
+
+    const filter = new Tone.Filter(`${note}8`, "lowpass", -96);
+
+    const lfo = new Tone.LFO(
+      3,
+      Tone.Frequency(`${note}1`).toFrequency(),
+      Tone.Frequency(`${note}8`).toFrequency()
+    );
+
+    lfo.connect(filter.frequency);
+
+    synthRef.current?.chain(filter, reverb, Tone.Destination);
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (onClick) {
       onClick(e);
     }
-    const note = Math.round(Math.random() * 3 + 4);
-    synthRef.current?.triggerAttackRelease(`F#${note}`, 0.05);
+    if (state.soundOn) {
+      synthRef.current?.frequency.rampTo(`${note}8`, 0.02);
+      synthRef.current?.triggerAttackRelease(`${note}3`, 0.11);
+    }
+    // synthRef.current?.triggerAttackRelease(`C#${note}`, 0.05);
   };
 
   return (
