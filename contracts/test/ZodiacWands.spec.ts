@@ -177,6 +177,7 @@ describe("ZodiacWands", async () => {
         // doesnt matter
         stage: MintStage.IDLE,
         tokenId: -1,
+        showJourney: false,
       };
       const date = new Date("2022-10-01");
 
