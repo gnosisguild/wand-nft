@@ -33,9 +33,12 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [txConjuror.address, rootHash],
     log: true,
   });
+
+  // These are NOT XP thresholds, but the XP amounts to spend to level up to the respective level from the previous one
+  const levels = [2000, 2000, 2000, 2000];
   const txForge = await deploy("Forge", {
     from: deployer,
-    args: [txZodiacWands.address],
+    args: [txZodiacWands.address, levels],
     log: true,
   });
 

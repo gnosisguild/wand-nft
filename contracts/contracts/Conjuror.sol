@@ -46,9 +46,9 @@ contract Conjuror is IConjuror {
       string(
         abi.encodePacked(
           '{"trait_type": "Level", "value": ',
-          SolidMustacheHelpers.uintToString(wand.level, 0),
+          SolidMustacheHelpers.uintToString(wand.level + 1, 0),
           '},{"trait_type": "Evolution", "value": ',
-          SolidMustacheHelpers.uintToString(wand.xp, 0),
+          SolidMustacheHelpers.uintToString(wand.xp.amount, 0),
           '},{"trait_type": "Birth", "display_type": "date", "value": ',
           SolidMustacheHelpers.uintToString(wand.birth, 0),
           "}"
@@ -61,8 +61,6 @@ contract Conjuror is IConjuror {
     string memory name,
     address owner
   ) internal pure returns (string memory svg) {
-    // TODO should xpCap be pulled from the forge?
-    uint32 xpCap = 10000;
     return
       Cauldron.render(
         Cauldron.__Input({
@@ -71,11 +69,7 @@ contract Conjuror is IConjuror {
           planets: scalePlanets(wand.planets),
           aspects: scaleAspects(wand.aspects),
           handle: wand.handle,
-          xp: Cauldron.Xp({
-            cap: xpCap,
-            amount: wand.xp,
-            crown: wand.xp >= xpCap
-          }),
+          xp: wand.xp,
           stone: interpolateStone(wand.stone),
           halo: wand.halo,
           frame: generateFrame(wand, name),

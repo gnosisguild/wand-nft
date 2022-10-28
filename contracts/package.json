@@ -6,6 +6,7 @@
     "test": "test"
   },
   "scripts": {
+    "clean": "rimraf build typechain-types",
     "compile:cauldron": "solid-mustache ../svg/template.svg.hbs -o ./contracts/Cauldron.sol --name Cauldron --condense --dedupeThreshold=128",
     "compile": "hardhat compile",
     "test": "hardhat test",
@@ -49,6 +50,7 @@
     "hardhat-gas-reporter": "^1.0.9",
     "prettier": "2.7.1",
     "prettier-plugin-solidity": "1.0.0-dev.23",
+    "rimraf": "^3.0.2",
     "solhint": "3.3.7",
     "solhint-plugin-prettier": "0.0.5",
     "solidity-coverage": "^0.8.2",

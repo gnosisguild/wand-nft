@@ -4,66 +4,118 @@ pragma solidity ^0.8.6;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IForge.sol";
 
-interface ITrackOwnership {
-  function ownerOf(uint256 tokenId) external returns (address);
+interface IOwnerOf {
+  function ownerOf(uint256 tokenId) external view returns (address);
 }
 
 contract Forge is IForge, Ownable {
-  mapping(address => Character) public characters; // account {XP, XP_Spent}
-  mapping(uint256 => uint256) public iLvl; // portal to iLvl
-  uint256 public maxLevel;
+  IOwnerOf public immutable wand;
 
-  ITrackOwnership public immutable wand;
+  struct Score {
+    uint32 accrued;
+    uint32 spent;
+  }
 
-  constructor(ITrackOwnership _wand) {
+  error NotYourWand();
+  error WithinCurrentLevel(uint8 fromLevel, uint8 toLevel);
+  error BeyondMaxLevel(uint8 fromLevel, uint8 toLevel, uint8 maxLevel);
+  error InsufficientXP(
+    uint8 fromLevel,
+    uint8 toLevel,
+    uint8 atLevel,
+    uint32 xpAvailable,
+    uint32 xpCost
+  );
+
+  event LeveledUp(
+    address indexed account,
+    uint256 indexed tokenId,
+    uint8 fromLevel,
+    uint8 toLevel
+  );
+
+  event XpAdjusted(address indexed account, uint32 xp, uint32 xpSpent);
+
+  mapping(address => Score) internal score;
+
+  mapping(uint256 => uint8) public override level; // wand tokenId -> level
+  uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
+  uint32 public override xpLeader;
+
+  constructor(IOwnerOf _wand, uint32[] memory levels) {
     wand = _wand;
+    levelUpCost = levels;
+    xpLeader = 1;
   }
 
-  // increases a portals iLvl irrevocably
-  // XP per account can only be assigned to one portal NFT
-  // warning this lets new holders downgrade the iLvl
-  function forgePortal(uint256 _id, uint256 _amount) public {
-    require(wand.ownerOf(_id) == msg.sender);
-    Character memory temp = characters[msg.sender];
-    uint256 availableXP = temp.XP - temp.XPAssigned;
-    // ensure that this account has XP left to assign
-    require(availableXP > 0);
-    require(availableXP >= _amount);
-    characters[msg.sender].XPAssigned += _amount;
+  function xp(address account) external view override returns (uint32) {
+    return score[account].accrued;
+  }
 
-    if (_amount > 1000) {
-      iLvl[_id] += 1;
-    } else if (_amount > 5000) {
-      iLvl[_id] += 2;
-    } else if (_amount > 10000) {
-      iLvl[_id] += 3;
+  function xpSpent(address account) external view override returns (uint32) {
+    return score[account].spent;
+  }
+
+  function levelUp(uint256 tokenId, uint8 toLevel) external override {
+    if (wand.ownerOf(tokenId) != msg.sender) {
+      revert NotYourWand();
     }
-  }
 
-  function level(uint256 tokenId) external view override returns (uint32) {
-    return uint32(iLvl[tokenId]);
-  }
-
-  function xp(address avatar) external view override returns (uint32) {
-    return uint32(characters[avatar].XP);
-  }
-
-  function adjustXP(address _id, uint256 _xp) public onlyOwner {
-    characters[_id].XP = _xp;
-  }
-
-  function adjustXPBatch(address[] memory _ids, uint256[] memory _xps)
-    external
-    onlyOwner
-  {
-    require(_ids.length == _xps.length);
-
-    for (uint256 i = 0; i <= _ids.length; i++) {
-      characters[_ids[i]].XP = _xps[i];
+    uint8 fromLevel = level[tokenId];
+    if (toLevel <= fromLevel) {
+      revert WithinCurrentLevel(fromLevel, toLevel);
     }
+
+    uint8 maxLevel = uint8(levelUpCost.length);
+    if (toLevel > maxLevel) {
+      revert BeyondMaxLevel(fromLevel, toLevel, maxLevel);
+    }
+
+    uint32 spent = score[msg.sender].spent;
+    uint32 available = score[msg.sender].accrued - spent;
+
+    for (uint8 atLevel = fromLevel; atLevel < toLevel; atLevel++) {
+      uint32 cost = levelUpCost[atLevel];
+
+      if (cost > available) {
+        revert InsufficientXP({
+          fromLevel: fromLevel,
+          toLevel: toLevel,
+          atLevel: atLevel,
+          xpAvailable: available,
+          xpCost: cost
+        });
+      }
+
+      available -= cost;
+      spent += cost;
+    }
+
+    level[tokenId] = toLevel;
+    score[msg.sender].spent = spent;
+
+    emit LeveledUp(msg.sender, tokenId, fromLevel, toLevel);
   }
 
-  function setMaxLevel(uint256 _maxLevel) public onlyOwner {
-    maxLevel = _maxLevel;
+  function adjustXp(address account, uint32 accrued) external onlyOwner {
+    if (accrued > xpLeader) {
+      xpLeader = accrued;
+    }
+
+    uint32 spent = score[account].spent > accrued
+      ? accrued
+      : score[account].spent;
+
+    score[account] = Score({accrued: accrued, spent: spent});
+
+    emit XpAdjusted(account, accrued, spent);
+  }
+
+  function setLevelUpCost(uint32[] memory levels) external onlyOwner {
+    levelUpCost = levels;
+  }
+
+  function setXpLeader(uint32 _xpLeader) external onlyOwner {
+    xpLeader = _xpLeader;
   }
 }

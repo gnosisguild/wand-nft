@@ -2,12 +2,15 @@
 pragma solidity ^0.8.6;
 
 interface IForge {
-  struct Character {
-    uint256 XP;
-    uint256 XPAssigned;
-  }
+  function level(uint256 tokenId) external view returns (uint8);
 
-  function level(uint256 tokenId) external view returns (uint32);
+  function xp(address account) external view returns (uint32);
 
-  function xp(address avatar) external view returns (uint32);
+  function xpSpent(address account) external view returns (uint32);
+
+  function xpLeader() external view returns (uint32);
+
+  function levelUpCost(uint256 currentLevel) external view returns (uint32);
+
+  function levelUp(uint256 tokenId, uint8 level) external;
 }

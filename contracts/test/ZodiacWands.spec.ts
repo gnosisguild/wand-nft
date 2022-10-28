@@ -13,7 +13,7 @@ import { transformForRendering } from "../../apps/minting-app/state/transforms/f
 import { keccak256 } from "ethers/lib/utils";
 import { AppState, MintStage } from "../../apps/minting-app/types";
 import MerkleTree from "merkletreejs";
-import { ZodiacWands } from "../typechain-types";
+import { Forge__factory, ZodiacWands } from "../typechain-types";
 
 describe("ZodiacWands", async () => {
   const baseSetup = deployments.createFixture(async () => {
@@ -21,7 +21,6 @@ describe("ZodiacWands", async () => {
 
     const signers = await hre.ethers.getSigners();
     const [signer] = signers;
-    const signerAddress = await signer.getAddress();
 
     const deployment = await deployments.get("ZodiacWands");
     const zodiacWands = new Contract(
@@ -36,17 +35,23 @@ describe("ZodiacWands", async () => {
       sortPairs: true,
     });
 
-    const proof = merkleTree.getHexProof(keccak256(signerAddress));
+    const getPermit = (minter: string) => {
+      const proof = merkleTree.getHexProof(keccak256(minter));
+      return { proof, signature: "0x" };
+    };
 
-    return { zodiacWands, permit: { proof, signature: "0x" } };
+    return { zodiacWands, getPermit };
   });
 
   describe("SVG generation", () => {
-    it("it render the template with the same results as JavaScript", async () => {
-      const { zodiacWands, permit } = await baseSetup();
+    it("it render the template with the same results as JavaScript (fresh mint)", async () => {
+      const [signer] = await hre.ethers.getSigners();
+      const { zodiacWands, getPermit } = await baseSetup();
+
+      const forgeAddress = await zodiacWands.forge();
+      const forge = Forge__factory.connect(forgeAddress, signer);
 
       const background = {
-        hue: 0,
         radial: true,
         dark: true,
         color: {
@@ -88,12 +93,15 @@ describe("ZodiacWands", async () => {
         tokenId: -1,
         showJourney: false,
       };
+      const date = new Date("2022-10-01");
 
-      const tx = await zodiacWands.mint(...packForMinting(state), permit);
-
+      const tx = await zodiacWands.mint(
+        ...packForMinting(state, date),
+        getPermit(signer.address)
+      );
       await tx.wait();
-
       const tokenId = 0;
+
       const tokenUri = await zodiacWands.tokenURI(tokenId);
       const tokenUriJson = JSON.parse(
         atob(
@@ -106,17 +114,118 @@ describe("ZodiacWands", async () => {
         tokenUriJson.image.substring("data:image/svg+xml;base64,".length)
       );
 
-      const [signer] = await hre.ethers.getSigners();
-
       const seed = parseInt(keccak256(signer.address).slice(-4), 16);
 
       const svgFromJS = renderSvgTemplate({
-        ...transformForRendering(state, seed),
+        ...transformForRendering(state, seed, date),
         // sparkles and name are not on the preview, we mimick solidity
         sparkles: generateSparkles(tokenId),
         frame: {
           level1: true,
           title: generateName(tokenId),
+        },
+        xp: { amount: 0, cap: 1, crown: false },
+      });
+
+      expect(svgFromSol).to.equal(svgFromJS);
+    });
+
+    it("it render the template with the same results as JavaScript (level 2)", async () => {
+      const [signer, minter] = await hre.ethers.getSigners();
+      const { zodiacWands, getPermit } = await baseSetup();
+
+      const forgeAddress = await zodiacWands.forge();
+      const forge = Forge__factory.connect(forgeAddress, signer);
+
+      const background = {
+        radial: false,
+        dark: false,
+        color: {
+          hue: 11,
+          saturation: 22,
+          lightness: 33,
+        },
+      };
+
+      const latBrooklyn = 40.6782;
+      const lngBrooklyn = -73.9442;
+
+      const state: AppState = {
+        stone: 222,
+        handle: 3,
+        background,
+        latitude: latBrooklyn,
+        longitude: lngBrooklyn,
+        halo: {
+          shape: 2,
+          rhythm: [
+            true,
+            true,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+          ],
+        },
+        // doesnt matter
+        stage: MintStage.IDLE,
+        tokenId: -1,
+        showJourney: false,
+      };
+      const date = new Date("2022-10-01");
+
+      const xpAccrued = 6000;
+
+      const tx = await zodiacWands
+        .connect(minter)
+        .mint(...packForMinting(state, date), getPermit(minter.address));
+      await tx.wait();
+      const tokenId = 0;
+
+      const wandOwner = await zodiacWands.ownerOf(tokenId);
+      expect(wandOwner).to.equal(minter.address);
+
+      await forge.adjustXp(wandOwner, xpAccrued); // give XP to wand owner
+      await forge.connect(minter).levelUp(tokenId, 1); // wand owner redeems XP for leveling up the wand
+      expect(await forge.level(tokenId)).to.equal(1);
+
+      const tokenUri = await zodiacWands.tokenURI(tokenId);
+      const tokenUriJson = JSON.parse(
+        atob(
+          // remove the prefix
+          tokenUri.substring("data:application/json;base64,".length)
+        )
+      );
+      const svgFromSol = atob(
+        // remove the prefix
+        tokenUriJson.image.substring("data:image/svg+xml;base64,".length)
+      );
+
+      const seed = parseInt(keccak256(minter.address).slice(-4), 16);
+
+      const xpAmount = xpAccrued;
+      const xpCap = await forge.xpLeader();
+      const xpCrown = xpAccrued >= xpCap;
+
+      const svgFromJS = renderSvgTemplate({
+        ...transformForRendering(state, seed, date),
+        // sparkles and name are not on the preview, we mimick solidity
+        sparkles: generateSparkles(tokenId),
+        frame: {
+          level2: true,
+          title: generateName(tokenId),
+        },
+        xp: {
+          amount: xpAmount,
+          cap: xpCap,
+          crown: xpCrown,
         },
       });
 

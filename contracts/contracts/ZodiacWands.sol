@@ -119,10 +119,13 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
 
   function unpack(uint256 tokenId) internal view returns (Wand memory) {
     Wand memory wand = Decanter.unpack(tokenId, wands[tokenId]);
-    wand.xp = address(forge) != address(0)
-      ? forge.xp(ERC721.ownerOf(tokenId))
-      : 0;
-    wand.level = address(forge) != address(0) ? forge.level(tokenId) : 0;
+
+    wand.level = forge.level(tokenId);
+
+    uint32 amount = forge.xp(ownerOf(tokenId));
+    uint32 cap = forge.xpLeader();
+
+    wand.xp = Cauldron.Xp({amount: amount, cap: cap, crown: amount >= cap});
 
     return wand;
   }
