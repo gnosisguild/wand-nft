@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import classNames from "classnames";
 
 import { Halo } from "../../types";
@@ -10,8 +10,7 @@ import { randomHalo } from "../../utils/randomizer";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
-import * as ToneLib from "tone";
-import useFoley from "../useMusic/useFoley";
+import * as Tone from "tone";
 
 import styles from "./HaloPicker.module.css";
 
@@ -45,11 +44,37 @@ const NARROW = [
 const HaloPicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
 
-  const toneRef = useRef(ToneLib);
+  const synthRef = useRef<Tone.Synth>();
 
   const { halo } = state;
   const isWide = isWideShape(halo.shape);
   const [segments, fillers] = isWide ? WIDE : NARROW;
+
+  useEffect(() => {
+    synthRef.current = new Tone.Synth({
+      oscillator: {
+        type: "fmsquare",
+        harmonicity: 0.8,
+        modulationType: "sine",
+      },
+      envelope: {
+        attackCurve: "linear",
+        attack: 0.05,
+        decay: 0.2,
+        sustain: 1,
+        release: 0.5,
+      },
+      volume: -25,
+    }).toDestination();
+  }, []);
+
+  useEffect(() => {
+    const notes = ["A", "C", "D", "E", "F", "G"];
+    const noteBase = notes[halo.shape];
+    if (state.soundOn) {
+      synthRef.current?.triggerAttackRelease(`${noteBase}10`, 0.11);
+    }
+  }, [halo.rhythm]);
 
   return (
     <>
@@ -88,7 +113,6 @@ const HaloPicker: React.FC = () => {
               key={`${isWide}-${index}`}
               d={d}
               onClick={() => {
-                // useFoley({ Tone: toneRef.current, trigger: true, type: 1 });
                 dispatch({
                   type: "changeHalo",
                   value: setRhythm(halo, index),
