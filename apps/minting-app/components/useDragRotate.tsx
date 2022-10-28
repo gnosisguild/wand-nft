@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { FullGestureState, useGesture } from "@use-gesture/react";
 import { usePrevious } from "./usePrevious";
 import { useSpring } from "@react-spring/web";
-import * as ToneLib from "tone";
-import useFoley from "./useMusic/useFoley";
 
 interface Handlers {
   onChange?: (angle: number) => void;
@@ -22,9 +20,6 @@ function useDragRotate<T>(value: number = 0, { onChange, onRest }: Handlers) {
   const [hovering, setHovering] = useState<boolean>(false);
   const [dragRotation, setDragRotation] = useState<number>(value);
   const prevDragRotation = usePrevious(dragRotation);
-
-  // const toneRef = useRef(ToneLib);
-  // useFoley({ Tone: toneRef.current, active: dragging, type: 0 });
 
   useEffect(() => {
     setDragRotation(value);

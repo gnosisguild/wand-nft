@@ -44,9 +44,8 @@ const useMidSynth = () => {
   useEffect(() => {
     if (midSynthRef.current) {
       midSynthRef.current.releaseAll();
-      // changing the oscillator is causing polysynth to get backed up and fail
       midSynthRef.current.set({
-        oscillator: { type: haloStyle[state.halo.shape] },
+        oscillator: { type: "fatsquare16" },
       });
     }
 

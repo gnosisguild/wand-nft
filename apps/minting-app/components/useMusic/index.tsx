@@ -23,9 +23,6 @@ const useMusic = () => {
   }, [state.soundOn]);
 
   useEffect(() => {
-    Tone.Transport.context.on("statechange", () => {
-      console.log("transport state cahnge ");
-    });
     Tone.getDestination().mute = true;
     const handleMouseDown = async () => {
       dispatch({ type: "ChangeSound", value: true });
