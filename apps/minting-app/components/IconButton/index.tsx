@@ -114,7 +114,7 @@ const IconButton: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    synthRef.current = new Tone.Synth({
+    synthRef.current = new Tone.MembraneSynth({
       oscillator: {
         type: "amsine",
         harmonicity: 0.5,
@@ -122,10 +122,10 @@ const IconButton: React.FC<Props> = ({
       },
       envelope: {
         attackCurve: "exponential",
-        attack: 0.05,
+        attack: 0.02,
         decay: 0.02,
         sustain: 0.02,
-        release: 0.2,
+        release: 0.05,
       },
       portamento: 0.05,
       volume: -15,
@@ -136,7 +136,8 @@ const IconButton: React.FC<Props> = ({
     if (onClick) {
       onClick(e);
     }
-    synthRef.current?.triggerAttackRelease("F#3", 0.01);
+    const note = Math.round(Math.random() * 3 + 4);
+    synthRef.current?.triggerAttackRelease(`F#${note}`, 0.05);
   };
 
   return (
