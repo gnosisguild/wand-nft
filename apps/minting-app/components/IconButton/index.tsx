@@ -1,5 +1,6 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useEffect, useRef } from "react";
 import classnames from "classnames";
+import * as Tone from "tone";
 import uiCircleBg from "../UiCircle/uiCirclebg.jpg";
 import styles from "./IconButton.module.css";
 import {
@@ -64,6 +65,7 @@ const IconButton: React.FC<Props> = ({
   isLoading = false,
   disabled = false,
 }) => {
+  const synthRef = useRef<Tone.Synth>();
   const iconSwitch = (iconName: string) => {
     switch (iconName) {
       case "Light":
@@ -110,6 +112,33 @@ const IconButton: React.FC<Props> = ({
         return <Light />;
     }
   };
+
+  useEffect(() => {
+    synthRef.current = new Tone.Synth({
+      oscillator: {
+        type: "amsine",
+        harmonicity: 0.5,
+        modulationType: "sine",
+      },
+      envelope: {
+        attackCurve: "exponential",
+        attack: 0.05,
+        decay: 0.02,
+        sustain: 0.02,
+        release: 0.2,
+      },
+      portamento: 0.05,
+      volume: -15,
+    }).toDestination();
+  }, []);
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (onClick) {
+      onClick(e);
+    }
+    synthRef.current?.triggerAttackRelease("F#3", 0.01);
+  };
+
   return (
     <div
       className={classnames(
@@ -118,7 +147,7 @@ const IconButton: React.FC<Props> = ({
         { [styles.active]: active },
         { [styles.disabled]: disabled }
       )}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <svg
         viewBox="0 0 33 33"
