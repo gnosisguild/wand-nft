@@ -81,20 +81,20 @@ const useBackgroundTrack = () => {
         fadeOut: 1,
       });
 
-      const filter = new Tone.Filter();
+      // const filter = new Tone.Filter();
 
-      filter.type = currentTrack.filterType || "lowpass";
-      const lfo = new Tone.LFO(
-        0.3,
-        currentTrack.filterRange[0],
-        currentTrack.filterRange[1]
-      );
-      lfo.connect(filter.frequency);
+      // filter.type = currentTrack.filterType || "lowpass";
+      // const lfo = new Tone.LFO(
+      //   0.3,
+      //   currentTrack.filterRange[0],
+      //   currentTrack.filterRange[1]
+      // );
+      // lfo.connect(filter.frequency);
 
-      const effect = new Tone.PingPongDelay(0.5, 0.45);
-      effect.wet.value = 0.05;
+      // const effect = new Tone.PingPongDelay(0.5, 0.45);
+      // effect.wet.value = 0.05;
 
-      playerRef.current?.chain(filter, effect, Tone.Destination);
+      playerRef.current?.chain(Tone.Destination);
 
       if (Tone.context.state === "running" && playerRef.current?.loaded) {
         playerRef.current?.start();

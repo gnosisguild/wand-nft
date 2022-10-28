@@ -133,22 +133,22 @@ const IconButton: React.FC<Props> = ({
       },
     });
 
-    const reverb = new Tone.Reverb({
-      decay: 2,
-      wet: 0,
-    });
+    // const reverb = new Tone.Reverb({
+    //   decay: 2,
+    //   wet: 0,
+    // });
 
-    const filter = new Tone.Filter(`${note}8`, "lowpass", -96);
+    // const filter = new Tone.Filter(`${note}8`, "lowpass", -96);
 
-    const lfo = new Tone.LFO(
-      3,
-      Tone.Frequency(`${note}1`).toFrequency(),
-      Tone.Frequency(`${note}8`).toFrequency()
-    );
+    // const lfo = new Tone.LFO(
+    //   3,
+    //   Tone.Frequency(`${note}1`).toFrequency(),
+    //   Tone.Frequency(`${note}8`).toFrequency()
+    // );
 
-    lfo.connect(filter.frequency);
+    // lfo.connect(filter.frequency);
 
-    synthRef.current?.chain(filter, reverb, Tone.Destination);
+    synthRef.current?.chain(Tone.Destination);
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
