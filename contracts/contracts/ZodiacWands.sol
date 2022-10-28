@@ -122,9 +122,8 @@ contract ZodiacWands is ERC721, GatedMint, Ownable {
 
     wand.level = forge.level(tokenId);
 
-    address owner = ownerOf(tokenId);
-    uint32 amount = forge.xp(owner) - forge.xpSpent(owner);
-    uint32 cap = forge.levelUpCost(wand.level);
+    uint32 amount = forge.xp(ownerOf(tokenId));
+    uint32 cap = forge.xpLeader();
 
     wand.xp = Cauldron.Xp({amount: amount, cap: cap, crown: amount >= cap});
 

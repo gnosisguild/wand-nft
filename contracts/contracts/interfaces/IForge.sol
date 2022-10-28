@@ -8,6 +8,8 @@ interface IForge {
 
   function xpSpent(address account) external view returns (uint32);
 
+  function xpLeader() external view returns (uint32);
+
   function levelUpCost(uint256 currentLevel) external view returns (uint32);
 
   function levelUp(uint256 tokenId, uint8 level) external;

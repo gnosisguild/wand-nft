@@ -40,10 +40,12 @@ contract Forge is IForge, Ownable {
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
   uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
+  uint32 public override xpLeader;
 
   constructor(IOwnerOf _wand, uint32[] memory levels) {
     wand = _wand;
     levelUpCost = levels;
+    xpLeader = 1;
   }
 
   function xp(address account) external view override returns (uint32) {
@@ -96,6 +98,10 @@ contract Forge is IForge, Ownable {
   }
 
   function adjustXp(address account, uint32 accrued) external onlyOwner {
+    if (accrued > xpLeader) {
+      xpLeader = accrued;
+    }
+
     uint32 spent = score[account].spent > accrued
       ? accrued
       : score[account].spent;
@@ -107,5 +113,9 @@ contract Forge is IForge, Ownable {
 
   function setLevelUpCost(uint32[] memory levels) external onlyOwner {
     levelUpCost = levels;
+  }
+
+  function setXpLeader(uint32 _xpLeader) external onlyOwner {
+    xpLeader = _xpLeader;
   }
 }

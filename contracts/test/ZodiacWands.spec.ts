@@ -101,7 +101,6 @@ describe("ZodiacWands", async () => {
       );
       await tx.wait();
       const tokenId = 0;
-      const levelUpCost = await forge.levelUpCost(0);
 
       const tokenUri = await zodiacWands.tokenURI(tokenId);
       const tokenUriJson = JSON.parse(
@@ -125,7 +124,7 @@ describe("ZodiacWands", async () => {
           level1: true,
           title: generateName(tokenId),
         },
-        xp: { amount: 0, cap: levelUpCost, crown: false },
+        xp: { amount: 0, cap: 1, crown: false },
       });
 
       expect(svgFromSol).to.equal(svgFromJS);
@@ -137,11 +136,6 @@ describe("ZodiacWands", async () => {
 
       const forgeAddress = await zodiacWands.forge();
       const forge = Forge__factory.connect(forgeAddress, signer);
-
-      const levelUpCosts = [
-        await forge.levelUpCost(0),
-        await forge.levelUpCost(1),
-      ];
 
       const background = {
         radial: false,
@@ -215,8 +209,8 @@ describe("ZodiacWands", async () => {
 
       const seed = parseInt(keccak256(minter.address).slice(-4), 16);
 
-      const xpAmount = xpAccrued - levelUpCosts[0];
-      const xpCap = levelUpCosts[1];
+      const xpAmount = xpAccrued;
+      const xpCap = await forge.xpLeader();
       const xpCrown = xpAccrued >= xpCap;
 
       const svgFromJS = renderSvgTemplate({
