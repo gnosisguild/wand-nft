@@ -85,3 +85,14 @@ button:hover,
 button:focus {
   border-color: #d9d4ad;
 }
+
+/* Tippy custom styles */
+div.tippy-box {
+  background-color: #2a2727;
+  border-radius: 0;
+  color: #eee791;
+}
+
+div.tippy-arrow {
+  color: #2a2727;
+}

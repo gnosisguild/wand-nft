@@ -24,6 +24,7 @@ import { MintStage } from "../types";
 import useHandleClock from "../components/useHandleClock";
 import MintButton from "../components/MintButton";
 import Modal from "../components/Modal";
+import Tooltip from "../components/Tooltip";
 
 const Home: NextPage = () => {
   useHandleClock();
@@ -125,12 +126,18 @@ const Home: NextPage = () => {
           { [styles.mobileDevice]: isMobile }
         )}
       >
-        <IconButton
-          icon="Intro"
-          onClick={() => dispatch({ type: "ChangeJourney", value: true })}
-        />
-        <FullDownloadButton />
-        <PFPDownloadButton />
+        <Tooltip content="Learn about Wand NFTs">
+          <IconButton
+            icon="Intro"
+            onClick={() => dispatch({ type: "ChangeJourney", value: true })}
+          />
+        </Tooltip>
+        <Tooltip content="Download your NFT image">
+          <FullDownloadButton />
+        </Tooltip>
+        <Tooltip content="Download your square PFP image">
+          <PFPDownloadButton />
+        </Tooltip>
       </div>
       {state.showJourney && (
         <JourneyModal
