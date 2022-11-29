@@ -20,10 +20,10 @@ const useMidSynth = () => {
     });
     midSynthRef.current.set({
       envelope: {
-        attack: 2,
+        attack: 0.5,
         decay: 0.3,
         sustain: 0.8,
-        release: 2,
+        release: 0.5,
       },
     });
 
