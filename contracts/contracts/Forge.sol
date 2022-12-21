@@ -39,7 +39,7 @@ contract Forge is IForge, Ownable {
   mapping(address => Score) internal score;
 
   mapping(uint256 => uint8) public override level; // wand tokenId -> level
-  uint32[] public override levelUpCost; // array of xp cost for upgrading to the respective levels
+  uint32[] public override levelUpCost; // array of xp cost for upgrading from the respective levels
   uint32 public override xpLeader;
 
   constructor(IOwnerOf _wand, uint32[] memory levels) {
