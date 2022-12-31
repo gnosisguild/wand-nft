@@ -3,7 +3,11 @@ import { FullGestureState, useGesture } from "@use-gesture/react";
 import { usePrevious } from "./usePrevious";
 import { useSpring } from "@react-spring/web";
 
-function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
+interface Handlers {
+  onChange?: (angle: number) => void;
+  onRest: (angle: number) => void;
+}
+function useDragRotate<T>(value: number = 0, { onChange, onRest }: Handlers) {
   const container = useRef<T | null>(null);
   const valueAtStart = useRef(value);
   const [dragging, setDragging] = useState<boolean>(false);
@@ -33,6 +37,7 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
     onChange: () => {
       if (!dragging) {
         setRotation(rotationSpring.get());
+        if (onChange) onChange(rotationSpring.get());
       }
     },
     onRest() {
@@ -84,6 +89,7 @@ function useDragRotate<T>(value: number = 0, onRest: (angle: number) => void) {
       setDragging(dragging as boolean);
       setDragRotation(nextRotation);
       setRotation(nextRotation);
+      if (onChange) onChange(nextRotation);
 
       if (last) {
         setVelocity(tangentialVelocity);
@@ -120,4 +126,23 @@ const dimensions = (rect: DOMRect) => {
   const center = { x: left + width / 2, y: top + height / 2 };
 
   return { center, width, height };
+};
+
+export const everyTick = (
+  tickSize: number,
+  callback: (value: number) => void
+) => {
+  let lastTick: number | undefined;
+
+  return (value: number) => {
+    if (lastTick === undefined) {
+      lastTick = value;
+      return;
+    }
+
+    if (Math.abs(lastTick - value) > tickSize) {
+      lastTick = value;
+      callback(value);
+    }
+  };
 };

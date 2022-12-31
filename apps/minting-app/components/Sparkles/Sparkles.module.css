@@ -1,0 +1,8 @@
+.wrapper {
+  filter: blur(2px);
+  mix-blend-mode: color-dodge;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}

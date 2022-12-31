@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import classNames from "classnames";
+import * as Tone from "tone";
 
 import { Background } from "../../types";
 import { useAppContext } from "../../state";
 import { randomBackground } from "../../utils/randomizer";
 
-import useDragRotate from "../useDragRotate";
+import useDragRotate, { everyTick } from "../useDragRotate";
 import UiCircle from "../UiCircle";
 import IconButton from "../IconButton";
 
@@ -15,10 +16,52 @@ import { HueArc, LightnessArc } from "./Arc";
 import { normalizeAngle } from "../../state/transforms/transformRotations";
 
 const ColorPicker: React.FC = () => {
+  const hueSynthRef = useRef<Tone.Synth>();
+  const lightSynthRef = useRef<Tone.Synth>();
+
+  useEffect(() => {
+    hueSynthRef.current = new Tone.Synth({
+      volume: -15,
+      envelope: {
+        attack: 0.001,
+        sustain: 0.001,
+        decay: 0.001,
+        release: 0.001,
+      },
+    }).toDestination();
+    lightSynthRef.current = new Tone.Synth({
+      volume: -15,
+      envelope: {
+        attack: 0.001,
+        sustain: 0.001,
+        decay: 0.001,
+        release: 0.001,
+      },
+    }).toDestination();
+  }, []);
+
   const {
     state: { background },
     dispatch,
   } = useAppContext();
+
+  const hueClicker = useMemo(
+    () =>
+      everyTick(4, (nextRotation) => {
+        const now = Tone.now();
+        hueSynthRef.current?.triggerAttackRelease("C7", "32n", now + 0.05);
+      }),
+    []
+  );
+
+  const lightClicker = useMemo(
+    () =>
+      everyTick(4, (nextRotation) => {
+        const now = Tone.now();
+        lightSynthRef.current?.triggerAttackRelease("E7", "32n", now + 0.05);
+      }),
+    []
+  );
 
   const handleChange = (value: Background) => {
     dispatch({
@@ -27,9 +70,8 @@ const ColorPicker: React.FC = () => {
     });
   };
 
-  const hueProps = useDragRotate<SVGPathElement>(
-    background.color.hue,
-    (nextRotation: number) => {
+  const hueProps = useDragRotate<SVGPathElement>(background.color.hue, {
+    onRest(nextRotation: number) {
       handleChange({
         ...background,
         color: {
@@ -37,19 +79,23 @@ const ColorPicker: React.FC = () => {
           hue: nextRotation,
         },
       });
-    }
-  );
+    },
+    onChange: hueClicker,
+  });
 
   const lightnessProps = useDragRotate<SVGPathElement>(
     background.color.lightness,
-    (nextRotation: number) => {
-      handleChange({
-        ...background,
-        color: {
-          ...background.color,
-          lightness: nextRotation,
-        },
-      });
+    {
+      onRest(nextRotation: number) {
+        handleChange({
+          ...background,
+          color: {
+            ...background.color,
+            lightness: nextRotation,
+          },
+        });
+      },
+      onChange: lightClicker,
     }
   );
 

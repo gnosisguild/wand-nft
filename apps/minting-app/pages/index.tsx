@@ -15,11 +15,14 @@ import IconButton from "../components/IconButton";
 import RecastButton from "../components/IconButton/RecastButton";
 import Layout from "../components/Layout";
 import MintingToast from "../components/MintingToast";
+import Sparkles from "../components/Sparkles";
+import useMusic from "../components/useMusic";
 import JourneyModal from "../components/JourneyModal";
 import {
   FullDownloadButton,
   PFPDownloadButton,
 } from "../components/DownloadButton";
+import { SoundButton } from "../components/SoundButton";
 import { MintStage } from "../types";
 import useHandleClock from "../components/useHandleClock";
 import MintButton from "../components/MintButton";
@@ -27,6 +30,7 @@ import Modal from "../components/Modal";
 
 const Home: NextPage = () => {
   useHandleClock();
+  useMusic();
 
   const { state, dispatch } = useAppContext();
   const { stage } = state;
@@ -66,6 +70,7 @@ const Home: NextPage = () => {
         <CenterGilding className={classNames(mintingClasses)} />
         <MintButton />
         <PickerLabels className={classNames(mintingClasses, styles.hasSvg)} />
+        <Sparkles />
         <div
           className={classNames(styles.svgPreview, {
             [styles.mintingPreview]: isMinting,
@@ -125,6 +130,7 @@ const Home: NextPage = () => {
           { [styles.mobileDevice]: isMobile }
         )}
       >
+        <SoundButton />
         <IconButton
           icon="Intro"
           onClick={() => dispatch({ type: "ChangeJourney", value: true })}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 
 import { useAppContext } from "../../state";
@@ -11,7 +11,7 @@ import {
 import { interpolateStone, stoneList, stoneCount } from "../../mimicking";
 
 import UiCircle from "../UiCircle";
-import useDragRotate from "../useDragRotate";
+import useDragRotate, { everyTick } from "../useDragRotate";
 import useSeed from "../useSeed";
 
 import styles from "./StonePicker.module.css";
@@ -20,20 +20,46 @@ import StoneFilter from "./StoneFilter";
 import StoneViewer from "./StoneViewer";
 import IconButton from "../IconButton";
 import { toStoneId } from "../../state/transforms/transformRotations";
+import * as Tone from "tone";
 
 const StonePicker: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const seed = useSeed();
+  const synthRef = useRef<Tone.Synth>();
+
+  const stoneClicker = useMemo(
+    () =>
+      everyTick(4, (nextRotation) => {
+        const now = Tone.now();
+        synthRef.current?.triggerAttackRelease("A7", "32n", now + 0.05);
+      }),
+    []
+  );
 
   const { bind, hovering, dragging, rotation } = useDragRotate<HTMLDivElement>(
     state.stone,
-    (nextRotation) => {
-      dispatch({
-        type: "changeStone",
-        value: nextRotation,
-      });
+    {
+      onRest(nextRotation) {
+        dispatch({
+          type: "changeStone",
+          value: nextRotation,
+        });
+      },
+      onChange: stoneClicker,
     }
   );
+
+  useEffect(() => {
+    synthRef.current = new Tone.Synth({
+      volume: -15,
+      envelope: {
+        attack: 0.001,
+        sustain: 0.001,
+        decay: 0.001,
+        release: 0.001,
+      },
+    }).toDestination();
+  }, []);
 
   return (
     <div

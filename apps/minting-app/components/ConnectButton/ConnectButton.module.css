@@ -39,6 +39,7 @@
   width: 100%;
   column-gap: 0.5vw;
   padding: 0;
+  user-select: none;
 }
 
 .connectContainer button img {
