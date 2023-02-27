@@ -69,6 +69,10 @@ export default {
       ...sharedNetworkConfig,
       url: `https://goerli.infura.io/v3/${INFURA_KEY}`,
     },
+    sepolia: {
+      ...sharedNetworkConfig,
+      url: `https://sepolia.infura.io/v3/${INFURA_KEY}`,
+    },
     xdai: {
       ...sharedNetworkConfig,
       url: "https://xdai.poanetwork.dev",
