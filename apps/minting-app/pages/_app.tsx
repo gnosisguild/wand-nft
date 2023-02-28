@@ -5,13 +5,22 @@ import type { AppContext, AppProps } from "next/app";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
 import { AppState } from "../types";
 import { GreenlistProvider } from "../components/useGreenlist";
 
-const { chains, provider } = configureChains([sepolia], [publicProvider()]);
+const { chains, provider } = configureChains(
+  [sepolia],
+  [
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: `https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
+      }),
+    }),
+  ]
+);
 
 const { connectors } = getDefaultWallets({
   appName: "Zodiac NFT",
