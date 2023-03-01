@@ -49,13 +49,21 @@ export default {
     sources: "contracts",
   },
   solidity: {
-    compilers: [{ version: "0.8.6" }, { version: "0.6.12" }],
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 1,
+    compilers: [
+      {
+        version: "0.8.6",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+            details: {
+              yul: false,
+            },
+          },
+        },
       },
-    },
+      { version: "0.6.12" },
+    ],
   },
   networks: {
     hardhat: {
