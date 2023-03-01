@@ -3,16 +3,23 @@ import { AppWrapper, randomState } from "../state";
 import type { AppContext, AppProps } from "next/app";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { infuraProvider } from "wagmi/providers/infura";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { sepolia } from "wagmi/chains";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import { customTheme, BlockieAvatar } from "../components/ConnectButton";
 import { AppState } from "../types";
 import { GreenlistProvider } from "../components/useGreenlist";
 
 const { chains, provider } = configureChains(
-  [chain.goerli],
-  [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID })]
+  [sepolia],
+  [
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: `https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
+      }),
+    }),
+  ]
 );
 
 const { connectors } = getDefaultWallets({

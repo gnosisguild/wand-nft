@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const greenlist = require("./greenlist.goerli.json");
+const greenlist = require("./greenlist.sepolia.json");
 
 import { ethers } from "ethers";
 
