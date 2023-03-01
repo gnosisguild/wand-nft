@@ -243,4 +243,24 @@ describe("Conjuror", async () => {
       }
     });
   });
+
+  describe("auraTraits", () => {
+    it("compiles aura traits correctly", async () => {
+      const { wandConjurorMock } = await baseSetup();
+
+      const background = {
+        radial: true,
+        dark: true,
+        color: {
+          hue: 300,
+          saturation: 100,
+          lightness: 50,
+        },
+      };
+      const traits = await wandConjurorMock._describeAuraTraits(background);
+      expect(traits[0]).to.equal("Penumbra");
+      expect(traits[1]).to.equal("Polar");
+      expect(traits[2]).to.equal("(50, 300°)");
+    });
+  });
 });

@@ -49,4 +49,16 @@ contract WandConjurorMock is Conjuror {
   function _stoneList() public pure returns (InceptionStones.Stone[29] memory) {
     return InceptionStones.list();
   }
+
+  function _describeAuraTraits(Cauldron.Background memory background)
+    public
+    pure
+    returns (
+      string memory,
+      string memory,
+      string memory
+    )
+  {
+    return describeAuraTraits(background);
+  }
 }

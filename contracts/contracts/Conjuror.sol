@@ -113,21 +113,44 @@ contract Conjuror is IConjuror {
       );
   }
 
+  function describeAuraTraits(Cauldron.Background memory background)
+    internal
+    pure
+    returns (
+      string memory basis,
+      string memory perspective,
+      string memory coords
+    )
+  {
+    basis = background.dark ? "Penumbra" : "Radiance";
+    perspective = background.radial ? "Polar" : "Cartesian";
+    coords = string(
+      abi.encodePacked(
+        "(",
+        SolidMustacheHelpers.uintToString(background.color.lightness, 0),
+        ", ",
+        SolidMustacheHelpers.uintToString(background.color.hue, 0),
+        unicode"°)"
+      )
+    );
+  }
+
   function generateAuraTraits(Cauldron.Background memory background)
     internal
     pure
     returns (bytes memory)
   {
-    string memory basis = background.dark ? "Penumbra" : "Radiance";
-    string memory perspective = background.radial ? "Polar" : "Cartesian";
+    (
+      string memory basis,
+      string memory perspective,
+      string memory coords
+    ) = describeAuraTraits(background);
 
     return
       abi.encodePacked(
-        '},{"trait_type": "Aura", "value": "(',
-        SolidMustacheHelpers.uintToString(background.color.lightness, 0),
-        ", ",
-        SolidMustacheHelpers.uintToString(background.color.hue, 0),
-        '\u00B0)"',
+        '},{"trait_type": "Aura", "value": "',
+        coords,
+        '"',
         '},{"trait_type": "Aura Basis", "value": "',
         basis,
         '"',
