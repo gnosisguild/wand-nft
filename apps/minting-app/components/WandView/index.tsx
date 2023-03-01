@@ -35,7 +35,12 @@ const WandView: React.FC<Props> = ({ tokenUri, tokenId }) => {
 export default WandView;
 
 const getDataFromUri = (tokenUri: string): WandTokenData => {
-  const json = atob(tokenUri.slice("data:application/json;base64,".length));
+  const buff = Buffer.from(
+    tokenUri.slice("data:application/json;base64,".length),
+    "base64"
+  );
+  const json = buff.toString("utf-8");
+  console.log("json", json);
   if (!json) return {} as WandTokenData;
   return JSON.parse(json);
 };
