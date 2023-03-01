@@ -1,6 +1,7 @@
 import Image from "next/image";
 import wandContract from "../../utils/contract";
 import { useMemo } from "react";
+import getDataFromUri from "../../utils/getDataFromUri";
 
 const WandImage: React.FC<{
   tokenUri: string;
@@ -8,9 +9,7 @@ const WandImage: React.FC<{
   width: number;
 }> = ({ tokenUri, tokenId, width }) => {
   const obj = useMemo(() => {
-    const json = atob(tokenUri.slice("data:application/json;base64,".length));
-    if (!json) return {};
-    return JSON.parse(json);
+    return getDataFromUri(tokenUri);
   }, [tokenUri]);
 
   const { chainId, address } = wandContract;

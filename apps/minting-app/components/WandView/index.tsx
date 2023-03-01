@@ -1,5 +1,5 @@
+import getDataFromUri from "../../utils/getDataFromUri";
 import WandImage from "../WandImage";
-import { WandTokenData } from "../../types";
 import styles from "./WandView.module.css";
 
 interface Props {
@@ -33,9 +33,3 @@ const WandView: React.FC<Props> = ({ tokenUri, tokenId }) => {
   );
 };
 export default WandView;
-
-const getDataFromUri = (tokenUri: string): WandTokenData => {
-  const json = atob(tokenUri.slice("data:application/json;base64,".length));
-  if (!json) return {} as WandTokenData;
-  return JSON.parse(json);
-};

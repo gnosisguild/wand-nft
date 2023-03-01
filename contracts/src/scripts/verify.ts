@@ -166,7 +166,7 @@ async function verify(): Promise<void> {
   try {
     await hre.run("verify:verify", {
       address: Forge,
-      constructorArguments: [ZodiacWands],
+      constructorArguments: [ZodiacWands, [2000, 2000, 2000, 2000]],
     });
   } catch (e: any) {
     if (
